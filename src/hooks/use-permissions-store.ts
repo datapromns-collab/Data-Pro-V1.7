@@ -115,7 +115,7 @@ export const MODULE_LABELS: Record<ModuleId, string> = {
   procesos: 'Procesos',
   calidad: 'Calidad',
   mtto: 'MTTO',
-  insumos: 'Insumos',
+  insumos: 'Reportes',
   logistica: 'Logística',
   ventas: 'Ventas',
   purchasing: 'Compras',

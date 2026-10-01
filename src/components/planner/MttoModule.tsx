@@ -19,17 +19,21 @@ import { useRemoteCollection } from '@/hooks/use-remote-collection';
 
 const TANKS = [1, 2, 3, 4, 5, 6] as const;
 
+export type MttoCo2ConsumptionStore = ReturnType<
+  typeof useRemoteCollection<Record<string, string>>
+>;
+
 interface MttoModuleProps {
   getCo2TheoreticalForDate: (date: string) => number;
+  co2Consumption: MttoCo2ConsumptionStore;
 }
 
-export default function MttoModule({ getCo2TheoreticalForDate }: MttoModuleProps) {
+export default function MttoModule({ getCo2TheoreticalForDate, co2Consumption }: MttoModuleProps) {
   const [activeSection, setActiveSection] = useState<'daily' | 'weekly' | 'monthly'>('daily');
   const [weekStart, setWeekStart] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }));
   const [weeklySelectedMonth, setWeeklySelectedMonth] = useState(() => new Date().getMonth());
   const [weeklySelectedYear, setWeeklySelectedYear] = useState(() => new Date().getFullYear());
   const [monthlyDate, setMonthlyDate] = useState(() => new Date());
-  const co2Consumption = useRemoteCollection<Record<string, string>>('mtto-co2-consumption', {});
   const sections = [
     { id: 'daily', label: 'Consumo diario', icon: CalendarDays },
     { id: 'weekly', label: 'Resumen semanal', icon: CalendarRange },

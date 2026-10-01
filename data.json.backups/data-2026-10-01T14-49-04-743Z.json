@@ -30351,7 +30351,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-01T14:10:15.101Z"
+    "updatedAt": "2026-10-01T14:29:59.435Z"
   },
   "ordenesSap": [
     {
@@ -172387,6 +172387,16 @@
           "jarabeReal": 87325,
           "ubb": 30.4,
           "producto": "674"
+        },
+        "auto-1-1790622563029": {
+          "cajasPlanificadas": 71250,
+          "jarabeReal": 115937,
+          "ubb": 40.29
+        },
+        "auto-1-1790853172708": {
+          "jarabeReal": 14415,
+          "cajasPlanificadas": 33000,
+          "ubb": 8.28
         }
       },
       "linea-2": {
@@ -172611,6 +172621,16 @@
           "jarabeReal": 74920,
           "ubb": 75.93,
           "producto": "190"
+        },
+        "auto-2-1790622686945": {
+          "cajasPlanificadas": 118750,
+          "jarabeReal": 107296,
+          "ubb": 108.57
+        },
+        "auto-2-1790793838451": {
+          "cajasPlanificadas": 55000,
+          "jarabeReal": 31214,
+          "ubb": 20.09
         }
       },
       "linea-3": {
@@ -172801,6 +172821,12 @@
           "jarabeReal": 123030,
           "ubb": 42.77,
           "producto": "389"
+        },
+        "auto-3-1790622806270": {
+          "cajasPlanificadas": 198800,
+          "jarabeReal": 162371,
+          "ubb": 56.43,
+          "pnc": 68
         }
       },
       "linea-4": {
@@ -172950,6 +172976,12 @@
           "ubb": 43.37,
           "pnc": 19,
           "producto": "228"
+        },
+        "auto-4-1790622903554": {
+          "cajasPlanificadas": 196000,
+          "jarabeReal": 172034,
+          "pnc": 16,
+          "ubb": 59.82
         }
       },
       "linea-5": {
@@ -173080,6 +173112,11 @@
           "ubb": 207,
           "pnc": 1782,
           "producto": "282"
+        },
+        "auto-5-1790609854603": {
+          "cajasPlanificadas": 79860,
+          "jarabeReal": 520000,
+          "ubb": 520
         }
       },
       "linea-6": {
@@ -173225,6 +173262,11 @@
           "jarabeReal": 26728,
           "ubb": 9.29,
           "producto": "414"
+        },
+        "auto-6-1790623044406": {
+          "cajasPlanificadas": 67320,
+          "jarabeReal": 38073,
+          "ubb": 13.23
         }
       },
       "linea-7": {
@@ -173440,6 +173482,19 @@
           "jarabeReal": 34560,
           "ubb": 12,
           "producto": "318"
+        },
+        "auto-7-1790610053303": {
+          "cajasPlanificadas": 17250,
+          "jarabeReal": 33573,
+          "pnc": 234
+        },
+        "auto-7-1790682811969": {
+          "cajasPlanificadas": 17791,
+          "jarabeReal": 35594
+        },
+        "auto-7-1790767503618": {
+          "cajasPlanificadas": 14225,
+          "jarabeReal": 34135
         }
       }
     },
@@ -181163,6 +181218,55 @@
       "2026-09-30-tank-5": "20",
       "2026-09-30-tank-6": "6610",
       "2026-09-30-tank-3": "10"
+    },
+    "logistica-inventario-mensual": {
+      "periods": {
+        "2026-10": {
+          "prodt": {
+            "PRODT-0007": "99689",
+            "PRODT-0008": "6994",
+            "PRODT-0009": "58461",
+            "PRODT-0010": "6157",
+            "PRODT-0011": "0",
+            "PRODT-0012": "45940",
+            "PRODT-0049": "1724",
+            "PRODT-0097": "17117",
+            "PRODT-0098": "3780",
+            "PRODT-0082": "5130",
+            "PRODT-0084": "10730",
+            "PRODT-0086": "9311",
+            "PRODT-0088": "14574",
+            "PRODT-0104": "1397",
+            "PRODT-0105": "1",
+            "PRODT-0107": "9133",
+            "PRODT-0092": "40100",
+            "PRODT-0093": "8396",
+            "PRODT-0094": "8281",
+            "PRODT-0095": "1044",
+            "PRODT-0111": "112",
+            "PRODT-0014": "23614",
+            "PRODT-0100": "21532",
+            "PRODT-0115": "13356",
+            "PRODT-0116": "4210",
+            "PRODT-0123": "17296",
+            "PRODT-0124": "23263",
+            "PRODT-0125": "24498",
+            "PRODT-0126": "3857",
+            "PRODT-0025": "[object Object]",
+            "PRODT-0026": "[object Object]",
+            "PRODT-0127": "114",
+            "PRODT-0128": "[object Object]",
+            "PRODT-0113": "8707",
+            "PRODT-0112": "11857",
+            "PRODT-0114": "22708",
+            "PRODT-0120": "6495",
+            "PRODT-0121": "3584",
+            "PRODT-0122": "[object Object]"
+          },
+          "matp": {},
+          "emp": {}
+        }
+      }
     }
   },
   "cacheVersion": 0,
@@ -181264,7 +181368,8 @@
       ]
     },
     "ventas-pronostico-mensual": {},
-    "mtto-co2-consumption": {}
+    "mtto-co2-consumption": {},
+    "logistica-inventario-mensual": {}
   },
   "_deletedOrdenesSapIds": [
     "1-1785349102112",
