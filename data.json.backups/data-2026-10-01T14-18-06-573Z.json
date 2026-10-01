@@ -180038,7 +180038,9 @@
       "2026-09-29-total": "3358494",
       "2026-09-30-servicio": "25731",
       "2026-09-30-suave": "160510",
-      "2026-09-30-procesos": "1628"
+      "2026-09-30-procesos": "1628297,39",
+      "2026-09-30-filtrada": "2543633,78",
+      "2026-09-30-total": "2219645,33"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
@@ -181161,6 +181163,55 @@
       "2026-09-30-tank-5": "20",
       "2026-09-30-tank-6": "6610",
       "2026-09-30-tank-3": "10"
+    },
+    "logistica-inventario-mensual": {
+      "periods": {
+        "2026-10": {
+          "prodt": {
+            "PRODT-0007": "99689",
+            "PRODT-0008": "6994",
+            "PRODT-0009": "58461",
+            "PRODT-0010": "6157",
+            "PRODT-0011": "[object Object]",
+            "PRODT-0012": "45940",
+            "PRODT-0049": "1724",
+            "PRODT-0097": "17117",
+            "PRODT-0098": "3780",
+            "PRODT-0082": "5130",
+            "PRODT-0084": "10730",
+            "PRODT-0086": "9311",
+            "PRODT-0088": "14574",
+            "PRODT-0104": "1397",
+            "PRODT-0105": "1",
+            "PRODT-0107": "9133",
+            "PRODT-0092": "40100",
+            "PRODT-0093": "8396",
+            "PRODT-0094": "8281",
+            "PRODT-0095": "1044",
+            "PRODT-0111": "112",
+            "PRODT-0014": "23614",
+            "PRODT-0100": "21532",
+            "PRODT-0115": "13356",
+            "PRODT-0116": "4210",
+            "PRODT-0123": "17296",
+            "PRODT-0124": "23263",
+            "PRODT-0125": "24498",
+            "PRODT-0126": "3857",
+            "PRODT-0025": "[object Object]",
+            "PRODT-0026": "[object Object]",
+            "PRODT-0127": "114",
+            "PRODT-0128": "[object Object]",
+            "PRODT-0113": "8707",
+            "PRODT-0112": "11857",
+            "PRODT-0114": "22708",
+            "PRODT-0120": "6495",
+            "PRODT-0121": "3584",
+            "PRODT-0122": "[object Object]"
+          },
+          "matp": {},
+          "emp": {}
+        }
+      }
     }
   },
   "cacheVersion": 0,
@@ -181262,7 +181313,8 @@
       ]
     },
     "ventas-pronostico-mensual": {},
-    "mtto-co2-consumption": {}
+    "mtto-co2-consumption": {},
+    "logistica-inventario-mensual": {}
   },
   "_deletedOrdenesSapIds": [
     "1-1785349102112",
