@@ -30351,7 +30351,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-01T12:32:49.299Z"
+    "updatedAt": "2026-10-01T14:10:15.101Z"
   },
   "ordenesSap": [
     {
@@ -180035,7 +180035,10 @@
       "2026-09-29-suave": "258184",
       "2026-09-29-procesos": "3076684,12",
       "2026-09-29-filtrada": "4681978,29",
-      "2026-09-29-total": "3358494"
+      "2026-09-29-total": "3358494",
+      "2026-09-30-servicio": "25731",
+      "2026-09-30-suave": "160510",
+      "2026-09-30-procesos": "16282"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
@@ -181275,8 +181278,8 @@
     "filename": "stock-producto-terminado.xlsx",
     "originalName": "Formato Inventario  Fisico Almacen PT DIARIO ACT  08.xlsx",
     "tipo": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "tamano": 35017,
-    "uploadedAt": "2026-09-30T12:17:47.106Z",
+    "tamano": 35165,
+    "uploadedAt": "2026-10-01T14:10:15.101Z",
     "uploadedBy": "local-user"
   }
 }
