@@ -3,7 +3,7 @@
 import { useState, type Dispatch, type SetStateAction } from 'react';
 import { addDays, eachDayOfInterval, endOfMonth, format, getISOWeek, startOfDay, startOfMonth, startOfWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Calendar as CalendarIcon, Droplets, FlaskConical } from 'lucide-react';
+import { Calendar as CalendarIcon, ClipboardList, Droplets, FlaskConical } from 'lucide-react';
 import {
   Bar,
   CartesianGrid,
@@ -18,6 +18,7 @@ import {
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+import { OrdenesReporteResumenMensual } from '@/components/planner/OrdenesReporteResumenMensual';
 
 type Co2DailyRow = { cajas2L: string; cajas1L: string; cajas04L: string };
 type AguaDailyRow = { cajas2L: string; cajas1L: string; cajas1_5L: string; cajas04L: string };
@@ -121,6 +122,11 @@ function ReportesResumenMensual({
         : theoretical > 0 ? Number((physical / theoretical).toFixed(2)) : 0,
     };
   });
+  const monthlyTotalPhysical = monthlyData.reduce((total, week) => total + week.physical, 0);
+  const monthlyTotalTheoretical = monthlyData.reduce((total, week) => total + week.theoretical, 0);
+  const monthlyTotalYield = tipo === 'co2'
+    ? monthlyTotalPhysical > 0 ? monthlyTotalTheoretical / monthlyTotalPhysical : 0
+    : monthlyTotalTheoretical > 0 ? monthlyTotalPhysical / monthlyTotalTheoretical : 0;
   const formatValue = (value: number) => tipo === 'agua'
     ? formatAguaDisplay(value)
     : value.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -324,6 +330,9 @@ function ReportesResumenMensual({
                         {week.week}
                       </th>
                     ))}
+                    <th className="min-w-[90px] border border-white/10 px-2 py-2 text-center font-black uppercase tracking-wider">
+                      TOTAL
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -337,6 +346,13 @@ function ReportesResumenMensual({
                           </div>
                         </td>
                       ))}
+                      <td className="border border-slate-100 bg-slate-50 px-2 py-2 text-center">
+                        <div className="flex h-8 min-w-[14ch] items-center justify-center rounded border border-slate-200 bg-slate-100 text-[11px] font-black text-slate-700">
+                          {key === 'yield'
+                            ? formatValue(monthlyTotalYield)
+                            : formatValue(key === 'physical' ? monthlyTotalPhysical : monthlyTotalTheoretical)}
+                        </div>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -460,7 +476,7 @@ export function ReportesModule({
                          )}
                          <div className="flex items-center gap-2 mb-2 no-print">
                             <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                              {(['co2', 'agua'] as const).map((tab) => (
+                              {(['co2', 'agua', 'ordenes'] as const).map((tab) => (
                                 <button
                                   key={tab}
                                   onClick={() => setInsumosSubTab(tab)}
@@ -471,11 +487,12 @@ export function ReportesModule({
                                 >
                                   {tab === 'co2' && <FlaskConical className="h-3.5 w-3.5" />}
                                   {tab === 'agua' && <Droplets className="h-3.5 w-3.5" />}
-                                  <span className="hidden sm:inline">{tab === 'co2' ? 'CO2' : 'Agua'}</span>
+                                  {tab === 'ordenes' && <ClipboardList className="h-3.5 w-3.5" />}
+                                  <span className="hidden sm:inline">{tab === 'co2' ? 'CO2' : tab === 'agua' ? 'Agua' : 'Órdenes'}</span>
                                 </button>
                               ))}
                             </div>
-                           <div className="ml-auto">
+                           {insumosSubTab !== 'ordenes' && <div className="ml-auto">
                              <Popover>
                                <PopoverTrigger asChild>
                                  <button className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
@@ -487,7 +504,7 @@ export function ReportesModule({
                                   <Calendar mode="single" selected={insumosFecha} onSelect={(date) => { setInsumosFecha(date); if (date) { localStorage.setItem('selected-insumos-fecha', JSON.stringify(format(date, 'yyyy-MM-dd'))); } }} locale={es} />
                                </PopoverContent>
                              </Popover>
-                           </div>
+                           </div>}
                          </div>
                          {insumosSubTab === 'co2' && (
                            <>
@@ -917,6 +934,7 @@ export function ReportesModule({
                                 )}
                               </>
                             )}
+                           {insumosSubTab === 'ordenes' && <OrdenesReporteResumenMensual />}
                            {insumosSubTab === 'co2' &&
                              (insumosPeriodoSubTab === 'diario' || insumosPeriodoSubTab === 'resumen-tablas') && (
                            <div className="flex-1 bg-white rounded-[2.5rem] p-4 overflow-x-auto">

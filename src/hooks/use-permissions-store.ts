@@ -115,7 +115,7 @@ export const MODULE_LABELS: Record<ModuleId, string> = {
   procesos: 'Procesos',
   calidad: 'Calidad',
   mtto: 'MTTO',
-  insumos: 'Reportes',
+  insumos: 'Insumos',
   logistica: 'Logística',
   ventas: 'Ventas',
   purchasing: 'Compras',
@@ -408,6 +408,11 @@ export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
         { id: 'r-semanal', label: 'R Semanal' },
         { id: 'r-mensual', label: 'R Mensual' },
       ] },
+    ] },
+    { id: 'ordenes', label: 'Órdenes', children: [
+      { id: 'resumen-por-sabor', label: 'Resumen por sabor' },
+      { id: 'resumen-por-lineas', label: 'Resumen por líneas' },
+      { id: 'rendimiento-azucar', label: 'Rendimiento de azúcar' },
     ] },
   ],
   logistica: [

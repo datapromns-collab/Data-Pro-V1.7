@@ -29,7 +29,7 @@ import { jsPDF } from 'jspdf';
 import * as XLSX from 'xlsx';
 import { useOrdenesSap } from '@/hooks/use-ordenes-sap';
 import { useSeguimientoResumenOptimizado, type SeguimientoOrdenLineaConLinea } from '@/hooks/use-seguimiento-ordenes';
-import { combinarFilasResumenMensual } from '@/lib/seguimiento-utils';
+import { combinarFilasResumenMensual, FACTORES_RENDIMIENTO_AZUCAR } from '@/lib/seguimiento-utils';
 import {
   SeguimientoLineaTable,
   SeguimientoLinea1Table,
@@ -70,28 +70,6 @@ const SABOR_COLORS: Record<string, string> = {
 };
 
 const FALLBACK_COLOR = "bg-gray-200 text-gray-900";
-
-const FACTORES_RENDIMIENTO_AZUCAR: Record<string, { jarabeS: number; azucar: number }> = {
-  'GLUP COLA': { jarabeS: 0.8326, azucar: 0.8042 },
-  'GLUP FRESH': { jarabeS: 0.823681, azucar: 0.8042 },
-  'GLUP UVA': { jarabeS: 0.821259, azucar: 0.8042 },
-  'GLUP PIÑA': { jarabeS: 0.83886, azucar: 0.8042 },
-  'GLUP NARANJA': { jarabeS: 0.826121, azucar: 0.8042 },
-  'GLUP KOLITA': { jarabeS: 0.838508, azucar: 0.8042 },
-  'GLUP MANZANA VERDE': { jarabeS: 0.892866, azucar: 0.8042 },
-  'GLUP MANZANA': { jarabeS: 0.892866, azucar: 0.8042 },
-  'GLUP PONCHE': { jarabeS: 0.665356, azucar: 0.8042 },
-  'GLUP CHICLE': { jarabeS: 0.887338, azucar: 0.8042 },
-  'GLUP PIÑA PARCHITA': { jarabeS: 0.820996, azucar: 0.8042 },
-  'GLUP MANZANA ROJA': { jarabeS: 0.807803, azucar: 0.8042 },
-  'JUSTY NARANJA': { jarabeS: 0.136782, azucar: 0.8042 },
-  'JUSTY DURAZNO': { jarabeS: 0.170978, azucar: 0.8042 },
-  'JUSTY PERA': { jarabeS: 0.152326, azucar: 0.8042 },
-  'JUSTY MANZANA': { jarabeS: 0.152325, azucar: 0.8042 },
-  'JUSTY TAMARINDO': { jarabeS: 0.152325, azucar: 0.8042 },
-  'VITA TEA DURAZNO': { jarabeS: 0.125591, azucar: 0.8042 },
-  'VITA TEA LIMON': { jarabeS: 0.120617, azucar: 0.8042 },
-};
 
 const SABOR_ALIAS: Record<string, string> = {
   'GLUP MANZANA VERDE': 'GLUP MANZANA',
