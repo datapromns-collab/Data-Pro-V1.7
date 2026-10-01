@@ -1,9 +1,20 @@
 "use client";
 
 import { useState, type Dispatch, type SetStateAction } from 'react';
-import { addDays, eachDayOfInterval, endOfMonth, format, getISOWeek, startOfDay, startOfWeek } from 'date-fns';
+import { addDays, eachDayOfInterval, endOfMonth, format, getISOWeek, startOfDay, startOfMonth, startOfWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Calendar as CalendarIcon, Droplets, FlaskConical } from 'lucide-react';
+import {
+  Bar,
+  CartesianGrid,
+  ComposedChart,
+  Legend,
+  Line,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
@@ -11,6 +22,368 @@ import { cn } from '@/lib/utils';
 type Co2DailyRow = { cajas2L: string; cajas1L: string; cajas04L: string };
 type AguaDailyRow = { cajas2L: string; cajas1L: string; cajas1_5L: string; cajas04L: string };
 type StateSetter<T> = Dispatch<SetStateAction<T>>;
+type ReportesResumenSection = 'r-semanal' | 'r-mensual';
+
+interface ReportesResumenMensualProps {
+  tipo: 'co2' | 'agua';
+  insumosFecha: Date | undefined;
+  getMttoCo2ConsumptionForDate: (fechaStr: string) => number;
+  calcularKgCo2ParaFecha: (fechaStr: string) => number;
+  getAguaConsumoNumber: (fechaStr: string) => number;
+  calcularLitrosAguaParaFecha: (fechaStr: string) => number;
+  formatAguaDisplay: (value: number | string | undefined | null) => string;
+}
+
+function ReportesResumenMensual({
+  tipo,
+  insumosFecha,
+  getMttoCo2ConsumptionForDate,
+  calcularKgCo2ParaFecha,
+  getAguaConsumoNumber,
+  calcularLitrosAguaParaFecha,
+  formatAguaDisplay,
+}: ReportesResumenMensualProps) {
+  const initialDate = insumosFecha ?? new Date();
+  const [section, setSection] = useState<ReportesResumenSection>('r-semanal');
+  const [weeklyDate, setWeeklyDate] = useState(() => startOfWeek(initialDate, { weekStartsOn: 1 }));
+  const [monthlyDate, setMonthlyDate] = useState(() => startOfMonth(initialDate));
+  const [weeklySelectedMonth, setWeeklySelectedMonth] = useState(initialDate.getMonth());
+  const [weeklySelectedYear, setWeeklySelectedYear] = useState(initialDate.getFullYear());
+
+  const monthOptions = Array.from({ length: 12 }, (_, month) => ({
+    value: month,
+    label: format(new Date(2024, month, 1), 'MMMM', { locale: es }),
+  }));
+  const currentYear = new Date().getFullYear();
+  const yearOptions = Array.from({ length: 11 }, (_, index) => currentYear - 5 + index);
+  const monthStart = new Date(weeklySelectedYear, weeklySelectedMonth, 1);
+  const monthEnd = endOfMonth(monthStart);
+  const weeksInSelectedMonth: Date[] = [];
+  for (
+    let week = startOfWeek(monthStart, { weekStartsOn: 1 });
+    week <= monthEnd;
+    week = addDays(week, 7)
+  ) {
+    weeksInSelectedMonth.push(week);
+  }
+  const selectedWeekIndex = weeksInSelectedMonth.findIndex(
+    (week) => format(week, 'yyyy-MM-dd') === format(weeklyDate, 'yyyy-MM-dd'),
+  );
+  const weekDays = Array.from({ length: 7 }, (_, index) => addDays(weeklyDate, index))
+    .filter((day) => day.getMonth() === weeklySelectedMonth && day.getFullYear() === weeklySelectedYear);
+  const monthlyStart = startOfMonth(monthlyDate);
+  const monthlyEnd = endOfMonth(monthlyDate);
+  const monthlyWeeks: { isoWeek: number; days: Date[] }[] = [];
+  for (
+    let week = startOfWeek(monthlyStart, { weekStartsOn: 1 });
+    week <= monthlyEnd;
+    week = addDays(week, 7)
+  ) {
+    const days = Array.from({ length: 7 }, (_, index) => addDays(week, index))
+      .filter((day) => day >= monthlyStart && day <= monthlyEnd);
+    monthlyWeeks.push({ isoWeek: getISOWeek(week), days });
+  }
+  const getPhysical = (date: Date) => {
+    const dateKey = format(date, 'yyyy-MM-dd');
+    return tipo === 'co2'
+      ? getMttoCo2ConsumptionForDate(dateKey)
+      : getAguaConsumoNumber(dateKey);
+  };
+  const getTheoretical = (date: Date) => {
+    const dateKey = format(date, 'yyyy-MM-dd');
+    return tipo === 'co2'
+      ? calcularKgCo2ParaFecha(dateKey)
+      : calcularLitrosAguaParaFecha(dateKey);
+  };
+  const weeklyData = weekDays.map((day) => {
+    const dateKey = format(day, 'yyyy-MM-dd');
+    const physical = getPhysical(day);
+    const theoretical = getTheoretical(day);
+    return {
+      dateKey,
+      day: format(day, 'EEEE', { locale: es }).toUpperCase(),
+      physical,
+      theoretical,
+      yield: tipo === 'co2'
+        ? physical > 0 ? Number((theoretical / physical).toFixed(2)) : 0
+        : theoretical > 0 ? Number((physical / theoretical).toFixed(2)) : 0,
+    };
+  });
+  const monthlyData = monthlyWeeks.map((week) => {
+    const physical = week.days.reduce((total, day) => total + getPhysical(day), 0);
+    const theoretical = week.days.reduce((total, day) => total + getTheoretical(day), 0);
+    return {
+      week: `SEM ${week.isoWeek}`,
+      physical,
+      theoretical,
+      yield: tipo === 'co2'
+        ? physical > 0 ? Number((theoretical / physical).toFixed(2)) : 0
+        : theoretical > 0 ? Number((physical / theoretical).toFixed(2)) : 0,
+    };
+  });
+  const formatValue = (value: number) => tipo === 'agua'
+    ? formatAguaDisplay(value)
+    : value.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const setWeeklyMonth = (month: number) => {
+    setWeeklySelectedMonth(month);
+    setWeeklyDate(startOfWeek(new Date(weeklySelectedYear, month, 1), { weekStartsOn: 1 }));
+  };
+  const setWeeklyYear = (year: number) => {
+    setWeeklySelectedYear(year);
+    setWeeklyDate(startOfWeek(new Date(year, weeklySelectedMonth, 1), { weekStartsOn: 1 }));
+  };
+  const monthlyRows = tipo === 'co2'
+    ? [
+      { label: 'CONSUMO FÍSICO', key: 'physical' },
+      { label: 'CONSUMO TEÓRICO', key: 'theoretical' },
+      { label: 'RENDIMIENTO CO2', key: 'yield' },
+    ] as const
+    : [
+      { label: 'CONSUMO FISICO', key: 'physical' },
+      { label: 'CONSUMO TEORICO', key: 'theoretical' },
+      { label: 'RENDIMIENTO DE AGUA', key: 'yield' },
+    ] as const;
+  const weeklyRows = tipo === 'co2'
+    ? [
+      { label: 'CONSUMO FÍSICO', key: 'physical' },
+      { label: 'CONSUMO TEÓRICO', key: 'theoretical' },
+      { label: 'RENDIMIENTO CO2', key: 'yield' },
+    ] as const
+    : [
+      { label: 'CONSUMO FISICO', key: 'physical' },
+      { label: 'CONSUMO TEORICO', key: 'theoretical' },
+      { label: 'RENDIMIENTO DE AGUA', key: 'yield' },
+    ] as const;
+
+  return (
+    <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-auto">
+      <div className="flex w-fit items-center rounded-full border border-slate-200 bg-slate-100/50 p-1 no-print">
+        {([
+          { id: 'r-semanal', label: 'R Semanal' },
+          { id: 'r-mensual', label: 'R Mensual' },
+        ] as const).map(({ id, label }) => (
+          <button
+            key={id}
+            type="button"
+            onClick={() => setSection(id)}
+            aria-pressed={section === id}
+            className={cn(
+              "inline-flex h-9 items-center justify-center rounded-full px-3 sm:px-6 font-bold text-[10px] uppercase tracking-widest whitespace-nowrap transition-none",
+              section === id ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+            )}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {section === 'r-semanal' && (
+        <div className="flex min-h-0 flex-col gap-3">
+          <div className="flex flex-wrap items-center justify-end gap-2 no-print">
+            <button
+              type="button"
+              aria-label="Semana anterior"
+              disabled={selectedWeekIndex <= 0}
+              onClick={() => selectedWeekIndex > 0 && setWeeklyDate(weeksInSelectedMonth[selectedWeekIndex - 1])}
+              className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 disabled:opacity-40"
+            >
+              ‹
+            </button>
+            <select
+              aria-label="Mes del resumen semanal"
+              value={weeklySelectedMonth}
+              onChange={(event) => setWeeklyMonth(Number(event.target.value))}
+              className="h-8 rounded-full border-0 bg-white px-3 text-[10px] font-bold capitalize text-slate-700 shadow-sm outline-none"
+            >
+              {monthOptions.map((month) => <option key={month.value} value={month.value}>{month.label}</option>)}
+            </select>
+            <select
+              aria-label="Año del resumen semanal"
+              value={weeklySelectedYear}
+              onChange={(event) => setWeeklyYear(Number(event.target.value))}
+              className="h-8 rounded-full border-0 bg-white px-3 text-[10px] font-bold text-slate-700 shadow-sm outline-none"
+            >
+              {yearOptions.map((year) => <option key={year} value={year}>{year}</option>)}
+            </select>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
+              Semana {getISOWeek(weeklyDate)} · {format(weekDays[0] ?? weeklyDate, 'd/M/yyyy')} - {format(weekDays[weekDays.length - 1] ?? addDays(weeklyDate, 6), 'd/M/yyyy')}
+            </span>
+            <button
+              type="button"
+              aria-label="Semana siguiente"
+              disabled={selectedWeekIndex < 0 || selectedWeekIndex >= weeksInSelectedMonth.length - 1}
+              onClick={() => selectedWeekIndex >= 0 && selectedWeekIndex < weeksInSelectedMonth.length - 1 && setWeeklyDate(weeksInSelectedMonth[selectedWeekIndex + 1])}
+              className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 disabled:opacity-40"
+            >
+              ›
+            </button>
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-white">
+            <div className="px-4 py-2 text-center text-[11px] font-black uppercase tracking-widest text-slate-700">
+              {tipo === 'co2' ? 'Consumo CO2' : 'Consumo Agua'} · Semana {getISOWeek(weeklyDate)} · {format(monthStart, 'MMMM yyyy', { locale: es })}
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[760px] border-collapse text-[11px]">
+                <thead>
+                  <tr className="bg-[#002D82] text-white">
+                    <th className="border border-white/10 px-2 py-2 text-left font-black uppercase tracking-wider">{tipo === 'co2' ? 'Consumo CO2' : 'Consumo Agua'}</th>
+                    {weeklyData.map((day) => (
+                      <th key={day.dateKey} className="border border-white/10 px-2 py-2 text-center font-black uppercase tracking-wider">
+                        {format(new Date(`${day.dateKey}T00:00:00`), 'EEEE d/M/yy', { locale: es })}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {weeklyRows.map(({ label, key }) => (
+                    <tr key={key} className="border-b border-slate-100 hover:bg-slate-50/50">
+                      <td className="whitespace-nowrap border border-slate-100 px-2 py-2 font-bold text-slate-700">{label}</td>
+                      {weeklyData.map((day) => (
+                        <td key={day.dateKey} className="border border-slate-100 px-2 py-2 text-center">
+                          <div className="flex h-8 min-w-[14ch] items-center justify-center rounded border border-slate-200 bg-slate-100 text-[11px] font-black text-slate-700">
+                            {key === 'yield' ? formatValue(day.yield) : formatValue(day[key])}
+                          </div>
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div className="rounded-2xl border border-slate-100 bg-white">
+            <div className="px-4 pt-4 text-xs font-black uppercase tracking-widest text-slate-700">
+              Consumo de {tipo === 'co2' ? 'CO2' : 'agua'} - Gráfico semanal
+            </div>
+            <div className="h-[420px] px-4 pb-4 pt-2">
+              {weeklyData.length > 0 ? (
+                <ResponsiveContainer width="100%" height="100%">
+                  <ComposedChart data={weeklyData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="day" />
+                    <YAxis
+                      yAxisId="left"
+                      width={50}
+                      tickFormatter={tipo === 'agua'
+                        ? (value) => (Math.abs(Number(value)) >= 1_000_000
+                          ? `${(Number(value) / 1_000_000).toFixed(1)}M`
+                          : Math.abs(Number(value)) >= 1_000
+                            ? `${(Number(value) / 1_000).toFixed(1)}K`
+                            : String(value))
+                        : undefined}
+                    />
+                    <YAxis yAxisId="right" orientation="right" />
+                    <Tooltip />
+                    <Legend />
+                    <Bar yAxisId="left" dataKey="physical" fill="#0ea5e9" name={`Consumo Físico${tipo === 'co2' ? ' (kg)' : ''}`} />
+                    <Bar yAxisId="left" dataKey="theoretical" fill="#10b981" name={`Consumo Teórico${tipo === 'co2' ? ' (kg)' : ''}`} />
+                    <Line yAxisId="right" type="monotone" dataKey="yield" stroke="#f59e0b" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} name="Rendimiento" />
+                  </ComposedChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="flex h-full items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-white/50 text-xs font-black uppercase tracking-widest text-slate-400">
+                  Sin datos para graficar
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {section === 'r-mensual' && (
+        <div className="flex min-h-0 flex-col gap-3">
+          <div className="flex items-center justify-end gap-2 no-print">
+            <select
+              aria-label="Mes del resumen mensual"
+              value={monthlyDate.getMonth()}
+              onChange={(event) => setMonthlyDate((date) => new Date(date.getFullYear(), Number(event.target.value), 1))}
+              className="h-9 rounded-full border-0 bg-white px-4 text-[10px] font-bold capitalize text-slate-700 shadow-sm outline-none"
+            >
+              {monthOptions.map((month) => <option key={month.value} value={month.value}>{month.label}</option>)}
+            </select>
+            <select
+              aria-label="Año del resumen mensual"
+              value={monthlyDate.getFullYear()}
+              onChange={(event) => setMonthlyDate((date) => new Date(Number(event.target.value), date.getMonth(), 1))}
+              className="h-9 rounded-full border-0 bg-white px-4 text-[10px] font-bold text-slate-700 shadow-sm outline-none"
+            >
+              {yearOptions.map((year) => <option key={year} value={year}>{year}</option>)}
+            </select>
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-white">
+            <div className="px-4 py-2 text-[11px] font-black uppercase tracking-widest text-slate-700">
+              {format(monthlyDate, 'MMMM yyyy', { locale: es })}
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[520px] border-collapse text-[11px]">
+                <thead>
+                  <tr className="bg-[#002D82] text-white">
+                    <th className="border border-white/10 px-2 py-2 text-left font-black uppercase tracking-wider">{tipo === 'co2' ? 'Consumo CO2' : 'Consumo Agua'}</th>
+                    {monthlyData.map((week) => (
+                      <th key={week.week} className="min-w-[70px] border border-white/10 px-2 py-2 text-center font-black uppercase tracking-wider">
+                        {week.week}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {monthlyRows.map(({ label, key }) => (
+                    <tr key={key} className="border-b border-slate-100 hover:bg-slate-50/50">
+                      <td className="whitespace-nowrap border border-slate-100 px-2 py-2 font-bold text-slate-700">{label}</td>
+                      {monthlyData.map((week) => (
+                        <td key={week.week} className="border border-slate-100 px-2 py-2 text-center">
+                          <div className="flex h-8 min-w-[14ch] items-center justify-center rounded border border-slate-200 bg-slate-100 text-[11px] font-black text-slate-700">
+                            {key === 'yield' ? formatValue(week.yield) : formatValue(week[key])}
+                          </div>
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div className="rounded-2xl border border-slate-100 bg-white p-4">
+            <div className="mb-2 text-xs font-black uppercase tracking-widest text-slate-700">
+              Consumo de {tipo === 'co2' ? 'CO2' : 'agua'} - Gráfico mensual
+            </div>
+            <div className="min-h-[320px]">
+              {monthlyData.length > 0 ? (
+                <ResponsiveContainer width="100%" height={320}>
+                  <ComposedChart data={monthlyData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="week" />
+                    <YAxis
+                      yAxisId="left"
+                      width={50}
+                      tickFormatter={tipo === 'agua'
+                        ? (value) => (Math.abs(Number(value)) >= 1_000_000
+                          ? `${(Number(value) / 1_000_000).toFixed(1)}M`
+                          : Math.abs(Number(value)) >= 1_000
+                            ? `${(Number(value) / 1_000).toFixed(1)}K`
+                            : String(value))
+                        : undefined}
+                    />
+                    <YAxis yAxisId="right" orientation="right" />
+                    <Tooltip />
+                    <Legend />
+                    <Bar yAxisId="left" dataKey="physical" fill="#0ea5e9" name={`Consumo Físico${tipo === 'co2' ? ' (kg)' : ''}`} />
+                    <Bar yAxisId="left" dataKey="theoretical" fill="#10b981" name={`Consumo Teórico${tipo === 'co2' ? ' (kg)' : ''}`} />
+                    <Line yAxisId="right" type="monotone" dataKey="yield" stroke="#f59e0b" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} name="Rendimiento" />
+                  </ComposedChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="flex h-[320px] items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-white/50 text-xs font-black uppercase tracking-widest text-slate-400">
+                  Sin datos para graficar
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 interface ReportesModuleProps {
   insumosSubTab: string;
@@ -153,6 +526,17 @@ export function ReportesModule({
                                 ))}
                               </div>
                             )}
+                            {insumosPeriodoSubTab === 'resumen-mensual' && (
+                              <ReportesResumenMensual
+                                tipo="co2"
+                                insumosFecha={insumosFecha}
+                                getMttoCo2ConsumptionForDate={getMttoCo2ConsumptionForDate}
+                                calcularKgCo2ParaFecha={calcularKgCo2ParaFecha}
+                                getAguaConsumoNumber={getAguaConsumoNumber}
+                                calcularLitrosAguaParaFecha={calcularLitrosAguaParaFecha}
+                                formatAguaDisplay={formatAguaDisplay}
+                              />
+                            )}
                            </>
                          )}
                             {insumosSubTab === 'agua' && (
@@ -192,6 +576,17 @@ export function ReportesModule({
                                     ))}
                                   </div>
                                 )}
+                               {insumosPeriodoSubTab === 'resumen-mensual' && (
+                                 <ReportesResumenMensual
+                                   tipo="agua"
+                                   insumosFecha={insumosFecha}
+                                   getMttoCo2ConsumptionForDate={getMttoCo2ConsumptionForDate}
+                                   calcularKgCo2ParaFecha={calcularKgCo2ParaFecha}
+                                   getAguaConsumoNumber={getAguaConsumoNumber}
+                                   calcularLitrosAguaParaFecha={calcularLitrosAguaParaFecha}
+                                   formatAguaDisplay={formatAguaDisplay}
+                                 />
+                               )}
                                {insumosPeriodoSubTab === 'diario' && (
                                  <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
                                    <table className="w-full border-collapse text-[11px]">
@@ -522,6 +917,8 @@ export function ReportesModule({
                                 )}
                               </>
                             )}
+                           {insumosSubTab === 'co2' &&
+                             (insumosPeriodoSubTab === 'diario' || insumosPeriodoSubTab === 'resumen-tablas') && (
                            <div className="flex-1 bg-white rounded-[2.5rem] p-4 overflow-x-auto">
                              {insumosSubTab === 'co2' && insumosPeriodoSubTab === 'diario' && (
                                <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
@@ -877,6 +1274,7 @@ export function ReportesModule({
                                </div>
                              )}
                           </div>
+                           )}
                        </div>
   );
 }

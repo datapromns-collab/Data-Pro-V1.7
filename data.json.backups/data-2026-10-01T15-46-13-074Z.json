@@ -30351,7 +30351,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-01T14:29:59.435Z"
+    "updatedAt": "2026-10-01T15:46:06.664Z"
   },
   "ordenesSap": [
     {
@@ -173491,11 +173491,13 @@
         },
         "auto-7-1790682811969": {
           "cajasPlanificadas": 17791,
-          "jarabeReal": 35594
+          "jarabeReal": 35594,
+          "ubb": 36
         },
         "auto-7-1790767503618": {
           "cajasPlanificadas": 14225,
-          "jarabeReal": 34135
+          "jarabeReal": 34135,
+          "ubb": 22
         }
       }
     },
@@ -181224,31 +181226,31 @@
       "periods": {
         "2026-10": {
           "prodt": {
-            "PRODT-0007": "99689",
-            "PRODT-0008": "6994",
-            "PRODT-0009": "58461",
-            "PRODT-0010": "6157",
+            "PRODT-0007": "39747",
+            "PRODT-0008": "12202",
+            "PRODT-0009": "38546",
+            "PRODT-0010": "5611",
             "PRODT-0011": "0",
-            "PRODT-0012": "45940",
-            "PRODT-0049": "1724",
-            "PRODT-0097": "17117",
-            "PRODT-0098": "3780",
-            "PRODT-0082": "5130",
-            "PRODT-0084": "10730",
-            "PRODT-0086": "9311",
-            "PRODT-0088": "14574",
-            "PRODT-0104": "1397",
+            "PRODT-0012": "27186",
+            "PRODT-0049": "1129",
+            "PRODT-0097": "11438",
+            "PRODT-0098": "3185",
+            "PRODT-0082": "60",
+            "PRODT-0084": "14358",
+            "PRODT-0086": "5948",
+            "PRODT-0088": "11689",
+            "PRODT-0104": "995",
             "PRODT-0105": "1",
-            "PRODT-0107": "9133",
-            "PRODT-0092": "40100",
-            "PRODT-0093": "8396",
-            "PRODT-0094": "8281",
-            "PRODT-0095": "1044",
+            "PRODT-0107": "8319",
+            "PRODT-0092": "32050",
+            "PRODT-0093": "5832",
+            "PRODT-0094": "5121",
+            "PRODT-0095": "124",
             "PRODT-0111": "112",
-            "PRODT-0014": "23614",
-            "PRODT-0100": "21532",
-            "PRODT-0115": "13356",
-            "PRODT-0116": "4210",
+            "PRODT-0014": "15136",
+            "PRODT-0100": "19859",
+            "PRODT-0115": "1262",
+            "PRODT-0116": "20993",
             "PRODT-0123": "17296",
             "PRODT-0124": "23263",
             "PRODT-0125": "24498",
@@ -181386,8 +181388,8 @@
     "filename": "stock-producto-terminado.xlsx",
     "originalName": "Formato Inventario  Fisico Almacen PT DIARIO ACT  08.xlsx",
     "tipo": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "tamano": 35165,
-    "uploadedAt": "2026-10-01T14:10:15.101Z",
+    "tamano": 35025,
+    "uploadedAt": "2026-10-01T14:56:26.038Z",
     "uploadedBy": "local-user"
   }
 }

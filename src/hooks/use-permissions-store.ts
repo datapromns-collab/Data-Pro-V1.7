@@ -387,12 +387,27 @@ export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
     { id: 'monthly', label: 'Resumen mensual' },
   ] }],
   insumos: [
-    { id: 'co2', label: 'CO2' },
-    { id: 'agua', label: 'Agua' },
-    { id: 'period', label: 'Período', children: [
+    { id: 'co2', label: 'CO2', children: [
       { id: 'diario', label: 'Diario' },
-      { id: 'semanal', label: 'Semanal' },
-      { id: 'mensual', label: 'Mensual' },
+      { id: 'resumen-tablas', label: 'Resumen Tablas', children: [
+        { id: 'semanal', label: 'Semanal' },
+        { id: 'mensual', label: 'Mensual' },
+      ] },
+      { id: 'resumen-mensual', label: 'Resumen mensual', children: [
+        { id: 'r-semanal', label: 'R Semanal' },
+        { id: 'r-mensual', label: 'R Mensual' },
+      ] },
+    ] },
+    { id: 'agua', label: 'Agua', children: [
+      { id: 'diario', label: 'Diario' },
+      { id: 'resumen-tablas', label: 'Resumen Tablas', children: [
+        { id: 'semanal', label: 'Semanal' },
+        { id: 'mensual', label: 'Mensual' },
+      ] },
+      { id: 'resumen-mensual', label: 'Resumen mensual', children: [
+        { id: 'r-semanal', label: 'R Semanal' },
+        { id: 'r-mensual', label: 'R Mensual' },
+      ] },
     ] },
   ],
   logistica: [

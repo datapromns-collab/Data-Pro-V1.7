@@ -28908,7 +28908,80 @@
               "unit": "UND"
             }
           ],
-          "2026-09-30": [],
+          "2026-09-30": [
+            {
+              "id": "3990af7c-2358-48f3-9b86-334df12cef46",
+              "line": "Linea 1",
+              "flavor": "GLUP FRESH",
+              "code": "ENV-00013",
+              "material": "BOTELLA ENVASADA GLUP FRESH 2.0.LTS",
+              "quantity": "558",
+              "unit": "UND"
+            },
+            {
+              "id": "9c5d071f-cd18-455c-a67b-abdea1a51113",
+              "line": "Linea 1",
+              "flavor": "GLUP PIÑA",
+              "code": "ENV-00009",
+              "material": "BOTELLA ENVASADA GLUP PIÑA 2.0.LTS",
+              "quantity": "99",
+              "unit": "UND"
+            },
+            {
+              "id": "3a9c8e93-23ff-45e2-bb0c-9029364e0244",
+              "line": "Linea 2",
+              "flavor": "GLUP UVA",
+              "code": "ENV-00039",
+              "material": "BOTELLA ENVASADA GLUP UVA  2.0.LTS  (EN LINEA 2)",
+              "quantity": "181",
+              "unit": "UND"
+            },
+            {
+              "id": "f16ffd51-d354-441f-9d5a-dbc4bc4bb5c3",
+              "line": "Linea 3",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00063",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 2L (LINEA 3)",
+              "quantity": "168",
+              "unit": "UND"
+            },
+            {
+              "id": "6662a9a2-d188-421f-93c6-907ac7216e58",
+              "line": "Linea 4",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00054",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 2.LTS (LINEA 4)",
+              "quantity": "133",
+              "unit": "UND"
+            },
+            {
+              "id": "c81f85b8-137f-47d3-9f89-d0dbff4d56c0",
+              "line": "Linea 5",
+              "flavor": "JUSTY NARANJA",
+              "code": "ENV-00027",
+              "material": "BOTELLA ENVASADA JUSTY NARANJA  1.5 LTS",
+              "quantity": "340",
+              "unit": "UND"
+            },
+            {
+              "id": "1f1da8b4-05f9-475a-8008-0f3400594483",
+              "line": "Linea 6",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00048",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 400 ML (LINEA 6)",
+              "quantity": "125",
+              "unit": "UND"
+            },
+            {
+              "id": "5c4268ae-0544-432e-9f2a-d6b68991cc0c",
+              "line": "Linea 7",
+              "flavor": "GLUP UVA",
+              "code": "ENV-00079",
+              "material": "BOTELLA ENVASADA GLUP UVA 1.0 L (LINEA 7)",
+              "quantity": "57",
+              "unit": "UND"
+            }
+          ],
           "2026-09-29": [
             {
               "id": "f3168d22-9693-4fff-af7f-b704069c6181",
@@ -29515,8 +29588,8 @@
           "seguimiento",
           "procesos",
           "ordenes-sap",
-          "insumos",
-          "mtto"
+          "mtto",
+          "insumos"
         ],
         "demon": [
           "planning",
@@ -30351,7 +30424,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-01T14:56:26.038Z"
+    "updatedAt": "2026-10-01T15:48:45.505Z"
   },
   "ordenesSap": [
     {
