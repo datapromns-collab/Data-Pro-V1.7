@@ -98,6 +98,7 @@ import { getWeekDays } from '@/lib/planner-utils';
 import { useAuthStore } from '@/hooks/use-auth-store';
 import { usePermissionsStore } from '@/hooks/use-permissions-store';
 import { PermisosModule } from '@/components/planner/PermisosModule';
+import VentasModule from '@/components/planner/VentasModule';
 import { MessagesCenter } from '@/components/planner/MessagesCenter';
 import { FcmManager } from '@/components/FcmManager';
 import { Toaster } from '@/components/ui/toaster';
@@ -6961,10 +6962,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                        </div>
                      )}
                 {activeModule === 'ventas' && hasAccess(user.id, 'ventas') && (
-                  <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                    <TrendingUp className="h-12 w-12 mb-4 opacity-20" />
-                    Módulo de Ventas en Desarrollo
-                  </div>
+                  <VentasModule />
                 )}
                  {activeModule === 'purchasing' && hasAccess(user.id, 'purchasing') && (
                    <PurchasingModule 
