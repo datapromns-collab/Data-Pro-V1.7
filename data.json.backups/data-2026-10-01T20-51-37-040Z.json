@@ -29075,7 +29075,8 @@
             "INSU_0031": "280",
             "INSU_0032": "300",
             "INSU_0036": "166.5",
-            "INSU_0042": "213.70"
+            "INSU_0042": "213.70",
+            "INSU_0044": "200"
           },
           "2026-09": {
             "tapas": {
@@ -30948,7 +30949,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-01T20:26:00.992Z"
+    "updatedAt": "2026-10-01T20:51:34.503Z"
   },
   "ordenesSap": [
     {
@@ -41030,6 +41031,26 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 5358
+        }
+      ]
+    },
+    {
+      "id": "6-1790887890172",
+      "linea": 6,
+      "sabor": "GLUP MANZANA ROJA",
+      "ordenNumero": "64000",
+      "semana": 40,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-01",
+          "ticket1": "16177",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     }
