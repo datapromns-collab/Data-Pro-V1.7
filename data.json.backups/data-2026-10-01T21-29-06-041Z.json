@@ -30949,7 +30949,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-01T20:51:33.229Z"
+    "updatedAt": "2026-10-01T21:29:04.176Z"
   },
   "ordenesSap": [
     {
@@ -41043,7 +41043,127 @@
       "dias": [
         {
           "fechaInicio": "2026-10-01",
-          "ticket1": "1",
+          "ticket1": "16177",
+          "cajas1": 1280,
+          "ticket2": "",
+          "cajas2": 1280,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "1-1790888018203",
+      "linea": 1,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "63971",
+      "semana": 40,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-01",
+          "ticket1": "16082",
+          "cajas1": 1280,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "2-1790888030241",
+      "linea": 2,
+      "sabor": "GLUP UVA",
+      "ordenNumero": "63977",
+      "semana": 40,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-01",
+          "ticket1": "16042",
+          "cajas1": 7920,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "5-1790888057275",
+      "linea": 5,
+      "sabor": "JUSTY NARANJA",
+      "ordenNumero": "63994",
+      "semana": 40,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-01",
+          "ticket1": "15205",
+          "cajas1": 1500,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "7-1790888068568",
+      "linea": 7,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "64006",
+      "semana": 40,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-01",
+          "ticket1": "16",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "4-1790889966788",
+      "linea": 4,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63983",
+      "semana": 40,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-01",
+          "ticket1": "16129",
+          "cajas1": 4960,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "3-1790889997583",
+      "linea": 3,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63989",
+      "semana": 40,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-01",
+          "ticket1": "",
           "cajas1": 0,
           "ticket2": "",
           "cajas2": 0,
@@ -182084,7 +182204,9 @@
     "2-1787746751497",
     "4-1788299817717",
     "7-1788889770039",
-    "1-1789561701246"
+    "1-1789561701246",
+    "3-1790888038958",
+    "4-1790888046631"
   ],
   "logisticsStockFile": {
     "filename": "stock-producto-terminado.xlsx",
