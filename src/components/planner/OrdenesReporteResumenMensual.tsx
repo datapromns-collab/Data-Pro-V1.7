@@ -16,7 +16,6 @@ import {
   YAxis,
 } from 'recharts';
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useOrdenesSap } from '@/hooks/use-ordenes-sap';
 import { useSeguimientoResumenOptimizado, type LineaKey } from '@/hooks/use-seguimiento-ordenes';
 import { PRODUCT_LIST } from '@/lib/planner-utils';
@@ -24,21 +23,18 @@ import { combinarFilasResumenMensual, FACTORES_RENDIMIENTO_AZUCAR } from '@/lib/
 
 type ResumenMensualSubsection = 'resumen-por-sabor' | 'resumen-por-lineas' | 'rendimiento-azucar';
 
-const MONTHS = [
-  'ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO',
-  'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE',
-];
-
-const YEAR_OPTIONS = Array.from({ length: 10 }, (_, index) => new Date().getFullYear() - 5 + index);
-
 const formatNumber = (value: number) => value.toFixed(2).replace('.', ',');
 
-export function OrdenesReporteResumenMensual() {
+interface OrdenesReporteResumenMensualProps {
+  reportMonthDate: Date;
+}
+
+export function OrdenesReporteResumenMensual({ reportMonthDate }: OrdenesReporteResumenMensualProps) {
   const { ordenes } = useOrdenesSap();
   const seguimiento = useSeguimientoResumenOptimizado();
   const [subsection, setSubsection] = useState<ResumenMensualSubsection>('resumen-por-sabor');
-  const [month, setMonth] = useState(new Date().getMonth() + 1);
-  const [year, setYear] = useState(new Date().getFullYear());
+  const month = reportMonthDate.getMonth() + 1;
+  const year = reportMonthDate.getFullYear();
 
   const autoOverrides = useMemo(() => {
     const flattened: Record<string, {
@@ -288,24 +284,6 @@ export function OrdenesReporteResumenMensual() {
                 {label}
               </button>
             ))}
-          </div>
-          <div className="flex items-center gap-2">
-            <Select value={String(month)} onValueChange={(value) => setMonth(Number(value))}>
-              <SelectTrigger aria-label="Mes del resumen mensual de órdenes" className="h-9 w-[140px] rounded-md border-slate-200 bg-white text-center text-[10px] font-bold uppercase tracking-widest">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {MONTHS.map((name, index) => <SelectItem key={name} value={String(index + 1)}>{name}</SelectItem>)}
-              </SelectContent>
-            </Select>
-            <Select value={String(year)} onValueChange={(value) => setYear(Number(value))}>
-              <SelectTrigger aria-label="Año del resumen mensual de órdenes" className="h-9 w-[100px] rounded-md border-slate-200 bg-white text-center text-[10px] font-bold uppercase tracking-widest">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {YEAR_OPTIONS.map((option) => <SelectItem key={option} value={String(option)}>{option}</SelectItem>)}
-              </SelectContent>
-            </Select>
           </div>
         </div>
         <div className="flex items-center justify-end gap-2">

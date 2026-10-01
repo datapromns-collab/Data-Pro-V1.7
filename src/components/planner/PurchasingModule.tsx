@@ -39,7 +39,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { useRemoteCollection } from '@/hooks/use-remote-collection';
-import { loadPlannerData } from '@/lib/json-db';
+import { loadProductionInventoryData } from '@/lib/json-db';
 import { Card } from '@/components/ui/card';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
@@ -283,10 +283,10 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
    useEffect(() => {
      let cancelled = false;
      const loadProductionInventory = async () => {
-       const data = await loadPlannerData();
+       const data = await loadProductionInventoryData();
        if (cancelled) return;
-       if (data?.productionInventory) {
-         setProductionInventory(data.productionInventory as MonthlyProductionInventory);
+       if (data) {
+         setProductionInventory(data as MonthlyProductionInventory);
          setProductionInventoryError(null);
        } else {
          setProductionInventoryError('La respuesta compartida no incluyó el inventario mensual de Producción. Se conservan los últimos datos cargados.');

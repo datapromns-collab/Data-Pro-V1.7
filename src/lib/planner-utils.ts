@@ -15,6 +15,9 @@ export const PRODUCT_LIST = [
   "JUSTY TAMARINDO", "JUSTY MANZANA", "JUSTY PERA", "VITA TEA DURAZNO", "VITA TEA LIMON"
 ];
 
+export const weekMonthKey = (weekStart: Date, monthRef: Date) =>
+  `${format(weekStart, 'yyyy-MM-dd')}|${format(monthRef, 'yyyy-MM')}`;
+
 export const ALL_LINES_SUMMARY = ["1", "2", "3", "4", "5", "6", "7", "8"];
 
 // --- DATOS MAESTROS DE MATERIALES ---

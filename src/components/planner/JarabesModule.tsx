@@ -9,7 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Beaker, Pipette, Activity, FileSpreadsheet, TrendingUp, ScrollText, CalendarIcon } from 'lucide-react';
 import { format, startOfMonth, endOfMonth, startOfWeek, addDays, isSameMonth } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { getWeekDays, getWeeksInMonth } from '@/lib/planner-utils';
+import { getWeekDays, getWeeksInMonth, weekMonthKey } from '@/lib/planner-utils';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Line, ComposedChart } from 'recharts';
 
 const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
@@ -94,10 +94,6 @@ function useJarabes(): JarabesContextValue {
 }
 
 const dk = (fecha: Date) => format(fecha, 'yyyy-MM-dd');
-
-// Clave de persistencia del Físico total semanal: ${semana yyyy-MM-dd}|${mes yyyy-MM}
-export const weekMonthKey = (weekStart: Date, monthRef: Date) =>
-  `${dk(weekStart)}|${format(monthRef, 'yyyy-MM')}`;
 
 function normalizeJarabesData(raw: any): JarabesData {
   const d = raw && typeof raw === 'object' ? raw : {};

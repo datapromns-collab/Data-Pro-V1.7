@@ -75,7 +75,7 @@ async function fetchWithRetry(url: string, options: RequestInit = {}, retries = 
 
 export async function loadPlannerData(): Promise<PlannerData | null> {
   try {
-    const res = await fetchWithRetry(API_URL);
+    const res = await fetchWithRetry(`${API_URL}?section=planner`);
     if (!res.ok) throw new Error('API error');
     const json = await res.json();
     return { ...(json.planner || json), _meta: json._meta };
@@ -135,7 +135,7 @@ export async function savePlannerData(data: Partial<PlannerData>): Promise<void>
 
 export async function loadOrdenesSapData(): Promise<{ ordenes: OrdenSap[]; deletedIds: string[] } | null> {
   try {
-    const res = await fetchWithRetry(API_URL);
+    const res = await fetchWithRetry(`${API_URL}?section=ordenesSap`);
     if (!res.ok) throw new Error('API error');
     const json = await res.json();
     return {

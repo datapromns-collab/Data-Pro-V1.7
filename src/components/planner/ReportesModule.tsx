@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type Dispatch, type SetStateAction } from 'react';
+import { useEffect, useState, type Dispatch, type SetStateAction } from 'react';
 import { addDays, eachDayOfInterval, endOfMonth, format, getISOWeek, startOfDay, startOfMonth, startOfWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Calendar as CalendarIcon, ClipboardList, Droplets, FlaskConical } from 'lucide-react';
@@ -28,6 +28,7 @@ type ReportesResumenSection = 'r-semanal' | 'r-mensual';
 interface ReportesResumenMensualProps {
   tipo: 'co2' | 'agua';
   insumosFecha: Date | undefined;
+  reportMonthDate: Date;
   getMttoCo2ConsumptionForDate: (fechaStr: string) => number;
   calcularKgCo2ParaFecha: (fechaStr: string) => number;
   getAguaConsumoNumber: (fechaStr: string) => number;
@@ -38,6 +39,7 @@ interface ReportesResumenMensualProps {
 function ReportesResumenMensual({
   tipo,
   insumosFecha,
+  reportMonthDate,
   getMttoCo2ConsumptionForDate,
   calcularKgCo2ParaFecha,
   getAguaConsumoNumber,
@@ -47,16 +49,13 @@ function ReportesResumenMensual({
   const initialDate = insumosFecha ?? new Date();
   const [section, setSection] = useState<ReportesResumenSection>('r-semanal');
   const [weeklyDate, setWeeklyDate] = useState(() => startOfWeek(initialDate, { weekStartsOn: 1 }));
-  const [monthlyDate, setMonthlyDate] = useState(() => startOfMonth(initialDate));
-  const [weeklySelectedMonth, setWeeklySelectedMonth] = useState(initialDate.getMonth());
-  const [weeklySelectedYear, setWeeklySelectedYear] = useState(initialDate.getFullYear());
+  const weeklySelectedMonth = reportMonthDate.getMonth();
+  const weeklySelectedYear = reportMonthDate.getFullYear();
 
-  const monthOptions = Array.from({ length: 12 }, (_, month) => ({
-    value: month,
-    label: format(new Date(2024, month, 1), 'MMMM', { locale: es }),
-  }));
-  const currentYear = new Date().getFullYear();
-  const yearOptions = Array.from({ length: 11 }, (_, index) => currentYear - 5 + index);
+  useEffect(() => {
+    setWeeklyDate(startOfWeek(reportMonthDate, { weekStartsOn: 1 }));
+  }, [reportMonthDate]);
+
   const monthStart = new Date(weeklySelectedYear, weeklySelectedMonth, 1);
   const monthEnd = endOfMonth(monthStart);
   const weeksInSelectedMonth: Date[] = [];
@@ -72,8 +71,8 @@ function ReportesResumenMensual({
   );
   const weekDays = Array.from({ length: 7 }, (_, index) => addDays(weeklyDate, index))
     .filter((day) => day.getMonth() === weeklySelectedMonth && day.getFullYear() === weeklySelectedYear);
-  const monthlyStart = startOfMonth(monthlyDate);
-  const monthlyEnd = endOfMonth(monthlyDate);
+  const monthlyStart = startOfMonth(reportMonthDate);
+  const monthlyEnd = endOfMonth(reportMonthDate);
   const monthlyWeeks: { isoWeek: number; days: Date[] }[] = [];
   for (
     let week = startOfWeek(monthlyStart, { weekStartsOn: 1 });
@@ -130,14 +129,6 @@ function ReportesResumenMensual({
   const formatValue = (value: number) => tipo === 'agua'
     ? formatAguaDisplay(value)
     : value.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  const setWeeklyMonth = (month: number) => {
-    setWeeklySelectedMonth(month);
-    setWeeklyDate(startOfWeek(new Date(weeklySelectedYear, month, 1), { weekStartsOn: 1 }));
-  };
-  const setWeeklyYear = (year: number) => {
-    setWeeklySelectedYear(year);
-    setWeeklyDate(startOfWeek(new Date(year, weeklySelectedMonth, 1), { weekStartsOn: 1 }));
-  };
   const monthlyRows = tipo === 'co2'
     ? [
       { label: 'CONSUMO FÍSICO', key: 'physical' },
@@ -195,22 +186,6 @@ function ReportesResumenMensual({
             >
               ‹
             </button>
-            <select
-              aria-label="Mes del resumen semanal"
-              value={weeklySelectedMonth}
-              onChange={(event) => setWeeklyMonth(Number(event.target.value))}
-              className="h-8 rounded-full border-0 bg-white px-3 text-[10px] font-bold capitalize text-slate-700 shadow-sm outline-none"
-            >
-              {monthOptions.map((month) => <option key={month.value} value={month.value}>{month.label}</option>)}
-            </select>
-            <select
-              aria-label="Año del resumen semanal"
-              value={weeklySelectedYear}
-              onChange={(event) => setWeeklyYear(Number(event.target.value))}
-              className="h-8 rounded-full border-0 bg-white px-3 text-[10px] font-bold text-slate-700 shadow-sm outline-none"
-            >
-              {yearOptions.map((year) => <option key={year} value={year}>{year}</option>)}
-            </select>
             <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
               Semana {getISOWeek(weeklyDate)} · {format(weekDays[0] ?? weeklyDate, 'd/M/yyyy')} - {format(weekDays[weekDays.length - 1] ?? addDays(weeklyDate, 6), 'd/M/yyyy')}
             </span>
@@ -298,27 +273,9 @@ function ReportesResumenMensual({
 
       {section === 'r-mensual' && (
         <div className="flex min-h-0 flex-col gap-3">
-          <div className="flex items-center justify-end gap-2 no-print">
-            <select
-              aria-label="Mes del resumen mensual"
-              value={monthlyDate.getMonth()}
-              onChange={(event) => setMonthlyDate((date) => new Date(date.getFullYear(), Number(event.target.value), 1))}
-              className="h-9 rounded-full border-0 bg-white px-4 text-[10px] font-bold capitalize text-slate-700 shadow-sm outline-none"
-            >
-              {monthOptions.map((month) => <option key={month.value} value={month.value}>{month.label}</option>)}
-            </select>
-            <select
-              aria-label="Año del resumen mensual"
-              value={monthlyDate.getFullYear()}
-              onChange={(event) => setMonthlyDate((date) => new Date(Number(event.target.value), date.getMonth(), 1))}
-              className="h-9 rounded-full border-0 bg-white px-4 text-[10px] font-bold text-slate-700 shadow-sm outline-none"
-            >
-              {yearOptions.map((year) => <option key={year} value={year}>{year}</option>)}
-            </select>
-          </div>
           <div className="rounded-2xl border border-slate-200 bg-white">
             <div className="px-4 py-2 text-[11px] font-black uppercase tracking-widest text-slate-700">
-              {format(monthlyDate, 'MMMM yyyy', { locale: es })}
+              {format(reportMonthDate, 'MMMM yyyy', { locale: es })}
             </div>
             <div className="overflow-x-auto">
               <table className="w-full min-w-[520px] border-collapse text-[11px]">
@@ -460,6 +417,57 @@ export function ReportesModule({
 }: ReportesModuleProps) {
   const [co2ResumenSubTab, setCo2ResumenSubTab] = useState<'semanal' | 'mensual'>('semanal');
   const [aguaResumenSubTab, setAguaResumenSubTab] = useState<'semanal' | 'mensual'>('semanal');
+  const [reportMonthDate, setReportMonthDate] = useState(() => startOfMonth(insumosFecha ?? new Date()));
+  const [reportMonthLoaded, setReportMonthLoaded] = useState(false);
+
+  useEffect(() => {
+    const savedMonth = localStorage.getItem('reportes-selected-month');
+    if (savedMonth && /^\d{4}-\d{2}$/.test(savedMonth)) {
+      const [year, month] = savedMonth.split('-').map(Number);
+      if (month >= 1 && month <= 12) {
+        const restoredMonth = new Date(year, month - 1, 1);
+        setReportMonthDate(restoredMonth);
+        setInsumosFecha((currentDate) => {
+          const day = currentDate?.getDate() ?? 1;
+          const lastDay = new Date(year, month, 0).getDate();
+          const restoredDate = new Date(year, month - 1, Math.min(day, lastDay));
+          localStorage.setItem('selected-insumos-fecha', JSON.stringify(format(restoredDate, 'yyyy-MM-dd')));
+          return restoredDate;
+        });
+      }
+    }
+    setReportMonthLoaded(true);
+  }, [setInsumosFecha]);
+
+  useEffect(() => {
+    if (reportMonthLoaded) {
+      localStorage.setItem('reportes-selected-month', format(reportMonthDate, 'yyyy-MM'));
+    }
+  }, [reportMonthDate, reportMonthLoaded]);
+
+  const selectReportMonth = (value: string) => {
+    const [year, month] = value.split('-').map(Number);
+    if (!Number.isInteger(year) || !Number.isInteger(month) || month < 1 || month > 12) return;
+    const selectedMonth = new Date(year, month - 1, 1);
+    setReportMonthDate(selectedMonth);
+    localStorage.setItem('reportes-selected-month', format(selectedMonth, 'yyyy-MM'));
+    setInsumosFecha((currentDate) => {
+      const day = currentDate?.getDate() ?? 1;
+      const lastDay = new Date(year, month, 0).getDate();
+      const selectedDate = new Date(year, month - 1, Math.min(day, lastDay));
+      localStorage.setItem('selected-insumos-fecha', JSON.stringify(format(selectedDate, 'yyyy-MM-dd')));
+      return selectedDate;
+    });
+  };
+
+  const selectReportDate = (date: Date | undefined) => {
+    setInsumosFecha(date);
+    if (date) {
+      setReportMonthDate(startOfMonth(date));
+      localStorage.setItem('selected-insumos-fecha', JSON.stringify(format(date, 'yyyy-MM-dd')));
+      localStorage.setItem('reportes-selected-month', format(date, 'yyyy-MM'));
+    }
+  };
 
   return (
 <div className="flex flex-col h-full">
@@ -474,7 +482,7 @@ export function ReportesModule({
                              {mttoCo2SyncError && <p>{mttoCo2SyncError}</p>}
                            </div>
                          )}
-                         <div className="flex items-center gap-2 mb-2 no-print">
+                         <div className="flex flex-wrap items-center gap-2 mb-2 no-print">
                             <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
                               {(['co2', 'agua', 'ordenes'] as const).map((tab) => (
                                 <button
@@ -492,6 +500,13 @@ export function ReportesModule({
                                 </button>
                               ))}
                             </div>
+                           <input
+                             type="month"
+                             aria-label="Mes principal de reportes"
+                             value={format(reportMonthDate, 'yyyy-MM')}
+                             onChange={(event) => selectReportMonth(event.target.value)}
+                             className="h-9 rounded-full border-0 bg-white px-3 text-[10px] font-bold text-slate-700 shadow-sm outline-none"
+                           />
                            {insumosSubTab !== 'ordenes' && <div className="ml-auto">
                              <Popover>
                                <PopoverTrigger asChild>
@@ -501,7 +516,7 @@ export function ReportesModule({
                                  </button>
                                </PopoverTrigger>
                                <PopoverContent className="w-auto p-0" align="end">
-                                  <Calendar mode="single" selected={insumosFecha} onSelect={(date) => { setInsumosFecha(date); if (date) { localStorage.setItem('selected-insumos-fecha', JSON.stringify(format(date, 'yyyy-MM-dd'))); } }} locale={es} />
+                                  <Calendar mode="single" selected={insumosFecha} onSelect={selectReportDate} locale={es} />
                                </PopoverContent>
                              </Popover>
                            </div>}
@@ -547,6 +562,7 @@ export function ReportesModule({
                               <ReportesResumenMensual
                                 tipo="co2"
                                 insumosFecha={insumosFecha}
+                                reportMonthDate={reportMonthDate}
                                 getMttoCo2ConsumptionForDate={getMttoCo2ConsumptionForDate}
                                 calcularKgCo2ParaFecha={calcularKgCo2ParaFecha}
                                 getAguaConsumoNumber={getAguaConsumoNumber}
@@ -597,6 +613,7 @@ export function ReportesModule({
                                  <ReportesResumenMensual
                                    tipo="agua"
                                    insumosFecha={insumosFecha}
+                                   reportMonthDate={reportMonthDate}
                                    getMttoCo2ConsumptionForDate={getMttoCo2ConsumptionForDate}
                                    calcularKgCo2ParaFecha={calcularKgCo2ParaFecha}
                                    getAguaConsumoNumber={getAguaConsumoNumber}
@@ -934,7 +951,7 @@ export function ReportesModule({
                                 )}
                               </>
                             )}
-                           {insumosSubTab === 'ordenes' && <OrdenesReporteResumenMensual />}
+                           {insumosSubTab === 'ordenes' && <OrdenesReporteResumenMensual reportMonthDate={reportMonthDate} />}
                            {insumosSubTab === 'co2' &&
                              (insumosPeriodoSubTab === 'diario' || insumosPeriodoSubTab === 'resumen-tablas') && (
                            <div className="flex-1 bg-white rounded-[2.5rem] p-4 overflow-x-auto">

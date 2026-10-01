@@ -2,11 +2,7 @@
 
 import React, { useState, useMemo, useEffect, useRef, memo } from "react";
 import Image from "next/image";
-import ExcelJS from "exceljs";
-import { read, utils } from "xlsx";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
-import { autoTable } from "jspdf-autotable";
+import dynamic from "next/dynamic";
 import { 
   Plus, 
   Trash2, 
@@ -55,52 +51,18 @@ import {
   FileText,
   Upload
 } from 'lucide-react';
-import { PRODUCT_LIST, SHIFT_SPLIT_HOUR, SHIFT_SPLIT_MINUTE, PRODUCTION_START_HOUR } from '@/lib/planner-utils';
-import ProducidasTable, { ProducidasTabla, nuevaTabla, sumarTablas } from '@/components/planner/ProducidasTable';import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
+import { PRODUCT_LIST, SHIFT_SPLIT_HOUR, SHIFT_SPLIT_MINUTE, PRODUCTION_START_HOUR, weekMonthKey } from '@/lib/planner-utils';
+import ProducidasTable, { ProducidasTabla, nuevaTabla, sumarTablas } from '@/components/planner/ProducidasTable';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
-import { TaskDialog } from '@/components/planner/TaskDialog';
-import { Calculator } from '@/components/planner/Calculator';
-import { KeyboardShortcuts } from '@/components/planner/KeyboardShortcuts';
 import { useRemoteCollection } from '@/hooks/use-remote-collection';
-import { RequirementSection } from '@/components/planner/RequirementSection';
-import { RequirementReport } from '@/components/planner/RequirementReport';
-import { CalculationReport } from '@/components/planner/CalculationReport';
-import { SummaryReport } from '@/components/planner/SummaryReport';
-import { DailyPlanSection } from '@/components/planner/DailyPlanSection';
-import { WeeklyPlanSection } from '@/components/planner/WeeklyPlanSection';
-import { PreparationSection } from '@/components/planner/PreparationSection';
-import { AdminReportTool } from '@/components/planner/AdminReportTool';
-import { ProductionEntryDialog } from '@/components/planner/ProductionEntryDialog';
-import { MonthlyReport } from '@/components/planner/MonthlyReport';
-import { WeeklySummaryReport } from '@/components/planner/WeeklySummaryReport';
-import { ComplianceReport } from '@/components/planner/ComplianceReport';
-import { MonthlyComplianceReport } from '@/components/planner/MonthlyComplianceReport';
-import { RecipeEditor } from '@/components/planner/RecipeEditor';
-import ProduccionModule from '@/components/planner/ProduccionModule';
-import { LogisticaModule } from '@/components/planner/LogisticaModule';
 import OrdenesSapModule, { CorrelativoSelector } from '@/components/planner/OrdenesSapModule';
 import { useOrdenesSap } from '@/hooks/use-ordenes-sap';
-import SeguimientoPanel from '@/components/planner/SeguimientoPanel';
-import { PackagingRecipeEditor } from '@/components/planner/PackagingRecipeEditor';
-import { RawMaterialModule } from '@/components/planner/RawMaterialModule';
-import { RawMaterialReport } from '@/components/planner/RawMaterialReport';
-import { DailyRawMaterialReport } from '@/components/planner/DailyRawMaterialReport';
-import { PurchasingModule, type PurchasingSummaryPrintData } from '@/components/planner/PurchasingModule';
-import { PurchasingRequirementReport } from '@/components/planner/PurchasingRequirementReport';
-import { InventoryReport } from '@/components/planner/InventoryReport';
-import { PlanProduccionReport } from '@/components/planner/PlanProduccionReport';
-import { RequisicionReport } from '@/components/planner/RequisicionReport';
-import { JarabesModule, weekMonthKey } from '@/components/planner/JarabesModule';
-import MttoModule from '@/components/planner/MttoModule';
-import CalidadModule from '@/components/planner/CalidadModule';
-import { ReportesModule } from '@/components/planner/ReportesModule';
-import { LoginForm } from '@/components/auth/LoginForm';
+import type { PurchasingSummaryPrintData } from '@/components/planner/PurchasingModule';
 import { usePlannerStore, getWeekKey } from '@/hooks/use-planner-store';
 import { getWeekDays } from '@/lib/planner-utils';
 import { useAuthStore } from '@/hooks/use-auth-store';
 import { usePermissionsStore } from '@/hooks/use-permissions-store';
-import { PermisosModule } from '@/components/planner/PermisosModule';
-import VentasModule from '@/components/planner/VentasModule';
+import { LoginForm } from '@/components/auth/LoginForm';
 import { MessagesCenter } from '@/components/planner/MessagesCenter';
 import { FcmManager } from '@/components/FcmManager';
 import { Toaster } from '@/components/ui/toaster';
@@ -121,6 +83,47 @@ import { es } from 'date-fns/locale';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { Bar, CartesianGrid, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, BarChart, Legend, Line, ComposedChart } from 'recharts';
+
+const lazyModule = <Props,>(loader: () => Promise<React.ComponentType<Props>>) =>
+  dynamic<Props>(() => loader().then((Component) => ({ default: Component })), {
+    loading: () => <div className="p-6 text-center text-xs font-bold text-slate-500">Cargando módulo...</div>,
+  });
+const LineSpeedsConfig = lazyModule(() => import('@/components/planner/LineSpeedsConfig').then((module) => module.LineSpeedsConfig));
+const TaskDialog = lazyModule(() => import('@/components/planner/TaskDialog').then((module) => module.TaskDialog));
+const Calculator = lazyModule(() => import('@/components/planner/Calculator').then((module) => module.Calculator));
+const KeyboardShortcuts = lazyModule(() => import('@/components/planner/KeyboardShortcuts').then((module) => module.KeyboardShortcuts));
+const RequirementSection = lazyModule(() => import('@/components/planner/RequirementSection').then((module) => module.RequirementSection));
+const JarabesModule = lazyModule(() => import('@/components/planner/JarabesModule').then((module) => module.JarabesModule));
+const RequirementReport = lazyModule(() => import('@/components/planner/RequirementReport').then((module) => module.RequirementReport));
+const CalculationReport = lazyModule(() => import('@/components/planner/CalculationReport').then((module) => module.CalculationReport));
+const SummaryReport = lazyModule(() => import('@/components/planner/SummaryReport').then((module) => module.SummaryReport));
+const DailyPlanSection = lazyModule(() => import('@/components/planner/DailyPlanSection').then((module) => module.DailyPlanSection));
+const WeeklyPlanSection = lazyModule(() => import('@/components/planner/WeeklyPlanSection').then((module) => module.WeeklyPlanSection));
+const PreparationSection = lazyModule(() => import('@/components/planner/PreparationSection').then((module) => module.PreparationSection));
+const AdminReportTool = lazyModule(() => import('@/components/planner/AdminReportTool').then((module) => module.AdminReportTool));
+const ProductionEntryDialog = lazyModule(() => import('@/components/planner/ProductionEntryDialog').then((module) => module.ProductionEntryDialog));
+const MonthlyReport = lazyModule(() => import('@/components/planner/MonthlyReport').then((module) => module.MonthlyReport));
+const WeeklySummaryReport = lazyModule(() => import('@/components/planner/WeeklySummaryReport').then((module) => module.WeeklySummaryReport));
+const ComplianceReport = lazyModule(() => import('@/components/planner/ComplianceReport').then((module) => module.ComplianceReport));
+const MonthlyComplianceReport = lazyModule(() => import('@/components/planner/MonthlyComplianceReport').then((module) => module.MonthlyComplianceReport));
+const RecipeEditor = lazyModule(() => import('@/components/planner/RecipeEditor').then((module) => module.RecipeEditor));
+const ProduccionModule = dynamic(() => import('@/components/planner/ProduccionModule'));
+const LogisticaModule = lazyModule(() => import('@/components/planner/LogisticaModule').then((module) => module.LogisticaModule));
+const SeguimientoPanel = dynamic(() => import('@/components/planner/SeguimientoPanel'));
+const PackagingRecipeEditor = lazyModule(() => import('@/components/planner/PackagingRecipeEditor').then((module) => module.PackagingRecipeEditor));
+const RawMaterialModule = lazyModule(() => import('@/components/planner/RawMaterialModule').then((module) => module.RawMaterialModule));
+const RawMaterialReport = lazyModule(() => import('@/components/planner/RawMaterialReport').then((module) => module.RawMaterialReport));
+const DailyRawMaterialReport = lazyModule(() => import('@/components/planner/DailyRawMaterialReport').then((module) => module.DailyRawMaterialReport));
+const PurchasingModule = lazyModule(() => import('@/components/planner/PurchasingModule').then((module) => module.PurchasingModule));
+const PurchasingRequirementReport = lazyModule(() => import('@/components/planner/PurchasingRequirementReport').then((module) => module.PurchasingRequirementReport));
+const InventoryReport = lazyModule(() => import('@/components/planner/InventoryReport').then((module) => module.InventoryReport));
+const PlanProduccionReport = lazyModule(() => import('@/components/planner/PlanProduccionReport').then((module) => module.PlanProduccionReport));
+const RequisicionReport = lazyModule(() => import('@/components/planner/RequisicionReport').then((module) => module.RequisicionReport));
+const MttoModule = dynamic(() => import('@/components/planner/MttoModule'));
+const CalidadModule = dynamic(() => import('@/components/planner/CalidadModule'));
+const ReportesModule = lazyModule(() => import('@/components/planner/ReportesModule').then((module) => module.ReportesModule));
+const PermisosModule = lazyModule(() => import('@/components/planner/PermisosModule').then((module) => module.PermisosModule));
+const VentasModule = lazyModule(() => import('@/components/planner/VentasModule').then((module) => module.VentasModule));
 
 const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Línea 6", "Línea 7", "Línea 8"];
 
@@ -1127,6 +1130,7 @@ export default function PlannerPage() {
   };
   const generarExcelCo2Mensual = async () => {
     if (typeof window === 'undefined') return;
+    const ExcelJS = (await import('exceljs')).default;
     const baseDate = insumosFecha || new Date();
     const mesSeleccionado = baseDate.getMonth();
     const anioSeleccionado = baseDate.getFullYear();
@@ -1192,6 +1196,7 @@ export default function PlannerPage() {
   };
   const generarExcelAguaMensual = async () => {
     if (typeof window === 'undefined') return;
+    const ExcelJS = (await import('exceljs')).default;
     const baseDate = insumosFecha || new Date();
     const mesSeleccionado = baseDate.getMonth();
     const anioSeleccionado = baseDate.getFullYear();
@@ -1257,6 +1262,10 @@ export default function PlannerPage() {
   };
   const generarPDFCo2Mensual = async () => {
     if (typeof window === 'undefined') return;
+    const [{ default: jsPDF }, { autoTable }] = await Promise.all([
+      import('jspdf'),
+      import('jspdf-autotable'),
+    ]);
     const baseDate = insumosFecha || new Date();
     const mesSeleccionado = baseDate.getMonth();
     const anioSeleccionado = baseDate.getFullYear();
@@ -1311,6 +1320,10 @@ export default function PlannerPage() {
   };
   const generarPDFAguaMensual = async () => {
     if (typeof window === 'undefined') return;
+    const [{ default: jsPDF }, { autoTable }] = await Promise.all([
+      import('jspdf'),
+      import('jspdf-autotable'),
+    ]);
     const baseDate = insumosFecha || new Date();
     const mesSeleccionado = baseDate.getMonth();
     const anioSeleccionado = baseDate.getFullYear();
@@ -1365,6 +1378,10 @@ export default function PlannerPage() {
   };
   const generarPDFRSemanalAgua = async () => {
     if (typeof window === 'undefined') return;
+    const [{ default: jsPDF }, { autoTable }] = await Promise.all([
+      import('jspdf'),
+      import('jspdf-autotable'),
+    ]);
     const days = getWeekDays(rSemanalWeekStartDate).filter((day) => {
       const dayMonth = day.getMonth() + 1;
       const dayYear = day.getFullYear();
@@ -1417,6 +1434,7 @@ export default function PlannerPage() {
     const finalY = (doc as any).lastAutoTable ? (doc as any).lastAutoTable.finalY : 80;
     const chartEl = document.getElementById('r-semanal-agua-chart');
     if (chartEl) {
+      const html2canvas = (await import('html2canvas')).default;
       const canvas = await html2canvas(chartEl, { scale: 2, backgroundColor: '#ffffff' });
       const imgData = canvas.toDataURL('image/png');
       const pageWidth = doc.internal.pageSize.getWidth();
@@ -2292,6 +2310,7 @@ export default function PlannerPage() {
 
   const exportPtabAguaToExcel = async () => {
     if (typeof window === 'undefined') return;
+    const ExcelJS = (await import('exceljs')).default;
     const days = getWeekDays(ptabWeekStartDate);
     const data = ptabAguaStore.data || {};
     const rows = [

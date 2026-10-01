@@ -93,6 +93,30 @@ export async function GET(request: Request) {
   try {
     const data = readDb();
     const section = new URL(request.url).searchParams.get('section');
+    if (section === 'planner') {
+      const planner = data.planner ?? {};
+      return new Response(JSON.stringify({
+        planner: {
+          config: planner.config,
+          customRecipes: planner.customRecipes,
+          customPackagingRecipes: planner.customPackagingRecipes,
+          weeks: planner.weeks,
+        },
+        _meta: data._meta,
+      }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      });
+    }
+    if (section === 'ordenesSap') {
+      return new Response(JSON.stringify({
+        ordenesSap: Array.isArray(data.ordenesSap) ? data.ordenesSap : [],
+        _deletedOrdenesSapIds: Array.isArray(data._deletedOrdenesSapIds) ? data._deletedOrdenesSapIds : [],
+      }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      });
+    }
     if (section === 'permissions') {
       return new Response(JSON.stringify({ permissions: data.planner?.permissions ?? {} }), {
         status: 200,
