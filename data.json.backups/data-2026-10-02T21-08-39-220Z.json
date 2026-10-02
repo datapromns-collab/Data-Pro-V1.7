@@ -14816,7 +14816,8 @@
           "planning",
           "seguimiento",
           "management",
-          "logistica"
+          "logistica",
+          "insumos"
         ],
         "enf.mds": [
           "planning",
@@ -15221,7 +15222,8 @@
           "planning"
         ],
         "g.tec.mds": [
-          "seguimiento"
+          "seguimiento",
+          "insumos"
         ],
         "enf.mds": [
           "planning"
@@ -15530,7 +15532,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-02T20:07:06.337Z"
+    "updatedAt": "2026-10-02T21:08:00.510Z"
   },
   "ordenesSap": [
     {
