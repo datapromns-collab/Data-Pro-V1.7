@@ -46807,7 +46807,7 @@
               "flavor": "GLUP UVA",
               "code": "PRODT-0008",
               "description": "GLUP! UVA  CAJA X 6BOT X 2.0LTS",
-              "nonConformity": "Bajo Co2 - Alto CO2",
+              "nonConformity": "Bajo CO2",
               "quantity": "36"
             },
             {
@@ -46827,7 +46827,7 @@
               "flavor": "GLUP KOLITA",
               "code": "PRODT-0009",
               "description": "GLUP! KOLITA  CAJA X 6BOT X 2.0LTS",
-              "nonConformity": "Bajo Co2 - Alto CO2",
+              "nonConformity": "Bajo CO2",
               "quantity": "88"
             },
             {
@@ -46847,7 +46847,7 @@
               "flavor": "GLUP MANZANA ROJA",
               "code": "PRODT-0097",
               "description": "GLUP! MAZANA ROJA CAJA X 6BOT X 2.0LTS",
-              "nonConformity": "Bajo Co2 - Alto CO2",
+              "nonConformity": "Bajo CO2",
               "quantity": "60"
             }
           ],
@@ -46878,7 +46878,7 @@
               "flavor": "GLUP KOLITA",
               "code": "PRODT-0009",
               "description": "GLUP! KOLITA  CAJA X 6BOT X 2.0LTS",
-              "nonConformity": "Bajo Co2 - Alto CO2",
+              "nonConformity": "Bajo CO2",
               "quantity": "390"
             },
             {
@@ -46889,6 +46889,55 @@
               "description": "GLUP! COLA NEGRA  CAJA X 6BOT X 2.0LTS",
               "nonConformity": "Bajo Brix",
               "quantity": "19"
+            }
+          ],
+          "2026-09-25": [
+            {
+              "id": "185bba5f-9152-42d6-a133-3e5318ce00b7",
+              "line": "Linea 5",
+              "flavor": "JUSTY DURAZNO",
+              "code": "PRODT-0100",
+              "description": "JUSTY DURAZNO CAJA X 12BOT X 1.5LTS",
+              "nonConformity": "Tiempo en tanques",
+              "quantity": "1782"
+            },
+            {
+              "id": "3ff460f9-486f-47fc-8e81-45043ebeaf59",
+              "line": "Linea 7",
+              "flavor": "GLUP COLA",
+              "code": "PRODT-0082",
+              "description": "GLUP! COLA NEGRA CAJA X 12BOT X 1LTS",
+              "nonConformity": "Exposicion de Taca",
+              "quantity": "234"
+            }
+          ],
+          "2026-09-29": [
+            {
+              "id": "bd00e8ef-7420-428e-bf33-916bf62b7a02",
+              "line": "Linea 7",
+              "flavor": "GLUP COLA",
+              "code": "PRODT-0082",
+              "description": "GLUP! COLA NEGRA CAJA X 12BOT X 1LTS",
+              "nonConformity": "Exposicion de Taca",
+              "quantity": "234"
+            },
+            {
+              "id": "1becef24-f4d6-4314-8ca4-2320683d2aea",
+              "line": "Linea 3",
+              "flavor": "GLUP COLA",
+              "code": "PRODT-0007",
+              "description": "GLUP! COLA NEGRA  CAJA X 6BOT X 2.0LTS",
+              "nonConformity": "Problemas de Soplado",
+              "quantity": "68"
+            },
+            {
+              "id": "fd11da3e-a6a0-411b-8b48-6f22194fc102",
+              "line": "Linea 4",
+              "flavor": "GLUP COLA",
+              "code": "PRODT-0007",
+              "description": "GLUP! COLA NEGRA  CAJA X 6BOT X 2.0LTS",
+              "nonConformity": "Problemas de Soplado",
+              "quantity": "16"
             }
           ]
         }
@@ -47749,7 +47798,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-02T14:57:20.107Z"
+    "updatedAt": "2026-10-02T15:12:00.688Z"
   },
   "ordenesSap": [
     {

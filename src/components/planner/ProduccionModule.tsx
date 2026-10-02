@@ -54,6 +54,7 @@ const NON_CONFORMITIES = [
   'Sabor no Caracteristico',
   'Prueba',
   'Déficit de pega',
+  'Tiempo en tanques',
 ] as const;
 
 const NON_CONFORMING_PRODUCTS: Record<string, Record<string, NonConformingProduct>> = {
