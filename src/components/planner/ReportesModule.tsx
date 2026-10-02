@@ -167,7 +167,7 @@ function ReportesResumenMensual({
             onClick={() => setSection(id)}
             aria-pressed={section === id}
             className={cn(
-              "inline-flex h-9 items-center justify-center rounded-full px-3 sm:px-6 font-bold text-[10px] uppercase tracking-widest whitespace-nowrap transition-none",
+              "pointer-events-auto inline-flex h-9 items-center justify-center rounded-full px-3 sm:px-6 font-bold text-[10px] uppercase tracking-widest whitespace-nowrap transition-none",
               section === id ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
             )}
           >
@@ -184,7 +184,7 @@ function ReportesResumenMensual({
               aria-label="Semana anterior"
               disabled={selectedWeekIndex <= 0}
               onClick={() => selectedWeekIndex > 0 && setWeeklyDate(weeksInSelectedMonth[selectedWeekIndex - 1])}
-              className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 disabled:opacity-40"
+              className="pointer-events-auto inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 disabled:opacity-40"
             >
               ‹
             </button>
@@ -196,7 +196,7 @@ function ReportesResumenMensual({
               aria-label="Semana siguiente"
               disabled={selectedWeekIndex < 0 || selectedWeekIndex >= weeksInSelectedMonth.length - 1}
               onClick={() => selectedWeekIndex >= 0 && selectedWeekIndex < weeksInSelectedMonth.length - 1 && setWeeklyDate(weeksInSelectedMonth[selectedWeekIndex + 1])}
-              className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 disabled:opacity-40"
+              className="pointer-events-auto inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 disabled:opacity-40"
             >
               ›
             </button>
@@ -499,7 +499,7 @@ export function ReportesModule({
                                   key={tab}
                                   onClick={() => setInsumosSubTab(tab)}
                                   className={cn(
-                                    "inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                    "pointer-events-auto inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
                                     insumosSubTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                   )}
                                 >
@@ -517,12 +517,12 @@ export function ReportesModule({
                              aria-label="Mes principal de reportes"
                              value={format(reportMonthDate, 'yyyy-MM')}
                              onChange={(event) => selectReportMonth(event.target.value)}
-                             className="h-9 rounded-full border-0 bg-white px-3 text-[10px] font-bold text-slate-700 shadow-sm outline-none"
+                             className="pointer-events-auto h-9 rounded-full border-0 bg-white px-3 text-[10px] font-bold text-slate-700 shadow-sm outline-none"
                            />
                            {insumosSubTab !== 'ordenes' && insumosSubTab !== 'rendimiento-azucar' && insumosSubTab !== 'producto-no-conforme' && <div className="ml-auto">
                              <Popover>
                                <PopoverTrigger asChild>
-                                 <button className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
+                                 <button className="pointer-events-auto inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
                                    <CalendarIcon className="h-3.5 w-3.5 text-primary" />
                                    {format(insumosFecha || new Date(), "dd 'de' MMM, yyyy", { locale: es })}
                                  </button>
@@ -542,7 +542,7 @@ export function ReportesModule({
                                     key={tab}
                                     onClick={() => setInsumosPeriodoSubTab(tab)}
                                     className={cn(
-                                      "inline-flex items-center justify-center h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                      "pointer-events-auto inline-flex items-center justify-center h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
                                       insumosPeriodoSubTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                     )}
                                   >
@@ -561,7 +561,7 @@ export function ReportesModule({
                                     onClick={() => setCo2ResumenSubTab(tab)}
                                     aria-pressed={co2ResumenSubTab === tab}
                                     className={cn(
-                                      "inline-flex h-9 items-center justify-center rounded-full px-3 sm:px-6 font-bold text-[10px] uppercase tracking-widest whitespace-nowrap transition-none",
+                                      "pointer-events-auto inline-flex h-9 items-center justify-center rounded-full px-3 sm:px-6 font-bold text-[10px] uppercase tracking-widest whitespace-nowrap transition-none",
                                       co2ResumenSubTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                     )}
                                   >
@@ -593,7 +593,7 @@ export function ReportesModule({
                                         key={tab}
                                         onClick={() => setInsumosPeriodoSubTab(tab)}
                                         className={cn(
-                                          "inline-flex items-center justify-center h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                          "pointer-events-auto inline-flex items-center justify-center h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
                                           insumosPeriodoSubTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                         )}
                                       >
@@ -612,7 +612,7 @@ export function ReportesModule({
                                         onClick={() => setAguaResumenSubTab(tab)}
                                         aria-pressed={aguaResumenSubTab === tab}
                                         className={cn(
-                                          "inline-flex h-9 items-center justify-center rounded-full px-3 sm:px-6 font-bold text-[10px] uppercase tracking-widest whitespace-nowrap transition-none",
+                                          "pointer-events-auto inline-flex h-9 items-center justify-center rounded-full px-3 sm:px-6 font-bold text-[10px] uppercase tracking-widest whitespace-nowrap transition-none",
                                           aguaResumenSubTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                         )}
                                       >

@@ -115,7 +115,7 @@ export const MODULE_LABELS: Record<ModuleId, string> = {
   procesos: 'Procesos',
   calidad: 'Calidad',
   mtto: 'MTTO',
-  insumos: 'Insumos',
+  insumos: 'Reportes',
   logistica: 'Logística',
   ventas: 'Ventas',
   purchasing: 'Compras',
@@ -414,6 +414,26 @@ export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
       { id: 'resumen-por-lineas', label: 'Resumen por líneas' },
       { id: 'rendimiento-azucar', label: 'Rendimiento de azúcar' },
     ] },
+    { id: 'rendimiento-azucar', label: 'Rendimiento de azúcar', children: [
+      { id: 'semanal', label: 'Semanal', children: [
+        { id: 'r-estandar-sem', label: 'R estandar sem' },
+        { id: 'r-promedio-sem', label: 'R promedio sem' },
+      ] },
+      { id: 'mensual', label: 'Mensual', children: [
+        { id: 'r-estandar-mes', label: 'R estandar mes' },
+        { id: 'r-promedio-mes', label: 'R promedio mes' },
+      ] },
+    ] },
+    { id: 'producto-no-conforme', label: 'Producto no conforme', children: [
+      { id: 'semanal', label: 'Semanal', children: [
+        { id: 'por-lineas', label: 'Por líneas' },
+        { id: 'por-no-conformidad', label: 'Por no conformidad' },
+      ] },
+      { id: 'mensual', label: 'Mensual', children: [
+        { id: 'por-lineas', label: 'Por líneas' },
+        { id: 'por-no-conformidad', label: 'Por no conformidad' },
+      ] },
+    ] },
   ],
   logistica: [
     { id: 'finished-product', label: 'Stock de Producto Terminado' },
@@ -649,21 +669,27 @@ export function usePermissionsStore() {
       persistedStateRef.current = next;
     };
 
+    applyState(localState);
+    setIsLoaded(true);
+    remoteReadyRef.current = true;
+
     const hydrateFromApi = async () => {
-      const remote = await loadSharedPermissions();
-      if (remote) {
-        applyState(remote);
-      } else {
-        applyState(localState);
-        try {
-          await saveSharedPermissions(localState);
-          setSyncError(false);
-        } catch {
-          setSyncError(true);
+      try {
+        const remote = await loadSharedPermissions();
+        if (remote) {
+          applyState(remote);
+          return;
         }
+      } catch {
+        // keep local data visible while the remote sync refreshes in the background
       }
-      remoteReadyRef.current = true;
-      setIsLoaded(true);
+
+      try {
+        await saveSharedPermissions(localState);
+        setSyncError(false);
+      } catch {
+        setSyncError(true);
+      }
     };
 
     void hydrateFromApi();

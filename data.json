@@ -14415,8 +14415,7 @@
           "planta",
           "management",
           "logistica",
-          "produccion",
-          "insumos"
+          "produccion"
         ],
         "prodts.mds": [
           "planning",
@@ -14896,9 +14895,7 @@
         "cal.mds": [
           "planning"
         ],
-        "prodtg.mds": [
-          "planning"
-        ],
+        "prodtg.mds": [],
         "MDS": [
           "planning",
           "management",
@@ -14940,7 +14937,10 @@
           "produccion.recepciones": "read",
           "produccion.consumo-materiales": "read",
           "logistica.monthly-inventory": "none",
-          "produccion.mermas-desperdicios": "read"
+          "produccion.mermas-desperdicios": "read",
+          "planning.gantt": "read",
+          "planning.daily": "read",
+          "planning.preparation": "write"
         },
         "prodt1.mds": {
           "produccion.inventarios.mensual.empaque": "none",
@@ -15182,7 +15182,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-02T17:12:54.420Z"
+    "updatedAt": "2026-10-02T17:27:50.289Z"
   },
   "ordenesSap": [
     {

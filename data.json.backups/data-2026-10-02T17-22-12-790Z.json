@@ -14897,8 +14897,7 @@
           "planning"
         ],
         "prodtg.mds": [
-          "planning",
-          "insumos"
+          "planning"
         ],
         "MDS": [
           "planning",
@@ -15183,7 +15182,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-02T15:38:00.710Z"
+    "updatedAt": "2026-10-02T17:12:54.420Z"
   },
   "ordenesSap": [
     {
@@ -38270,7 +38269,7 @@
           "IMPORTADA 1": {
             "invInicialSacos": "440",
             "recepcionSacos": "",
-            "invFinalSacos": "4"
+            "invFinalSacos": "40"
           },
           "MONTALBAN": {
             "invInicialSacos": "440",
@@ -39175,11 +39174,11 @@
         "2026-10-01": {
           "JARABE SIMPLE": {
             "invInicialSacos": "158",
-            "invFinalSacos": ""
+            "invFinalSacos": "171"
           },
           "Sala 1": {
             "invInicialSacos": "452",
-            "invFinalSacos": ""
+            "invFinalSacos": "307"
           }
         }
       },

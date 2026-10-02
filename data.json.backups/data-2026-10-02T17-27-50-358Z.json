@@ -14896,10 +14896,7 @@
         "cal.mds": [
           "planning"
         ],
-        "prodtg.mds": [
-          "planning",
-          "insumos"
-        ],
+        "prodtg.mds": [],
         "MDS": [
           "planning",
           "management",
@@ -14941,7 +14938,10 @@
           "produccion.recepciones": "read",
           "produccion.consumo-materiales": "read",
           "logistica.monthly-inventory": "none",
-          "produccion.mermas-desperdicios": "read"
+          "produccion.mermas-desperdicios": "read",
+          "planning.gantt": "read",
+          "planning.daily": "read",
+          "planning.preparation": "write"
         },
         "prodt1.mds": {
           "produccion.inventarios.mensual.empaque": "none",
@@ -15183,7 +15183,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-02T15:38:00.710Z"
+    "updatedAt": "2026-10-02T17:27:21.924Z"
   },
   "ordenesSap": [
     {
@@ -39175,11 +39175,11 @@
         "2026-10-01": {
           "JARABE SIMPLE": {
             "invInicialSacos": "158",
-            "invFinalSacos": ""
+            "invFinalSacos": "171"
           },
           "Sala 1": {
             "invInicialSacos": "452",
-            "invFinalSacos": ""
+            "invFinalSacos": "307"
           }
         }
       },

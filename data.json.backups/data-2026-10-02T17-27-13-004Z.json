@@ -14896,10 +14896,7 @@
         "cal.mds": [
           "planning"
         ],
-        "prodtg.mds": [
-          "planning",
-          "insumos"
-        ],
+        "prodtg.mds": [],
         "MDS": [
           "planning",
           "management",
@@ -14941,7 +14938,8 @@
           "produccion.recepciones": "read",
           "produccion.consumo-materiales": "read",
           "logistica.monthly-inventory": "none",
-          "produccion.mermas-desperdicios": "read"
+          "produccion.mermas-desperdicios": "read",
+          "planning.gantt": "write"
         },
         "prodt1.mds": {
           "produccion.inventarios.mensual.empaque": "none",
@@ -15183,7 +15181,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-02T15:38:00.710Z"
+    "updatedAt": "2026-10-02T17:27:10.547Z"
   },
   "ordenesSap": [
     {
@@ -39179,7 +39177,7 @@
           },
           "Sala 1": {
             "invInicialSacos": "452",
-            "invFinalSacos": ""
+            "invFinalSacos": "307"
           }
         }
       },

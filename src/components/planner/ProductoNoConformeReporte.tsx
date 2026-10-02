@@ -100,7 +100,7 @@ export function ProductoNoConformeReporte({ reportMonthDate }: ProductoNoConform
             onClick={() => setPeriod(id)}
             aria-pressed={period === id}
             className={cn(
-              'inline-flex min-h-9 items-center justify-center rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-widest',
+              'pointer-events-auto inline-flex min-h-9 items-center justify-center rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-widest',
               period === id ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700',
             )}
           >
@@ -116,7 +116,7 @@ export function ProductoNoConformeReporte({ reportMonthDate }: ProductoNoConform
             aria-label="Semana anterior"
             disabled={currentWeekIndex <= 0}
             onClick={() => currentWeekIndex > 0 && setWeekStart(weekStarts[currentWeekIndex - 1])}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 disabled:opacity-40"
+            className="pointer-events-auto inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 disabled:opacity-40"
           >
             ‹
           </button>
@@ -128,7 +128,7 @@ export function ProductoNoConformeReporte({ reportMonthDate }: ProductoNoConform
             aria-label="Semana siguiente"
             disabled={currentWeekIndex < 0 || currentWeekIndex >= weekStarts.length - 1}
             onClick={() => currentWeekIndex >= 0 && currentWeekIndex < weekStarts.length - 1 && setWeekStart(weekStarts[currentWeekIndex + 1])}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 disabled:opacity-40"
+            className="pointer-events-auto inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 disabled:opacity-40"
           >
             ›
           </button>
@@ -146,7 +146,7 @@ export function ProductoNoConformeReporte({ reportMonthDate }: ProductoNoConform
             onClick={() => setSummaryType(id)}
             aria-pressed={summaryType === id}
             className={cn(
-              'rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-widest',
+              'pointer-events-auto rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-widest',
               summaryType === id ? 'bg-indigo-700 text-white' : 'bg-slate-100 text-slate-600',
             )}
           >

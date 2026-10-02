@@ -343,6 +343,7 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
   const load = useCallback(async (skipQueryCache = false) => {
     setIsLoading(true);
     const isFirst = firstLoadRef.current;
+    let hasLocalSnapshot = false;
     try {
       const cachedDel = localStorage.getItem(deletedKey);
       if (cachedDel) {
@@ -355,6 +356,7 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
       if (isFirst) {
         const cached = localStorage.getItem(cacheKey);
         if (cached) {
+          hasLocalSnapshot = true;
           try {
             const parsed = JSON.parse(cached);
             setData((prev) => {
@@ -379,6 +381,7 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
       if (!skipQueryCache) {
         const cachedQuery = getQueryCache<T>(queryCacheKey);
         if (cachedQuery && !pendingRef.current) {
+          hasLocalSnapshot = true;
           // Use the cache as an initial render value, but continue to the
           // server so shared data is always authoritative after hydration.
           setData(cachedQuery);
@@ -386,6 +389,9 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
       }
     } catch {
       // ignore
+    }
+    if (hasLocalSnapshot) {
+      setIsLoaded(true);
     }
     try {
       const params = queryParamsRef.current;

@@ -279,7 +279,7 @@ export function OrdenesReporteResumenMensual({ reportMonthDate }: OrdenesReporte
                 type="button"
                 onClick={() => setSubsection(id)}
                 aria-pressed={subsection === id}
-                className={`inline-flex h-9 flex-shrink-0 items-center justify-center rounded-full border-0 px-3 sm:px-6 text-[10px] font-bold uppercase tracking-widest transition-none ${subsection === id ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                className={`pointer-events-auto inline-flex h-9 flex-shrink-0 items-center justify-center rounded-full border-0 px-3 sm:px-6 text-[10px] font-bold uppercase tracking-widest transition-none ${subsection === id ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
               >
                 {label}
               </button>
