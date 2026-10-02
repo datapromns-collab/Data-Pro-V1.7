@@ -46704,7 +46704,7 @@
           "2026-10-02": {
             "tapas": {
               "EMP_0095-Alpla": {
-                "totalCajas": "20",
+                "totalCajas": "",
                 "total": ""
               }
             },
@@ -46725,7 +46725,7 @@
           "2026-09-28": {
             "tapas": {
               "EMP_0095-Alpla": {
-                "totalCajas": "20",
+                "totalCajas": "",
                 "total": ""
               }
             },
@@ -47599,7 +47599,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-02T13:31:47.865Z"
+    "updatedAt": "2026-10-02T14:07:13.018Z"
   },
   "ordenesSap": [
     {

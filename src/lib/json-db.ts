@@ -114,6 +114,24 @@ export async function loadProductionWasteRows(
   }
 }
 
+export async function loadProductionNonConformingData(): Promise<Record<string, unknown[]> | null> {
+  try {
+    const res = await fetchWithRetry(`${API_URL}?section=productionNonConforming`);
+    if (!res.ok) throw new Error('Production non-conforming API error');
+    const json = await res.json();
+    const rowsByDate = json.rowsByDate;
+    if (!rowsByDate || typeof rowsByDate !== 'object' || Array.isArray(rowsByDate)) return {};
+    return Object.fromEntries(
+      Object.entries(rowsByDate).filter(([date, rows]) =>
+        /^\d{4}-\d{2}-\d{2}$/.test(date) && Array.isArray(rows)
+      )
+    ) as Record<string, unknown[]>;
+  } catch (error) {
+    console.warn('[JSON_DB] Unable to load production non-conforming data', error);
+    return null;
+  }
+}
+
 export async function savePlannerData(data: Partial<PlannerData>): Promise<void> {
   try {
     const { _meta: _ignoredMeta, ...plannerData } = data as any;

@@ -140,6 +140,14 @@ export async function GET(request: Request) {
         headers: { 'content-type': 'application/json' },
       });
     }
+    if (section === 'productionNonConforming') {
+      return new Response(JSON.stringify({
+        rowsByDate: data.planner?.productionInventory?.productosNoConformes?.diarios ?? {},
+      }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      });
+    }
     if (section === 'productionWaste') {
       const params = new URL(request.url).searchParams;
       const wasteSection = params.get('wasteSection');
@@ -327,6 +335,39 @@ export async function POST(request: Request) {
             [key]: mergedWaste,
           };
         });
+
+        const incomingNonConforming = incomingPlanner.productionInventory.productosNoConformes?.diarios;
+        if (incomingNonConforming && typeof incomingNonConforming === 'object' && !Array.isArray(incomingNonConforming)) {
+          const storedNonConforming = merged.productionInventory.productosNoConformes || {};
+          const mergedDays = { ...(storedNonConforming.diarios || {}) };
+          Object.entries(incomingNonConforming).forEach(([date, rows]) => {
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return;
+            if (rows === null) {
+              delete mergedDays[date];
+              return;
+            }
+            if (!Array.isArray(rows)) return;
+            const validRows = rows.every((row: any) =>
+              row &&
+              typeof row === 'object' &&
+              typeof row.id === 'string' &&
+              typeof row.line === 'string' &&
+              typeof row.flavor === 'string' &&
+              typeof row.code === 'string' &&
+              typeof row.description === 'string' &&
+              typeof row.nonConformity === 'string' &&
+              typeof row.quantity === 'string'
+            );
+            if (validRows) mergedDays[date] = rows;
+          });
+          merged.productionInventory = {
+            ...merged.productionInventory,
+            productosNoConformes: {
+              ...storedNonConforming,
+              diarios: mergedDays,
+            },
+          };
+        }
       }
       if (incomingPlanner.users && Array.isArray(incomingPlanner.users)) {
         merged.users = deepMerge(Array.isArray(merged.users) ? merged.users : [], incomingPlanner.users);

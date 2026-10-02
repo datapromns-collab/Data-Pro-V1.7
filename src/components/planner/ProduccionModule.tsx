@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowLeftRight, Box, CalendarDays, CalendarIcon, CalendarRange, Droplets, FileDown, Package, Recycle, RotateCcw, Truck } from 'lucide-react';
-import { addDays, format, getISOWeek, getISOWeekYear, setISOWeek, startOfISOWeek, startOfWeek } from 'date-fns';
+import { addDays, endOfWeek, format, getISOWeek, getISOWeekYear, setISOWeek, startOfISOWeek, startOfMonth, startOfWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
 import jsPDF from 'jspdf';
+import { Bar, CartesianGrid, ComposedChart, Legend, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { cn } from '@/lib/utils';
-import { loadProductionInventoryData, loadProductionWasteRows, savePlannerData } from '@/lib/json-db';
+import { loadProductionInventoryData, loadProductionNonConformingData, loadProductionWasteRows, savePlannerData } from '@/lib/json-db';
 import { useAuthStore } from '@/hooks/use-auth-store';
 
 type WasteSectionKey = 'mermas' | 'desperdicios' | 'rechazos' | 'devoluciones';
@@ -25,6 +26,89 @@ type WasteTableRow = {
 };
 type WasteProduct = { code: string; material: string };
 type WasteTablesBySection = Record<WasteSectionKey, Record<string, WasteTableRow[]>>;
+type NonConformingRow = {
+  id: string;
+  line: string;
+  flavor: string;
+  code: string;
+  description: string;
+  nonConformity: string;
+  quantity: string;
+};
+type NonConformingPeriod = 'diarios' | 'semanal' | 'mensual';
+type NonConformingSummary = 'por-lineas' | 'por-no-conformidad';
+type NonConformingRowsByDate = Record<string, NonConformingRow[]>;
+type NonConformingProduct = { code: string; description: string };
+
+const NON_CONFORMITIES = [
+  'Bajo Brix',
+  'Preforma con Defecto',
+  'Bajo Co2 - Alto CO2',
+  'Exposicion de Taca',
+  'Problemas de Soplado',
+  'Sin Codificación',
+  'Adherencia de etiqueta',
+  'Nivel de llenado',
+  'Sabor no Caracteristico',
+  'Prueba',
+] as const;
+
+const NON_CONFORMING_PRODUCTS: Record<string, Record<string, NonConformingProduct>> = {
+  'Linea 1': {
+    'GLUP COLA': { code: 'PRODT-0007', description: 'GLUP! COLA NEGRA  CAJA X 6BOT X 2.0LTS' },
+    'GLUP UVA': { code: 'PRODT-0008', description: 'GLUP! UVA  CAJA X 6BOT X 2.0LTS' },
+    'GLUP KOLITA': { code: 'PRODT-0009', description: 'GLUP! KOLITA  CAJA X 6BOT X 2.0LTS' },
+    'GLUP PIÑA': { code: 'PRODT-0010', description: 'GLUP! PIÑA  CAJA X 6BOT X 2.0LTS' },
+    'GLUP NARANJA': { code: 'PRODT-0011', description: 'GLUP! NARANJA  CAJA X 6BOT X 2.0LTS' },
+    'GLUP FRESH': { code: 'PRODT-0012', description: 'GLUP! FRESH  CAJA X 6BOT X 2.0LTS' },
+    'GLUP PONCHE': { code: 'PRODT-0048', description: 'GLUP! PONCHE DE FRUTAS CAJA X 6BOT X 2LTS' },
+    'GLUP MANZANA': { code: 'PRODT-0049', description: 'GLUP! MANZANA VERDE CAJA X 6BOT X 2.0 LTS' },
+    'GLUP CHICLE': { code: 'PRODT-0050', description: 'GLUP! CHICLE BOMBA CAJA X 6BOT X 2LTS' },
+    'GLUP MANZANA ROJA': { code: 'PRODT-0097', description: 'GLUP! MAZANA ROJA CAJA X 6BOT X 2.0LTS' },
+    'GLUP PIÑA PARCHITA': { code: 'PRODT-0098', description: 'GLUP! PIÑA PARCHITA CAJA X 6BOT X 2.0LTS' },
+  },
+  'Linea 2': {},
+  'Linea 3': {},
+  'Linea 4': {},
+  'Linea 5': {
+    'JUSTY NARANJA': { code: 'PRODT-0014', description: 'JUSTY NARANJA CAJA X 12BOT X 1.5LTS' },
+    'JUSTY FR': { code: 'PRODT-0015', description: 'JUSTY FRUTAS ROJAS CAJA X 12BOT X 1.5LTS' },
+    'JUSTY DURAZNO': { code: 'PRODT-0100', description: 'JUSTY DURAZNO CAJA X 12BOT X 1.5LTS' },
+    'JUSTY MANDARINA': { code: 'PRODT-0102', description: 'JUSTY MANDARINA CAJA X 12BOT X 1.5LTS' },
+    'JUSTY SANDIA': { code: 'PRODT-0101', description: 'JUSTY SANDIA CAJA X 12BOT X 1.5LTS' },
+    'JUSTY TAMARINDO': { code: 'PRODT-0103', description: 'JUSTY TAMARINDO CAJA X 12BOT X 1.5LTS' },
+    'VITA TEA DURAZNO': { code: 'PRODT-0026', description: 'VITA TEA DURAZNO 1,5 LT' },
+    'VITA TEA LIMON': { code: 'PRODT-0025', description: 'VITA TEA LIMON 1,5 LT' },
+    'JUSTY PERA': { code: 'PRODT-0115', description: 'JUSTY PERA CAJA X 12BOT X 1.5LTS' },
+    'JUSTY MANZANA': { code: 'PRODT-0116', description: 'JUSTY MANZANA CAJA X 12BOT X 1.5LTS' },
+  },
+  'Linea 6': {
+    'GLUP COLA': { code: 'PRODT-0092', description: 'GLUP! COLA NEGRA CAJA X 15 BOT X 0.400LTS' },
+    'GLUP UVA': { code: 'PRODT-0093', description: 'GLUP! UVA  CAJA X 15BOT X 0.400LTS' },
+    'GLUP KOLITA': { code: 'PRODT-0094', description: 'GLUP! KOLITA  CAJA X 15BOT X 0.400LTS' },
+    'GLUP FRESH': { code: 'PRODT-0095', description: 'GLUP! FRESH CAJA X 15BOT X 0.400LTS' },
+    'GLUP MANZANA': { code: 'PRODT-0096', description: 'GLUP! MANZANA VERDE CAJA X 15BOT X 0.400LTS' },
+    'GLUP PIÑA': { code: 'PRODT-0108', description: 'GLUP! PIÑA CAJA X 15BOT X 0.400LTS' },
+    'GLUP NARANJA': { code: 'PRODT-0109', description: 'GLUP! NARANJA CAJA X 15BOT X 0.400LTS' },
+    'GLUP PIÑA PARCHITA': { code: 'PRODT-0110', description: 'GLUP! PIÑA PARCHITA CAJA X 15BOT X 0.400LTS' },
+    'GLUP MANZANA ROJA': { code: 'PRODT-0111', description: 'GLUP! MANZANA ROJA CAJA X 15BOT X 0.400LTS' },
+  },
+  'Linea 7': {
+    'GLUP COLA': { code: 'PRODT-0082', description: 'GLUP! COLA NEGRA CAJA X 12BOT X 1LTS' },
+    'GLUP UVA': { code: 'PRODT-0084', description: 'GLUP! UVA  CAJA X 12BOT X 1.0LTS' },
+    'GLUP FRESH': { code: 'PRODT-0086', description: 'GLUP! FRESH CAJA X 12BOT X 1.0LTS' },
+    'GLUP KOLITA': { code: 'PRODT-0088', description: 'GLUP! KOLITA  CAJA X 12BOT X 1.0LTS' },
+    'GLUP MANZANA': { code: 'PRODT-0090', description: 'GLUP! MANZANA VERDE CAJA X 12BOT X 1.0LTS' },
+    'GLUP PIÑA': { code: 'PRODT-0104', description: 'GLUP! PIÑA CAJA X 12BOT X 1.0LTS' },
+    'GLUP NARANJA': { code: 'PRODT-0105', description: 'GLUP! NARANJA CAJA X 12BOT X 1.0LTS' },
+    'GLUP PIÑA PARCHITA': { code: 'PRODT-0106', description: 'GLUP! PIÑA PARCHITA CAJA X 12BOT X 1.0LTS' },
+    'GLUP MANZANA ROJA': { code: 'PRODT-0107', description: 'GLUP! MANZANA ROJA CAJA X 12BOT X 1.0LTS' },
+  },
+};
+
+for (const line of ['Linea 2', 'Linea 3', 'Linea 4']) {
+  NON_CONFORMING_PRODUCTS[line] = { ...NON_CONFORMING_PRODUCTS['Linea 1'] };
+}
 
 const WASTE_DATA_GROUP_BY_SECTION: Record<WasteSectionKey, WasteDataGroup> = {
   mermas: 'mermasDesperdicios',
@@ -241,6 +325,36 @@ const normalizeWasteRows = (value: unknown): WasteTableRow[] => {
     .filter((row) => row.id);
 };
 
+const normalizeNonConformingRows = (value: unknown): NonConformingRow[] => {
+  if (!Array.isArray(value)) return [];
+  return value
+    .filter((row): row is Record<string, unknown> => !!row && typeof row === 'object' && !Array.isArray(row))
+    .map((row) => {
+      const line = typeof row.line === 'string' ? row.line : '';
+      const flavor = typeof row.flavor === 'string' ? row.flavor : '';
+      const product = NON_CONFORMING_PRODUCTS[line]?.[flavor];
+      return {
+        id: typeof row.id === 'string' ? row.id : '',
+        line,
+        flavor,
+        code: product?.code || (typeof row.code === 'string' ? row.code : ''),
+        description: product?.description || (typeof row.description === 'string' ? row.description : ''),
+        nonConformity: typeof row.nonConformity === 'string' ? row.nonConformity : '',
+        quantity: typeof row.quantity === 'string' ? row.quantity : '',
+      };
+    })
+    .filter((row) => row.id);
+};
+
+const parseNonConformingQuantity = (value: string): number => {
+  const normalized = value.trim().replace(/\s/g, '').replace(/[^0-9,.-]/g, '');
+  const decimalNormalized = normalized.includes(',')
+    ? normalized.replace(/\./g, '').replace(',', '.')
+    : normalized;
+  const number = Number(decimalNormalized);
+  return Number.isFinite(number) ? number : 0;
+};
+
 const sumNumericValues = (values: string[]): string => {
   const total = values.reduce((sum, value) => {
     const normalized = value.trim().replace(/\s/g, '').replace(',', '.');
@@ -392,8 +506,19 @@ interface ProduccionModuleProps {
 
 export default function ProduccionModule({ weeklyOnly = false }: ProduccionModuleProps) {
   const { user } = useAuthStore();
-  const [activeProduccionSection, setActiveProduccionSection] = useState<'inventarios' | 'recepciones' | 'consumo-materiales' | 'mermas-desperdicios' | 'rechazos-devoluciones'>('inventarios');
+  const [activeProduccionSection, setActiveProduccionSection] = useState<'inventarios' | 'recepciones' | 'consumo-materiales' | 'mermas-desperdicios' | 'rechazos-devoluciones' | 'productos-no-conformes'>('inventarios');
   const [activeRecepcionesSubSection, setActiveRecepcionesSubSection] = useState<'diarias' | 'resumen-semanal'>('diarias');
+  const [activeNonConformingPeriod, setActiveNonConformingPeriod] = useState<NonConformingPeriod>('diarios');
+  const [activeNonConformingSummary, setActiveNonConformingSummary] = useState<NonConformingSummary>('por-lineas');
+  const [nonConformingDailyDate, setNonConformingDailyDate] = useState<Date>(() => addDays(new Date(), -1));
+  const [nonConformingWeeklyDate, setNonConformingWeeklyDate] = useState<Date>(() => new Date());
+  const [nonConformingMonthlyDate, setNonConformingMonthlyDate] = useState<Date>(() => new Date());
+  const [nonConformingRowsByDate, setNonConformingRowsByDate] = useState<NonConformingRowsByDate>({});
+  const [nonConformingDraftRows, setNonConformingDraftRows] = useState<NonConformingRow[]>([]);
+  const [nonConformingEditingKey, setNonConformingEditingKey] = useState<string | null>(null);
+  const [nonConformingSaveStatus, setNonConformingSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const [nonConformingCopyStatus, setNonConformingCopyStatus] = useState<'idle' | 'copied' | 'error'>('idle');
+  const nonConformingLocalWriteVersion = useRef(0);
   const [activeMermasSubSection, setActiveMermasSubSection] = useState<'mermas' | 'desperdicios' | 'resumen-semanal' | 'resumen-mensual' | 'rechazos' | 'devoluciones'>('mermas');
   const [mermasFecha, setMermasFecha] = useState<Date>(() => addDays(new Date(), -1));
   const [mermasSemanalFecha, setMermasSemanalFecha] = useState<Date>(() => new Date());
@@ -443,6 +568,52 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   const activePeriodData = productionByPeriod[inventariosSubTab][activePeriodKey] || EMPTY_PRODUCTION_DATA;
   const receptionsDailyPeriodKey = format(recepcionesDiariasFecha, 'yyyy-MM-dd');
   const receptionWeekStart = startOfWeek(recepcionesSemanalFecha, { weekStartsOn: 1 });
+  const nonConformingDateKey = format(nonConformingDailyDate, 'yyyy-MM-dd');
+  const nonConformingWeekStart = startOfWeek(nonConformingWeeklyDate, { weekStartsOn: 1 });
+  const nonConformingWeekEnd = endOfWeek(nonConformingWeekStart, { weekStartsOn: 1 });
+  const nonConformingMonthStart = startOfMonth(nonConformingMonthlyDate);
+  const nonConformingActiveKey = `${activeNonConformingPeriod}:${activeNonConformingPeriod === 'diarios'
+    ? nonConformingDateKey
+    : activeNonConformingPeriod === 'semanal'
+      ? format(nonConformingWeekStart, 'yyyy-MM-dd')
+      : format(nonConformingMonthStart, 'yyyy-MM')}`;
+  const nonConformingActiveRows = nonConformingRowsByDate[nonConformingDateKey] || [];
+  const isNonConformingEditing = nonConformingEditingKey === nonConformingActiveKey;
+  const nonConformingSummaryRows = useMemo(() => {
+    const selectedRows = Object.entries(nonConformingRowsByDate).flatMap(([date, rows]) => {
+      const recordDate = new Date(`${date}T12:00:00`);
+      const isInPeriod = activeNonConformingPeriod === 'semanal'
+        ? recordDate >= nonConformingWeekStart && recordDate <= nonConformingWeekEnd
+        : date.startsWith(format(nonConformingMonthStart, 'yyyy-MM'));
+      return isInPeriod ? rows : [];
+    });
+    const totals = new Map<string, number>();
+    selectedRows.forEach((row) => {
+      const label = activeNonConformingSummary === 'por-lineas' ? row.line : row.nonConformity;
+      if (!label) return;
+      totals.set(label, (totals.get(label) || 0) + parseNonConformingQuantity(row.quantity));
+    });
+    const totalQuantity = Array.from(totals.values()).reduce((sum, quantity) => sum + quantity, 0);
+    let cumulative = 0;
+    return Array.from(totals.entries())
+      .map(([label, quantity]) => ({ label, quantity }))
+      .filter((item) => item.quantity > 0)
+      .sort((a, b) => b.quantity - a.quantity || a.label.localeCompare(b.label))
+      .map((item) => {
+        cumulative += item.quantity;
+        return {
+          ...item,
+          cumulativePercent: totalQuantity ? (cumulative / totalQuantity) * 100 : 0,
+        };
+      });
+  }, [
+    nonConformingRowsByDate,
+    activeNonConformingPeriod,
+    activeNonConformingSummary,
+    nonConformingWeekStart,
+    nonConformingWeekEnd,
+    nonConformingMonthStart,
+  ]);
   const activeWasteSubSection = activeMermasSubSection;
   const wasteSectionKey: WasteSectionKey | null = activeWasteSubSection === 'mermas' ||
     activeWasteSubSection === 'desperdicios' ||
@@ -454,6 +625,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   const activeWasteKey = wasteSectionKey ? `${wasteSectionKey}:${wasteDateKey}` : null;
   const activeWasteRows = wasteSectionKey ? wasteTablesBySection[wasteSectionKey][wasteDateKey] || [] : [];
   const canEditWasteTables = user?.id === 'maria.mds' || user?.id === 'alex.mds';
+  const canEditNonConforming = canEditWasteTables;
   const canCopyWasteValues = user?.id === 'maria.mds' || user?.id === 'demon';
   const isWasteEditing = activeWasteKey !== null && wasteEditingKey === activeWasteKey;
   const activeReceptionData = activeRecepcionesSubSection === 'diarias'
@@ -523,6 +695,14 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
         });
       });
       setWasteTablesBySection(nextWasteTables);
+      const storedNonConformingDays = persisted?.productosNoConformes?.diarios || {};
+      const nextNonConformingDays: NonConformingRowsByDate = {};
+      if (storedNonConformingDays && typeof storedNonConformingDays === 'object' && !Array.isArray(storedNonConformingDays)) {
+        Object.entries(storedNonConformingDays).forEach(([date, rows]) => {
+          if (/^\d{4}-\d{2}-\d{2}$/.test(date)) nextNonConformingDays[date] = normalizeNonConformingRows(rows);
+        });
+      }
+      setNonConformingRowsByDate(nextNonConformingDays);
       setProductionLoaded(true);
       setProductionLoadStatus('ready');
       } catch (error) {
@@ -565,6 +745,32 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
       window.clearInterval(timer);
     };
   }, [activeProduccionSection, productionLoaded, wasteSectionKey, wasteDateKey, isWasteEditing]);
+
+  useEffect(() => {
+    if (activeProduccionSection !== 'productos-no-conformes' || activeNonConformingPeriod !== 'diarios' || !productionLoaded || isNonConformingEditing) return;
+    let cancelled = false;
+    const syncNonConformingRows = async () => {
+      const versionAtRequestStart = nonConformingLocalWriteVersion.current;
+      const incoming = await loadProductionNonConformingData();
+      if (cancelled || !incoming || versionAtRequestStart !== nonConformingLocalWriteVersion.current) return;
+      const normalized = Object.fromEntries(
+        Object.entries(incoming).map(([date, rows]) => [date, normalizeNonConformingRows(rows)])
+      );
+      setNonConformingRowsByDate(normalized);
+    };
+    void syncNonConformingRows();
+    const timer = window.setInterval(() => void syncNonConformingRows(), 5000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(timer);
+    };
+  }, [
+    activeProduccionSection,
+    activeNonConformingPeriod,
+    productionLoaded,
+    nonConformingDateKey,
+    isNonConformingEditing,
+  ]);
 
   useEffect(() => {
     const savedPeriodData = productionByPeriod[inventariosSubTab][activePeriodKey];
@@ -690,6 +896,144 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
         [activePeriodKey]: update(prev[inventariosSubTab][activePeriodKey] || emptyProductionValues()),
       },
     }));
+  };
+
+  const startNonConformingEntry = () => {
+    setNonConformingDraftRows(nonConformingActiveRows.length
+      ? nonConformingActiveRows.map((row) => ({ ...row }))
+      : [{ id: crypto.randomUUID(), line: '', flavor: '', code: '', description: '', nonConformity: '', quantity: '' }]);
+    setNonConformingEditingKey(nonConformingActiveKey);
+    setNonConformingSaveStatus('idle');
+  };
+
+  const updateNonConformingLine = (rowId: string, line: string) => {
+    setNonConformingDraftRows((rows) => rows.map((row) => row.id === rowId
+      ? { ...row, line, flavor: '', code: '', description: '' }
+      : row));
+  };
+
+  const updateNonConformingFlavor = (rowId: string, flavor: string) => {
+    setNonConformingDraftRows((rows) => rows.map((row) => {
+      if (row.id !== rowId) return row;
+      const product = NON_CONFORMING_PRODUCTS[row.line]?.[flavor];
+      return { ...row, flavor, code: product?.code || '', description: product?.description || '' };
+    }));
+  };
+
+  const updateNonConformingRow = (rowId: string, field: 'nonConformity' | 'quantity', value: string) => {
+    setNonConformingDraftRows((rows) => rows.map((row) => row.id === rowId ? { ...row, [field]: value } : row));
+  };
+
+  const addNonConformingRow = () => {
+    setNonConformingDraftRows((rows) => [
+      ...rows,
+      { id: crypto.randomUUID(), line: '', flavor: '', code: '', description: '', nonConformity: '', quantity: '' },
+    ]);
+  };
+
+  const removeNonConformingRow = (rowId: string) => {
+    setNonConformingDraftRows((rows) => rows.filter((row) => row.id !== rowId));
+  };
+
+  const saveNonConformingEntry = async () => {
+    if (nonConformingEditingKey !== nonConformingActiveKey) return;
+    setNonConformingSaveStatus('saving');
+    try {
+      const existing = await loadProductionInventoryData();
+      if (!existing) throw new Error('Unable to load shared data before saving non-conforming products');
+      const storedNonConforming = existing.productosNoConformes || {};
+      const storedDays = storedNonConforming.diarios || {};
+      const rowsToSave = nonConformingDraftRows.map((row) => {
+        const product = NON_CONFORMING_PRODUCTS[row.line]?.[row.flavor];
+        return {
+          ...row,
+          code: product?.code || '',
+          description: product?.description || '',
+        };
+      });
+      await savePlannerData({
+        productionInventory: {
+          ...(existing.productionInventory || {}),
+          productosNoConformes: {
+            ...storedNonConforming,
+            diarios: { ...storedDays, [nonConformingDateKey]: rowsToSave },
+          },
+        },
+      });
+      nonConformingLocalWriteVersion.current += 1;
+      setNonConformingRowsByDate((current) => ({ ...current, [nonConformingDateKey]: rowsToSave }));
+      setNonConformingEditingKey(null);
+      setNonConformingSaveStatus('saved');
+    } catch (error) {
+      console.error('[PRODUCCION] Failed to save non-conforming products', {
+        date: nonConformingDateKey,
+        error,
+      });
+      setNonConformingSaveStatus('error');
+    }
+  };
+
+  const enableNonConformingTable = async () => {
+    if (!canEditNonConforming || Object.prototype.hasOwnProperty.call(nonConformingRowsByDate, nonConformingDateKey)) return;
+    setNonConformingSaveStatus('saving');
+    try {
+      const existing = await loadProductionInventoryData();
+      if (!existing) throw new Error('Unable to load shared data before enabling non-conforming table');
+      const storedNonConforming = existing.productosNoConformes || {};
+      const storedDays = storedNonConforming.diarios || {};
+      if (Object.prototype.hasOwnProperty.call(storedDays, nonConformingDateKey)) {
+        throw new Error('Non-conforming table was already enabled by another user');
+      }
+      await savePlannerData({
+        productionInventory: {
+          ...(existing.productionInventory || {}),
+          productosNoConformes: {
+            ...storedNonConforming,
+            diarios: { ...storedDays, [nonConformingDateKey]: [] },
+          },
+        },
+      });
+      nonConformingLocalWriteVersion.current += 1;
+      setNonConformingRowsByDate((current) => ({ ...current, [nonConformingDateKey]: [] }));
+      setNonConformingSaveStatus('saved');
+    } catch (error) {
+      console.error('[PRODUCCION] Failed to enable non-conforming table', {
+        date: nonConformingDateKey,
+        error,
+      });
+      setNonConformingSaveStatus('error');
+    }
+  };
+
+  const copyNonConformingColumn = async (column: 'code' | 'quantity') => {
+    if (user?.id !== 'maria.mds' && user?.id !== 'demon') return;
+    const rows = nonConformingRowsByDate[nonConformingDateKey] || [];
+    const text = rows.map((row) => row[column].trim()).filter(Boolean).join('\n');
+    try {
+      if (navigator.clipboard?.writeText) {
+        try {
+          await navigator.clipboard.writeText(text);
+          setNonConformingCopyStatus('copied');
+          return;
+        } catch {
+          // Use the legacy clipboard path for browsers that deny Clipboard API access.
+        }
+      }
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      const copied = document.execCommand('copy');
+      document.body.removeChild(textarea);
+      if (!copied) throw new Error('Browser refused to copy non-conforming product values');
+      setNonConformingCopyStatus('copied');
+    } catch (error) {
+      console.error('[PRODUCCION] Failed to copy non-conforming product values', { column, error });
+      setNonConformingCopyStatus('error');
+    }
   };
 
   const startWasteEntry = () => {
@@ -1976,14 +2320,15 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
           </div>
         </div>
       )}
-      <div className="flex items-center gap-2 mb-3 no-print">
-        <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+      <nav aria-label="Secciones principales de Producción" className="mb-3 w-full min-w-0 no-print">
+        <div className="grid w-full grid-cols-2 gap-1 rounded-2xl border border-slate-200 bg-slate-100/50 p-1 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6">
           {([
             { id: 'inventarios', label: 'Inventarios', icon: Package },
             { id: 'recepciones', label: 'Recepciones', icon: Truck },
             { id: 'consumo-materiales', label: 'Consumo de materiales', icon: ArrowLeftRight },
             { id: 'mermas-desperdicios', label: 'Mermas y desperdicios', icon: Recycle },
             { id: 'rechazos-devoluciones', label: 'Rechazos y devoluciones', icon: RotateCcw },
+            { id: 'productos-no-conformes', label: 'Productos No Conformes', icon: Box },
           ] as const).map(({ id, label, icon: Icon }) => (
             <button
               key={id}
@@ -1996,16 +2341,16 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                 }
               }}
               className={cn(
-                'inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none',
+                'inline-flex min-w-0 min-h-9 items-center justify-center gap-1.5 rounded-full border-0 px-2 py-1 text-center text-[9px] font-bold uppercase leading-tight tracking-wide outline-none transition-none active:scale-95 transform-none focus:ring-0 sm:px-3 sm:text-[10px] sm:tracking-widest',
                 activeProduccionSection === id ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
               )}
             >
-              <Icon className="h-3.5 w-3.5" />
-              {label}
+              <Icon className="h-3.5 w-3.5 shrink-0" />
+              <span className="min-w-0">{label}</span>
             </button>
           ))}
         </div>
-      </div>
+      </nav>
 
       <div className={cn('flex flex-col flex-1 min-h-0', activeProduccionSection !== 'inventarios' && 'hidden')}>
       <div className="flex min-h-5 items-center gap-2 px-2 text-[10px] font-bold uppercase tracking-widest no-print">
@@ -3092,7 +3437,366 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
               <div className="flex-1 min-h-0 bg-white rounded-[2.5rem]" />
             )}
           </div>
-        ) : (
+        ) : activeProduccionSection === 'productos-no-conformes' ? (
+                            <div className="flex min-h-0 flex-1 flex-col">
+                              <div className="mb-2 grid w-full grid-cols-3 gap-1 rounded-2xl border border-slate-200 bg-slate-100/50 p-1 no-print">
+                                {([
+                                  { id: 'diarios' as const, label: 'Diarios', icon: CalendarIcon },
+                                  { id: 'semanal' as const, label: 'Semanal', icon: CalendarDays },
+                                  { id: 'mensual' as const, label: 'Mensual', icon: CalendarRange },
+                                ]).map(({ id, label, icon: Icon }) => (
+                                  <button
+                                    key={id}
+                                    type="button"
+                                    onClick={() => setActiveNonConformingPeriod(id)}
+                                    className={cn(
+                                      'inline-flex min-h-9 min-w-0 items-center justify-center gap-1.5 rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-wide sm:tracking-widest',
+                                      activeNonConformingPeriod === id ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                                    )}
+                                  >
+                                    <Icon className="h-3.5 w-3.5 shrink-0" />
+                                    {label}
+                                  </button>
+                                ))}
+                              </div>
+
+                              {activeNonConformingPeriod === 'diarios' ? (
+                                <>
+                                  <div className="mb-2 flex flex-wrap items-center gap-2 no-print">
+                                    <input
+                                      type="date"
+                                      value={nonConformingDateKey}
+                                      onChange={(event) => {
+                                        if (!event.target.value) return;
+                                        const [year, month, day] = event.target.value.split('-').map(Number);
+                                        setNonConformingDailyDate(new Date(year, month - 1, day));
+                                      }}
+                                      className="h-9 rounded-full border-slate-200 bg-white px-3 text-left text-[10px] font-bold uppercase tracking-widest"
+                                      aria-label="Fecha de productos no conformes"
+                                    />
+                                    {nonConformingSaveStatus !== 'idle' && (
+                                      <span className={cn('text-[10px] font-bold', nonConformingSaveStatus === 'error' ? 'text-red-600' : 'text-slate-500')}>
+                                        {nonConformingSaveStatus === 'saving' ? 'Guardando…' : nonConformingSaveStatus === 'saved' ? 'Guardado' : 'Error al guardar'}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <div className="min-h-0 flex-1 overflow-auto rounded-[2rem] bg-white p-3 sm:p-4">
+                                    {(() => {
+                                      const hasSavedTable = Object.prototype.hasOwnProperty.call(nonConformingRowsByDate, nonConformingDateKey);
+                                      const canEnable = canEditNonConforming && hasSavedTable && nonConformingActiveRows.length === 0 && !isNonConformingEditing;
+                                      const rows = isNonConformingEditing ? nonConformingDraftRows : nonConformingActiveRows;
+                                      return (
+                                        <div className="overflow-x-auto rounded-2xl border border-slate-200">
+                                          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 px-3 py-3 sm:px-4">
+                                            <h3 className="text-xs font-black uppercase tracking-widest text-slate-700">
+                                              Productos No Conformes - {format(nonConformingDailyDate, 'dd/MM/yyyy')}
+                                            </h3>
+                                            <div className="flex flex-wrap items-center gap-2">
+                                              {canEnable && (
+                                                <button
+                                                  type="button"
+                                                  onClick={() => void enableNonConformingTable()}
+                                                  disabled={nonConformingSaveStatus === 'saving'}
+                                                  className="rounded-full bg-amber-600 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-white disabled:opacity-50"
+                                                >
+                                                  Habilitar
+                                                </button>
+                                              )}
+                                              {isNonConformingEditing ? (
+                                                <>
+                                                  <button
+                                                    type="button"
+                                                    onClick={addNonConformingRow}
+                                                    className="h-8 w-8 rounded-full bg-slate-100 text-lg font-bold text-slate-800"
+                                                    aria-label="Agregar fila"
+                                                  >
+                                                    +
+                                                  </button>
+                                                  <button
+                                                    type="button"
+                                                    onClick={() => void saveNonConformingEntry()}
+                                                    disabled={nonConformingSaveStatus === 'saving'}
+                                                    className="rounded-full bg-indigo-700 px-4 py-2 text-[10px] font-black uppercase tracking-widest text-white disabled:opacity-50"
+                                                  >
+                                                    {nonConformingSaveStatus === 'saving' ? 'Guardando…' : 'Listo'}
+                                                  </button>
+                                                </>
+                                              ) : hasSavedTable ? (
+                                                canEditNonConforming && (
+                                                  <button
+                                                    type="button"
+                                                    onClick={startNonConformingEntry}
+                                                    className="rounded-full bg-slate-900 px-4 py-2 text-[10px] font-black uppercase tracking-widest text-white"
+                                                  >
+                                                    Editar
+                                                  </button>
+                                                )
+                                              ) : (
+                                                <button
+                                                  type="button"
+                                                  onClick={startNonConformingEntry}
+                                                  className="rounded-full bg-indigo-700 px-4 py-2 text-[10px] font-black uppercase tracking-widest text-white"
+                                                >
+                                                  Cargar
+                                                </button>
+                                              )}
+                                            </div>
+                                          </div>
+                                          {nonConformingSaveStatus === 'error' && (
+                                            <p role="alert" className="px-4 py-2 text-[10px] font-bold text-red-600">
+                                              No se pudieron guardar los datos. Pulsa «Listo» para reintentar.
+                                            </p>
+                                          )}
+                                          {nonConformingCopyStatus === 'error' && (
+                                            <p role="alert" className="px-4 py-2 text-[10px] font-bold text-red-600">
+                                              No se pudo copiar la columna; verifica los permisos del navegador.
+                                            </p>
+                                          )}
+                                          <table className="w-full min-w-[760px] border-collapse text-left text-xs">
+                                            <thead>
+                                              <tr className="bg-indigo-700 text-white">
+                                                <th className="w-32 px-3 py-3 font-black uppercase tracking-widest">Línea</th>
+                                                <th className="w-36 px-3 py-3 font-black uppercase tracking-widest">Código</th>
+                                                <th className="min-w-64 px-3 py-3 font-black uppercase tracking-widest">Descripción del artículo</th>
+                                                <th className="w-48 px-3 py-3 font-black uppercase tracking-widest">No conformidad</th>
+                                                <th className="w-36 px-3 py-3 text-center font-black uppercase tracking-widest">Cantidad</th>
+                                                {isNonConformingEditing && <th className="w-24 px-3 py-3 font-black uppercase tracking-widest">Acciones</th>}
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              {rows.map((row) => (
+                                                <tr key={row.id} className="border-b border-slate-200 last:border-b-0">
+                                                  <td className="px-3 py-2">
+                                                    {isNonConformingEditing ? (
+                                                      <select
+                                                        value={row.line}
+                                                        onChange={(event) => updateNonConformingLine(row.id, event.target.value)}
+                                                        className="w-full bg-transparent px-1 py-1 outline-none"
+                                                        aria-label="Línea"
+                                                      >
+                                                        <option value="">Seleccionar línea</option>
+                                                        {Array.from({ length: 7 }, (_, lineIndex) => `Linea ${lineIndex + 1}`).map((line) => (
+                                                          <option key={line} value={line}>{line}</option>
+                                                        ))}
+                                                      </select>
+                                                    ) : <span className="block px-1 py-1">{row.line}</span>}
+                                                  </td>
+                                                  <td className="px-3 py-2">
+                                                    {isNonConformingEditing ? (
+                                                      <div>
+                                                        <select
+                                                          value={row.flavor}
+                                                          onChange={(event) => updateNonConformingFlavor(row.id, event.target.value)}
+                                                          disabled={!row.line}
+                                                          className="w-full bg-transparent px-1 py-1 outline-none disabled:text-slate-400"
+                                                          aria-label="Código y producto"
+                                                        >
+                                                          <option value="">Seleccionar producto</option>
+                                                          {Object.keys(NON_CONFORMING_PRODUCTS[row.line] || {}).map((flavor) => (
+                                                            <option key={flavor} value={flavor}>{flavor}</option>
+                                                          ))}
+                                                        </select>
+                                                        {row.code && <span className="block px-1 text-[10px] text-slate-500">{row.code}</span>}
+                                                      </div>
+                                                    ) : <span className="block px-1 py-1">{row.code}</span>}
+                                                  </td>
+                                                  <td className="px-3 py-2">{row.description}</td>
+                                                  <td className="px-3 py-2">
+                                                    {isNonConformingEditing ? (
+                                                      <select
+                                                        value={row.nonConformity}
+                                                        onChange={(event) => updateNonConformingRow(row.id, 'nonConformity', event.target.value)}
+                                                        className="w-full bg-transparent px-1 py-1 outline-none"
+                                                        aria-label="No conformidad"
+                                                      >
+                                                        <option value="">Seleccionar no conformidad</option>
+                                                        {NON_CONFORMITIES.map((value) => <option key={value} value={value}>{value}</option>)}
+                                                      </select>
+                                                    ) : <span className="block px-1 py-1">{row.nonConformity}</span>}
+                                                  </td>
+                                                  <td className="px-3 py-2">
+                                                    <input
+                                                      type="number"
+                                                      min="0"
+                                                      step="any"
+                                                      value={row.quantity}
+                                                      onChange={(event) => updateNonConformingRow(row.id, 'quantity', event.target.value)}
+                                                      readOnly={!isNonConformingEditing}
+                                                      className="w-full bg-transparent px-1 py-1 text-center outline-none read-only:text-slate-700"
+                                                      aria-label="Cantidad"
+                                                    />
+                                                  </td>
+                                                  {isNonConformingEditing && (
+                                                    <td className="px-3 py-2 text-center">
+                                                      <button
+                                                        type="button"
+                                                        onClick={() => removeNonConformingRow(row.id)}
+                                                        className="rounded-full px-2 py-1 text-[10px] font-bold text-red-700 hover:bg-red-50"
+                                                      >
+                                                        Eliminar
+                                                      </button>
+                                                    </td>
+                                                  )}
+                                                </tr>
+                                              ))}
+                                              {rows.length === 0 && (
+                                                <tr>
+                                                  <td colSpan={isNonConformingEditing ? 6 : 5} className="px-3 py-8 text-center text-slate-500">
+                                                    {hasSavedTable ? 'Tabla habilitada, sin registros.' : 'No hay registros para esta fecha.'}
+                                                  </td>
+                                                </tr>
+                                              )}
+                                            </tbody>
+                                            {user?.id === 'maria.mds' || user?.id === 'demon' ? (
+                                              hasSavedTable && !isNonConformingEditing && rows.length > 0 && (
+                                                <tfoot>
+                                                  <tr className="border-t border-slate-200 bg-slate-50">
+                                                    <td />
+                                                    <td className="px-3 py-2 text-center">
+                                                      <button type="button" onClick={() => void copyNonConformingColumn('code')} className="rounded-full bg-slate-700 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-white">
+                                                        {nonConformingCopyStatus === 'copied' ? 'Copiado' : 'Copiar'}
+                                                      </button>
+                                                    </td>
+                                                    <td />
+                                                    <td />
+                                                    <td className="px-3 py-2 text-center">
+                                                      <button type="button" onClick={() => void copyNonConformingColumn('quantity')} className="rounded-full bg-slate-700 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-white">
+                                                        {nonConformingCopyStatus === 'copied' ? 'Copiado' : 'Copiar'}
+                                                      </button>
+                                                    </td>
+                                                  </tr>
+                                                </tfoot>
+                                              )
+                                            ) : null}
+                                          </table>
+                                        </div>
+                                      );
+                                    })()}
+                                  </div>
+                                </>
+                              ) : (
+                                <>
+                                  <div className="mb-2 flex flex-wrap items-center gap-2 no-print">
+                                    {activeNonConformingPeriod === 'semanal' ? (
+                                      <>
+                                        <input
+                                          type="week"
+                                          value={`${getISOWeekYear(nonConformingWeeklyDate)}-W${String(getISOWeek(nonConformingWeeklyDate)).padStart(2, '0')}`}
+                                          onChange={(event) => {
+                                            if (!event.target.value) return;
+                                            const [year, week] = event.target.value.split('-W').map(Number);
+                                            setNonConformingWeeklyDate(startOfISOWeek(setISOWeek(new Date(year, 0, 4), week)));
+                                          }}
+                                          className="h-9 rounded-full border-slate-200 bg-white px-3 text-[10px] font-bold uppercase tracking-widest"
+                                          aria-label="Semana del resumen"
+                                        />
+                                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-600">
+                                          Semana {getISOWeek(nonConformingWeeklyDate)}
+                                        </span>
+                                      </>
+                                    ) : (
+                                      <input
+                                        type="month"
+                                        value={format(nonConformingMonthlyDate, 'yyyy-MM')}
+                                        onChange={(event) => {
+                                          if (!event.target.value) return;
+                                          const [year, month] = event.target.value.split('-').map(Number);
+                                          setNonConformingMonthlyDate(new Date(year, month - 1, 1));
+                                        }}
+                                        className="h-9 rounded-full border-slate-200 bg-white px-3 text-[10px] font-bold uppercase tracking-widest"
+                                        aria-label="Mes del resumen"
+                                      />
+                                    )}
+                                  </div>
+                                  <div className="mb-2 flex items-center gap-2 no-print">
+                                    {([
+                                      { id: 'por-lineas' as const, label: 'Por líneas' },
+                                      { id: 'por-no-conformidad' as const, label: 'Por no conformidad' },
+                                    ]).map(({ id, label }) => (
+                                      <button
+                                        key={id}
+                                        type="button"
+                                        onClick={() => setActiveNonConformingSummary(id)}
+                                        className={cn(
+                                          'rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-widest',
+                                          activeNonConformingSummary === id ? 'bg-indigo-700 text-white' : 'bg-slate-100 text-slate-600'
+                                        )}
+                                      >
+                                        {label}
+                                      </button>
+                                    ))}
+                                  </div>
+                                  <div className="min-h-0 flex-1 overflow-auto rounded-[2rem] bg-white p-3 sm:p-5">
+                                    <div className="mb-4">
+                                      <h3 className="text-sm font-black uppercase tracking-widest text-slate-800">
+                                        Resumen {activeNonConformingSummary === 'por-lineas' ? 'por líneas' : 'por no conformidad'}
+                                      </h3>
+                                      <p className="mt-1 text-xs text-slate-500">
+                                        {activeNonConformingPeriod === 'semanal'
+                                          ? `Semana ${getISOWeek(nonConformingWeeklyDate)} · ${format(nonConformingWeekStart, 'dd/MM/yyyy')} al ${format(nonConformingWeekEnd, 'dd/MM/yyyy')}`
+                                          : format(nonConformingMonthStart, 'MMMM yyyy', { locale: es })}
+                                      </p>
+                                    </div>
+                                    <div className="flex flex-col gap-5">
+                                      <section aria-label="Tabla resumen" className="overflow-x-auto rounded-2xl border border-slate-200">
+                                        <table className="w-full border-collapse text-left text-xs">
+                                          <thead>
+                                            <tr className="bg-indigo-700 text-white">
+                                              <th className="px-3 py-3 font-black uppercase tracking-widest">
+                                                {activeNonConformingSummary === 'por-lineas' ? 'Línea' : 'No conformidad'}
+                                              </th>
+                                              <th className="px-3 py-3 text-right font-black uppercase tracking-widest">Cantidad</th>
+                                              <th className="px-3 py-3 text-right font-black uppercase tracking-widest">% acumulado</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            {nonConformingSummaryRows.length ? nonConformingSummaryRows.map((row) => (
+                                              <tr key={row.label} className="border-b border-slate-200">
+                                                <td className="px-3 py-2">{row.label}</td>
+                                                <td className="px-3 py-2 text-right">{row.quantity.toLocaleString('es-VE')}</td>
+                                                <td className="px-3 py-2 text-right">{row.cumulativePercent.toLocaleString('es-VE', { maximumFractionDigits: 1 })}%</td>
+                                              </tr>
+                                            )) : (
+                                              <tr>
+                                                <td colSpan={3} className="px-3 py-8 text-center text-slate-500">
+                                                  No hay cantidades registradas para este periodo.
+                                                </td>
+                                              </tr>
+                                            )}
+                                          </tbody>
+                                        </table>
+                                      </section>
+                                      <section aria-label="Gráfica de barras Pareto">
+                                        <h4 className="mb-2 text-xs font-black uppercase tracking-widest text-slate-700">
+                                          Gráfica de barras Pareto
+                                        </h4>
+                                        {nonConformingSummaryRows.length ? (
+                                          <div className="h-[28rem] min-w-0 rounded-2xl border border-slate-100 p-3">
+                                            <ResponsiveContainer width="100%" height="100%">
+                                              <ComposedChart data={nonConformingSummaryRows} margin={{ top: 12, right: 12, left: 0, bottom: 54 }}>
+                                                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                                                <XAxis dataKey="label" interval={0} angle={-30} textAnchor="end" height={72} tick={{ fontSize: 10 }} />
+                                                <YAxis yAxisId="quantity" allowDecimals />
+                                                <YAxis yAxisId="percent" orientation="right" domain={[0, 100]} unit="%" />
+                                                <Tooltip />
+                                                <Legend />
+                                                <Bar yAxisId="quantity" dataKey="quantity" name="Cantidad" fill="#4f46e5" radius={[5, 5, 0, 0]} />
+                                                <Line yAxisId="percent" dataKey="cumulativePercent" name="% acumulado" stroke="#f97316" strokeWidth={2} dot={{ r: 3 }} />
+                                              </ComposedChart>
+                                            </ResponsiveContainer>
+                                          </div>
+                                        ) : (
+                                          <div className="flex h-64 items-center justify-center rounded-2xl border border-dashed border-slate-200 text-sm text-slate-500">
+                                            Sin datos para graficar en este periodo.
+                                          </div>
+                                        )}
+                                      </section>
+                                    </div>
+                                  </div>
+                                </>
+                              )}
+                            </div>
+                          ) : (
           <div className="flex-1 min-h-0 bg-white rounded-[2.5rem]" />
         )
       )}
