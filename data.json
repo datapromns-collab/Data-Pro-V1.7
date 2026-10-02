@@ -46903,12 +46903,12 @@
             },
             {
               "id": "3ff460f9-486f-47fc-8e81-45043ebeaf59",
-              "line": "Linea 7",
+              "line": "Linea 2",
               "flavor": "GLUP COLA",
-              "code": "PRODT-0082",
-              "description": "GLUP! COLA NEGRA CAJA X 12BOT X 1LTS",
-              "nonConformity": "Exposicion de Taca",
-              "quantity": "234"
+              "code": "PRODT-0007",
+              "description": "GLUP! COLA NEGRA  CAJA X 6BOT X 2.0LTS",
+              "nonConformity": "Bajo CO2",
+              "quantity": "80"
             }
           ],
           "2026-09-29": [
@@ -47798,7 +47798,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-02T15:12:00.688Z"
+    "updatedAt": "2026-10-02T15:13:01.699Z"
   },
   "ordenesSap": [
     {
