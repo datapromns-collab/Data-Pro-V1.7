@@ -46828,7 +46828,27 @@
               "code": "PRODT-0009",
               "description": "GLUP! KOLITA  CAJA X 6BOT X 2.0LTS",
               "nonConformity": "Bajo Co2 - Alto CO2",
-              "quantity": "89"
+              "quantity": "88"
+            },
+            {
+              "id": "a5d2d890-3678-41b9-a147-96c40c05d1ef",
+              "line": "Linea 2",
+              "flavor": "GLUP KOLITA",
+              "code": "PRODT-0009",
+              "description": "GLUP! KOLITA  CAJA X 6BOT X 2.0LTS",
+              "nonConformity": "Problemas de Soplado",
+              "quantity": "57"
+            }
+          ],
+          "2026-09-21": [
+            {
+              "id": "6f6ae3c2-89c8-4e9d-94cf-75eb809a0723",
+              "line": "Linea 3",
+              "flavor": "GLUP MANZANA ROJA",
+              "code": "PRODT-0097",
+              "description": "GLUP! MAZANA ROJA CAJA X 6BOT X 2.0LTS",
+              "nonConformity": "Bajo Co2 - Alto CO2",
+              "quantity": "60"
             }
           ]
         }
@@ -47689,7 +47709,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-02T14:40:48.494Z"
+    "updatedAt": "2026-10-02T14:54:40.188Z"
   },
   "ordenesSap": [
     {
