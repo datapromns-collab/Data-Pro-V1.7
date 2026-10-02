@@ -46742,6 +46742,21 @@
             "quimicosInsumosCantidad": {}
           }
         }
+      },
+      "productosNoConformes": {
+        "diarios": {
+          "2026-09-02": [
+            {
+              "id": "02a73ab4-ae40-4530-a020-780748d8e62f",
+              "line": "Linea 2",
+              "flavor": "GLUP KOLITA",
+              "code": "PRODT-0009",
+              "description": "GLUP! KOLITA  CAJA X 6BOT X 2.0LTS",
+              "nonConformity": "Problemas de Soplado",
+              "quantity": "187"
+            }
+          ]
+        }
       }
     },
     "permissions": {
@@ -47599,7 +47614,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-02T14:07:13.018Z"
+    "updatedAt": "2026-10-02T14:25:55.562Z"
   },
   "ordenesSap": [
     {
