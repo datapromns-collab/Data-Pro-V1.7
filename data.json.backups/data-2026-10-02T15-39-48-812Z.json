@@ -14897,7 +14897,8 @@
           "planning"
         ],
         "prodtg.mds": [
-          "planning"
+          "planning",
+          "insumos"
         ],
         "MDS": [
           "planning",
@@ -15182,7 +15183,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-02T17:12:54.420Z"
+    "updatedAt": "2026-10-02T15:38:00.710Z"
   },
   "ordenesSap": [
     {
@@ -39178,7 +39179,7 @@
           },
           "Sala 1": {
             "invInicialSacos": "452",
-            "invFinalSacos": "307"
+            "invFinalSacos": ""
           }
         }
       },
