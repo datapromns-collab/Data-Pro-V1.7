@@ -51,6 +51,7 @@ const NON_CONFORMITIES = [
   'Nivel de llenado',
   'Sabor no Caracteristico',
   'Prueba',
+  'Déficit de pega',
 ] as const;
 
 const NON_CONFORMING_PRODUCTS: Record<string, Record<string, NonConformingProduct>> = {
@@ -628,7 +629,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   const activeWasteKey = wasteSectionKey ? `${wasteSectionKey}:${wasteDateKey}` : null;
   const activeWasteRows = wasteSectionKey ? wasteTablesBySection[wasteSectionKey][wasteDateKey] || [] : [];
   const canEditWasteTables = user?.id === 'maria.mds' || user?.id === 'alex.mds';
-  const canEditNonConforming = canEditWasteTables;
+  const canEditNonConforming = user?.id === 'demon' || user?.id === 'demon2';
   const canCopyWasteValues = user?.id === 'maria.mds' || user?.id === 'demon';
   const isWasteEditing = activeWasteKey !== null && wasteEditingKey === activeWasteKey;
   const activeReceptionData = activeRecepcionesSubSection === 'diarias'
@@ -904,9 +905,16 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   };
 
   const startNonConformingEntry = () => {
+    if (Object.prototype.hasOwnProperty.call(nonConformingRowsByDate, nonConformingDateKey)) return;
     setNonConformingDraftRows(nonConformingActiveRows.length
       ? nonConformingActiveRows.map((row) => ({ ...row }))
       : [{ id: crypto.randomUUID(), line: '', flavor: '', code: '', description: '', nonConformity: '', quantity: '' }]);
+    setNonConformingEditingKey(nonConformingActiveKey);
+  };
+
+  const startEditingNonConformingEntry = () => {
+    if (!canEditNonConforming || !Object.prototype.hasOwnProperty.call(nonConformingRowsByDate, nonConformingDateKey)) return;
+    setNonConformingDraftRows(nonConformingActiveRows.map((row) => ({ ...row })));
     setNonConformingEditingKey(nonConformingActiveKey);
     setNonConformingSaveStatus('idle');
   };
@@ -942,6 +950,8 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
 
   const saveNonConformingEntry = async () => {
     if (nonConformingEditingKey !== nonConformingActiveKey) return;
+    const tableAlreadyExists = Object.prototype.hasOwnProperty.call(nonConformingRowsByDate, nonConformingDateKey);
+    if (tableAlreadyExists && !canEditNonConforming) return;
     setNonConformingSaveStatus('saving');
     try {
       const rowsToSave = nonConformingDraftRows.map((row) => {
@@ -967,7 +977,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   };
 
   const enableNonConformingTable = async () => {
-    if (!canEditNonConforming || Object.prototype.hasOwnProperty.call(nonConformingRowsByDate, nonConformingDateKey)) return;
+    if (!canEditWasteTables || Object.prototype.hasOwnProperty.call(nonConformingRowsByDate, nonConformingDateKey)) return;
     setNonConformingSaveStatus('saving');
     try {
       await saveProductionNonConformingRows(nonConformingDateKey, [], { onlyIfMissing: true });
@@ -3461,7 +3471,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                   <div className="min-h-0 flex-1 overflow-auto rounded-[2rem] bg-white p-3 sm:p-4">
                                     {(() => {
                                       const hasSavedTable = Object.prototype.hasOwnProperty.call(nonConformingRowsByDate, nonConformingDateKey);
-                                      const canEnable = canEditNonConforming && hasSavedTable && nonConformingActiveRows.length === 0 && !isNonConformingEditing;
+                                      const canEnable = canEditWasteTables && hasSavedTable && nonConformingActiveRows.length === 0 && !isNonConformingEditing;
                                       const rows = isNonConformingEditing ? nonConformingDraftRows : nonConformingActiveRows;
                                       return (
                                         <div className="overflow-x-auto rounded-2xl border border-slate-200">
@@ -3503,7 +3513,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                                 canEditNonConforming && (
                                                   <button
                                                     type="button"
-                                                    onClick={startNonConformingEntry}
+                                                    onClick={startEditingNonConformingEntry}
                                                     className="rounded-full bg-slate-900 px-4 py-2 text-[10px] font-black uppercase tracking-widest text-white"
                                                   >
                                                     Editar
