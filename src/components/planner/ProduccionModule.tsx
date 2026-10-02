@@ -9,6 +9,7 @@ import { Bar, CartesianGrid, ComposedChart, Legend, Line, ResponsiveContainer, T
 import { cn } from '@/lib/utils';
 import { loadProductionInventoryData, loadProductionNonConformingData, loadProductionWasteRows, savePlannerData, saveProductionNonConformingRows } from '@/lib/json-db';
 import { useAuthStore } from '@/hooks/use-auth-store';
+import { normalizeNonConformingRows, parseNonConformingQuantity, summarizeNonConformingRows } from '@/lib/non-conforming-utils';
 
 type WasteSectionKey = 'mermas' | 'desperdicios' | 'rechazos' | 'devoluciones';
 type WasteDataGroup = 'mermasDesperdicios' | 'rechazosDevoluciones';
@@ -43,7 +44,8 @@ type NonConformingProduct = { code: string; description: string };
 const NON_CONFORMITIES = [
   'Bajo Brix',
   'Preforma con Defecto',
-  'Bajo Co2 - Alto CO2',
+  'Bajo CO2',
+  'Alto CO2',
   'Exposicion de Taca',
   'Problemas de Soplado',
   'Sin Codificación',
@@ -326,35 +328,16 @@ const normalizeWasteRows = (value: unknown): WasteTableRow[] => {
     .filter((row) => row.id);
 };
 
-const normalizeNonConformingRows = (value: unknown): NonConformingRow[] => {
-  if (!Array.isArray(value)) return [];
-  return value
-    .filter((row): row is Record<string, unknown> => !!row && typeof row === 'object' && !Array.isArray(row))
-    .map((row) => {
-      const line = typeof row.line === 'string' ? row.line : '';
-      const flavor = typeof row.flavor === 'string' ? row.flavor : '';
-      const product = NON_CONFORMING_PRODUCTS[line]?.[flavor];
-      return {
-        id: typeof row.id === 'string' ? row.id : '',
-        line,
-        flavor,
-        code: product?.code || (typeof row.code === 'string' ? row.code : ''),
-        description: product?.description || (typeof row.description === 'string' ? row.description : ''),
-        nonConformity: typeof row.nonConformity === 'string' ? row.nonConformity : '',
-        quantity: typeof row.quantity === 'string' ? row.quantity : '',
-      };
-    })
-    .filter((row) => row.id);
-};
-
-const parseNonConformingQuantity = (value: string): number => {
-  const normalized = value.trim().replace(/\s/g, '').replace(/[^0-9,.-]/g, '');
-  const decimalNormalized = normalized.includes(',')
-    ? normalized.replace(/\./g, '').replace(',', '.')
-    : normalized;
-  const number = Number(decimalNormalized);
-  return Number.isFinite(number) ? number : 0;
-};
+const normalizeProductionNonConformingRows = (value: unknown): NonConformingRow[] => (
+  normalizeNonConformingRows(value).map((row) => {
+    const product = NON_CONFORMING_PRODUCTS[row.line]?.[row.flavor];
+    return {
+      ...row,
+      code: product?.code || row.code,
+      description: product?.description || row.description,
+    };
+  })
+);
 
 const sumNumericValues = (values: string[]): string => {
   const total = values.reduce((sum, value) => {
@@ -580,45 +563,24 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
       : format(nonConformingMonthStart, 'yyyy-MM')}`;
   const nonConformingActiveRows = nonConformingRowsByDate[nonConformingDateKey] || [];
   const isNonConformingEditing = nonConformingEditingKey === nonConformingActiveKey;
-  const nonConformingSummaryRows = useMemo(() => {
-    const selectedRows = Object.entries(nonConformingRowsByDate).flatMap(([date, rows]) => {
-      const recordDate = new Date(`${date}T12:00:00`);
-      const isInPeriod = activeNonConformingPeriod === 'semanal'
-        ? recordDate >= nonConformingWeekStart && recordDate <= nonConformingWeekEnd
-        : date.startsWith(format(nonConformingMonthStart, 'yyyy-MM'));
-      return isInPeriod ? rows : [];
-    });
-    const totals = new Map<string, { quantity: number; records: number }>();
-    selectedRows.forEach((row) => {
-      const label = activeNonConformingSummary === 'por-lineas' ? row.line : row.nonConformity;
-      if (!label) return;
-      const current = totals.get(label) || { quantity: 0, records: 0 };
-      totals.set(label, {
-        quantity: current.quantity + parseNonConformingQuantity(row.quantity),
-        records: current.records + 1,
-      });
-    });
-    const totalQuantity = Array.from(totals.values()).reduce((sum, total) => sum + total.quantity, 0);
-    let cumulative = 0;
-    return Array.from(totals.entries())
-      .map(([label, total]) => ({ label, ...total }))
-      .sort((a, b) => b.quantity - a.quantity || a.label.localeCompare(b.label))
-      .map((item) => {
-        cumulative += item.quantity;
-        return {
-          ...item,
-          percentOfTotal: totalQuantity ? (item.quantity / totalQuantity) * 100 : 0,
-          cumulativePercent: totalQuantity ? (cumulative / totalQuantity) * 100 : 0,
-        };
-      });
-  }, [
-    nonConformingRowsByDate,
-    activeNonConformingPeriod,
-    activeNonConformingSummary,
-    nonConformingWeekStart,
-    nonConformingWeekEnd,
-    nonConformingMonthStart,
-  ]);
+  const nonConformingSummaryRows = useMemo(
+    () => summarizeNonConformingRows(
+      nonConformingRowsByDate,
+      activeNonConformingPeriod === 'semanal' ? 'semanal' : 'mensual',
+      activeNonConformingSummary,
+      nonConformingWeekStart,
+      nonConformingWeekEnd,
+      format(nonConformingMonthStart, 'yyyy-MM'),
+    ),
+    [
+      nonConformingRowsByDate,
+      activeNonConformingPeriod,
+      activeNonConformingSummary,
+      nonConformingWeekStart,
+      nonConformingWeekEnd,
+      nonConformingMonthStart,
+    ],
+  );
   const activeWasteSubSection = activeMermasSubSection;
   const wasteSectionKey: WasteSectionKey | null = activeWasteSubSection === 'mermas' ||
     activeWasteSubSection === 'desperdicios' ||
@@ -704,7 +666,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
       const nextNonConformingDays: NonConformingRowsByDate = {};
       if (storedNonConformingDays && typeof storedNonConformingDays === 'object' && !Array.isArray(storedNonConformingDays)) {
         Object.entries(storedNonConformingDays).forEach(([date, rows]) => {
-          if (/^\d{4}-\d{2}-\d{2}$/.test(date)) nextNonConformingDays[date] = normalizeNonConformingRows(rows);
+          if (/^\d{4}-\d{2}-\d{2}$/.test(date)) nextNonConformingDays[date] = normalizeProductionNonConformingRows(rows);
         });
       }
       setNonConformingRowsByDate(nextNonConformingDays);
@@ -759,7 +721,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
       const incoming = await loadProductionNonConformingData();
       if (cancelled || !incoming || versionAtRequestStart !== nonConformingLocalWriteVersion.current) return;
       const normalized = Object.fromEntries(
-        Object.entries(incoming).map(([date, rows]) => [date, normalizeNonConformingRows(rows)])
+        Object.entries(incoming).map(([date, rows]) => [date, normalizeProductionNonConformingRows(rows)])
       );
       setNonConformingRowsByDate((current) => (
         JSON.stringify(current) === JSON.stringify(normalized) ? current : normalized
