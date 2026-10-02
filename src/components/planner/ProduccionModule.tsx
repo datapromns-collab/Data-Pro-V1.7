@@ -7,7 +7,7 @@ import { es } from 'date-fns/locale';
 import jsPDF from 'jspdf';
 import { Bar, CartesianGrid, ComposedChart, Legend, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { cn } from '@/lib/utils';
-import { loadProductionInventoryData, loadProductionNonConformingData, loadProductionWasteRows, savePlannerData } from '@/lib/json-db';
+import { loadProductionInventoryData, loadProductionNonConformingData, loadProductionWasteRows, savePlannerData, saveProductionNonConformingRows } from '@/lib/json-db';
 import { useAuthStore } from '@/hooks/use-auth-store';
 
 type WasteSectionKey = 'mermas' | 'desperdicios' | 'rechazos' | 'devoluciones';
@@ -587,17 +587,20 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
         : date.startsWith(format(nonConformingMonthStart, 'yyyy-MM'));
       return isInPeriod ? rows : [];
     });
-    const totals = new Map<string, number>();
+    const totals = new Map<string, { quantity: number; records: number }>();
     selectedRows.forEach((row) => {
       const label = activeNonConformingSummary === 'por-lineas' ? row.line : row.nonConformity;
       if (!label) return;
-      totals.set(label, (totals.get(label) || 0) + parseNonConformingQuantity(row.quantity));
+      const current = totals.get(label) || { quantity: 0, records: 0 };
+      totals.set(label, {
+        quantity: current.quantity + parseNonConformingQuantity(row.quantity),
+        records: current.records + 1,
+      });
     });
-    const totalQuantity = Array.from(totals.values()).reduce((sum, quantity) => sum + quantity, 0);
+    const totalQuantity = Array.from(totals.values()).reduce((sum, total) => sum + total.quantity, 0);
     let cumulative = 0;
     return Array.from(totals.entries())
-      .map(([label, quantity]) => ({ label, quantity }))
-      .filter((item) => item.quantity > 0)
+      .map(([label, total]) => ({ label, ...total }))
       .sort((a, b) => b.quantity - a.quantity || a.label.localeCompare(b.label))
       .map((item) => {
         cumulative += item.quantity;
@@ -747,7 +750,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   }, [activeProduccionSection, productionLoaded, wasteSectionKey, wasteDateKey, isWasteEditing]);
 
   useEffect(() => {
-    if (activeProduccionSection !== 'productos-no-conformes' || activeNonConformingPeriod !== 'diarios' || !productionLoaded || isNonConformingEditing) return;
+    if (activeProduccionSection !== 'productos-no-conformes' || !productionLoaded || isNonConformingEditing) return;
     let cancelled = false;
     const syncNonConformingRows = async () => {
       const versionAtRequestStart = nonConformingLocalWriteVersion.current;
@@ -756,7 +759,9 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
       const normalized = Object.fromEntries(
         Object.entries(incoming).map(([date, rows]) => [date, normalizeNonConformingRows(rows)])
       );
-      setNonConformingRowsByDate(normalized);
+      setNonConformingRowsByDate((current) => (
+        JSON.stringify(current) === JSON.stringify(normalized) ? current : normalized
+      ));
     };
     void syncNonConformingRows();
     const timer = window.setInterval(() => void syncNonConformingRows(), 5000);
@@ -939,10 +944,6 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
     if (nonConformingEditingKey !== nonConformingActiveKey) return;
     setNonConformingSaveStatus('saving');
     try {
-      const existing = await loadProductionInventoryData();
-      if (!existing) throw new Error('Unable to load shared data before saving non-conforming products');
-      const storedNonConforming = existing.productosNoConformes || {};
-      const storedDays = storedNonConforming.diarios || {};
       const rowsToSave = nonConformingDraftRows.map((row) => {
         const product = NON_CONFORMING_PRODUCTS[row.line]?.[row.flavor];
         return {
@@ -951,15 +952,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
           description: product?.description || '',
         };
       });
-      await savePlannerData({
-        productionInventory: {
-          ...(existing.productionInventory || {}),
-          productosNoConformes: {
-            ...storedNonConforming,
-            diarios: { ...storedDays, [nonConformingDateKey]: rowsToSave },
-          },
-        },
-      });
+      await saveProductionNonConformingRows(nonConformingDateKey, rowsToSave);
       nonConformingLocalWriteVersion.current += 1;
       setNonConformingRowsByDate((current) => ({ ...current, [nonConformingDateKey]: rowsToSave }));
       setNonConformingEditingKey(null);
@@ -977,22 +970,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
     if (!canEditNonConforming || Object.prototype.hasOwnProperty.call(nonConformingRowsByDate, nonConformingDateKey)) return;
     setNonConformingSaveStatus('saving');
     try {
-      const existing = await loadProductionInventoryData();
-      if (!existing) throw new Error('Unable to load shared data before enabling non-conforming table');
-      const storedNonConforming = existing.productosNoConformes || {};
-      const storedDays = storedNonConforming.diarios || {};
-      if (Object.prototype.hasOwnProperty.call(storedDays, nonConformingDateKey)) {
-        throw new Error('Non-conforming table was already enabled by another user');
-      }
-      await savePlannerData({
-        productionInventory: {
-          ...(existing.productionInventory || {}),
-          productosNoConformes: {
-            ...storedNonConforming,
-            diarios: { ...storedDays, [nonConformingDateKey]: [] },
-          },
-        },
-      });
+      await saveProductionNonConformingRows(nonConformingDateKey, [], { onlyIfMissing: true });
       nonConformingLocalWriteVersion.current += 1;
       setNonConformingRowsByDate((current) => ({ ...current, [nonConformingDateKey]: [] }));
       setNonConformingSaveStatus('saved');
@@ -3745,6 +3723,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                               <th className="px-3 py-3 font-black uppercase tracking-widest">
                                                 {activeNonConformingSummary === 'por-lineas' ? 'Línea' : 'No conformidad'}
                                               </th>
+                                              <th className="px-3 py-3 text-right font-black uppercase tracking-widest">Registros</th>
                                               <th className="px-3 py-3 text-right font-black uppercase tracking-widest">Cantidad</th>
                                               <th className="px-3 py-3 text-right font-black uppercase tracking-widest">% acumulado</th>
                                             </tr>
@@ -3753,12 +3732,13 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                             {nonConformingSummaryRows.length ? nonConformingSummaryRows.map((row) => (
                                               <tr key={row.label} className="border-b border-slate-200">
                                                 <td className="px-3 py-2">{row.label}</td>
+                                                <td className="px-3 py-2 text-right">{row.records.toLocaleString('es-VE')}</td>
                                                 <td className="px-3 py-2 text-right">{row.quantity.toLocaleString('es-VE')}</td>
                                                 <td className="px-3 py-2 text-right">{row.cumulativePercent.toLocaleString('es-VE', { maximumFractionDigits: 1 })}%</td>
                                               </tr>
                                             )) : (
                                               <tr>
-                                                <td colSpan={3} className="px-3 py-8 text-center text-slate-500">
+                                                <td colSpan={4} className="px-3 py-8 text-center text-slate-500">
                                                   No hay cantidades registradas para este periodo.
                                                 </td>
                                               </tr>
@@ -3770,7 +3750,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                         <h4 className="mb-2 text-xs font-black uppercase tracking-widest text-slate-700">
                                           Gráfica de barras Pareto
                                         </h4>
-                                        {nonConformingSummaryRows.length ? (
+                                        {nonConformingSummaryRows.some((row) => row.quantity > 0) ? (
                                           <div className="h-[28rem] min-w-0 rounded-2xl border border-slate-100 p-3">
                                             <ResponsiveContainer width="100%" height="100%">
                                               <ComposedChart data={nonConformingSummaryRows} margin={{ top: 12, right: 12, left: 0, bottom: 54 }}>
@@ -3784,6 +3764,10 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                                 <Line yAxisId="percent" dataKey="cumulativePercent" name="% acumulado" stroke="#f97316" strokeWidth={2} dot={{ r: 3 }} />
                                               </ComposedChart>
                                             </ResponsiveContainer>
+                                          </div>
+                                        ) : nonConformingSummaryRows.length ? (
+                                          <div className="flex h-64 items-center justify-center rounded-2xl border border-dashed border-amber-200 bg-amber-50 px-6 text-center text-sm text-amber-800">
+                                            Hay {nonConformingSummaryRows.reduce((total, row) => total + row.records, 0).toLocaleString('es-VE')} registro(s), pero ninguno tiene una cantidad mayor que cero. Completa la cantidad en Diarios para generar el Pareto por cantidad.
                                           </div>
                                         ) : (
                                           <div className="flex h-64 items-center justify-center rounded-2xl border border-dashed border-slate-200 text-sm text-slate-500">

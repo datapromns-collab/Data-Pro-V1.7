@@ -116,7 +116,7 @@ export async function loadProductionWasteRows(
 
 export async function loadProductionNonConformingData(): Promise<Record<string, unknown[]> | null> {
   try {
-    const res = await fetchWithRetry(`${API_URL}?section=productionNonConforming`);
+    const res = await fetchWithRetry('/api/production/non-conforming');
     if (!res.ok) throw new Error('Production non-conforming API error');
     const json = await res.json();
     const rowsByDate = json.rowsByDate;
@@ -129,6 +129,37 @@ export async function loadProductionNonConformingData(): Promise<Record<string, 
   } catch (error) {
     console.warn('[JSON_DB] Unable to load production non-conforming data', error);
     return null;
+  }
+}
+
+export type ProductionNonConformingRow = {
+  id: string;
+  line: string;
+  flavor: string;
+  code: string;
+  description: string;
+  nonConformity: string;
+  quantity: string;
+};
+
+export async function saveProductionNonConformingRows(
+  date: string,
+  rows: ProductionNonConformingRow[],
+  options: { onlyIfMissing?: boolean } = {},
+): Promise<void> {
+  try {
+    const res = await fetchWithRetry('/api/production/non-conforming', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ date, rows, ...options }),
+    });
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(`HTTP ${res.status}: ${text}`);
+    }
+  } catch (error) {
+    console.warn('[JSON_DB] Unable to save production non-conforming data', error);
+    throw error;
   }
 }
 
