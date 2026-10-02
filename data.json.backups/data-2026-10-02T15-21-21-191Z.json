@@ -46903,12 +46903,41 @@
             },
             {
               "id": "3ff460f9-486f-47fc-8e81-45043ebeaf59",
+              "line": "Linea 2",
+              "flavor": "GLUP COLA",
+              "code": "PRODT-0007",
+              "description": "GLUP! COLA NEGRA  CAJA X 6BOT X 2.0LTS",
+              "nonConformity": "Bajo CO2",
+              "quantity": "80"
+            }
+          ],
+          "2026-09-29": [
+            {
+              "id": "bd00e8ef-7420-428e-bf33-916bf62b7a02",
               "line": "Linea 7",
               "flavor": "GLUP COLA",
               "code": "PRODT-0082",
               "description": "GLUP! COLA NEGRA CAJA X 12BOT X 1LTS",
               "nonConformity": "Exposicion de Taca",
               "quantity": "234"
+            },
+            {
+              "id": "1becef24-f4d6-4314-8ca4-2320683d2aea",
+              "line": "Linea 3",
+              "flavor": "GLUP COLA",
+              "code": "PRODT-0007",
+              "description": "GLUP! COLA NEGRA  CAJA X 6BOT X 2.0LTS",
+              "nonConformity": "Problemas de Soplado",
+              "quantity": "68"
+            },
+            {
+              "id": "fd11da3e-a6a0-411b-8b48-6f22194fc102",
+              "line": "Linea 4",
+              "flavor": "GLUP COLA",
+              "code": "PRODT-0007",
+              "description": "GLUP! COLA NEGRA  CAJA X 6BOT X 2.0LTS",
+              "nonConformity": "Problemas de Soplado",
+              "quantity": "16"
             }
           ]
         }
@@ -46924,15 +46953,13 @@
         ],
         "jaime.r": [
           "planning",
-          "management",
-          "jarabes",
           "planta",
-          "produccion",
           "logistica",
           "ventas",
           "purchasing",
           "seguimiento",
-          "insumos"
+          "insumos",
+          "management"
         ],
         "demon": [
           "planning",
@@ -47769,7 +47796,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-02T15:10:48.996Z"
+    "updatedAt": "2026-10-02T15:21:17.538Z"
   },
   "ordenesSap": [
     {

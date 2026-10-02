@@ -140,6 +140,64 @@ export async function GET(request: Request) {
         headers: { 'content-type': 'application/json' },
       });
     }
+    if (section === 'productionInventoryPeriod') {
+      const params = new URL(request.url).searchParams;
+      const view = params.get('view');
+      const period = params.get('period');
+      const validPeriod = view === 'mensual'
+        ? !!period && /^\d{4}-\d{2}$/.test(period)
+        : !!period && /^\d{4}-\d{2}-\d{2}$/.test(period);
+      if (!['diarios', 'semanal', 'mensual'].includes(view || '') || !validPeriod) {
+        return new Response(JSON.stringify({ error: 'Invalid production inventory period query' }), {
+          status: 400,
+          headers: { 'content-type': 'application/json' },
+        });
+      }
+      const storedView = data.planner?.productionInventory?.[view as 'diarios' | 'semanal' | 'mensual'] ?? {};
+      const periodValues = Object.prototype.hasOwnProperty.call(storedView, period!)
+        ? storedView[period!]
+        : view === 'mensual' && /^\d{4}-\d{2}-01$/.test(period!)
+          ? storedView[period!.slice(0, 7)]
+          : undefined;
+      const values = projectProductionValues(periodValues)
+        ? periodValues
+        : projectProductionValues(storedView)
+          ? storedView
+          : periodValues;
+      return new Response(JSON.stringify({ values: projectProductionValues(values) }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      });
+    }
+    if (section === 'productionReceptions') {
+      const weekStart = new URL(request.url).searchParams.get('weekStart');
+      if (!weekStart || !/^\d{4}-\d{2}-\d{2}$/.test(weekStart)) {
+        return new Response(JSON.stringify({ error: 'Invalid production receptions week query' }), {
+          status: 400,
+          headers: { 'content-type': 'application/json' },
+        });
+      }
+      const receptions = data.planner?.productionInventory?.recepciones ?? {};
+      const daily = receptions.diarias ?? {};
+      const [year, month, day] = weekStart.split('-').map(Number);
+      const start = new Date(Date.UTC(year, month - 1, day));
+      const days = Object.fromEntries(Array.from({ length: 7 }, (_, index) => {
+        const date = new Date(start);
+        date.setUTCDate(start.getUTCDate() + index);
+        const key = date.toISOString().slice(0, 10);
+        return [key, daily[key]];
+      }).filter(([, value]) => value !== undefined));
+      const weeklySummary = receptions['resumen-semanal']?.[weekStart];
+      return new Response(JSON.stringify({
+        recepciones: {
+          diarias: days,
+          'resumen-semanal': weeklySummary === undefined ? {} : { [weekStart]: weeklySummary },
+        },
+      }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      });
+    }
     if (section === 'productionNonConforming') {
       return new Response(JSON.stringify({
         rowsByDate: data.planner?.productionInventory?.productosNoConformes?.diarios ?? {},
@@ -194,6 +252,23 @@ const flatWeeklyFields = [
   'salesProjectionAW', 'finishedProductInventoryAW', 'productionPlanAW',
   'logisticsInventoryAW', 'plantInventoryAW', 'deletedTaskIds',
 ];
+
+const productionValueKeys = [
+  'tapas', 'separadores', 'preformas', 'plasticos', 'adhesivoCantidad', 'etiquetasCantidad',
+  'azucarCantidad', 'concentradosCantidad', 'concentradosJustyCantidad', 'aditivosCantidad',
+  'solidosCantidad', 'quimicosInsumosCantidad',
+];
+
+function projectProductionValues(value: unknown): Record<string, unknown> | null {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  const record = value as Record<string, unknown>;
+  if (!productionValueKeys.some((key) => Object.prototype.hasOwnProperty.call(record, key))) return null;
+  return Object.fromEntries(
+    productionValueKeys
+      .filter((key) => Object.prototype.hasOwnProperty.call(record, key))
+      .map((key) => [key, record[key]]),
+  );
+}
 
 export async function POST(request: Request) {
   let body: any = {};
@@ -295,6 +370,20 @@ export async function POST(request: Request) {
       }
       if (incomingPlanner.productionInventory) {
         merged.productionInventory = deepMerge(merged.productionInventory, incomingPlanner.productionInventory);
+        (['diarios', 'semanal', 'mensual'] as const).forEach((view) => {
+          const incomingPeriods = incomingPlanner.productionInventory[view];
+          if (!incomingPeriods || typeof incomingPeriods !== 'object' || Array.isArray(incomingPeriods)) return;
+          const mergedPeriods = { ...(merged.productionInventory[view] || {}) };
+          Object.entries(incomingPeriods).forEach(([period, values]) => {
+            const validPeriod = view === 'mensual'
+              ? /^\d{4}-\d{2}$/.test(period)
+              : /^\d{4}-\d{2}-\d{2}$/.test(period);
+            const projectedValues = projectProductionValues(values);
+            if (!validPeriod || !projectedValues) return;
+            mergedPeriods[period] = projectedValues;
+          });
+          merged.productionInventory[view] = mergedPeriods;
+        });
 
         const wasteGroups = [
           { key: 'mermasDesperdicios', sections: ['mermas', 'desperdicios'] as const },

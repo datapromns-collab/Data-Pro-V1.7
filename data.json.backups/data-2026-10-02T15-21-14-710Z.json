@@ -46953,15 +46953,13 @@
         ],
         "jaime.r": [
           "planning",
-          "management",
-          "jarabes",
           "planta",
-          "produccion",
           "logistica",
           "ventas",
           "purchasing",
           "seguimiento",
-          "insumos"
+          "insumos",
+          "management"
         ],
         "demon": [
           "planning",
@@ -47798,7 +47796,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-02T15:13:01.699Z"
+    "updatedAt": "2026-10-02T15:21:12.818Z"
   },
   "ordenesSap": [
     {

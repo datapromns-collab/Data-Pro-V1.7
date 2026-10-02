@@ -7,7 +7,7 @@ import { es } from 'date-fns/locale';
 import jsPDF from 'jspdf';
 import { Bar, CartesianGrid, ComposedChart, Legend, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { cn } from '@/lib/utils';
-import { loadProductionInventoryData, loadProductionNonConformingData, loadProductionWasteRows, savePlannerData, saveProductionNonConformingRows } from '@/lib/json-db';
+import { loadProductionInventoryData, loadProductionInventoryPeriod, loadProductionNonConformingData, loadProductionReceptions, loadProductionWasteRows, savePlannerData, saveProductionNonConformingRows } from '@/lib/json-db';
 import { useAuthStore } from '@/hooks/use-auth-store';
 import { normalizeNonConformingRows, parseNonConformingQuantity, summarizeNonConformingRows } from '@/lib/non-conforming-utils';
 
@@ -286,19 +286,18 @@ const isProductionValues = (value: unknown): value is Partial<ProductionTableVal
 };
 
 const normalizeProductionValues = (value: Partial<ProductionTableValues> | undefined): ProductionTableValues => ({
-  ...emptyProductionValues(),
-  ...(value || {}),
-  tapas: { ...emptyProductionValues().tapas, ...(value?.tapas || {}) },
-  separadores: { ...emptyProductionValues().separadores, ...(value?.separadores || {}) },
-  preformas: { ...emptyProductionValues().preformas, ...(value?.preformas || {}) },
-  plasticos: { ...emptyProductionValues().plasticos, ...(value?.plasticos || {}) },
-  etiquetasCantidad: { ...emptyProductionValues().etiquetasCantidad, ...(value?.etiquetasCantidad || {}) },
-  azucarCantidad: { ...emptyProductionValues().azucarCantidad, ...(value?.azucarCantidad || {}) },
-  concentradosCantidad: { ...emptyProductionValues().concentradosCantidad, ...(value?.concentradosCantidad || {}) },
-  concentradosJustyCantidad: { ...emptyProductionValues().concentradosJustyCantidad, ...(value?.concentradosJustyCantidad || {}) },
-  aditivosCantidad: { ...emptyProductionValues().aditivosCantidad, ...(value?.aditivosCantidad || {}) },
-  solidosCantidad: { ...emptyProductionValues().solidosCantidad, ...(value?.solidosCantidad || {}) },
-  quimicosInsumosCantidad: { ...emptyProductionValues().quimicosInsumosCantidad, ...(value?.quimicosInsumosCantidad || {}) },
+  tapas: { ...(value?.tapas || {}) },
+  separadores: { ...(value?.separadores || {}) },
+  preformas: { ...(value?.preformas || {}) },
+  plasticos: { ...(value?.plasticos || {}) },
+  adhesivoCantidad: value?.adhesivoCantidad || '',
+  etiquetasCantidad: { ...(value?.etiquetasCantidad || {}) },
+  azucarCantidad: { ...(value?.azucarCantidad || {}) },
+  concentradosCantidad: { ...(value?.concentradosCantidad || {}) },
+  concentradosJustyCantidad: { ...(value?.concentradosJustyCantidad || {}) },
+  aditivosCantidad: { ...(value?.aditivosCantidad || {}) },
+  solidosCantidad: { ...(value?.solidosCantidad || {}) },
+  quimicosInsumosCantidad: { ...(value?.quimicosInsumosCantidad || {}) },
 });
 
 const normalizeWasteRows = (value: unknown): WasteTableRow[] => {
@@ -536,6 +535,8 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   const [productionLoaded, setProductionLoaded] = useState(false);
   const [productionLoadStatus, setProductionLoadStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [productionLoadRetry, setProductionLoadRetry] = useState(0);
+  const loadedProductionPeriods = useRef(new Set<string>());
+  const loadedReceptionWeeks = useRef(new Set<string>());
   const [inventorySaveStatus, setInventorySaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [inventorySaveRetry, setInventorySaveRetry] = useState(0);
   const [receptionSaveStatus, setReceptionSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
@@ -615,74 +616,60 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
 
   useEffect(() => {
     let cancelled = false;
-    setProductionLoaded(false);
-    setProductionLoadStatus('loading');
+    const periodCacheKey = `${inventariosSubTab}:${activePeriodKey}`;
+    if (loadedProductionPeriods.current.has(periodCacheKey)) return;
+    if (!productionLoaded) setProductionLoadStatus('loading');
     const loadProductionData = async () => {
       try {
-        const data = await loadProductionInventoryData();
-        if (!data) throw new Error('Unable to load shared production data');
+        const value = await loadProductionInventoryPeriod(inventariosSubTab, activePeriodKey);
+        if (value === undefined) throw new Error('Unable to load shared production data');
         if (cancelled) return;
-      const persisted = data;
-      const periodKeys: Record<ProductionViewKey, string> = {
-        diarios: dailyPeriodKey,
-        semanal: weeklyPeriodKey,
-        mensual: monthlyPeriodKey,
-      };
-      const nextPeriods: ProductionPeriods = { diarios: {}, semanal: {}, mensual: {} };
-      (['diarios', 'semanal', 'mensual'] as ProductionViewKey[]).forEach((view) => {
-        const stored = persisted?.[view] || {};
-        const isLegacy = isProductionValues(stored);
-        if (isLegacy) {
-          nextPeriods[view][periodKeys[view]] = normalizeProductionValues(stored);
+        if (isProductionValues(value)) {
+          const normalized = normalizeProductionValues(value);
+          setProductionByPeriod((current) => ({
+            ...current,
+            [inventariosSubTab]: { ...current[inventariosSubTab], [activePeriodKey]: normalized },
+          }));
         }
-        Object.entries(stored).forEach(([period, values]) => {
-          if (isProductionValues(values)) {
-            nextPeriods[view][period] = normalizeProductionValues(values);
-          }
-        });
-      });
-      setProductionByPeriod(nextPeriods);
-      const storedReceptions = persisted?.recepciones || {};
-      const nextReceptions: ReceptionPeriods = { diarias: {}, 'resumen-semanal': {} };
-      (['diarias', 'resumen-semanal'] as ReceptionViewKey[]).forEach((view) => {
-        const stored = storedReceptions[view] || {};
-        Object.entries(stored).forEach(([period, values]) => {
-          if (isProductionValues(values)) nextReceptions[view][period] = normalizeProductionValues(values);
-        });
-      });
-      setReceptionsByPeriod(nextReceptions);
-      const nextWasteTables: WasteTablesBySection = { mermas: {}, desperdicios: {}, rechazos: {}, devoluciones: {} };
-      (['mermas', 'desperdicios', 'rechazos', 'devoluciones'] as WasteSectionKey[]).forEach((section) => {
-        const storedWaste = persisted?.[WASTE_DATA_GROUP_BY_SECTION[section]] || {};
-        const storedDays = storedWaste[section];
-        if (!storedDays || typeof storedDays !== 'object' || Array.isArray(storedDays)) return;
-        Object.entries(storedDays).forEach(([date, rows]) => {
-          nextWasteTables[section][date] = normalizeWasteRows(rows).map((row) => (
-            section === 'mermas' ? { ...row, unit: 'UND' } : row
-          ));
-        });
-      });
-      setWasteTablesBySection(nextWasteTables);
-      const storedNonConformingDays = persisted?.productosNoConformes?.diarios || {};
-      const nextNonConformingDays: NonConformingRowsByDate = {};
-      if (storedNonConformingDays && typeof storedNonConformingDays === 'object' && !Array.isArray(storedNonConformingDays)) {
-        Object.entries(storedNonConformingDays).forEach(([date, rows]) => {
-          if (/^\d{4}-\d{2}-\d{2}$/.test(date)) nextNonConformingDays[date] = normalizeProductionNonConformingRows(rows);
-        });
-      }
-      setNonConformingRowsByDate(nextNonConformingDays);
-      setProductionLoaded(true);
-      setProductionLoadStatus('ready');
+        loadedProductionPeriods.current.add(periodCacheKey);
+        setProductionLoaded(true);
+        setProductionLoadStatus('ready');
       } catch (error) {
         if (cancelled) return;
         console.error('[PRODUCCION] Failed to load shared production data', error);
-        setProductionLoaded(false);
-        setProductionLoadStatus('error');
+        if (!productionLoaded) {
+          setProductionLoadStatus('error');
+        }
       }
     };
     void loadProductionData();
     return () => { cancelled = true; };
-  }, [productionLoadRetry]);
+  }, [activePeriodKey, inventariosSubTab, productionLoadRetry, productionLoaded]);
+
+  useEffect(() => {
+    if (activeProduccionSection !== 'recepciones') return;
+    const weekKey = format(receptionWeekStart, 'yyyy-MM-dd');
+    if (loadedReceptionWeeks.current.has(weekKey)) return;
+    let cancelled = false;
+    const loadWeek = async () => {
+      const data = await loadProductionReceptions(weekKey);
+      if (cancelled || !data) return;
+      const next: ReceptionPeriods = { diarias: {}, 'resumen-semanal': {} };
+      (['diarias', 'resumen-semanal'] as ReceptionViewKey[]).forEach((view) => {
+        const stored = data[view] || {};
+        Object.entries(stored).forEach(([period, values]) => {
+          if (isProductionValues(values)) next[view][period] = normalizeProductionValues(values);
+        });
+      });
+      setReceptionsByPeriod((current) => ({
+        diarias: { ...current.diarias, ...next.diarias },
+        'resumen-semanal': { ...current['resumen-semanal'], ...next['resumen-semanal'] },
+      }));
+      loadedReceptionWeeks.current.add(weekKey);
+    };
+    void loadWeek();
+    return () => { cancelled = true; };
+  }, [activeProduccionSection, receptionWeekStart]);
 
   useEffect(() => {
     if ((activeProduccionSection !== 'mermas-desperdicios' && activeProduccionSection !== 'rechazos-devoluciones') || !productionLoaded || !wasteSectionKey || isWasteEditing) return;

@@ -98,6 +98,35 @@ export async function loadProductionInventoryData(): Promise<Record<string, any>
   }
 }
 
+export async function loadProductionInventoryPeriod(
+  view: 'diarios' | 'semanal' | 'mensual',
+  period: string,
+): Promise<unknown | undefined> {
+  try {
+    const params = new URLSearchParams({ section: 'productionInventoryPeriod', view, period });
+    const res = await fetchWithRetry(`${API_URL}?${params.toString()}`);
+    if (!res.ok) throw new Error('Production inventory period API error');
+    const json = await res.json();
+    return json.values ?? null;
+  } catch (error) {
+    console.warn('[JSON_DB] Unable to load production inventory period', { view, period, error });
+    return undefined;
+  }
+}
+
+export async function loadProductionReceptions(weekStart: string): Promise<Record<string, any> | null> {
+  try {
+    const params = new URLSearchParams({ section: 'productionReceptions', weekStart });
+    const res = await fetchWithRetry(`${API_URL}?${params.toString()}`);
+    if (!res.ok) throw new Error('Production receptions API error');
+    const json = await res.json();
+    return json.recepciones && typeof json.recepciones === 'object' ? json.recepciones : {};
+  } catch (error) {
+    console.warn('[JSON_DB] Unable to load production receptions', { weekStart, error });
+    return null;
+  }
+}
+
 export async function loadProductionWasteRows(
   section: 'mermas' | 'desperdicios' | 'rechazos' | 'devoluciones',
   date: string,
