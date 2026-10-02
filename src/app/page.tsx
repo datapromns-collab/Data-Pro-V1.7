@@ -2726,7 +2726,11 @@ export default function PlannerPage() {
     }, 150);
   };
 
-  const handlePrintInventory = (section: 'mds' | 'aw', type: 'product-finished' | 'logistics' | 'plant' | 'available') => {
+  const handlePrintInventory = (
+    section: 'mds' | 'aw',
+    type: 'product-finished' | 'logistics' | 'plant' | 'available',
+    data?: PurchasingSummaryPrintData,
+  ) => {
     const modeMap: Record<string, string> = {
       'product-finished': 'inventory-finished',
       'logistics': 'inventory-logistics',
@@ -2734,7 +2738,9 @@ export default function PlannerPage() {
       'available': 'inventory-available'
     };
     const suffix = section === 'aw' ? '-aw' : '';
+    setPurchasingSummaryPrintData(data ?? null);
     setPrintMode(`${modeMap[type]}${suffix}`);
+    document.getElementById('print-orientation-style')?.remove();
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
     style.innerHTML = purchasingPrintPageStyle;
@@ -6232,10 +6238,11 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
               <InventoryReport 
                 type={printMode.includes('finished') ? 'product-finished' : printMode.includes('logistics') ? 'logistics' : printMode.includes('plant') ? 'plant' : 'available'}
                 section={printMode.endsWith('-aw') ? 'aw' : 'mds'}
+                periodLabel={purchasingSummaryPrintData?.periodLabel}
                 data={{
-                  finishedProductInventory: printMode.endsWith('-aw') ? finishedProductInventoryAW : finishedProductInventory,
-                  logisticsInventory: printMode.endsWith('-aw') ? logisticsInventoryAW : logisticsInventory,
-                  plantInventory: printMode.endsWith('-aw') ? plantInventoryAW : plantInventory
+                  finishedProductInventory: purchasingSummaryPrintData?.finishedProductInventory ?? (printMode.endsWith('-aw') ? finishedProductInventoryAW : finishedProductInventory),
+                  logisticsInventory: purchasingSummaryPrintData?.logisticsInventory ?? (printMode.endsWith('-aw') ? logisticsInventoryAW : logisticsInventory),
+                  plantInventory: purchasingSummaryPrintData?.plantInventory ?? (printMode.endsWith('-aw') ? plantInventoryAW : plantInventory)
                 }}
               />
             </div>

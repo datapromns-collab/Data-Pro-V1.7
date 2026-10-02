@@ -1,8 +1,6 @@
 "use client";
 
 import React from 'react';
-import Image from 'next/image';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { format } from 'date-fns';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -28,6 +26,7 @@ import {
 interface InventoryReportProps {
   section?: 'mds' | 'aw';
   type: 'product-finished' | 'logistics' | 'plant' | 'available';
+  periodLabel?: string;
   data: {
     finishedProductInventory: Record<string, Record<string, number>>;
     logisticsInventory: Record<string, number>;
@@ -43,8 +42,7 @@ const ALL_MATERIALS_LIST = [
   ...PLASTICS_DATA.filter(p => !('isHeader' in p)), ...ADHESIVE_DATA
 ];
 
-export function InventoryReport({ section = 'mds', type, data }: InventoryReportProps) {
-  const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
+export function InventoryReport({ section = 'mds', type, data, periodLabel }: InventoryReportProps) {
   const { finishedProductInventory, logisticsInventory, plantInventory } = data;
 
   const isYellow = type === 'product-finished';
@@ -65,7 +63,7 @@ export function InventoryReport({ section = 'mds', type, data }: InventoryReport
       },
     });
     const imgData = canvas.toDataURL('image/png');
-    const pdf = new jsPDF();
+    const pdf = new jsPDF({ orientation: 'portrait' });
     const imgProps = pdf.getImageProperties(imgData);
     const margin = 8;
     const pdfWidth = pdf.internal.pageSize.getWidth() - margin * 2;
@@ -98,17 +96,16 @@ export function InventoryReport({ section = 'mds', type, data }: InventoryReport
       </button>
     </div>
 
-      <div className={`mb-6 border-b-2 pb-4 flex justify-between items-center`} style={{ borderColor: primaryColor }}>
+      <div className={`purchasing-report-header mb-6 border-b-2 pb-4 flex justify-between items-center`} style={{ borderColor: primaryColor }}>
         <div className="flex-1">
           <h1 className="text-xl font-headline font-black text-slate-900 leading-tight uppercase">{titleMap[type]} ({section.toUpperCase()})</h1>
           <p className="font-black text-[10px] uppercase tracking-widest mt-1" style={{ color: primaryColor }}>Sistema de Gestión de Compras e Inventarios</p>
         </div>
-      <div className="flex-1 flex justify-center">
-        {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={110} height={40} className="object-contain" />}
-      </div>
       <div className="flex-1 text-right">
         <p className="text-[8px] font-black uppercase tracking-widest mb-0.5" style={{ color: primaryColor }}>Confidencial - Planta</p>
-        <p className="text-[10px] text-slate-500 font-bold uppercase">{format(new Date(), "EEEE dd 'de' MMMM yyyy", { locale: es })}</p>
+        <p className="text-[10px] text-slate-500 font-bold uppercase">
+          {periodLabel ?? format(new Date(), "EEEE dd 'de' MMMM yyyy", { locale: es })}
+        </p>
         <p className="text-[8px] text-slate-400 font-medium italic">Emitido: {format(new Date(), "HH:mm:ss")}</p>
       </div>
     </div>

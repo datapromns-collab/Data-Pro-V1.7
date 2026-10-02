@@ -77,7 +77,11 @@ import {
 interface PurchasingModuleProps {
   onPrintRequirements: (section: 'mds' | 'aw', data?: PurchasingSummaryPrintData) => void;
   onPrintSalesProjection: (section: 'mds' | 'aw', data?: PurchasingSummaryPrintData) => void;
-  onPrintInventory: (section: 'mds' | 'aw', type: 'product-finished' | 'logistics' | 'plant' | 'available') => void;
+  onPrintInventory: (
+    section: 'mds' | 'aw',
+    type: 'product-finished' | 'logistics' | 'plant' | 'available',
+    data?: PurchasingSummaryPrintData,
+  ) => void;
   onPrintResumen: (section: 'mds' | 'aw' | 'global' | 'semestral', type: 'plan-produccion' | 'requisicion', data?: PurchasingSummaryPrintData) => void;
 }
 
@@ -738,7 +742,12 @@ export function PurchasingModule({ onPrintRequirements, onPrintSalesProjection, 
           <Button 
             variant="outline" 
             size="sm" 
-            onClick={() => onPrintInventory(section, type)}
+            onClick={() => onPrintInventory(section, type, {
+              finishedProductInventory: section === 'aw' ? finishedProductInventoryAW : monthlyFinishedProductInventory,
+              logisticsInventory: section === 'aw' ? logisticsInventoryAW : monthlyLogisticsMaterialInventory,
+              plantInventory: section === 'aw' ? plantInventoryAW : monthlyPlantInventory,
+              periodLabel: `${MONTH_OPTIONS[selectedMonth]} ${selectedYear}`,
+            })}
             className="pointer-events-auto gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
           >
             <FileDown className="h-4 w-4" />
@@ -1128,7 +1137,12 @@ export function PurchasingModule({ onPrintRequirements, onPrintSalesProjection, 
                       <Button 
                         variant="outline" 
                         size="sm" 
-                        onClick={() => onPrintInventory('mds', 'product-finished')}
+                        onClick={() => onPrintInventory('mds', 'product-finished', {
+                          finishedProductInventory: monthlyFinishedProductInventory,
+                          logisticsInventory: monthlyLogisticsMaterialInventory,
+                          plantInventory: monthlyPlantInventory,
+                          periodLabel: `${MONTH_OPTIONS[selectedMonth]} ${selectedYear}`,
+                        })}
                         className="pointer-events-auto gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
                       >
                         <FileDown className="h-4 w-4" />
@@ -1154,7 +1168,12 @@ export function PurchasingModule({ onPrintRequirements, onPrintSalesProjection, 
                     <Button 
                       variant="outline" 
                       size="sm" 
-                      onClick={() => onPrintInventory('mds', 'available')}
+                      onClick={() => onPrintInventory('mds', 'available', {
+                        finishedProductInventory: monthlyFinishedProductInventory,
+                        logisticsInventory: monthlyLogisticsMaterialInventory,
+                        plantInventory: monthlyPlantInventory,
+                        periodLabel: `${MONTH_OPTIONS[selectedMonth]} ${selectedYear}`,
+                      })}
                       className="pointer-events-auto gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
                     >
                       <FileDown className="h-4 w-4" />
@@ -1799,7 +1818,11 @@ export function PurchasingModule({ onPrintRequirements, onPrintSalesProjection, 
                       <Button 
                         variant="outline" 
                         size="sm" 
-                        onClick={() => onPrintInventory('aw', 'product-finished')}
+                        onClick={() => onPrintInventory('aw', 'product-finished', {
+                          finishedProductInventory: finishedProductInventoryAW,
+                          logisticsInventory: logisticsInventoryAW,
+                          plantInventory: plantInventoryAW,
+                        })}
                         className="pointer-events-auto gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
                       >
                         <FileDown className="h-4 w-4" />
@@ -1825,7 +1848,11 @@ export function PurchasingModule({ onPrintRequirements, onPrintSalesProjection, 
                     <Button 
                       variant="outline" 
                       size="sm" 
-                      onClick={() => onPrintInventory('aw', 'available')}
+                      onClick={() => onPrintInventory('aw', 'available', {
+                        finishedProductInventory: finishedProductInventoryAW,
+                        logisticsInventory: logisticsInventoryAW,
+                        plantInventory: plantInventoryAW,
+                      })}
                       className="pointer-events-auto gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
                     >
                       <FileDown className="h-4 w-4" />
