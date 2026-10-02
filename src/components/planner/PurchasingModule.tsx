@@ -75,7 +75,8 @@ import {
 } from '@/lib/planner-utils';
 
 interface PurchasingModuleProps {
-  onPrintRequirements: (section: 'mds' | 'aw') => void;
+  onPrintRequirements: (section: 'mds' | 'aw', data?: PurchasingSummaryPrintData) => void;
+  onPrintSalesProjection: (section: 'mds' | 'aw', data?: PurchasingSummaryPrintData) => void;
   onPrintInventory: (section: 'mds' | 'aw', type: 'product-finished' | 'logistics' | 'plant' | 'available') => void;
   onPrintResumen: (section: 'mds' | 'aw' | 'global' | 'semestral', type: 'plan-produccion' | 'requisicion', data?: PurchasingSummaryPrintData) => void;
 }
@@ -231,7 +232,7 @@ const sumProductionValues = (values: Record<string, unknown> | undefined, code: 
     .filter(([key]) => key === code || key.startsWith(`${code}-`))
     .reduce((sum, [, value]) => sum + parseProductionNumber(value), 0);
 
-export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrintResumen }: PurchasingModuleProps) {
+export function PurchasingModule({ onPrintRequirements, onPrintSalesProjection, onPrintInventory, onPrintResumen }: PurchasingModuleProps) {
   const [productionInventory, setProductionInventory] = useState<MonthlyProductionInventory>({});
   const [productionInventoryError, setProductionInventoryError] = useState<string | null>(null);
   const logisticsInventoryStore = useRemoteCollection<LogisticsMonthlyData>(
@@ -1027,15 +1028,32 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                       </TabsTrigger>
                     </TabsList>
                   </div>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={() => onPrintRequirements('mds')}
-                    className="pointer-events-auto gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-11 px-6 rounded-xl text-xs active:scale-95 transition-none no-print"
-                  >
-                    <FileDown className="h-4 w-4" />
-                    Exportar Requerimientos
-                  </Button>
+                  <div className="flex gap-2 no-print">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onPrintSalesProjection('mds', {
+                        salesProjection: monthlySalesProjection,
+                        periodLabel: `${MONTH_OPTIONS[selectedMonth]} ${selectedYear}`,
+                      })}
+                      className="pointer-events-auto gap-2 rounded-xl border-primary/20 px-5 text-xs font-bold text-primary hover:bg-primary/5"
+                    >
+                      <FileDown className="h-4 w-4" />
+                      Exportar Planificación
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onPrintRequirements('mds', {
+                        salesProjection: monthlySalesProjection,
+                        periodLabel: `${MONTH_OPTIONS[selectedMonth]} ${selectedYear}`,
+                      })}
+                      className="pointer-events-auto gap-2 rounded-xl border-primary/20 px-5 text-xs font-bold text-primary hover:bg-primary/5"
+                    >
+                      <FileDown className="h-4 w-4" />
+                      Exportar Requerimientos
+                    </Button>
+                  </div>
                 </div>
 
                 <TabsContent value="planificacion" className="m-0">

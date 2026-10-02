@@ -1,8 +1,6 @@
 "use client";
 
 import React from 'react';
-import Image from 'next/image';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
@@ -29,7 +27,6 @@ export function RequisicionReport({
   customPackagingRecipes,
   periodLabel
 }: RequisicionReportProps) {
-  const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
   const materialsList = getAllMaterialsList();
 
   return (
@@ -40,9 +37,6 @@ export function RequisicionReport({
           <h1 className="text-xl font-black uppercase leading-tight text-slate-900">Requisición de Materiales · {section.toUpperCase()}</h1>
           <p className="mt-1 text-[9px] font-bold uppercase tracking-wider text-slate-500">Requerimientos del plan, existencias y necesidad de compra (+10%)</p>
           {periodLabel && <p className="mt-1 text-[9px] font-black uppercase tracking-wide text-[#5C4033]">Período: {periodLabel}</p>}
-        </div>
-        <div className="flex shrink-0 justify-center">
-          {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={118} height={44} className="object-contain" />}
         </div>
         <div className="shrink-0 text-right">
           <p className="mb-1 text-[8px] font-black uppercase tracking-widest text-[#A67B5B]">Confidencial · Planta</p>

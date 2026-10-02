@@ -1,8 +1,6 @@
 "use client";
 
-import React, { useMemo } from 'react';
-import Image from 'next/image';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
+import React from 'react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -37,15 +35,16 @@ interface PurchasingRequirementReportProps {
   salesProjection: Record<string, Record<string, number>>;
   customRecipes: Record<string, Record<string, number>>;
   customPackagingRecipes: Record<string, Record<string, Record<string, number>>>;
+  periodLabel?: string;
 }
 
 export function PurchasingRequirementReport({ 
   section = 'mds',
   salesProjection, 
   customRecipes, 
-  customPackagingRecipes 
+  customPackagingRecipes,
+  periodLabel,
 }: PurchasingRequirementReportProps) {
-  const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
   const sectionLabel = section.toUpperCase();
 
   const calculateRequirement = (code: string) => {
@@ -170,7 +169,7 @@ export function PurchasingRequirementReport({
           <h2 className="text-xs font-black text-slate-800 uppercase tracking-tight">{title}</h2>
         </div>
         <div className="rounded border border-slate-200 overflow-hidden">
-          <Table>
+          <Table className="purchasing-report-table">
             <TableHeader>
               <TableRow className="bg-slate-50 h-7">
                 <TableHead className="py-1 font-bold text-slate-500 text-[10px] uppercase">Código SAP</TableHead>
@@ -199,17 +198,15 @@ export function PurchasingRequirementReport({
   };
 
   return (
-    <div className="bg-white p-8 max-w-[210mm] mx-auto print:pt-[5mm] print:px-8 print:pb-8 print:max-w-none">
+    <div className="purchasing-summary-report purchasing-requirements-report mx-auto max-w-[210mm] bg-white p-8 print:max-w-none">
       {/* HEADER */}
-      <div className="mb-6 border-b-2 border-primary pb-4 flex justify-between items-center">
+      <div className="mb-6 flex items-center justify-between gap-6 border-b-2 border-primary pb-4">
         <div className="flex-1">
           <h1 className="text-xl font-headline font-black text-slate-900 leading-tight uppercase">Reporte de Requerimientos de Compra</h1>
-          <p className="text-primary font-black text-[10px] uppercase tracking-widest mt-1">Proyección de Ventas Proyectada</p>
+          <p className="mt-1 text-[10px] font-black uppercase tracking-widest text-primary">Proyección de Ventas · {sectionLabel}</p>
+          {periodLabel && <p className="mt-1 text-[9px] font-black uppercase tracking-wide text-[#5C4033]">Período: {periodLabel}</p>}
         </div>
-        <div className="flex-1 flex justify-center">
-          {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={110} height={40} className="object-contain" />}
-        </div>
-        <div className="flex-1 text-right">
+        <div className="shrink-0 text-right">
           <p className="text-[8px] font-black text-primary uppercase tracking-widest mb-0.5">Confidencial - Planta</p>
           <p className="text-[10px] text-slate-500 font-bold uppercase">{format(new Date(), "EEEE dd 'de' MMMM yyyy", { locale: es })}</p>
           <p className="text-[8px] text-slate-400 font-medium italic">Emitido: {format(new Date(), "HH:mm:ss")}</p>
@@ -243,9 +240,9 @@ export function PurchasingRequirementReport({
       </div>
 
       {/* FOOTER */}
-      <div className="mt-12 pt-4 border-t border-slate-200 flex justify-between items-center text-[7px] text-slate-400 font-black uppercase tracking-widest">
+      <div className="mt-6 flex justify-between items-center border-t border-slate-200 pt-4 text-[7px] text-slate-400 font-black uppercase tracking-widest">
         <span>DATA PRO - SISTEMA DE GESTIÓN DE COMPRAS - MULTINACIONAL DE SABORES</span>
-        <span>Página 1 de 1</span>
+        <span>USO INTERNO - {sectionLabel}</span>
       </div>
     </div>
   );

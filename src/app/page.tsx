@@ -116,6 +116,7 @@ const RawMaterialReport = lazyModule(() => import('@/components/planner/RawMater
 const DailyRawMaterialReport = lazyModule(() => import('@/components/planner/DailyRawMaterialReport').then((module) => module.DailyRawMaterialReport));
 const PurchasingModule = lazyModule(() => import('@/components/planner/PurchasingModule').then((module) => module.PurchasingModule));
 const PurchasingRequirementReport = lazyModule(() => import('@/components/planner/PurchasingRequirementReport').then((module) => module.PurchasingRequirementReport));
+const PurchasingSalesProjectionReport = lazyModule(() => import('@/components/planner/PurchasingSalesProjectionReport').then((module) => module.PurchasingSalesProjectionReport));
 const InventoryReport = lazyModule(() => import('@/components/planner/InventoryReport').then((module) => module.InventoryReport));
 const PlanProduccionReport = lazyModule(() => import('@/components/planner/PlanProduccionReport').then((module) => module.PlanProduccionReport));
 const RequisicionReport = lazyModule(() => import('@/components/planner/RequisicionReport').then((module) => module.RequisicionReport));
@@ -2526,21 +2527,6 @@ export default function PlannerPage() {
     return tabs;
   }, [user, getPermissionLevel]);
 
-  const mgmtOnlyProduccionDiaria = useMemo(() => {
-    if (!user) return false;
-    return (
-      getPermissionLevel(user.id, 'management', 'production') !== 'none' &&
-      getPermissionLevel(user.id, 'management', 'control') === 'none' &&
-      getPermissionLevel(user.id, 'management', 'monthly-summary') === 'none' &&
-      getPermissionLevel(user.id, 'management', 'compliance') === 'none'
-    );
-  }, [user, getPermissionLevel]);
-
-  const mgmtAllowsControl = useMemo(() => {
-    if (!user) return false;
-    return getPermissionLevel(user.id, 'management', 'control') !== 'none' || getPermissionLevel(user.id, 'management', 'monthly-summary') !== 'none';
-  }, [user, getPermissionLevel]);
-
   const mgmtAllowsCumplimiento = useMemo(() => {
     if (!user) return false;
     return getPermissionLevel(user.id, 'management', 'compliance') !== 'none';
@@ -2668,11 +2654,33 @@ export default function PlannerPage() {
     }, 150);
   };
 
-  const handlePrintPurchasingRequirements = (section: 'mds' | 'aw') => {
+  const handlePrintPurchasingRequirements = (
+    section: 'mds' | 'aw',
+    data?: PurchasingSummaryPrintData,
+  ) => {
+    setPurchasingSummaryPrintData(data ?? null);
     setPrintMode(section === 'mds' ? 'purchasing-requirements' : 'purchasing-requirements-aw');
+    document.getElementById('print-orientation-style')?.remove();
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
-    style.innerHTML = '@page { size: portrait; margin: 5mm; }';
+    style.innerHTML = '@page { size: portrait; margin: 8mm !important; }';
+    document.head.appendChild(style);
+    setTimeout(() => {
+      window.print();
+      document.getElementById('print-orientation-style')?.remove();
+    }, 150);
+  };
+
+  const handlePrintSalesProjection = (
+    section: 'mds' | 'aw',
+    data?: PurchasingSummaryPrintData,
+  ) => {
+    setPurchasingSummaryPrintData(data ?? null);
+    setPrintMode(section === 'mds' ? 'purchasing-sales-projection' : 'purchasing-sales-projection-aw');
+    document.getElementById('print-orientation-style')?.remove();
+    const style = document.createElement('style');
+    style.id = 'print-orientation-style';
+    style.innerHTML = '@page { size: portrait; margin: 0; }';
     document.head.appendChild(style);
     setTimeout(() => {
       window.print();
@@ -2691,7 +2699,7 @@ export default function PlannerPage() {
     setPrintMode(`${modeMap[type]}${suffix}`);
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
-    style.innerHTML = '@page { size: portrait; margin: 5mm; }';
+    style.innerHTML = '@page { size: portrait; margin: 0; }';
     document.head.appendChild(style);
     setTimeout(() => {
       window.print();
@@ -2711,9 +2719,10 @@ export default function PlannerPage() {
     const suffix = section === 'aw' ? '-aw' : section === 'global' ? '-global' : section === 'semestral' ? '-semestral' : '';
     setPurchasingSummaryPrintData(data ?? null);
     setPrintMode(`${modeMap[type]}${suffix}`);
+    document.getElementById('print-orientation-style')?.remove();
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
-    style.innerHTML = '@page { size: portrait; margin: 5mm; }';
+    style.innerHTML = '@page { size: portrait; margin: 0; }';
     document.head.appendChild(style);
     setTimeout(() => {
       window.print();
@@ -3460,26 +3469,27 @@ export default function PlannerPage() {
                     )}
                      {activeModule === 'management' ? (
                        <div className="flex items-center gap-0.5">
-                         <div className="w-px h-5 bg-slate-300/60 mx-1 flex-shrink-0" />
-                         {mgmtOnlyProduccionDiaria && (
+                         {allowedProdTabs.length > 0 && (
                            <button 
                              onClick={() => setActiveTab('admin-report')}
                              className={cn(navTabClass(activeTab === 'admin-report'))}
                            >
                              <BarChart3 className="h-3.5 w-3.5" />
-                             <span className="hidden sm:inline">Producción Diaria</span>
-                           </button>
-                         )}
-                         {mgmtAllowsControl && (
-                           <button 
-                             onClick={() => setActiveTab('admin-report')}
-                             className={cn(navTabClass(activeTab === 'admin-report'))}
-                           >
-                             <BarChart3 className="h-3.5 w-3.5" />
-                             <span className="hidden sm:inline">Control Producción</span>
+                             <span className="hidden sm:inline">
+                               {allowedProdTabs.length === 1
+                                 ? ({
+                                   'dia-a-dia': 'Producción Diaria',
+                                   weekly: 'Control Semanal',
+                                   'weekly-summary': 'Resumen Semanal',
+                                   monthly: 'Resumen Mensual',
+                                 } as const)[allowedProdTabs[0]]
+                                 : 'Producción'}
+                             </span>
                            </button>
                          )}
                          {mgmtAllowsCumplimiento && (
+                           <>
+                           {allowedProdTabs.length > 0 && <div className="w-px h-5 bg-slate-300/60 mx-1 flex-shrink-0" />}
                            <button 
                              onClick={() => setActiveTab('compliance-report')}
                              className={cn(navTabClass(activeTab === 'compliance-report'))}
@@ -3487,6 +3497,7 @@ export default function PlannerPage() {
                              <CheckCircle2 className="h-3.5 w-3.5" />
                              <span className="hidden sm:inline">Cumplimiento</span>
                            </button>
+                           </>
                          )}
                        </div>
                      ) : activeModule === 'recipes' ? (
@@ -3550,7 +3561,7 @@ export default function PlannerPage() {
                                )}
                                 {activeModule === 'management' && hasAccess(user.id, 'management') && (
                    <>
-                         {activeTab === 'admin-report' && getPermissionLevel(user.id, 'management', 'production') !== 'none' && (
+                         {activeTab === 'admin-report' && allowedProdTabs.length > 0 && (
                       <AdminReportTool 
                         view="production"
                         weeklyData={weeklyData}
@@ -6049,6 +6060,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                  {activeModule === 'purchasing' && hasAccess(user.id, 'purchasing') && (
                    <PurchasingModule 
                      onPrintRequirements={handlePrintPurchasingRequirements} 
+                     onPrintSalesProjection={handlePrintSalesProjection}
                      onPrintInventory={handlePrintInventory}
                      onPrintResumen={handlePrintResumen}
                    />
@@ -6061,7 +6073,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
           </div>
         </main>
 
-        <div className="print-only w-full bg-white">
+        <div className={`print-only w-full bg-white ${printMode.startsWith('purchasing-') || printMode.startsWith('resumen-') ? 'purchasing-print' : ''}`}>
           <style>{`
              @media print {
                .print-only {
@@ -6077,19 +6089,19 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                  left: 0 !important;
                  right: 0 !important;
                }
-               .print-only > div:not(.print-spacer) {
+               .print-only:not(.purchasing-print) > div:not(.print-spacer) {
                  margin-top: 0 !important;
                  padding-top: 0 !important;
                  margin-bottom: 0 !important;
                  padding-bottom: 0 !important;
                }
-               .print-only > div:not(.print-spacer) > div:not(.print-spacer) {
+               .print-only:not(.purchasing-print) > div:not(.print-spacer) > div:not(.print-spacer) {
                  margin-top: 0 !important;
                  padding-top: 0 !important;
                  margin-bottom: 0 !important;
                  padding-bottom: 0 !important;
                }
-               .print-only > div:not(.print-spacer) > div:not(.print-spacer) > div:not(.print-spacer) {
+               .print-only:not(.purchasing-print) > div:not(.print-spacer) > div:not(.print-spacer) > div:not(.print-spacer) {
                  margin-top: 0 !important;
                  padding-top: 0 !important;
                  margin-bottom: 0 !important;
@@ -6102,26 +6114,28 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                  padding-bottom: 0 !important;
                  height: 32px !important;
                }
-                #report {
+                #report:not(.purchasing-summary-report) {
                   margin-top: 0 !important;
                   padding-top: 0 !important;
                   margin-bottom: 0 !important;
                   padding-bottom: 0 !important;
                 }
-                #report > div:first-child {
+                #report:not(.purchasing-summary-report) > div:first-child {
                   margin-bottom: 0 !important;
                   padding-bottom: 0 !important;
                 }
-                #report > div:last-child {
+                #report:not(.purchasing-summary-report) > div:last-child {
                   margin-top: 0 !important;
                   padding-top: 0 !important;
                 }
-                #report > div:last-child table {
+                #report:not(.purchasing-summary-report) > div:last-child table {
                   margin-top: 0 !important;
                   padding-top: 0 !important;
                 }
-                @page {
-                  margin: 5mm !important;
+                .print-only .purchasing-summary-report {
+                  max-width: none !important;
+                  margin: 0 !important;
+                  padding: 4mm !important;
                 }
              }
           `}</style>
@@ -6155,13 +6169,23 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                <CalculationReport tasks={tasks} calcStartDate={calcPrintStartDate} calcEndDate={calcPrintEndDate} availability={calcPrintAvailability} recipes={customRecipes} packagingRecipes={customPackagingRecipes} />
              </div>
            )}
+          {(printMode === 'purchasing-sales-projection' || printMode === 'purchasing-sales-projection-aw') && (
+            <div className="p-0">
+              <PurchasingSalesProjectionReport
+                section={printMode === 'purchasing-sales-projection-aw' ? 'aw' : 'mds'}
+                salesProjection={purchasingSummaryPrintData?.salesProjection ?? {}}
+                periodLabel={purchasingSummaryPrintData?.periodLabel}
+              />
+            </div>
+          )}
           {(printMode === 'purchasing-requirements' || printMode === 'purchasing-requirements-aw') && (
             <div className="p-0">
               <PurchasingRequirementReport 
                 section={printMode === 'purchasing-requirements-aw' ? 'aw' : 'mds'}
-                salesProjection={printMode === 'purchasing-requirements-aw' ? salesProjectionAW : salesProjection} 
+                salesProjection={purchasingSummaryPrintData?.salesProjection ?? (printMode === 'purchasing-requirements-aw' ? salesProjectionAW : salesProjection)}
                 customRecipes={customRecipes} 
                 customPackagingRecipes={customPackagingRecipes} 
+                periodLabel={purchasingSummaryPrintData?.periodLabel}
               />
             </div>
           )}
@@ -6267,9 +6291,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
               />
             </div>
           )}
-           {(isAdmin || user?.id === 'finan.mds' || user?.id === 'demon') && (
-            <>
-                {printMode === 'monthly' && (
+              {printMode === 'monthly' && (isAdmin || getPermissionLevel(user.id, 'management', 'monthly-summary') !== 'none') && (
                  <div className="p-0">
                    <MonthlyReport 
                      realProduction={realProduction} 
@@ -6278,8 +6300,8 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                      selectedYear={selectedYear} 
                    />
                  </div>
-               )}
-                 {printMode === 'monthly-with-signature' && (
+              )}
+              {(isAdmin || user?.id === 'finan.mds' || user?.id === 'demon') && printMode === 'monthly-with-signature' && (
                   <div className="p-0 min-h-[600px]">
                     <MonthlyReport 
                       realProduction={realProduction} 
@@ -6292,8 +6314,8 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                       signaturePath="/logos/FIRMA_N.png"
                     />
                   </div>
-                )}
-              {printMode === 'weekly-summary' && (
+              )}
+              {printMode === 'weekly-summary' && (isAdmin || getPermissionLevel(user.id, 'management', 'weekly-summary') !== 'none') && (
                 <div className="p-0">
                   <WeeklySummaryReport 
                     realProduction={realProduction}
@@ -6301,7 +6323,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                   />
                 </div>
               )}
-              {printMode === 'compliance' && (
+              {printMode === 'compliance' && (isAdmin || getPermissionLevel(user.id, 'management', 'compliance') !== 'none') && (
                 <div className="p-0">
                   <ComplianceReport 
                     tasks={tasks}
@@ -6312,7 +6334,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                   />
                 </div>
               )}
-              {printMode === 'monthly-compliance' && (
+              {printMode === 'monthly-compliance' && (isAdmin || getPermissionLevel(user.id, 'management', 'compliance') !== 'none') && (
                 <div className="p-0">
                   <MonthlyComplianceReport 
                     weeklyData={weeklyData}
@@ -6322,9 +6344,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                     subtitle={`Cumplimiento de planificación mes de ${format(new Date(parseInt(selectedYear), parseInt(selectedMonth) - 1), 'MMMM', { locale: es })}`}
                   />
                 </div>
-               )}
-             </>
-            )}
+              )}
           {jarabesPrintMode && (
             <div className="p-0">
               <div dangerouslySetInnerHTML={{ __html: jarabesPrintHtml }} />

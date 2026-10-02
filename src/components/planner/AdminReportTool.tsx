@@ -87,7 +87,7 @@ export function AdminReportTool({
     }
     return currentWeekKey || format(new Date(), 'yyyy-MM-dd');
   });
-  const [productionSubTab, setProductionTab] = useState('dia-a-dia');
+  const [productionSubTab, setProductionTab] = useState<string>(allowedProductionTabs?.[0] ?? 'dia-a-dia');
   const [complianceSubTab, setComplianceTab] = useState('weekly');
   const [selectedMonth, setSelectedMonth] = useState(format(new Date(), 'MM'));
   const [selectedYear, setSelectedYear] = useState(format(new Date(), 'yyyy'));

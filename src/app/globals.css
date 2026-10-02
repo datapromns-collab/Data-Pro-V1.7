@@ -174,10 +174,14 @@
     width: 100% !important;
     max-width: none !important;
     margin: 0 !important;
-    padding: 0 !important;
+    padding: 4mm !important;
     color: #0f172a !important;
     font-family: Arial, sans-serif !important;
     font-size: 9pt !important;
+  }
+
+  .purchasing-requirements-report {
+    padding: 0 !important;
   }
 
   .purchasing-report-table {
@@ -197,7 +201,7 @@
 
   .purchasing-report-table th,
   .purchasing-report-table td {
-    padding: 2.2mm 2.5mm !important;
+    padding: 1mm 1.8mm !important;
     overflow-wrap: anywhere !important;
   }
 
@@ -210,6 +214,40 @@
   .purchasing-report-table tr {
     page-break-inside: avoid !important;
     break-inside: avoid !important;
+  }
+
+  .purchasing-summary-report > header {
+    margin-bottom: 3mm !important;
+    padding-bottom: 2mm !important;
+  }
+
+  .purchasing-summary-report > div {
+    margin-top: 0 !important;
+    margin-bottom: 3mm !important;
+  }
+
+  .purchasing-summary-report section {
+    margin-bottom: 3mm !important;
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+  }
+
+  .purchasing-summary-report h3 {
+    margin-bottom: 2mm !important;
+  }
+
+  .purchasing-summary-report .purchasing-presentation-list {
+    gap: 3mm !important;
+  }
+
+  .purchasing-summary-report .purchasing-presentation-title {
+    margin-bottom: 1mm !important;
+    padding: 1.2mm 2mm !important;
+  }
+
+  .purchasing-summary-report .purchasing-report-footer {
+    margin-top: 3mm !important;
+    padding-top: 2mm !important;
   }
 
   #report:not(.purchasing-summary-report) {

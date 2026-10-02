@@ -1,8 +1,6 @@
 "use client";
 
 import React from 'react';
-import Image from 'next/image';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { jsPDF } from 'jspdf';
@@ -21,7 +19,6 @@ interface PlanProduccionReportProps {
 }
 
 export function PlanProduccionReport({ section = 'mds', salesProjection, finishedProductInventory, productionPlan, periodLabel }: PlanProduccionReportProps) {
-  const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
   const sectionLabel = section?.toUpperCase();
 
   const handleExportPDF = async () => {
@@ -71,9 +68,6 @@ export function PlanProduccionReport({ section = 'mds', salesProjection, finishe
           <h1 className="text-xl font-black uppercase leading-tight text-slate-900">Planificación de Producción · {sectionLabel}</h1>
           <p className="mt-1 text-[9px] font-bold uppercase tracking-wider text-slate-500">Balance de ventas, inventario y plan de producción</p>
           {periodLabel && <p className="mt-1 text-[9px] font-black uppercase tracking-wide text-[#5C4033]">Período: {periodLabel}</p>}
-        </div>
-        <div className="flex shrink-0 justify-center">
-          {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={118} height={44} className="object-contain" />}
         </div>
         <div className="shrink-0 text-right">
           <p className="mb-1 text-[8px] font-black uppercase tracking-widest text-[#A67B5B]">Confidencial · Planta</p>
