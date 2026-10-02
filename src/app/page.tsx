@@ -6034,6 +6034,10 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                         generarExcelAguaMensual={generarExcelAguaMensual}
                         generarPDFCo2Mensual={generarPDFCo2Mensual}
                         generarPDFAguaMensual={generarPDFAguaMensual}
+                        onPrintJarabesSemanalEst={handlePrintJarabesSemanalEst}
+                        onPrintJarabesSemanalProm={handlePrintJarabesSemanalProm}
+                        onPrintJarabesMensualEst={handlePrintJarabesMensualEst}
+                        onPrintJarabesMensualProm={handlePrintJarabesMensualProm}
                       />
                     )}
                       {activeModule === 'logistica' && hasAccess(user.id, 'logistica') && (

@@ -607,6 +607,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
         cumulative += item.quantity;
         return {
           ...item,
+          percentOfTotal: totalQuantity ? (item.quantity / totalQuantity) * 100 : 0,
           cumulativePercent: totalQuantity ? (cumulative / totalQuantity) * 100 : 0,
         };
       });
@@ -3735,7 +3736,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                               </th>
                                               <th className="px-3 py-3 text-right font-black uppercase tracking-widest">Registros</th>
                                               <th className="px-3 py-3 text-right font-black uppercase tracking-widest">Cantidad</th>
-                                              <th className="px-3 py-3 text-right font-black uppercase tracking-widest">% acumulado</th>
+                                              <th className="px-3 py-3 text-right font-black uppercase tracking-widest">% del total</th>
                                             </tr>
                                           </thead>
                                           <tbody>
@@ -3744,7 +3745,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                                 <td className="px-3 py-2">{row.label}</td>
                                                 <td className="px-3 py-2 text-right">{row.records.toLocaleString('es-VE')}</td>
                                                 <td className="px-3 py-2 text-right">{row.quantity.toLocaleString('es-VE')}</td>
-                                                <td className="px-3 py-2 text-right">{row.cumulativePercent.toLocaleString('es-VE', { maximumFractionDigits: 1 })}%</td>
+                                                <td className="px-3 py-2 text-right">{row.percentOfTotal.toLocaleString('es-VE', { maximumFractionDigits: 1 })}%</td>
                                               </tr>
                                             )) : (
                                               <tr>
@@ -3754,6 +3755,22 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                               </tr>
                                             )}
                                           </tbody>
+                                          {nonConformingSummaryRows.length > 0 && (
+                                            <tfoot>
+                                              <tr className="border-t-2 border-indigo-200 bg-indigo-50 font-black text-indigo-950">
+                                                <td className="px-3 py-3">Totales</td>
+                                                <td className="px-3 py-3 text-right">
+                                                  {nonConformingSummaryRows.reduce((total, row) => total + row.records, 0).toLocaleString('es-VE')}
+                                                </td>
+                                                <td className="px-3 py-3 text-right">
+                                                  {nonConformingSummaryRows.reduce((total, row) => total + row.quantity, 0).toLocaleString('es-VE')}
+                                                </td>
+                                                <td className="px-3 py-3 text-right">
+                                                  {nonConformingSummaryRows.some((row) => row.quantity > 0) ? '100%' : '0%'}
+                                                </td>
+                                              </tr>
+                                            </tfoot>
+                                          )}
                                         </table>
                                       </section>
                                       <section aria-label="Gráfica de barras Pareto">

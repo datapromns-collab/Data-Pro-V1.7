@@ -1636,6 +1636,150 @@ export function JarabesModule(props: { onPrintStandard?: (html: string, filename
   );
 }
 
+interface JarabesResumenReporteProps {
+  reportMonthDate: Date;
+  onPrintWeeklyStandard?: (html: string, filename?: string) => void;
+  onPrintWeeklyPromedio?: (html: string, filename?: string) => void;
+  onPrintMonthlyStandard?: (html: string, filename?: string) => void;
+  onPrintMonthlyPromedio?: (html: string, filename?: string) => void;
+}
+
+export function JarabesResumenReporte({
+  reportMonthDate,
+  onPrintWeeklyStandard,
+  onPrintWeeklyPromedio,
+  onPrintMonthlyStandard,
+  onPrintMonthlyPromedio,
+}: JarabesResumenReporteProps) {
+  return (
+    <JarabesProvider>
+      <JarabesResumenReporteInner
+        reportMonthDate={reportMonthDate}
+        onPrintWeeklyStandard={onPrintWeeklyStandard}
+        onPrintWeeklyPromedio={onPrintWeeklyPromedio}
+        onPrintMonthlyStandard={onPrintMonthlyStandard}
+        onPrintMonthlyPromedio={onPrintMonthlyPromedio}
+      />
+    </JarabesProvider>
+  );
+}
+
+function JarabesResumenReporteInner({
+  reportMonthDate,
+  onPrintWeeklyStandard,
+  onPrintWeeklyPromedio,
+  onPrintMonthlyStandard,
+  onPrintMonthlyPromedio,
+}: JarabesResumenReporteProps) {
+  const { data, getWeeklyFisico } = useJarabes();
+  const selectedFecha = useMemo(() => startOfMonth(reportMonthDate), [reportMonthDate]);
+  const [activeResumenTab, setActiveResumenTab] = useState('semanal');
+  const [activeResumenSemanalTab, setActiveResumenSemanalTab] = useState('r-estandar-sem');
+  const [activeResumenMensualTab, setActiveResumenMensualTab] = useState('r-estandar-mes');
+  const [updateCounter, setUpdateCounter] = useState(0);
+  const [realKgPerSack, setRealKgPerSack] = useState<number>();
+  const [costoAzucar, setCostoAzucar] = useState<number>();
+
+  useEffect(() => {
+    const key = dk(selectedFecha);
+    const savedKg = data.realKgPerSack[key];
+    const savedCosto = data.costoAzucar[key];
+    const parsedKg = savedKg ? Number(savedKg) : NaN;
+    const parsedCosto = savedCosto ? Number(savedCosto) : NaN;
+    setRealKgPerSack(Number.isFinite(parsedKg) ? parsedKg : undefined);
+    setCostoAzucar(Number.isFinite(parsedCosto) ? parsedCosto : undefined);
+  }, [selectedFecha, data.realKgPerSack, data.costoAzucar]);
+
+  return (
+    <div className="w-full">
+      <Tabs value={activeResumenTab} onValueChange={setActiveResumenTab} className="w-full">
+        <div className="mb-6 flex w-full items-center justify-between gap-3 no-print">
+          <div className="flex h-11 items-center rounded-full border border-slate-200 bg-slate-100/50 p-1">
+            <TabsList className="h-auto bg-transparent p-0">
+              <TabsTrigger value="semanal" className={tabsTriggerClass}>
+                <TrendingUp className="h-3.5 w-3.5" /> Semanal
+              </TabsTrigger>
+              <TabsTrigger value="mensual" className={tabsTriggerClass}>
+                <ScrollText className="h-3.5 w-3.5" /> Mensual
+              </TabsTrigger>
+            </TabsList>
+          </div>
+          <CostoAzucarInput
+            selectedFecha={selectedFecha}
+            onChange={setCostoAzucar}
+            onUpdate={() => setUpdateCounter((count) => count + 1)}
+          />
+        </div>
+
+        <TabsContent value="semanal" className="m-0 animate-in fade-in-50 duration-500">
+          <Tabs value={activeResumenSemanalTab} onValueChange={setActiveResumenSemanalTab} className="w-full">
+            <div className="mb-6 flex h-11 w-fit items-center rounded-full border border-slate-200 bg-slate-100/50 p-1 no-print">
+              <TabsList className="h-auto bg-transparent p-0">
+                <TabsTrigger value="r-estandar-sem" className={tabsTriggerClass}>
+                  <FileSpreadsheet className="h-3.5 w-3.5" /> R estandar sem
+                </TabsTrigger>
+                <TabsTrigger value="r-promedio-sem" className={tabsTriggerClass}>
+                  <TrendingUp className="h-3.5 w-3.5" /> R promedio sem
+                </TabsTrigger>
+              </TabsList>
+            </div>
+            <TabsContent value="r-estandar-sem" className="m-0 animate-in fade-in-50 duration-500">
+              <REstandarSemTable
+                selectedFecha={selectedFecha}
+                costoAzucar={costoAzucar}
+                onPrintWeeklyStandard={onPrintWeeklyStandard}
+              />
+            </TabsContent>
+            <TabsContent value="r-promedio-sem" className="m-0 animate-in fade-in-50 duration-500">
+              <RPromedioSemTable
+                selectedFecha={selectedFecha}
+                costoAzucar={costoAzucar}
+                realKgPerSack={realKgPerSack}
+                updateCounter={updateCounter}
+                onPrintWeeklyPromedio={onPrintWeeklyPromedio}
+              />
+            </TabsContent>
+          </Tabs>
+        </TabsContent>
+
+        <TabsContent value="mensual" className="m-0 animate-in fade-in-50 duration-500">
+          <Tabs value={activeResumenMensualTab} onValueChange={setActiveResumenMensualTab} className="w-full">
+            <div className="mb-6 flex h-11 w-fit items-center rounded-full border border-slate-200 bg-slate-100/50 p-1 no-print">
+              <TabsList className="h-auto bg-transparent p-0">
+                <TabsTrigger value="r-estandar-mes" className={tabsTriggerClass}>
+                  <FileSpreadsheet className="h-3.5 w-3.5" /> R estandar mes
+                </TabsTrigger>
+                <TabsTrigger value="r-promedio-mes" className={tabsTriggerClass}>
+                  <TrendingUp className="h-3.5 w-3.5" /> R promedio mes
+                </TabsTrigger>
+              </TabsList>
+            </div>
+            <TabsContent value="r-estandar-mes" className="m-0 animate-in fade-in-50 duration-500">
+              <REstandarMesTable
+                selectedFecha={selectedFecha}
+                data={data}
+                costoAzucar={costoAzucar}
+                realKgPerSack={realKgPerSack}
+                onPrintMonthlyStandard={onPrintMonthlyStandard}
+                getWeeklyFisico={getWeeklyFisico}
+              />
+            </TabsContent>
+            <TabsContent value="r-promedio-mes" className="m-0 animate-in fade-in-50 duration-500">
+              <RPromedioMesTable
+                selectedFecha={selectedFecha}
+                costoAzucar={costoAzucar}
+                realKgPerSack={realKgPerSack}
+                updateCounter={updateCounter}
+                onPrintMonthlyPromedio={onPrintMonthlyPromedio}
+              />
+            </TabsContent>
+          </Tabs>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+}
+
 function JarabesModuleInner({ onPrintStandard, onPrintPromedio, onPrintWeeklyStandard, onPrintWeeklyPromedio, onPrintMonthlyStandard, onPrintMonthlyPromedio, weekStartDate, onFisicoSemanal, getWeeklyFisico }: { onPrintStandard?: (html: string, filename?: string) => void; onPrintPromedio?: (html: string, filename?: string) => void; onPrintWeeklyStandard?: (html: string, filename?: string) => void; onPrintWeeklyPromedio?: (html: string, filename?: string) => void; onPrintMonthlyStandard?: (html: string, filename?: string) => void; onPrintMonthlyPromedio?: (html: string, filename?: string) => void; weekStartDate?: Date; onFisicoSemanal?: (weekStart: Date, monthRef: Date, fisico: number) => void; getWeeklyFisico?: (weekStart: Date, monthRef: Date) => number }) {
   const { data, setData } = useJarabes();
   const [activeInnerTab, setActiveInnerTab] = useState<string>('estandar');

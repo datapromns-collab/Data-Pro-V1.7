@@ -46816,8 +46816,19 @@
               "flavor": "GLUP FRESH",
               "code": "PRODT-0086",
               "description": "GLUP! FRESH CAJA X 12BOT X 1.0LTS",
-              "nonConformity": "",
+              "nonConformity": "Déficit de pega",
               "quantity": "133"
+            }
+          ],
+          "2026-09-17": [
+            {
+              "id": "c00f7f08-3743-4294-b3cd-a6c4d0b581a1",
+              "line": "Linea 2",
+              "flavor": "GLUP KOLITA",
+              "code": "PRODT-0009",
+              "description": "GLUP! KOLITA  CAJA X 6BOT X 2.0LTS",
+              "nonConformity": "Bajo Co2 - Alto CO2",
+              "quantity": "89"
             }
           ]
         }
@@ -47678,7 +47689,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-02T14:33:24.887Z"
+    "updatedAt": "2026-10-02T14:40:48.494Z"
   },
   "ordenesSap": [
     {

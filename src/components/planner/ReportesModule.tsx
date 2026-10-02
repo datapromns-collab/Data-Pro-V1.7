@@ -3,7 +3,7 @@
 import { useEffect, useState, type Dispatch, type SetStateAction } from 'react';
 import { addDays, eachDayOfInterval, endOfMonth, format, getISOWeek, startOfDay, startOfMonth, startOfWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Calendar as CalendarIcon, ClipboardList, Droplets, FlaskConical } from 'lucide-react';
+import { Calendar as CalendarIcon, ClipboardList, Droplets, FlaskConical, TrendingUp } from 'lucide-react';
 import {
   Bar,
   CartesianGrid,
@@ -19,6 +19,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import { OrdenesReporteResumenMensual } from '@/components/planner/OrdenesReporteResumenMensual';
+import { JarabesResumenReporte } from '@/components/planner/JarabesModule';
 
 type Co2DailyRow = { cajas2L: string; cajas1L: string; cajas04L: string };
 type AguaDailyRow = { cajas2L: string; cajas1L: string; cajas1_5L: string; cajas04L: string };
@@ -385,6 +386,10 @@ interface ReportesModuleProps {
   generarExcelAguaMensual: () => Promise<void>;
   generarPDFCo2Mensual: () => Promise<void>;
   generarPDFAguaMensual: () => Promise<void>;
+  onPrintJarabesSemanalEst: (html: string, filename?: string) => void;
+  onPrintJarabesSemanalProm: (html: string, filename?: string) => void;
+  onPrintJarabesMensualEst: (html: string, filename?: string) => void;
+  onPrintJarabesMensualProm: (html: string, filename?: string) => void;
 }
 
 export function ReportesModule({
@@ -414,6 +419,10 @@ export function ReportesModule({
   generarExcelAguaMensual,
   generarPDFCo2Mensual,
   generarPDFAguaMensual,
+  onPrintJarabesSemanalEst,
+  onPrintJarabesSemanalProm,
+  onPrintJarabesMensualEst,
+  onPrintJarabesMensualProm,
 }: ReportesModuleProps) {
   const [co2ResumenSubTab, setCo2ResumenSubTab] = useState<'semanal' | 'mensual'>('semanal');
   const [aguaResumenSubTab, setAguaResumenSubTab] = useState<'semanal' | 'mensual'>('semanal');
@@ -484,7 +493,7 @@ export function ReportesModule({
                          )}
                          <div className="flex flex-wrap items-center gap-2 mb-2 no-print">
                             <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                              {(['co2', 'agua', 'ordenes'] as const).map((tab) => (
+                              {(['co2', 'agua', 'ordenes', 'rendimiento-azucar'] as const).map((tab) => (
                                 <button
                                   key={tab}
                                   onClick={() => setInsumosSubTab(tab)}
@@ -496,7 +505,8 @@ export function ReportesModule({
                                   {tab === 'co2' && <FlaskConical className="h-3.5 w-3.5" />}
                                   {tab === 'agua' && <Droplets className="h-3.5 w-3.5" />}
                                   {tab === 'ordenes' && <ClipboardList className="h-3.5 w-3.5" />}
-                                  <span className="hidden sm:inline">{tab === 'co2' ? 'CO2' : tab === 'agua' ? 'Agua' : 'Órdenes'}</span>
+                                  {tab === 'rendimiento-azucar' && <TrendingUp className="h-3.5 w-3.5" />}
+                                  <span className="hidden sm:inline">{tab === 'co2' ? 'CO2' : tab === 'agua' ? 'Agua' : tab === 'ordenes' ? 'Órdenes' : 'Rendimiento de azúcar'}</span>
                                 </button>
                               ))}
                             </div>
@@ -507,7 +517,7 @@ export function ReportesModule({
                              onChange={(event) => selectReportMonth(event.target.value)}
                              className="h-9 rounded-full border-0 bg-white px-3 text-[10px] font-bold text-slate-700 shadow-sm outline-none"
                            />
-                           {insumosSubTab !== 'ordenes' && <div className="ml-auto">
+                           {insumosSubTab !== 'ordenes' && insumosSubTab !== 'rendimiento-azucar' && <div className="ml-auto">
                              <Popover>
                                <PopoverTrigger asChild>
                                  <button className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
@@ -952,6 +962,15 @@ export function ReportesModule({
                               </>
                             )}
                            {insumosSubTab === 'ordenes' && <OrdenesReporteResumenMensual reportMonthDate={reportMonthDate} />}
+                           {insumosSubTab === 'rendimiento-azucar' && (
+                             <JarabesResumenReporte
+                               reportMonthDate={reportMonthDate}
+                               onPrintWeeklyStandard={onPrintJarabesSemanalEst}
+                               onPrintWeeklyPromedio={onPrintJarabesSemanalProm}
+                               onPrintMonthlyStandard={onPrintJarabesMensualEst}
+                               onPrintMonthlyPromedio={onPrintJarabesMensualProm}
+                             />
+                           )}
                            {insumosSubTab === 'co2' &&
                              (insumosPeriodoSubTab === 'diario' || insumosPeriodoSubTab === 'resumen-tablas') && (
                            <div className="flex-1 bg-white rounded-[2.5rem] p-4 overflow-x-auto">
