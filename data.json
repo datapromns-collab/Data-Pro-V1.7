@@ -46698,6 +46698,50 @@
             }
           ]
         }
+      },
+      "recepciones": {
+        "diarias": {
+          "2026-10-02": {
+            "tapas": {
+              "EMP_0095-Alpla": {
+                "totalCajas": "",
+                "total": ""
+              }
+            },
+            "separadores": {},
+            "preformas": {},
+            "plasticos": {},
+            "adhesivoCantidad": "",
+            "etiquetasCantidad": {},
+            "azucarCantidad": {},
+            "concentradosCantidad": {},
+            "concentradosJustyCantidad": {},
+            "aditivosCantidad": {},
+            "solidosCantidad": {},
+            "quimicosInsumosCantidad": {}
+          }
+        },
+        "resumen-semanal": {
+          "2026-09-28": {
+            "tapas": {
+              "EMP_0095-Alpla": {
+                "totalCajas": "",
+                "total": ""
+              }
+            },
+            "separadores": {},
+            "preformas": {},
+            "plasticos": {},
+            "adhesivoCantidad": "",
+            "etiquetasCantidad": {},
+            "azucarCantidad": {},
+            "concentradosCantidad": {},
+            "concentradosJustyCantidad": {},
+            "aditivosCantidad": {},
+            "solidosCantidad": {},
+            "quimicosInsumosCantidad": {}
+          }
+        }
       }
     },
     "permissions": {
@@ -47555,7 +47599,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-02T13:12:11.510Z"
+    "updatedAt": "2026-10-02T13:31:50.302Z"
   },
   "ordenesSap": [
     {
