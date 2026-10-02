@@ -46787,7 +46787,6 @@
           "planta",
           "management",
           "logistica",
-          "procesos",
           "produccion",
           "insumos"
         ],
@@ -47556,7 +47555,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-02T13:07:27.193Z"
+    "updatedAt": "2026-10-02T13:11:48.812Z"
   },
   "ordenesSap": [
     {
@@ -57798,6 +57797,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 800
+        },
+        {
+          "fechaInicio": "2026-10-02",
+          "ticket1": "16",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     }

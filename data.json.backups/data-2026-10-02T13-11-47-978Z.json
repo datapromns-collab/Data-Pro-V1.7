@@ -46787,8 +46787,8 @@
           "planta",
           "management",
           "logistica",
-          "procesos",
-          "produccion"
+          "produccion",
+          "insumos"
         ],
         "prodts.mds": [
           "planning",
@@ -47269,7 +47269,8 @@
           "planning"
         ],
         "prodtg.mds": [
-          "planning"
+          "planning",
+          "insumos"
         ],
         "MDS": [
           "planning",
@@ -47554,7 +47555,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-02T13:06:51.814Z"
+    "updatedAt": "2026-10-02T13:11:43.696Z"
   },
   "ordenesSap": [
     {
@@ -57796,6 +57797,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 800
+        },
+        {
+          "fechaInicio": "2026-10-02",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     }

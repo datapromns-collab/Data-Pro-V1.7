@@ -46787,8 +46787,8 @@
           "planta",
           "management",
           "logistica",
-          "procesos",
-          "produccion"
+          "produccion",
+          "insumos"
         ],
         "prodts.mds": [
           "planning",
@@ -47269,7 +47269,8 @@
           "planning"
         ],
         "prodtg.mds": [
-          "planning"
+          "planning",
+          "insumos"
         ],
         "MDS": [
           "planning",
@@ -47554,7 +47555,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-02T12:58:00.411Z"
+    "updatedAt": "2026-10-02T13:12:11.510Z"
   },
   "ordenesSap": [
     {
@@ -57796,6 +57797,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 800
+        },
+        {
+          "fechaInicio": "2026-10-02",
+          "ticket1": "16180",
+          "cajas1": 800,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     }
@@ -69524,7 +69536,7 @@
           "GLUP PIÑA": {
             "inicial": "10",
             "preparado": "",
-            "final": "10"
+            "final": "1."
           },
           "GLUP MANZANA ROJA": {
             "preparado": "8",
