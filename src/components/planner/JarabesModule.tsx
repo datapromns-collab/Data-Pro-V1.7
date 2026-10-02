@@ -1276,7 +1276,8 @@ function REstandarMesTable({ selectedFecha, data, costoAzucar, realKgPerSack, on
     return weeks.map((week) => {
       const weekStart = week[0];
       const semanaNumero = format(weekStart, 'w', { locale: es });
-      const totals = computeWeekTotals(data, week, costoAzucar, 50);
+      const daysInMonth = week.filter((fecha) => isSameMonth(fecha, selectedFecha!));
+      const totals = computeWeekTotals(data, daysInMonth, costoAzucar, 50);
 
       // Preferir el Físico guardado (semana + mes) para que coincida con R estandar sem
       const savedFisico = getWeeklyFisico ? getWeeklyFisico(weekStart, selectedFecha!) : 0;
@@ -1452,10 +1453,11 @@ function RPromedioMesTable({ selectedFecha, costoAzucar, realKgPerSack, updateCo
     return weeks.map((week) => {
       const weekStart = week[0];
       const semanaNumero = format(weekStart, 'I', { locale: es });
+      const daysInMonth = week.filter((fecha) => isSameMonth(fecha, selectedFecha!));
 
       let totalEstandar = 0;
       let totalFisico = 0;
-      week.forEach(fecha => {
+      daysInMonth.forEach(fecha => {
         const dayKgPerSack = getRealKgPerSackForDateData(data, fecha);
         const resumen = computeResumenForDateData(data, fecha, dayKgPerSack);
         totalEstandar += resumen.estandar;
