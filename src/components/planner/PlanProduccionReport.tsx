@@ -24,22 +24,25 @@ export function PlanProduccionReport({ section = 'mds', salesProjection, finishe
   const handleExportPDF = async () => {
     const report = document.getElementById('report');
     if (!report) return;
-    const canvas = await html2canvas(report as HTMLElement);
+    const canvas = await html2canvas(report as HTMLElement, {
+      ignoreElements: (element) => element.classList.contains('no-print'),
+      onclone: (clonedDocument) => {
+        const clonedReport = clonedDocument.getElementById('report');
+        if (clonedReport) clonedReport.style.padding = '0';
+      },
+    });
     const imgData = canvas.toDataURL('image/png');
-    const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
     const imgProps = pdf.getImageProperties(imgData);
     const margin = 8;
     const pdfWidth = pdf.internal.pageSize.getWidth() - margin * 2;
     const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-    let y = margin;
-    let heightLeft = pdfHeight;
-    pdf.addImage(imgData, 'PNG', margin, y, pdfWidth, pdfHeight);
-    heightLeft -= pdf.internal.pageSize.getHeight() - margin * 2;
-    while (heightLeft > 0) {
-      pdf.addPage();
-      y = margin - (pdfHeight - heightLeft);
-      pdf.addImage(imgData, 'PNG', margin, y, pdfWidth, pdfHeight);
-      heightLeft -= pdf.internal.pageSize.getHeight() - margin * 2;
+    const pageContentHeight = pdf.internal.pageSize.getHeight() - margin * 2;
+    const pageCount = Math.max(1, Math.ceil(pdfHeight / pageContentHeight));
+
+    for (let page = 0; page < pageCount; page += 1) {
+      if (page > 0) pdf.addPage();
+      pdf.addImage(imgData, 'PNG', margin, margin - page * pageContentHeight, pdfWidth, pdfHeight);
     }
     pdf.save('planificacion_produccion.pdf');
   };

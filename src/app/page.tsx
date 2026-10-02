@@ -2654,6 +2654,44 @@ export default function PlannerPage() {
     }, 150);
   };
 
+  const purchasingPrintPageStyle = `
+    @page {
+      size: portrait;
+      margin: 0 !important;
+      @top-left { content: ""; }
+      @top-center { content: ""; }
+      @top-right { content: ""; }
+      @bottom-left { content: ""; }
+      @bottom-center { content: ""; }
+      @bottom-right { content: ""; }
+    }
+    @media print {
+      .print-only.purchasing-print .purchasing-summary-report {
+        box-sizing: border-box !important;
+        padding: 8mm !important;
+        -webkit-box-decoration-break: clone !important;
+        box-decoration-break: clone !important;
+      }
+      .print-only.purchasing-print::before,
+      .print-only.purchasing-print::after {
+        content: "";
+        position: fixed;
+        z-index: 99999;
+        left: 0;
+        width: 100vw;
+        height: 8mm;
+        background: #fff;
+        pointer-events: none;
+      }
+      .print-only.purchasing-print::before {
+        top: 0;
+      }
+      .print-only.purchasing-print::after {
+        bottom: 0;
+      }
+    }
+  `;
+
   const handlePrintPurchasingRequirements = (
     section: 'mds' | 'aw',
     data?: PurchasingSummaryPrintData,
@@ -2663,7 +2701,7 @@ export default function PlannerPage() {
     document.getElementById('print-orientation-style')?.remove();
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
-    style.innerHTML = '@page { size: portrait; margin: 8mm !important; }';
+    style.innerHTML = purchasingPrintPageStyle;
     document.head.appendChild(style);
     setTimeout(() => {
       window.print();
@@ -2680,7 +2718,7 @@ export default function PlannerPage() {
     document.getElementById('print-orientation-style')?.remove();
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
-    style.innerHTML = '@page { size: portrait; margin: 0; }';
+    style.innerHTML = purchasingPrintPageStyle;
     document.head.appendChild(style);
     setTimeout(() => {
       window.print();
@@ -2699,7 +2737,7 @@ export default function PlannerPage() {
     setPrintMode(`${modeMap[type]}${suffix}`);
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
-    style.innerHTML = '@page { size: portrait; margin: 0; }';
+    style.innerHTML = purchasingPrintPageStyle;
     document.head.appendChild(style);
     setTimeout(() => {
       window.print();
@@ -2722,7 +2760,7 @@ export default function PlannerPage() {
     document.getElementById('print-orientation-style')?.remove();
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
-    style.innerHTML = '@page { size: portrait; margin: 0; }';
+    style.innerHTML = purchasingPrintPageStyle;
     document.head.appendChild(style);
     setTimeout(() => {
       window.print();
@@ -6073,7 +6111,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
           </div>
         </main>
 
-        <div className={`print-only w-full bg-white ${printMode.startsWith('purchasing-') || printMode.startsWith('resumen-') ? 'purchasing-print' : ''}`}>
+        <div className={`print-only w-full bg-white ${printMode.startsWith('purchasing-') || printMode.startsWith('resumen-') || printMode.startsWith('inventory-') ? 'purchasing-print' : ''}`}>
           <style>{`
              @media print {
                .print-only {

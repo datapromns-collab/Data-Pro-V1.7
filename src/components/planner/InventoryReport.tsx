@@ -57,13 +57,26 @@ export function InventoryReport({ section = 'mds', type, data }: InventoryReport
   const handleExportPDF = async () => {
     const report = document.getElementById('report');
     if (!report) return;
-    const canvas = await html2canvas(report as HTMLElement);
+    const canvas = await html2canvas(report as HTMLElement, {
+      ignoreElements: (element) => element.classList.contains('no-print'),
+      onclone: (clonedDocument) => {
+        const clonedReport = clonedDocument.getElementById('report');
+        if (clonedReport) clonedReport.style.padding = '0';
+      },
+    });
     const imgData = canvas.toDataURL('image/png');
     const pdf = new jsPDF();
     const imgProps = pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    const margin = 8;
+    const pdfWidth = pdf.internal.pageSize.getWidth() - margin * 2;
+    const pageContentHeight = pdf.internal.pageSize.getHeight() - margin * 2;
+    const imageHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    const pageCount = Math.max(1, Math.ceil(imageHeight / pageContentHeight));
+
+    for (let page = 0; page < pageCount; page += 1) {
+      if (page > 0) pdf.addPage();
+      pdf.addImage(imgData, 'PNG', margin, margin - page * pageContentHeight, pdfWidth, imageHeight);
+    }
     pdf.save('reporte_semanal.pdf');
   };
 
@@ -104,7 +117,7 @@ export function InventoryReport({ section = 'mds', type, data }: InventoryReport
 
   const renderProductFinishedTable = () => (
     <div className="rounded border border-slate-200 overflow-hidden">
-      <table className="w-full border-collapse text-[9pt]">
+      <table className="purchasing-report-table w-full border-collapse text-[9pt]">
         <thead>
           <tr className="text-white font-black uppercase text-center h-10" style={{ backgroundColor: primaryColor }}>
             <th className="px-4 py-0 border border-white/20 text-left">SABOR / PRODUCTO</th>
@@ -153,7 +166,7 @@ export function InventoryReport({ section = 'mds', type, data }: InventoryReport
 
   const renderMaterialsTable = (inventorySource: 'logistics' | 'plant' | 'available') => (
     <div className="rounded border border-slate-200 overflow-hidden">
-      <table className="w-full border-collapse text-[9pt]">
+      <table className="purchasing-report-table w-full border-collapse text-[9pt]">
         <thead>
           <tr className="text-white font-black uppercase h-10" style={{ backgroundColor: primaryColor }}>
             <th className="px-4 py-0 border border-white/20 text-left">CÓDIGO SAP</th>
@@ -209,7 +222,7 @@ export function InventoryReport({ section = 'mds', type, data }: InventoryReport
   );
 
   return (
-    <div id="report" className="bg-white p-8 max-w-[210mm] mx-auto print:p-0 print:max-w-none">
+    <div id="report" className="purchasing-summary-report bg-white p-8 max-w-[210mm] mx-auto print:p-0 print:max-w-none">
       {renderHeader()}
 
       {type === 'product-finished' && (
