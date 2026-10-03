@@ -128,6 +128,71 @@ const VentasModule = lazyModule(() => import('@/components/planner/VentasModule'
 
 const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Línea 6", "Línea 7", "Línea 8"];
 
+const CONSUMO_UBB_FLAVORS = [
+  'GLUP COLA',
+  'GLUP FRESH',
+  'GLUP UVA',
+  'GLUP PIÑA',
+  'GLUP NARANJA',
+  'GLUP KOLITA',
+  'GLUP MANZANA VERDE',
+  'GLUP PONCHE',
+  'GLUP CHICLE',
+  'GLUP PIÑA PARCHITA',
+  'GLUP MANZANA ROJA',
+  'JUSTY NARANJA',
+  'JUSTY DURAZNO',
+  'JUSTY MANDARINA',
+  'JUSTY SANDIA',
+  'JUSTY LIMON',
+  'JUSTY TAMARINDO',
+  'VITA TEA DURAZNO',
+  'VITA TEA LIMON',
+] as const;
+
+type ConsumoLineaRow = {
+  sourcePrepKey?: string;
+  fechaFiltro?: string;
+  fecha: string;
+  dia: string;
+  turno: '' | 'Diurno' | 'Nocturno';
+  tanque: string;
+  sabor: string;
+  horaInicio: string;
+  ubbInicial: string;
+  volInicialTanque: string;
+  ubbFinal?: string;
+  volFinalTanque?: string;
+  enviarALinea?: number;
+};
+
+type SelectedLineaRow =
+  | { id: string; type: 'glup' | 'justy' }
+  | { type: 'consumo'; linea: number; rowIndex: number };
+
+const dividirVolumenPorUbb = (volumen: string, ubb: string) => {
+  const volumenNumero = Number(volumen.replace(',', '.'));
+  const ubbNumero = Number(ubb.replace(',', '.'));
+  if (!volumen.trim() || !ubb.trim() || !Number.isFinite(volumenNumero) || !Number.isFinite(ubbNumero) || ubbNumero === 0) return '';
+  return (volumenNumero / ubbNumero).toLocaleString('es-VE', { maximumFractionDigits: 2 });
+};
+
+const calcularConsumo = (inicial: string, final: string) => {
+  if (!inicial.trim() || !final.trim()) return '';
+  const inicialNumero = Number(inicial.replace(',', '.'));
+  const finalNumero = Number(final.replace(',', '.'));
+  if (!Number.isFinite(inicialNumero) || !Number.isFinite(finalNumero)) return '';
+  return (inicialNumero - finalNumero).toLocaleString('es-VE', { maximumFractionDigits: 2 });
+};
+
+const parseNumeroConsumo = (value: string) => {
+  const parsed = Number(value.trim().replace(',', '.'));
+  return Number.isFinite(parsed) ? parsed : null;
+};
+
+const normalizarSaborConsumoUbb = (value: string) =>
+  value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLocaleUpperCase('es');
+
 const normalizarHora = (valor: string): string => {
   if (!valor) return '';
   const s = String(valor).trim();
@@ -678,27 +743,143 @@ export default function PlannerPage() {
   const [planningDatePickerOpen, setPlanningDatePickerOpen] = useState(false);
   const [insumosSubTab, setInsumosSubTab] = useState('co2');
   const [insumosPeriodoSubTab, setInsumosPeriodoSubTab] = useState('diario');
-  const [consumoLineasDataPorLinea, setConsumoLineasDataPorLinea] = useState<Record<number, { fecha: string; semana: number; dia: string; turno: string; tanque: string; sabor: string; horaInicio: string; ubbInicial: string; volInicialTanque: string }[]>>({});
-  const addConsumoRow = (linea: number) => {
+  const consumoLineasStore = useRemoteCollection<Record<number, ConsumoLineaRow[]>>('sala-jarabe-consumo-lineas', {});
+  const consumoLineasDataPorLinea = consumoLineasStore.data;
+  const setConsumoLineasDataPorLinea = consumoLineasStore.setData;
+  const [consumoLineasMonth, setConsumoLineasMonth] = useState(() => startOfMonth(new Date()));
+  const [consumoLineasWeekStart, setConsumoLineasWeekStart] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }));
+  const [consumoUbbSection, setConsumoUbbSection] = useState<'diario' | 'semanal' | 'mensual'>('diario');
+  const [consumoUbbDailyDate, setConsumoUbbDailyDate] = useState(() => new Date());
+  const [consumoUbbWeeklyDate, setConsumoUbbWeeklyDate] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }));
+  const [consumoUbbWeeklyMonth, setConsumoUbbWeeklyMonth] = useState(() => startOfMonth(new Date()));
+  const [consumoUbbMonthlyDate, setConsumoUbbMonthlyDate] = useState(() => startOfMonth(new Date()));
+  const updateConsumoLineaRow = (linea: number, rowIndex: number, field: keyof ConsumoLineaRow, value: string) => {
     setConsumoLineasDataPorLinea((prev) => {
-      const current = prev[linea] || [];
+      const rows = prev[linea] || [];
       return {
         ...prev,
-        [linea]: [...current, {
-          fecha: format(new Date(), 'yyyy-MM-dd'),
-          semana: getISOWeek(new Date()),
-          dia: format(new Date(), 'EEEE'),
-          turno: 'T1',
-          tanque: '',
-          sabor: '',
-          horaInicio: '',
-          ubbInicial: '',
-          volInicialTanque: '',
-        }],
+        [linea]: rows.map((row, index) => {
+          if (index !== rowIndex) return row;
+          if (field === 'fecha') {
+            const date = parseFecha(value);
+            if (date) {
+              setConsumoLineasMonth(startOfMonth(date));
+              setConsumoLineasWeekStart(startOfWeek(date, { weekStartsOn: 1 }));
+            }
+            return { ...row, fecha: value, dia: date ? format(date, 'EEEE', { locale: es }) : '' };
+          }
+          return { ...row, [field]: value };
+        }),
       };
     });
   };
   const [salaJarabeLinea, setSalaJarabeLinea] = useState<number>(1);
+  const firstConsumoWeekOfMonth = startOfWeek(startOfMonth(consumoLineasMonth), { weekStartsOn: 1 });
+  const lastConsumoWeekOfMonth = startOfWeek(endOfMonth(consumoLineasMonth), { weekStartsOn: 1 });
+  const consumoLineasWeekEnd = addDays(consumoLineasWeekStart, 6);
+  const consumoLineasRowsForSelectedWeek = (consumoLineasDataPorLinea[salaJarabeLinea] || [])
+    .map((row, index) => ({ row, index }))
+    .filter(({ row }) => {
+      const rowDate = parseFecha(row.fecha || row.fechaFiltro || '');
+      return rowDate !== null
+        && rowDate >= consumoLineasWeekStart
+        && rowDate <= consumoLineasWeekEnd;
+    });
+  const handleConsumoLineasMonthChange = (value: string) => {
+    const [year, month] = value.split('-').map(Number);
+    if (!Number.isInteger(year) || !Number.isInteger(month) || month < 1 || month > 12) return;
+    const nextMonth = new Date(year, month - 1, 1);
+    setConsumoLineasMonth(nextMonth);
+    setConsumoLineasWeekStart(startOfWeek(nextMonth, { weekStartsOn: 1 }));
+  };
+  const handleConsumoUbbWeeklyMonthChange = (value: string) => {
+    const [year, month] = value.split('-').map(Number);
+    if (!Number.isInteger(year) || !Number.isInteger(month) || month < 1 || month > 12) return;
+    const nextMonth = new Date(year, month - 1, 1);
+    setConsumoUbbWeeklyMonth(nextMonth);
+    setConsumoUbbWeeklyDate(startOfWeek(nextMonth, { weekStartsOn: 1 }));
+  };
+  const consumoUbbFirstWeekOfMonth = startOfWeek(startOfMonth(consumoUbbWeeklyMonth), { weekStartsOn: 1 });
+  const consumoUbbLastWeekOfMonth = startOfWeek(endOfMonth(consumoUbbWeeklyMonth), { weekStartsOn: 1 });
+  const consumoUbbSelectedWeekStart = startOfWeek(consumoUbbWeeklyDate, { weekStartsOn: 1 });
+  const getConsumoUbbSummary = (periodStart: Date, periodEnd: Date) => {
+    const totalsByFlavor = new Map<string, number[]>(
+      CONSUMO_UBB_FLAVORS.map((flavor) => [normalizarSaborConsumoUbb(flavor), Array(7).fill(0)])
+    );
+
+    for (const [lineaKey, rows] of Object.entries(consumoLineasDataPorLinea)) {
+      const linea = Number(lineaKey);
+      if (!Number.isInteger(linea) || linea < 1 || linea > 7) continue;
+      for (const row of rows) {
+        const rowDate = parseFecha(row.fecha);
+        if (!rowDate || rowDate < periodStart || rowDate > periodEnd) continue;
+        const flavor = normalizarSaborConsumoUbb(row.sabor);
+        const flavorTotals = totalsByFlavor.get(flavor);
+        const inicial = parseNumeroConsumo(row.ubbInicial);
+        const final = parseNumeroConsumo(row.ubbFinal || '');
+        if (!flavorTotals || inicial === null || final === null) continue;
+        flavorTotals[linea - 1] += inicial - final;
+      }
+    }
+
+    return CONSUMO_UBB_FLAVORS.map((flavor) => ({
+      flavor,
+      lines: totalsByFlavor.get(normalizarSaborConsumoUbb(flavor)) || Array(7).fill(0),
+    }));
+  };
+  const formatConsumoUbb = (value: number) => value === 0
+    ? ''
+    : value.toLocaleString('es-VE', { maximumFractionDigits: 2 });
+  const renderConsumoUbbTable = (periodStart: Date, periodEnd: Date) => {
+    const summary = getConsumoUbbSummary(periodStart, periodEnd);
+    const lineTotals = Array.from({ length: 7 }, (_, lineIndex) =>
+      summary.reduce((total, row) => total + row.lines[lineIndex], 0)
+    );
+    const grandTotal = lineTotals.reduce((total, value) => total + value, 0);
+
+    return (
+      <div className="min-w-full overflow-x-auto rounded-xl border border-slate-300 bg-white">
+        <table className="w-full min-w-[900px] border-collapse text-[11px]">
+          <thead>
+            <tr className="bg-[#5b9bd5] text-white">
+              <th className="border border-slate-300 px-2 py-1.5 text-left font-black uppercase">Sabores</th>
+              {Array.from({ length: 7 }, (_, index) => (
+                <th key={index} className="border border-slate-300 px-2 py-1.5 text-center font-black uppercase">Línea {index + 1}</th>
+              ))}
+              <th className="border border-slate-300 px-2 py-1.5 text-center font-black uppercase">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {summary.map(({ flavor, lines }, rowIndex) => {
+              const flavorTotal = lines.reduce((total, value) => total + value, 0);
+              return (
+                <tr key={flavor} className={rowIndex % 2 === 0 ? 'bg-[#deebf7]' : 'bg-white'}>
+                  <td className="border border-slate-300 px-2 py-1 text-left font-bold text-slate-800">{flavor}</td>
+                  {lines.map((value, lineIndex) => (
+                    <td key={lineIndex} className="border border-slate-300 px-2 py-1 text-right tabular-nums text-slate-800">
+                      {formatConsumoUbb(value)}
+                    </td>
+                  ))}
+                  <td className="border border-slate-300 px-2 py-1 text-right font-bold tabular-nums text-slate-800">
+                    {formatConsumoUbb(flavorTotal)}
+                  </td>
+                </tr>
+              );
+            })}
+            <tr className="bg-[#5b9bd5] font-black text-white">
+              <td className="border border-slate-300 px-2 py-1.5">Total</td>
+              {lineTotals.map((value, lineIndex) => (
+                <td key={lineIndex} className="border border-slate-300 px-2 py-1.5 text-right tabular-nums">
+                  {formatConsumoUbb(value)}
+                </td>
+              ))}
+              <td className="border border-slate-300 px-2 py-1.5 text-right tabular-nums">{formatConsumoUbb(grandTotal)}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    );
+  };
   const [salaJarabePrepWeekStartDate, setSalaJarabePrepWeekStartDate] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }));
   const [salaJarabeNuevaTareaOpen, setSalaJarabeNuevaTareaOpen] = useState(false);
   const [preparacionTab, setPreparacionTab] = useState<'glup' | 'justy'>('glup');
@@ -736,8 +917,78 @@ export default function PlannerPage() {
       localStorage.removeItem('salaJarabeJustyRows');
     }
   }, []);
+  useEffect(() => {
+    if (!glupStore.isLoaded || !justyStore.isLoaded || !consumoLineasStore.isLoaded) return;
+
+    const preparationsToTransfer: { linea: number; row: ConsumoLineaRow }[] = [];
+
+    for (const [type, preparations] of [['glup', glupRows], ['justy', justyRows]] as const) {
+      for (const preparation of preparations) {
+        if (!preparation.enviarALinea) continue;
+        const sourcePrepKey = `${type}:${preparation.id}`;
+        const preparationDate = parseFecha(preparation.fecha);
+        if (!preparationDate) continue;
+        preparationsToTransfer.push({
+          linea: preparation.enviarALinea,
+          row: {
+            sourcePrepKey,
+            fechaFiltro: preparation.fecha,
+            fecha: '',
+            dia: '',
+            turno: '',
+            tanque: preparation.numeroTanques,
+            sabor: preparation.sabor,
+            horaInicio: '',
+            ubbInicial: preparation.ubb,
+            volInicialTanque: preparation.litros,
+          },
+        });
+      }
+    }
+
+    setConsumoLineasDataPorLinea((previous) => {
+      const next: Record<number, ConsumoLineaRow[]> = {};
+      const transferredKeys = new Set<string>();
+      let changed = false;
+
+      for (const [lineaKey, rows] of Object.entries(previous)) {
+        next[Number(lineaKey)] = rows.map((row) => {
+          if (!row.sourcePrepKey || row.fechaFiltro) {
+            if (row.sourcePrepKey) transferredKeys.add(row.sourcePrepKey);
+            return row;
+          }
+          changed = true;
+          transferredKeys.add(row.sourcePrepKey);
+          const transferredRow = preparationsToTransfer.find(({ row: transfer }) => transfer.sourcePrepKey === row.sourcePrepKey)?.row;
+          return {
+            ...row,
+            fechaFiltro: row.fecha || transferredRow?.fechaFiltro || '',
+            fecha: '',
+            dia: '',
+          };
+        });
+      }
+
+      for (const { linea, row } of preparationsToTransfer) {
+        if (transferredKeys.has(row.sourcePrepKey!)) continue;
+        transferredKeys.add(row.sourcePrepKey!);
+        next[linea] = [...(next[linea] || []), row];
+        changed = true;
+      }
+
+      return changed ? next : previous;
+    });
+  }, [
+    glupRows,
+    glupStore.isLoaded,
+    justyRows,
+    justyStore.isLoaded,
+    consumoLineasDataPorLinea,
+    consumoLineasStore.isLoaded,
+    setConsumoLineasDataPorLinea,
+  ]);
   const [lineaModalOpen, setLineaModalOpen] = useState(false);
-  const [selectedLineaRow, setSelectedLineaRow] = useState<{ id: string; type: 'glup' | 'justy' } | null>(null);
+  const [selectedLineaRow, setSelectedLineaRow] = useState<SelectedLineaRow | null>(null);
    const [selectedLinea, setSelectedLinea] = useState<number | null>(null);
    const [salaJarabeSubTab, setSalaJarabeSubTab] = useState<'preparacion' | 'consumo-lineas' | 'consumo-ubb' | 'resumen'>('preparacion');
    const [selectedEstadoRow, setSelectedEstadoRow] = useState<{ id: string; type: 'glup' | 'justy' } | null>(null);
@@ -5527,41 +5778,127 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                              );
                                            })}
                                          </div>
-                                         <button onClick={() => addConsumoRow(salaJarabeLinea)} className="h-9 px-4 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Agregar</button>
                                        </div>
 
                                        <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                                          <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
                                            <div className="flex flex-col h-full gap-3">
                                              <div className="text-slate-400 uppercase font-black text-sm tracking-widest">LINEA {salaJarabeLinea}</div>
+                                             <div className="flex flex-wrap items-center justify-between gap-2">
+                                               <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                                                 Mes
+                                                 <input
+                                                   type="month"
+                                                   aria-label="Filtrar consumo por mes"
+                                                   value={format(consumoLineasMonth, 'yyyy-MM')}
+                                                   onChange={(event) => handleConsumoLineasMonthChange(event.target.value)}
+                                                   className="h-8 rounded-full border border-slate-200 bg-white px-3 text-[11px] font-bold normal-case tracking-normal text-slate-700"
+                                                 />
+                                               </label>
+                                               <div className="flex min-w-0 flex-1 items-center justify-between gap-2">
+                                                 <button
+                                                   type="button"
+                                                   onClick={() => setConsumoLineasWeekStart((current) => addDays(current, -7))}
+                                                   aria-label="Semana anterior"
+                                                   disabled={consumoLineasWeekStart <= firstConsumoWeekOfMonth}
+                                                   className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                                                 >
+                                                   <ChevronLeft className="h-4 w-4" />
+                                                 </button>
+                                                 <span className="text-center text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                                                   Semana {getISOWeek(consumoLineasWeekStart)} del {format(consumoLineasWeekStart, 'd/M/yyyy')} a {format(consumoLineasWeekEnd, 'd/M/yyyy')}
+                                                 </span>
+                                                 <button
+                                                   type="button"
+                                                   onClick={() => setConsumoLineasWeekStart((current) => addDays(current, 7))}
+                                                   aria-label="Semana siguiente"
+                                                   disabled={consumoLineasWeekStart >= lastConsumoWeekOfMonth}
+                                                   className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                                                 >
+                                                   <ChevronRight className="h-4 w-4" />
+                                                 </button>
+                                               </div>
+                                             </div>
                                              <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
                                                <table className="w-full border-collapse text-[11px]">
                                                  <thead>
                                                    <tr className="bg-slate-100 text-slate-700">
-                                                     <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[90px]">Fecha</th>
-                                                     <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[90px]">Semana</th>
-                                                     <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[90px]">Dia</th>
+                                                   <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[90px]">Fecha</th>
+                                                   <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[90px]">Dia</th>
                                                      <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[90px]">Turno</th>
                                                      <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[90px]">N° Tanque Conectado</th>
                                                      <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[120px]">Sabor</th>
                                                      <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[90px]">Hora Inicio</th>
                                                      <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[100px]">Ubb Inicial</th>
                                                      <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[120px]">Vol, Inicial Tanque</th>
+                                                     <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[130px]">Volumen x UBB Inicial</th>
+                                                     <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[100px]">Ubb Final</th>
+                                                     <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[120px]">Vol, Final Tanque</th>
+                                                     <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[130px]">Volumen x UBB Final</th>
+                                                     <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[130px]">Consumo total litros</th>
+                                                     <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[120px]">Consumo total UBB</th>
+                                                     <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[130px]">Enviar a línea</th>
                                                    </tr>
                                                  </thead>
                                                  <tbody>
-                                                   {(consumoLineasDataPorLinea[salaJarabeLinea] || []).length === 0 && (
-                                                     <tr><td colSpan={9} className="px-2 py-4 text-center text-slate-400 uppercase font-black text-xs tracking-widest">Sin registros</td></tr>
+                                                   {consumoLineasRowsForSelectedWeek.length === 0 && (
+                                                     <tr><td colSpan={15} className="px-2 py-4 text-center text-slate-400 uppercase font-black text-xs tracking-widest">Sin registros</td></tr>
                                                    )}
-                                                   {(consumoLineasDataPorLinea[salaJarabeLinea] || []).map((row, idx) => (
-                                                     <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50">
-                                                       {['fecha','semana','dia','turno','tanque','sabor','horaInicio','ubbInicial','volInicialTanque'].map((field) => (
+                                                   {consumoLineasRowsForSelectedWeek.map(({ row, index }) => (
+                                                     <tr key={index} className="border-b border-slate-100 hover:bg-slate-50/50">
+                                                       {(['fecha','dia','turno','tanque','sabor','horaInicio','ubbInicial','volInicialTanque','volumenPorUbbInicial','ubbFinal','volFinalTanque','volumenPorUbbFinal','consumoTotalLitros','consumoTotalUbb','enviarALinea'] as const).map((field) => (
                                                          <td key={field} className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
-                                                           <input value={row[field as keyof typeof row]} onChange={(e) => setConsumoLineasDataPorLinea((prev) => {
-                                                             const current = prev[salaJarabeLinea] || [];
-                                                             const next = current.map((r, i) => i === idx ? { ...r, [field]: e.target.value } : r);
-                                                             return { ...prev, [salaJarabeLinea]: next };
-                                                           })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
+                                                           {field === 'turno' ? (
+                                                             <select
+                                                               aria-label={`Turno de la fila ${index + 1}`}
+                                                               value={row.turno}
+                                                               onChange={(e) => {
+                                                                 const turno = e.target.value;
+                                                                 if (turno === '' || turno === 'Diurno' || turno === 'Nocturno') {
+                                                                   updateConsumoLineaRow(salaJarabeLinea, index, 'turno', turno);
+                                                                 }
+                                                               }}
+                                                               className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary"
+                                                             >
+                                                               <option value="">Seleccionar</option>
+                                                               <option value="Diurno">Diurno</option>
+                                                               <option value="Nocturno">Nocturno</option>
+                                                             </select>
+                                                           ) : field === 'volumenPorUbbInicial' ? (
+                                                             <span className="block px-1 text-slate-500">{dividirVolumenPorUbb(row.volInicialTanque, row.ubbInicial)}</span>
+                                                           ) : field === 'volumenPorUbbFinal' ? (
+                                                             <span className="block px-1 text-slate-500">{dividirVolumenPorUbb(row.volFinalTanque || '', row.ubbFinal || '')}</span>
+                                                           ) : field === 'consumoTotalLitros' ? (
+                                                             <span className="block px-1 text-slate-500">{calcularConsumo(row.volInicialTanque, row.volFinalTanque || '')}</span>
+                                                           ) : field === 'consumoTotalUbb' ? (
+                                                             <span className="block px-1 text-slate-500">{calcularConsumo(row.ubbInicial, row.ubbFinal || '')}</span>
+                                                           ) : field === 'enviarALinea' ? (
+                                                             row.enviarALinea ? (
+                                                               <span className="block px-1 text-slate-500">Línea {row.enviarALinea}</span>
+                                                             ) : (
+                                                               <button
+                                                                 type="button"
+                                                                 onClick={() => {
+                                                                   setSelectedLineaRow({ type: 'consumo', linea: salaJarabeLinea, rowIndex: index });
+                                                                   setSelectedLinea(null);
+                                                                   setLineaModalOpen(true);
+                                                                 }}
+                                                                 className="h-8 rounded-full bg-blue-600 px-3 text-[10px] font-black uppercase tracking-widest text-white hover:bg-blue-700"
+                                                               >
+                                                                 Enviar
+                                                               </button>
+                                                             )
+                                                           ) : field === 'dia' || field === 'tanque' || field === 'sabor' || field === 'ubbInicial' || field === 'volInicialTanque' ? (
+                                                             <span className="block px-1 text-slate-500">{row[field]}</span>
+                                                           ) : (
+                                                             <input
+                                                               type={field === 'fecha' ? 'date' : field === 'ubbFinal' || field === 'volFinalTanque' ? 'number' : 'text'}
+                                                               step={field === 'ubbFinal' || field === 'volFinalTanque' ? 'any' : undefined}
+                                                               value={row[field] || ''}
+                                                               onChange={(e) => updateConsumoLineaRow(salaJarabeLinea, index, field, e.target.value)}
+                                                               className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary"
+                                                             />
+                                                           )}
                                                          </td>
                                                        ))}
                                                      </tr>
@@ -5952,7 +6289,108 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                         </div>
                                       )}
                                       {salaJarabeSubTab === 'consumo-ubb' && (
-                                        <div className="text-slate-400 uppercase font-black text-sm tracking-widest">Consumo Ubb</div>
+                                        <div className="flex min-h-0 flex-1 flex-col gap-3">
+                                          <div className="flex flex-wrap items-center justify-between gap-2">
+                                            <div className="flex items-center rounded-full border border-slate-200 bg-slate-100/50 p-1">
+                                              {([
+                                                { id: 'diario', label: 'Diario' },
+                                                { id: 'semanal', label: 'Semanal' },
+                                                { id: 'mensual', label: 'Mensual' },
+                                              ] as const).map((section) => (
+                                                <button
+                                                  key={section.id}
+                                                  type="button"
+                                                  onClick={() => setConsumoUbbSection(section.id)}
+                                                  aria-pressed={consumoUbbSection === section.id}
+                                                  className={cn(
+                                                    'h-8 rounded-full px-4 text-[10px] font-bold uppercase tracking-widest',
+                                                    consumoUbbSection === section.id ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                                                  )}
+                                                >
+                                                  {section.label}
+                                                </button>
+                                              ))}
+                                            </div>
+                                            {consumoUbbSection === 'diario' && (
+                                              <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                                                Fecha
+                                                <input
+                                                  type="date"
+                                                  aria-label="Fecha del consumo UBB diario"
+                                                  value={format(consumoUbbDailyDate, 'yyyy-MM-dd')}
+                                                  onChange={(event) => {
+                                                    const date = parseFecha(event.target.value);
+                                                    if (date) setConsumoUbbDailyDate(date);
+                                                  }}
+                                                  className="h-8 rounded-full border border-slate-200 bg-white px-3 text-[11px] font-bold normal-case tracking-normal text-slate-700"
+                                                />
+                                              </label>
+                                            )}
+                                            {consumoUbbSection === 'semanal' && (
+                                              <div className="flex flex-wrap items-center justify-end gap-3">
+                                                <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                                                  Mes
+                                                  <input
+                                                    type="month"
+                                                    aria-label="Mes del resumen semanal de consumo UBB"
+                                                    value={format(consumoUbbWeeklyMonth, 'yyyy-MM')}
+                                                    onChange={(event) => handleConsumoUbbWeeklyMonthChange(event.target.value)}
+                                                    className="h-8 rounded-full border border-slate-200 bg-white px-3 text-[11px] font-bold normal-case tracking-normal text-slate-700"
+                                                  />
+                                                </label>
+                                                <div className="flex min-w-[280px] items-center justify-between gap-2">
+                                                  <button
+                                                    type="button"
+                                                    onClick={() => setConsumoUbbWeeklyDate((current) => addDays(current, -7))}
+                                                    aria-label="Semana anterior"
+                                                    disabled={consumoUbbSelectedWeekStart <= consumoUbbFirstWeekOfMonth}
+                                                    className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                                                  >
+                                                    <ChevronLeft className="h-4 w-4" />
+                                                  </button>
+                                                  <span className="text-center text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                                                    Semana {getISOWeek(consumoUbbSelectedWeekStart)} del {format(consumoUbbSelectedWeekStart, 'd/M/yyyy')} a {format(addDays(consumoUbbSelectedWeekStart, 6), 'd/M/yyyy')}
+                                                  </span>
+                                                  <button
+                                                    type="button"
+                                                    onClick={() => setConsumoUbbWeeklyDate((current) => addDays(current, 7))}
+                                                    aria-label="Semana siguiente"
+                                                    disabled={consumoUbbSelectedWeekStart >= consumoUbbLastWeekOfMonth}
+                                                    className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                                                  >
+                                                    <ChevronRight className="h-4 w-4" />
+                                                  </button>
+                                                </div>
+                                              </div>
+                                            )}
+                                            {consumoUbbSection === 'mensual' && (
+                                              <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                                                Mes / Año
+                                                <input
+                                                  type="month"
+                                                  aria-label="Mes y año del consumo UBB mensual"
+                                                  value={format(consumoUbbMonthlyDate, 'yyyy-MM')}
+                                                  onChange={(event) => {
+                                                    const [year, month] = event.target.value.split('-').map(Number);
+                                                    if (Number.isInteger(year) && Number.isInteger(month) && month >= 1 && month <= 12) {
+                                                      setConsumoUbbMonthlyDate(new Date(year, month - 1, 1));
+                                                    }
+                                                  }}
+                                                  className="h-8 rounded-full border border-slate-200 bg-white px-3 text-[11px] font-bold normal-case tracking-normal text-slate-700"
+                                                />
+                                              </label>
+                                            )}
+                                          </div>
+                                          {consumoUbbSection === 'diario' && renderConsumoUbbTable(startOfDay(consumoUbbDailyDate), endOfDay(consumoUbbDailyDate))}
+                                          {consumoUbbSection === 'semanal' && renderConsumoUbbTable(
+                                            consumoUbbSelectedWeekStart,
+                                            endOfDay(addDays(consumoUbbSelectedWeekStart, 6))
+                                          )}
+                                          {consumoUbbSection === 'mensual' && renderConsumoUbbTable(
+                                            startOfMonth(consumoUbbMonthlyDate),
+                                            endOfDay(endOfMonth(consumoUbbMonthlyDate))
+                                          )}
+                                        </div>
                                       )}
                                       {salaJarabeSubTab === 'resumen' && (
                                         <div className="text-slate-400 uppercase font-black text-sm tracking-widest">Resumen</div>
@@ -6790,15 +7228,102 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
             <div className="py-4">
               <div className="grid grid-cols-2 gap-2">
                 {[1, 2, 3, 4, 5, 6, 7].map((n) => (
-                  <Button key={n} onClick={() => setSelectedLinea(n)} className="h-10 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Linea {n}</Button>
+                  <Button
+                    key={n}
+                    disabled={selectedLineaRow?.type === 'consumo' && selectedLineaRow.linea === n}
+                    onClick={() => setSelectedLinea(n)}
+                    className="h-10 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none"
+                  >
+                    Linea {n}
+                  </Button>
                 ))}
               </div>
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setLineaModalOpen(false)} className="rounded-xl">Cancelar</Button>
-              <Button onClick={() => {
+              <Button disabled={selectedLinea === null} onClick={() => {
                 if (!selectedLineaRow || selectedLinea === null) return;
+                if (selectedLineaRow.type === 'consumo') {
+                  const { linea, rowIndex } = selectedLineaRow;
+                  const sourceRow = (consumoLineasDataPorLinea[linea] || [])[rowIndex];
+                  if (!sourceRow) {
+                    toast({ title: 'No se encontró el registro de consumo', variant: 'destructive' });
+                    return;
+                  }
+                  if (selectedLinea === linea) {
+                    toast({ title: 'Selecciona una línea distinta a la línea de origen', variant: 'destructive' });
+                    return;
+                  }
+                  if (!sourceRow.ubbFinal?.trim() || !sourceRow.volFinalTanque?.trim()) {
+                    toast({ title: 'Completa UBB final y volumen final del tanque antes de enviar', variant: 'destructive' });
+                    return;
+                  }
+                  const sourceDate = sourceRow.fecha || sourceRow.fechaFiltro || format(consumoLineasWeekStart, 'yyyy-MM-dd');
+                  const sourceDateParsed = parseFecha(sourceDate);
+                  if (!sourceDateParsed) {
+                    toast({ title: 'El registro no tiene una fecha válida para ubicarlo en la semana', variant: 'destructive' });
+                    return;
+                  }
+                  const receivingRow: ConsumoLineaRow = {
+                    sourcePrepKey: `line-transfer:${linea}:${sourceRow.sourcePrepKey || rowIndex}:${selectedLinea}:${Date.now()}`,
+                    fechaFiltro: sourceDate,
+                    fecha: '',
+                    dia: '',
+                    turno: sourceRow.turno,
+                    tanque: sourceRow.tanque,
+                    sabor: sourceRow.sabor,
+                    horaInicio: '',
+                    ubbInicial: sourceRow.ubbFinal,
+                    volInicialTanque: sourceRow.volFinalTanque,
+                  };
+                  setConsumoLineasDataPorLinea((previous) => ({
+                    ...previous,
+                    [linea]: (previous[linea] || []).map((row, index) =>
+                      index === rowIndex ? { ...row, enviarALinea: selectedLinea } : row
+                    ),
+                    [selectedLinea]: [...(previous[selectedLinea] || []), receivingRow],
+                  }));
+                  setConsumoLineasMonth(startOfMonth(sourceDateParsed));
+                  setConsumoLineasWeekStart(startOfWeek(sourceDateParsed, { weekStartsOn: 1 }));
+                  setSalaJarabeLinea(selectedLinea);
+                  setSalaJarabeSubTab('consumo-lineas');
+                  setLineaModalOpen(false);
+                  setSelectedLineaRow(null);
+                  setSelectedLinea(null);
+                  return;
+                }
+
                 const { id, type } = selectedLineaRow;
+                const preparationRow = (type === 'glup' ? glupRows : justyRows).find((row) => row.id === id);
+               if (!preparationRow) {
+                 toast({ title: 'No se encontró la preparación', variant: 'destructive' });
+                 return;
+               }
+                const preparationDate = parseFecha(preparationRow.fecha);
+                if (!preparationDate) {
+                  toast({ title: 'La preparación no tiene una fecha válida', variant: 'destructive' });
+                  return;
+                }
+                setConsumoLineasMonth(startOfMonth(preparationDate));
+                setConsumoLineasWeekStart(startOfWeek(preparationDate, { weekStartsOn: 1 }));
+                const consumoRow: ConsumoLineaRow = {
+                  sourcePrepKey: `${type}:${id}`,
+                  fechaFiltro: preparationRow.fecha,
+                  fecha: '',
+                  dia: '',
+                  turno: '',
+                  tanque: preparationRow.numeroTanques,
+                  sabor: preparationRow.sabor,
+                  horaInicio: '',
+                  ubbInicial: preparationRow.ubb,
+                  volInicialTanque: preparationRow.litros,
+                };
+                setConsumoLineasDataPorLinea((prev) => ({
+                  ...prev,
+                  [selectedLinea]: [...(prev[selectedLinea] || []), consumoRow],
+                }));
+                setSalaJarabeLinea(selectedLinea);
+                setSalaJarabeSubTab('consumo-lineas');
                 if (type === 'glup') {
                   setGlupRows((prev) => prev.map((row) => row.id === id ? { ...row, estado: 'enviado a linea', enviarALinea: selectedLinea } : row));
                 } else {

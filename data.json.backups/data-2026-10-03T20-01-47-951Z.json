@@ -158462,7 +158462,7 @@
         "auto-2-1790888030241": {
           "cajasPlanificadas": 51250,
           "producto": "210",
-          "ubb": 0,
+          "ubb": 67.91,
           "pnc": 1260,
           "jarabeReal": 105485
         }
@@ -166704,7 +166704,7 @@
       "2026-10-01-RO Cleaner-6": "213,7",
       "2026-10-01-Sanitizer-6": "200",
       "2026-10-01-LARK CLEAN 21C-6": "0",
-      "2026-10-02-LP20-0": "180,9",
+      "2026-10-02-LP20-0": "180.9",
       "2026-10-02-Cloro-0": "408",
       "2026-10-02-AntiEscalante-0": "938,8",
       "2026-10-02-Sal-0": "2520",
@@ -166778,7 +166778,24 @@
       "2026-10-02-Gamma Ro-432-6": "166,5",
       "2026-10-02-RO Cleaner-6": "213,7",
       "2026-10-02-Sanitizer-6": "200",
-      "2026-10-02-LARK CLEAN 21C-6": "0"
+      "2026-10-02-LARK CLEAN 21C-6": "0",
+      "2026-10-03-LP20-0": "180,9",
+      "2026-10-03-Cloro-0": "601,3",
+      "2026-10-03-AntiEscalante-0": "917,6",
+      "2026-10-03-Sal-0": "6060",
+      "2026-10-03-Alcalino-0": "2814,2",
+      "2026-10-03-Peracetico-0": "536,4",
+      "2026-10-03-Lark Foam Quat-0": "315,8",
+      "2026-10-03-Lark Foam IN-0": "230",
+      "2026-10-03-Lark Desengrasante-0": "200",
+      "2026-10-03-Soda Caustica-0": "496,6",
+      "2026-10-03-GermiQuat-0": "225",
+      "2026-10-03-Lark Inox-0": "18",
+      "2026-10-03-TM Smart-0": "437,9",
+      "2026-10-03-Gamma Ro-432-0": "166,5",
+      "2026-10-03-RO Cleaner-0": "213,7",
+      "2026-10-03-Sanitizer-0": "200",
+      "2026-10-03-LARK CLEAN 21C-0": "0"
     },
     "sala-jarabe-glup": [
       {
@@ -167288,7 +167305,8 @@
           "emp": {}
         }
       }
-    }
+    },
+    "sala-jarabe-consumo-lineas": {}
   },
   "cacheVersion": 0,
   "deletedIds": {
@@ -167332,7 +167350,8 @@
     },
     "ventas-pronostico-mensual": {},
     "mtto-co2-consumption": {},
-    "logistica-inventario-mensual": {}
+    "logistica-inventario-mensual": {},
+    "sala-jarabe-consumo-lineas": {}
   },
   "_deletedOrdenesSapIds": [
     "1-1785349102112",
