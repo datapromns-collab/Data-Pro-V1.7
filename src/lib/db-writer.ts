@@ -37,30 +37,33 @@ function writePayloadSync(payload: DbData): void {
   const serialized = JSON.stringify(payload, null, 2);
   const tmpPath = DB_PATH + '.' + Date.now() + '.' + Math.random().toString(36).substr(2, 9) + '.tmp';
   fs.writeFileSync(tmpPath, serialized, 'utf8');
-  let renamed = false;
   try {
     fs.renameSync(tmpPath, DB_PATH);
-    renamed = true;
+    return;
   } catch (error) {
     const err = error as NodeJS.ErrnoException;
-    if (err.code === 'EPERM' || err.code === 'EACCES' || err.code === 'EBUSY' || err.code === 'UNKNOWN') {
-      try {
-        fs.copyFileSync(tmpPath, DB_PATH);
-        renamed = true;
-      } catch (copyError) {
-        console.error('[DB][WRITE][COPY_FALLBACK][ERROR]', copyError);
-        throw copyError;
-      }
-    } else {
+    if (err.code !== 'EPERM' && err.code !== 'EACCES' && err.code !== 'EBUSY' && err.code !== 'UNKNOWN') {
       throw error;
     }
+  }
+
+  try {
+    withRetrySync(() => fs.copyFileSync(tmpPath, DB_PATH), 5);
+    return;
+  } catch (copyError) {
+    console.warn('[DB][WRITE][COPY_FALLBACK][WARN]', copyError);
+  }
+
+  try {
+    fs.writeFileSync(DB_PATH, serialized, 'utf8');
+  } catch (writeError) {
+    console.error('[DB][WRITE][DIRECT][ERROR]', writeError);
+    throw writeError;
   } finally {
-    if (!renamed && fs.existsSync(tmpPath)) {
-      try {
-        fs.unlinkSync(tmpPath);
-      } catch (unlinkError) {
-        console.error('[DB][WRITE][CLEANUP][ERROR]', unlinkError);
-      }
+    try {
+      if (fs.existsSync(tmpPath)) fs.unlinkSync(tmpPath);
+    } catch {
+      // ignore
     }
   }
 }
@@ -189,8 +192,12 @@ export function writeDb(mutator: (current: DbData) => DbData): Promise<void> {
     try {
       const current = readDb();
       const updated = mutator(current);
-      createRotatingBackupSync();
-      writePayloadSync(updated);
+      retryWrite(updated, 6);
+      try {
+        createRotatingBackupSync();
+      } catch (backupError) {
+        console.warn('[DB][BACKUP][WARN]', backupError);
+      }
     } catch (error) {
       console.error('[DB][WRITE][ERROR]', error);
       throw error;
@@ -206,6 +213,21 @@ export function writeDb(mutator: (current: DbData) => DbData): Promise<void> {
 
 export function getDbPath(): string {
   return DB_PATH;
+}
+
+function retryWrite(updated: DbData, retries = 6): void {
+  let attempt = 0;
+  while (true) {
+    try {
+      writePayloadSync(updated);
+      return;
+    } catch (error) {
+      const err = error as NodeJS.ErrnoException;
+      const isRetryable = err.code === 'EPERM' || err.code === 'EACCES' || err.code === 'EBUSY' || err.code === 'UNKNOWN';
+      if (!isRetryable || attempt >= retries - 1) throw error;
+      attempt++;
+    }
+  }
 }
 
 function recoverFromBackupSync(): void {
