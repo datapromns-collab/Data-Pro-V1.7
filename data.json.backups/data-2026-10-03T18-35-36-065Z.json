@@ -15811,7 +15811,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-03T15:57:57.843Z"
+    "updatedAt": "2026-10-03T18:20:17.056Z"
   },
   "ordenesSap": [
     {
@@ -26163,6 +26163,26 @@
           "cajas3": 160,
           "ticket4": "",
           "cajas4": 2493
+        }
+      ]
+    },
+    {
+      "id": "2-1791048785936",
+      "linea": 2,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "64018",
+      "semana": 40,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-03",
+          "ticket1": "16046",
+          "cajas1": 2080,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     }
@@ -145287,7 +145307,7 @@
         "semana": 39,
         "turno": "DIURNO",
         "operador": "CRISTIAN CELIS",
-        "linea": "Línea 1",
+        "linea": "Línea 2",
         "equipo": "SOPLADORA",
         "tipoParada": "OPERACIONAL",
         "inicioParada": "07:09",
@@ -145299,7 +145319,7 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1790458363326,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-09-25",
@@ -155163,7 +155183,7 @@
         "turno": "DIURNO",
         "solicitante": "",
         "linea": "Línea 7",
-        "maquina": "PALETIZADORA",
+        "maquina": "OPERACIONAL",
         "aviso": "",
         "fechaParada": "2026-09-07",
         "inicioMtto": "",
@@ -158438,6 +158458,13 @@
           "jarabeReal": 31214,
           "ubb": 20.09,
           "producto": "181"
+        },
+        "auto-2-1790888030241": {
+          "cajasPlanificadas": 51250,
+          "producto": "210",
+          "ubb": 67.91,
+          "pnc": 1260,
+          "jarabeReal": 105485
         }
       },
       "linea-3": {
@@ -159334,7 +159361,8 @@
         "auto-7-1790888068568": {
           "cajasPlanificadas": 107500,
           "producto": "421",
-          "jarabeReal": 6893
+          "jarabeReal": 68939,
+          "ubb": 23.96
         }
       }
     },
@@ -167266,64 +167294,6 @@
   "deletedIds": {
     "planta-informes-operacionales": {
       "*": [
-        "1788991023411",
-        "1784566101946",
-        "1784568143186",
-        "1785014920340",
-        "1785358753845",
-        "1785358876155",
-        "1785414190166",
-        "1785414573668",
-        "1785415183096",
-        "1785415259439",
-        "1785415351871",
-        "1785415572542",
-        "1785415633951",
-        "1785415689630",
-        "1785415811823",
-        "1785415847510",
-        "1785415957655",
-        "1785416031310",
-        "1785416298630",
-        "1785416369910",
-        "1785416608317",
-        "1785416736028",
-        "1785416910693",
-        "1785417138565",
-        "1785417183419",
-        "1785417331300",
-        "1785417417646",
-        "1785417479222",
-        "1785418190316",
-        "1785508515291",
-        "1785509131922",
-        "1786024306648",
-        "1786024932528",
-        "1786037074553",
-        "1786037361081",
-        "1786037547921",
-        "1786037695201",
-        "1786037731718",
-        "1786037990748",
-        "1786037996096",
-        "1786038155639",
-        "1786038321776",
-        "1786027053232",
-        "1786040712235",
-        "1786119936092",
-        "1786128206608",
-        "1786456646957",
-        "1786456705797",
-        "1786996948604",
-        "1787086190625",
-        "1787086273033",
-        "1787938439979",
-        "1787237062452",
-        "1787247465383",
-        "1787959521278",
-        "1788293882619",
-        "1788978219703",
-        "1790538581551",
         "1790371816310"
       ]
     },
@@ -167378,10 +167348,10 @@
   ],
   "logisticsStockFile": {
     "filename": "stock-producto-terminado.xlsx",
-    "originalName": "Formato Inventario  Fisico Almacen PT DIARIO ACT  08.xlsx",
+    "originalName": "Formato Inventario  Fisico Almacen PT DIARIO ACT  0888.xlsx",
     "tipo": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "tamano": 35040,
-    "uploadedAt": "2026-10-02T17:38:00.129Z",
+    "tamano": 35022,
+    "uploadedAt": "2026-10-03T16:08:42.431Z",
     "uploadedBy": "local-user"
   }
 }
