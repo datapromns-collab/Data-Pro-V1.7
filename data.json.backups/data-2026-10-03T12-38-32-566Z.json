@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-01T00:00:00.000",
+      "weekStartDate": "2026-09-28T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -11390,12 +11390,12 @@
             "name": "JUSTY NARANJA",
             "lineId": "5",
             "loadPerHour": 1210,
-            "quantity": 36905,
-            "durationHours": 30.5,
+            "quantity": 15730,
+            "durationHours": 13,
             "presentation": "1.5Lts",
-            "tanks": 33.21,
+            "tanks": 14.16,
             "startTime": "2026-10-02T16:00:00.000Z",
-            "endTime": "2026-10-03T22:30:00.000Z",
+            "endTime": "2026-10-03T05:00:00.000Z",
             "id": "g32vq6pt4",
             "color": "#587593"
           },
@@ -11512,12 +11512,12 @@
             "name": "GLUP COLA",
             "lineId": "3",
             "loadPerHour": 2800,
-            "quantity": 96600,
-            "durationHours": 34.5,
+            "quantity": 163800,
+            "durationHours": 58.5,
             "presentation": "2Lts",
-            "tanks": 11.2,
+            "tanks": 18.99,
             "startTime": "2026-10-01T22:30:00.000Z",
-            "endTime": "2026-10-03T09:00:00.000Z",
+            "endTime": "2026-10-04T09:00:00.000Z",
             "id": "cskep0lci",
             "color": "#47CCB0"
           },
@@ -13591,6 +13591,62 @@
               "quantity": "359",
               "unit": "UND"
             }
+          ],
+          "2026-10-02": [
+            {
+              "id": "86758ab7-d995-4618-9309-a72670196881",
+              "line": "Linea 1",
+              "flavor": "GLUP FRESH",
+              "code": "ENV-00013",
+              "material": "BOTELLA ENVASADA GLUP FRESH 2.0.LTS",
+              "quantity": "221",
+              "unit": "UND"
+            },
+            {
+              "id": "f377e76f-a69f-4eb3-9c6e-f1b3fc34662b",
+              "line": "Linea 2",
+              "flavor": "GLUP UVA",
+              "code": "ENV-00039",
+              "material": "BOTELLA ENVASADA GLUP UVA  2.0.LTS  (EN LINEA 2)",
+              "quantity": "100",
+              "unit": "UND"
+            },
+            {
+              "id": "a53e0536-f746-4dab-9289-abca909aa75a",
+              "line": "Linea 4",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00054",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 2.LTS (LINEA 4)",
+              "quantity": "39",
+              "unit": "UND"
+            },
+            {
+              "id": "d7ba9f55-21c4-4e5b-bae3-b90a5a49c655",
+              "line": "Linea 5",
+              "flavor": "JUSTY NARANJA",
+              "code": "ENV-00027",
+              "material": "BOTELLA ENVASADA JUSTY NARANJA  1.5 LTS",
+              "quantity": "182",
+              "unit": "UND"
+            },
+            {
+              "id": "02648c89-60dc-4138-be25-818f2e0c551b",
+              "line": "Linea 6",
+              "flavor": "GLUP FRESH",
+              "code": "ENV-00060",
+              "material": "BOTELLA ENVASADA GLUP FRESH 400 ML (LINEA 6)",
+              "quantity": "375",
+              "unit": "UND"
+            },
+            {
+              "id": "f044fb8a-7fce-4dff-9073-3c2237bb3df7",
+              "line": "Linea 7",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00078",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 1.0 L (LINEA 7)",
+              "quantity": "62",
+              "unit": "UND"
+            }
           ]
         },
         "desperdicios": {
@@ -14430,6 +14486,151 @@
               "kind": "termo",
               "preformSize": ""
             }
+          ],
+          "2026-10-02": [
+            {
+              "id": "2a122a5a-653c-4a55-a46c-b1079e7c8e7d",
+              "line": "Linea 1",
+              "flavor": "verde",
+              "code": "EMP_0103",
+              "material": "PREFORMA VERDE 42,64 GR-1881",
+              "quantity": "3714",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "2f7ded47-1980-4143-b0e1-cb4b159b0623",
+              "line": "Linea 1",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "4,05",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "39c6845c-4bbb-40b0-a077-ca30bfe4d344",
+              "line": "Linea 2",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "1666",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "2f8b2da0-ad3b-402e-a70b-a23861a753b2",
+              "line": "Linea 2",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "1,48",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "06414744-ddb4-45a7-b6e6-0f8087aad215",
+              "line": "Linea 3",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "0,66",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "87a4acda-a736-47c2-af62-a119be45e64d",
+              "line": "Linea 4",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "2023",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "1731d990-8220-40ec-a2c2-0b2bdd058849",
+              "line": "Linea 4",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "1,16",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "96585f2f-4102-4413-ad60-b6f3c54953d7",
+              "line": "Linea 5",
+              "flavor": "transparente",
+              "code": "EMP_0068",
+              "material": "PREFORMA TRANSPARENTE 36 GR-1881",
+              "quantity": "2750",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "c1334c03-7af3-45e3-bf59-59493515b1df",
+              "line": "Linea 5",
+              "flavor": "",
+              "code": "EMP_0017",
+              "material": "POLIETILENO TERMOENCOGIBLE 55 X 0.07",
+              "quantity": "2,63",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "c4189460-ff37-4b5a-a450-354b4e7a008d",
+              "line": "Linea 6",
+              "flavor": "verde",
+              "code": "EMP_0135",
+              "material": "PREFORMA VERDE 20,5-1881",
+              "quantity": "1200",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "3401adc8-9794-4427-ac3b-acee41efbf97",
+              "line": "Linea 6",
+              "flavor": "",
+              "code": "EMP_0130",
+              "material": "POLIETILENO TERMOENCOGIBLE 43 x 0.06",
+              "quantity": "2,98",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "e2159877-160f-470c-b5ba-a128ecefcb0a",
+              "line": "Linea 7",
+              "flavor": "transparente",
+              "code": "EMP_0166",
+              "material": "PREFORMA TRANSPARENTE 33 GR-1881",
+              "quantity": "1878",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": "33"
+            },
+            {
+              "id": "68d2d7a7-45eb-4e7a-b431-a42b49c20d1d",
+              "line": "Linea 7",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "1,30",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            }
           ]
         }
       },
@@ -14816,7 +15017,8 @@
           "planning",
           "seguimiento",
           "management",
-          "logistica"
+          "logistica",
+          "insumos"
         ],
         "enf.mds": [
           "planning",
@@ -15221,7 +15423,8 @@
           "planning"
         ],
         "g.tec.mds": [
-          "seguimiento"
+          "seguimiento",
+          "insumos"
         ],
         "enf.mds": [
           "planning"
@@ -15473,7 +15676,7 @@
       },
       {
         "id": "g.tec.mds",
-        "name": "Gerente Técnico",
+        "name": "Jesús Meza",
         "password": "ad.147.",
         "role": "STANDARD",
         "displayRole": "GERENTE TÉCNICO"
@@ -15530,7 +15733,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-02T21:04:19.438Z"
+    "updatedAt": "2026-10-03T12:38:32.014Z"
   },
   "ordenesSap": [
     {
@@ -25657,12 +25860,12 @@
           "fechaInicio": "2026-10-02",
           "ticket1": "16084",
           "cajas1": 4960,
-          "ticket2": "",
+          "ticket2": "16085",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 480,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 13360
         }
       ]
     },
@@ -25686,14 +25889,14 @@
         },
         {
           "fechaInicio": "2026-10-02",
-          "ticket1": "16084",
+          "ticket1": "16044",
           "cajas1": 8240,
-          "ticket2": "",
+          "ticket2": "16045",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 240,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 5984
         }
       ]
     },
@@ -25719,12 +25922,12 @@
           "fechaInicio": "2026-10-02",
           "ticket1": "15207",
           "cajas1": 2250,
-          "ticket2": "",
+          "ticket2": "15208",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 2111
         }
       ]
     },
@@ -25750,12 +25953,12 @@
           "fechaInicio": "2026-10-02",
           "ticket1": "16231",
           "cajas1": 7644,
-          "ticket2": "",
+          "ticket2": "16232",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 17
         }
       ]
     },
@@ -25781,12 +25984,12 @@
           "fechaInicio": "2026-10-02",
           "ticket1": "16131",
           "cajas1": 7680,
-          "ticket2": "",
+          "ticket2": "16132",
           "cajas2": 960,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 480,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 9760
         }
       ]
     },
@@ -25843,12 +26046,12 @@
           "fechaInicio": "2026-10-02",
           "ticket1": "16180",
           "cajas1": 800,
-          "ticket2": "",
+          "ticket2": "16181",
           "cajas2": 480,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 160,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 2493
         }
       ]
     }
@@ -39700,7 +39903,7 @@
         "2026-08-31|2026-08": 0,
         "2026-07-27|2026-07": 121494.94,
         "2026-08-31|2026-09": 891165.86,
-        "2026-09-01|2026-09": 0,
+        "2026-09-01|2026-09": 891165.86,
         "2026-08-01|2026-08": 121494.94,
         "2026-09-07|2026-09": 1141476.37,
         "2026-09-14|2026-09": 1174355.86,
@@ -165603,7 +165806,12 @@
       "2026-10-01-suave": "236701",
       "2026-10-01-procesos": "2330031,99",
       "2026-10-01-filtrada": "3569695,31",
-      "2026-10-01-total": "2712600"
+      "2026-10-01-total": "2712600",
+      "2026-10-02-servicio": "28208",
+      "2026-10-02-suave": "197056",
+      "2026-10-02-procesos": "1366840,49",
+      "2026-10-02-filtrada": "2301175,04",
+      "2026-10-02-total": "1520100"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
@@ -166333,7 +166541,82 @@
       "2026-10-01-Gamma Ro-432-6": "166,5",
       "2026-10-01-RO Cleaner-6": "213,7",
       "2026-10-01-Sanitizer-6": "200",
-      "2026-10-01-LARK CLEAN 21C-6": "0"
+      "2026-10-01-LARK CLEAN 21C-6": "0",
+      "2026-10-02-LP20-0": "180,9",
+      "2026-10-02-Cloro-0": "408",
+      "2026-10-02-AntiEscalante-0": "938,8",
+      "2026-10-02-Sal-0": "2520",
+      "2026-10-02-Alcalino-0": "1764,2",
+      "2026-10-02-Peracetico-0": "536.4",
+      "2026-10-02-Lark Foam Quat-0": "115,8",
+      "2026-10-02-Lark Foam IN-0": "230",
+      "2026-10-02-Lark Desengrasante-0": "0",
+      "2026-10-02-Soda Caustica-0": "496,6",
+      "2026-10-02-GermiQuat-0": "25",
+      "2026-10-02-Lark Inox-0": "18",
+      "2026-10-02-TM Smart-0": "450,2",
+      "2026-10-02-Gamma Ro-432-0": "166,5",
+      "2026-10-02-RO Cleaner-0": "213,7",
+      "2026-10-02-Sanitizer-0": "200",
+      "2026-10-02-LARK CLEAN 21C-0": "0",
+      "2026-10-02-LP20-1": "",
+      "2026-10-02-LP20-2": "180,9",
+      "2026-10-02-LP20-4": "180,9",
+      "2026-10-02-Cloro-1": "230",
+      "2026-10-02-Cloro-2": "623,9",
+      "2026-10-02-Cloro-4": "623,9",
+      "2026-10-02-AntiEscalante-2": "928,7",
+      "2026-10-02-AntiEscalante-4": "928,7",
+      "2026-10-02-Sal-1": "4000",
+      "2026-10-02-Sal-2": "6360",
+      "2026-10-02-Sal-4": "6360",
+      "2026-10-02-Alcalino-1": "1050",
+      "2026-10-02-Alcalino-2": "2814,2",
+      "2026-10-02-Alcalino-4": "2814,2",
+      "2026-10-02-Peracetico-2": "536,4",
+      "2026-10-02-Peracetico-4": "536,4",
+      "2026-10-02-Lark Foam Quat-1": "200",
+      "2026-10-02-Lark Foam Quat-2": "315,8",
+      "2026-10-02-Lark Foam Quat-4": "315,8",
+      "2026-10-02-Lark Foam IN-2": "230",
+      "2026-10-02-Lark Foam IN-4": "230",
+      "2026-10-02-Lark Desengrasante-1": "200",
+      "2026-10-02-Lark Desengrasante-2": "200",
+      "2026-10-02-Lark Desengrasante-4": "200",
+      "2026-10-02-Soda Caustica-2": "496,6",
+      "2026-10-02-Soda Caustica-4": "496,6",
+      "2026-10-02-GermiQuat-1": "200",
+      "2026-10-02-GermiQuat-2": "225",
+      "2026-10-02-GermiQuat-4": "225",
+      "2026-10-02-Lark Inox-2": "18",
+      "2026-10-02-Lark Inox-4": "18",
+      "2026-10-02-TM Smart-2": "439,1",
+      "2026-10-02-TM Smart-4": "439,1",
+      "2026-10-02-Gamma Ro-432-2": "166,5",
+      "2026-10-02-Gamma Ro-432-4": "166,5",
+      "2026-10-02-RO Cleaner-2": "213,7",
+      "2026-10-02-RO Cleaner-4": "213,7",
+      "2026-10-02-Sanitizer-2": "200",
+      "2026-10-02-Sanitizer-4": "200",
+      "2026-10-02-LARK CLEAN 21C-2": "0",
+      "2026-10-02-LARK CLEAN 21C-4": "0",
+      "2026-10-02-LP20-6": "180,9",
+      "2026-10-02-Cloro-6": "601,3",
+      "2026-10-02-AntiEscalante-6": "917,6",
+      "2026-10-02-Sal-6": "6060",
+      "2026-10-02-Alcalino-6": "2814,2",
+      "2026-10-02-Peracetico-6": "536,4",
+      "2026-10-02-Lark Foam Quat-6": "315,8",
+      "2026-10-02-Lark Foam IN-6": "230",
+      "2026-10-02-Lark Desengrasante-6": "200",
+      "2026-10-02-Soda Caustica-6": "496,6",
+      "2026-10-02-GermiQuat-6": "225",
+      "2026-10-02-Lark Inox-6": "18",
+      "2026-10-02-TM Smart-6": "437,9",
+      "2026-10-02-Gamma Ro-432-6": "166,5",
+      "2026-10-02-RO Cleaner-6": "213,7",
+      "2026-10-02-Sanitizer-6": "200",
+      "2026-10-02-LARK CLEAN 21C-6": "0"
     },
     "sala-jarabe-glup": [
       {
