@@ -10,9 +10,15 @@ import { cn } from '@/lib/utils';
 import { loadProductionInventoryData, loadProductionInventoryPeriod, loadProductionNonConformingData, loadProductionReceptions, loadProductionWasteRows, savePlannerData, saveProductionNonConformingRows } from '@/lib/json-db';
 import { useAuthStore } from '@/hooks/use-auth-store';
 import { normalizeNonConformingRows, parseNonConformingQuantity, summarizeNonConformingRows } from '@/lib/non-conforming-utils';
+import { getWasteRowsWithGeneratedCaps, MermasDesperdiciosReporte } from '@/components/planner/MermasDesperdiciosReporte';
 
 type WasteSectionKey = 'mermas' | 'desperdicios' | 'rechazos' | 'devoluciones';
 type WasteDataGroup = 'mermasDesperdicios' | 'rechazosDevoluciones';
+type WasteSummarySubSection =
+  | 'resumen-semanal-mermas'
+  | 'resumen-semanal-desperdicios'
+  | 'resumen-mensual-mermas'
+  | 'resumen-mensual-desperdicios';
 type WasteTableRow = {
   id: string;
   line: string;
@@ -204,6 +210,17 @@ const WASTE_PRODUCTS_BY_LINE: Record<string, Record<string, WasteProduct>> = {
 const findWasteFlavor = (line: string, code: string): string => (
   Object.entries(WASTE_PRODUCTS_BY_LINE[line] || {}).find(([, product]) => product.code === code)?.[0] || ''
 );
+
+const prepareWasteSummaryRows = (rowsByDate: Record<string, WasteTableRow[]>) => (
+  Object.fromEntries(Object.entries(rowsByDate).map(([date, rows]) => [
+    date,
+    rows.map((row) => ({
+      ...row,
+      flavor: row.flavor || findWasteFlavor(row.line, row.code) || row.material,
+    })),
+  ]))
+);
+
 type ProductionTableValues = {
   tapas: Record<string, { totalCajas: string; total: string }>;
   separadores: Record<string, string>;
@@ -398,56 +415,9 @@ const wasteProductForOperation = (
   return undefined;
 };
 
-const getWasteRowsWithGeneratedCaps = (rows: WasteTableRow[]): WasteTableRow[] => {
-  const sourceRows = rows
-    .filter((row) => !row.generated)
-    .map((row) => row.kind
-      ? { ...row, unit: row.kind === 'termo' ? 'Kg' : 'UND' }
-      : row);
-  const transparentPreforms = sourceRows.filter((row) =>
-    row.kind === 'preformas' &&
-    row.flavor === 'transparente' &&
-    ['Linea 1', 'Linea 2', 'Linea 3', 'Linea 4', 'Linea 6', 'Linea 7'].includes(row.line)
-  );
-  const greenPreforms = sourceRows.filter((row) =>
-    row.kind === 'preformas' && row.flavor === 'verde'
-  );
-  const lineFivePreforms = sourceRows.filter((row) =>
-    row.kind === 'preformas' && row.line === 'Linea 5' && row.flavor === 'transparente'
-  );
-  const generatedRows: WasteTableRow[] = [];
-
-  if (transparentPreforms.length > 0) {
-    const quantity = Math.round(transparentPreforms.reduce((sum, row) => sum + parseProductionNumber(row.quantity), 0) * 0.09);
-    generatedRows.push({
-      id: 'generated-blue-cap-row',
-      line: 'T',
-      flavor: '',
-      code: 'EMP_0105',
-      material: 'TAPA AZUL REFRESCOS CON IMPRESIÓN-1881',
-      quantity: String(quantity),
-      unit: 'UND',
-      generated: true,
-    });
-  }
-
-  if (greenPreforms.length > 0 || lineFivePreforms.length > 0) {
-    const preformTotal = [...greenPreforms, ...lineFivePreforms]
-      .reduce((sum, row) => sum + parseProductionNumber(row.quantity), 0);
-    generatedRows.push({
-      id: 'generated-green-cap-row',
-      line: 'T',
-      flavor: '',
-      code: 'EMP_0095',
-      material: 'TAPA VERDE REFRESCOS CON IMPRESION-1881',
-      quantity: String(Math.round(preformTotal * 0.09)),
-      unit: 'UND',
-      generated: true,
-    });
-  }
-
-  return [...sourceRows, ...generatedRows];
-};
+const getWasteRowsWithGeneratedCapsForProduction = (rows: WasteTableRow[]): WasteTableRow[] => (
+  getWasteRowsWithGeneratedCaps(rows).map((row) => ({ ...row, quantity: String(row.quantity) }))
+);
 
 const hasWasteTableContent = (rows: WasteTableRow[]): boolean => rows.some((row) => (
   row.line.trim() !== '' ||
@@ -496,6 +466,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   const [activeNonConformingSummary, setActiveNonConformingSummary] = useState<NonConformingSummary>('por-lineas');
   const [nonConformingDailyDate, setNonConformingDailyDate] = useState<Date>(() => addDays(new Date(), -1));
   const [nonConformingWeeklyDate, setNonConformingWeeklyDate] = useState<Date>(() => new Date());
+  const [nonConformingWeeklyMonthDate, setNonConformingWeeklyMonthDate] = useState<Date>(() => new Date());
   const [nonConformingMonthlyDate, setNonConformingMonthlyDate] = useState<Date>(() => new Date());
   const [nonConformingRowsByDate, setNonConformingRowsByDate] = useState<NonConformingRowsByDate>({});
   const [nonConformingDraftRows, setNonConformingDraftRows] = useState<NonConformingRow[]>([]);
@@ -503,7 +474,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   const [nonConformingSaveStatus, setNonConformingSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [nonConformingCopyStatus, setNonConformingCopyStatus] = useState<'idle' | 'copied' | 'error'>('idle');
   const nonConformingLocalWriteVersion = useRef(0);
-  const [activeMermasSubSection, setActiveMermasSubSection] = useState<'mermas' | 'desperdicios' | 'resumen-semanal' | 'resumen-mensual' | 'rechazos' | 'devoluciones'>('mermas');
+  const [activeMermasSubSection, setActiveMermasSubSection] = useState<'mermas' | 'desperdicios' | WasteSummarySubSection | 'resumen-mensual' | 'rechazos' | 'devoluciones'>('mermas');
   const [mermasFecha, setMermasFecha] = useState<Date>(() => addDays(new Date(), -1));
   const [mermasSemanalFecha, setMermasSemanalFecha] = useState<Date>(() => new Date());
   const [mermasMensualMes, setMermasMensualMes] = useState<Date>(() => new Date());
@@ -572,7 +543,9 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
       activeNonConformingSummary,
       nonConformingWeekStart,
       nonConformingWeekEnd,
-      format(nonConformingMonthStart, 'yyyy-MM'),
+      activeNonConformingPeriod === 'semanal'
+        ? format(nonConformingWeeklyMonthDate, 'yyyy-MM')
+        : format(nonConformingMonthStart, 'yyyy-MM'),
     ),
     [
       nonConformingRowsByDate,
@@ -580,6 +553,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
       activeNonConformingSummary,
       nonConformingWeekStart,
       nonConformingWeekEnd,
+      nonConformingWeeklyMonthDate,
       nonConformingMonthStart,
     ],
   );
@@ -1094,7 +1068,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   const exportWasteTicketsPdf = async (section: WasteSectionKey) => {
     const savedRows = wasteTablesBySection[section][wasteDateKey];
     if (!savedRows?.length) return;
-    const rows = section === 'desperdicios' ? getWasteRowsWithGeneratedCaps(savedRows) : savedRows;
+    const rows = section === 'desperdicios' ? getWasteRowsWithGeneratedCapsForProduction(savedRows) : savedRows;
     setWastePdfStatus('generating');
     try {
       const logoResponse = await fetch('/Logo-MDS.png');
@@ -2275,7 +2249,11 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
               onClick={() => {
                 setActiveProduccionSection(id);
                 if (id === 'rechazos-devoluciones') setActiveMermasSubSection('rechazos');
-                if (id === 'mermas-desperdicios' && (activeMermasSubSection === 'rechazos' || activeMermasSubSection === 'devoluciones')) {
+                if (id === 'mermas-desperdicios' && (
+                  activeMermasSubSection === 'rechazos' ||
+                  activeMermasSubSection === 'devoluciones' ||
+                  activeMermasSubSection === 'resumen-mensual'
+                )) {
                   setActiveMermasSubSection('mermas');
                 }
               }}
@@ -2308,8 +2286,8 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
           </button>
         )}
       </div>
-      <div className="flex items-center gap-2 mb-2 no-print">
-        <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+      <div className="mb-2 overflow-x-auto no-print">
+        <div className="flex w-max min-w-full items-center gap-1 rounded-full border border-slate-200 bg-slate-100/50 p-1">
           {(weeklyOnly ? ['semanal'] : ['diarios', 'semanal', 'mensual']).map((subTab) => (
             <button
               key={subTab}
@@ -2779,7 +2757,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                     type="button"
                     onClick={() => setActiveRecepcionesSubSection(id)}
                     className={cn(
-                      'inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none',
+                      'inline-flex shrink-0 items-center justify-center gap-1.5 h-9 px-2 sm:px-4 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none',
                       activeRecepcionesSubSection === id ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
                     )}
                   >
@@ -2881,8 +2859,10 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                   ? [
                       { id: 'mermas' as const, label: 'Mermas', icon: Recycle },
                       { id: 'desperdicios' as const, label: 'Desperdicios', icon: Package },
-                      { id: 'resumen-semanal' as const, label: 'Resumen semanal', icon: CalendarDays },
-                      { id: 'resumen-mensual' as const, label: 'Resumen mensual', icon: CalendarRange },
+                      { id: 'resumen-semanal-mermas' as const, label: 'R Semana Mermas', icon: CalendarDays },
+                      { id: 'resumen-semanal-desperdicios' as const, label: 'R Semana Desperdicios', icon: CalendarDays },
+                      { id: 'resumen-mensual-mermas' as const, label: 'R Mensual Mermas', icon: CalendarRange },
+                      { id: 'resumen-mensual-desperdicios' as const, label: 'R Mensual Desperdicios', icon: CalendarRange },
                     ]
                   : [
                       { id: 'rechazos' as const, label: 'Rechazos', icon: Recycle },
@@ -2919,28 +2899,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                 />
               </div>
             )}
-            {activeMermasSubSection === 'resumen-semanal' && (
-              <div className="flex items-center gap-2 mb-2 no-print">
-                <input
-                  type="week"
-                  value={`${getISOWeekYear(mermasSemanalFecha)}-W${String(getISOWeek(mermasSemanalFecha)).padStart(2, '0')}`}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    if (!value) return;
-                    const [year, weekStr] = value.split('-W');
-                    const yearNum = Number(year);
-                    const weekNum = Number(weekStr);
-                    const date = startOfISOWeek(setISOWeek(new Date(yearNum, 0, 4), weekNum));
-                    setMermasSemanalFecha(date);
-                  }}
-                  className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
-                />
-                <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest">
-                  Semana {getISOWeek(mermasSemanalFecha)}
-                </span>
-              </div>
-            )}
-            {activeMermasSubSection === 'resumen-mensual' && (
+            {activeMermasSubSection === 'resumen-mensual' && activeProduccionSection === 'rechazos-devoluciones' && (
               <div className="flex items-center gap-2 mb-2 no-print">
                 <select
                   value={mermasMensualMes.getMonth().toString()}
@@ -2984,7 +2943,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                   const isMermas = section === 'mermas';
                   const isDesperdicios = section === 'desperdicios';
                   const sourceRows = isWasteEditing ? wasteDraftRows : activeWasteRows;
-                  const rows = isDesperdicios ? getWasteRowsWithGeneratedCaps(sourceRows) : sourceRows;
+                  const rows = isDesperdicios ? getWasteRowsWithGeneratedCapsForProduction(sourceRows) : sourceRows;
                   const hasPersistedTable = Object.prototype.hasOwnProperty.call(wasteTablesBySection[section], wasteDateKey);
                   const hasSavedTable = hasWasteTableContent(activeWasteRows);
                   const canResetEmptyTable = canEditWasteTables &&
@@ -3304,6 +3263,26 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                 })()}
               </div>
             )}
+            {(
+              activeMermasSubSection === 'resumen-semanal-mermas' ||
+              activeMermasSubSection === 'resumen-semanal-desperdicios' ||
+              activeMermasSubSection === 'resumen-mensual-mermas' ||
+              activeMermasSubSection === 'resumen-mensual-desperdicios'
+            ) && (
+              <MermasDesperdiciosReporte
+                mode={activeMermasSubSection === 'resumen-semanal-mermas' || activeMermasSubSection === 'resumen-mensual-mermas' ? 'mermas' : 'desperdicios'}
+                period={activeMermasSubSection === 'resumen-semanal-mermas' || activeMermasSubSection === 'resumen-semanal-desperdicios' ? 'semanal' : 'mensual'}
+                weeklyDate={mermasSemanalFecha}
+                monthlyDate={mermasMensualMes}
+                rowsByDate={prepareWasteSummaryRows(wasteTablesBySection[
+                  activeMermasSubSection === 'resumen-semanal-mermas' || activeMermasSubSection === 'resumen-mensual-mermas'
+                    ? 'mermas'
+                    : 'desperdicios'
+                ])}
+                onWeeklyDateChange={setMermasSemanalFecha}
+                onMonthlyDateChange={setMermasMensualMes}
+              />
+            )}
             {activeMermasSubSection === 'resumen-mensual' && activeProduccionSection === 'rechazos-devoluciones' && (
               <div className="flex flex-1 min-h-0 flex-col gap-2 overflow-auto">
                 <div className="flex items-center gap-2 no-print">
@@ -3372,6 +3351,10 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
             )}
             {activeMermasSubSection !== 'mermas' && activeMermasSubSection !== 'desperdicios' &&
               activeMermasSubSection !== 'rechazos' && activeMermasSubSection !== 'devoluciones' &&
+              activeMermasSubSection !== 'resumen-semanal-mermas' &&
+              activeMermasSubSection !== 'resumen-semanal-desperdicios' &&
+              activeMermasSubSection !== 'resumen-mensual-mermas' &&
+              activeMermasSubSection !== 'resumen-mensual-desperdicios' &&
               !(activeMermasSubSection === 'resumen-mensual' && activeProduccionSection === 'rechazos-devoluciones') && (
               <div className="flex-1 min-h-0 bg-white rounded-[2.5rem]" />
             )}
@@ -3619,6 +3602,17 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                     {activeNonConformingPeriod === 'semanal' ? (
                                       <>
                                         <input
+                                          type="month"
+                                          value={format(nonConformingWeeklyMonthDate, 'yyyy-MM')}
+                                          onChange={(event) => {
+                                            if (!event.target.value) return;
+                                            const [year, month] = event.target.value.split('-').map(Number);
+                                            setNonConformingWeeklyMonthDate(new Date(year, month - 1, 1));
+                                          }}
+                                          className="h-9 rounded-full border-slate-200 bg-white px-3 text-[10px] font-bold uppercase tracking-widest"
+                                          aria-label="Filtrar resumen semanal por mes"
+                                        />
+                                        <input
                                           type="week"
                                           value={`${getISOWeekYear(nonConformingWeeklyDate)}-W${String(getISOWeek(nonConformingWeeklyDate)).padStart(2, '0')}`}
                                           onChange={(event) => {
@@ -3672,7 +3666,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                       </h3>
                                       <p className="mt-1 text-xs text-slate-500">
                                         {activeNonConformingPeriod === 'semanal'
-                                          ? `Semana ${getISOWeek(nonConformingWeeklyDate)} · ${format(nonConformingWeekStart, 'dd/MM/yyyy')} al ${format(nonConformingWeekEnd, 'dd/MM/yyyy')}`
+                                          ? `Semana ${getISOWeek(nonConformingWeeklyDate)} · ${format(nonConformingWeekStart, 'dd/MM/yyyy')} al ${format(nonConformingWeekEnd, 'dd/MM/yyyy')} · Mes: ${format(nonConformingWeeklyMonthDate, 'MMMM yyyy', { locale: es })}`
                                           : format(nonConformingMonthStart, 'MMMM yyyy', { locale: es })}
                                       </p>
                                     </div>

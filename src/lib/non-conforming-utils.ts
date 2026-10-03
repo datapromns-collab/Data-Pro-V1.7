@@ -54,7 +54,7 @@ export function summarizeNonConformingRows(
   const selectedRows = Object.entries(rowsByDate).flatMap(([date, rows]) => {
     const recordDate = new Date(`${date}T12:00:00`);
     const isInPeriod = period === 'semanal'
-      ? recordDate >= startDate && recordDate <= endDate
+      ? recordDate >= startDate && recordDate <= endDate && (!monthKey || date.startsWith(monthKey))
       : date.startsWith(monthKey);
     return isInPeriod ? rows : [];
   });

@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-28T00:00:00.000",
+      "weekStartDate": "2026-10-05T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -12655,6 +12655,41 @@
           "aditivosCantidad": {},
           "solidosCantidad": {},
           "quimicosInsumosCantidad": {}
+        },
+        "2026-10-03": {
+          "tapas": {
+            "EMP_0095-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0095-Importada": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaEW": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaTipo2": {
+              "totalCajas": "",
+              "total": ""
+            }
+          },
+          "separadores": {},
+          "preformas": {},
+          "plasticos": {},
+          "adhesivoCantidad": "",
+          "etiquetasCantidad": {},
+          "azucarCantidad": {},
+          "concentradosCantidad": {},
+          "concentradosJustyCantidad": {},
+          "aditivosCantidad": {},
+          "solidosCantidad": {},
+          "quimicosInsumosCantidad": {}
         }
       },
       "semanal": {
@@ -14874,6 +14909,46 @@
               "nonConformity": "Problemas de Soplado",
               "quantity": "16"
             }
+          ],
+          "2026-10-01": [
+            {
+              "id": "89d707b2-7efc-487a-a0b6-314ffefb12b7",
+              "line": "Linea 2",
+              "flavor": "GLUP UVA",
+              "code": "PRODT-0008",
+              "description": "GLUP! UVA  CAJA X 6BOT X 2.0LTS",
+              "nonConformity": "Bajo Brix",
+              "quantity": "1180"
+            }
+          ],
+          "2026-10-02": [
+            {
+              "id": "bfe3e5ae-c9c3-4e88-ad11-bee2a85c00e1",
+              "line": "Linea 2",
+              "flavor": "GLUP UVA",
+              "code": "PRODT-0008",
+              "description": "GLUP! UVA  CAJA X 6BOT X 2.0LTS",
+              "nonConformity": "Bajo Brix",
+              "quantity": "80"
+            },
+            {
+              "id": "fd18b0ed-d3d3-478c-b62f-e367c12d1f60",
+              "line": "Linea 3",
+              "flavor": "GLUP COLA",
+              "code": "PRODT-0007",
+              "description": "GLUP! COLA NEGRA  CAJA X 6BOT X 2.0LTS",
+              "nonConformity": "Exposicion de Taca",
+              "quantity": "205"
+            },
+            {
+              "id": "3538aa07-a28e-47d2-9424-78ca80888a89",
+              "line": "Linea 4",
+              "flavor": "GLUP COLA",
+              "code": "PRODT-0007",
+              "description": "GLUP! COLA NEGRA  CAJA X 6BOT X 2.0LTS",
+              "nonConformity": "Exposicion de Taca",
+              "quantity": "216"
+            }
           ]
         }
       }
@@ -15530,6 +15605,9 @@
           "planning.daily": "read",
           "planning.preparation": "read",
           "planning.requirement": "read"
+        },
+        "procj.mds": {
+          "planning.requirement": "read"
         }
       }
     },
@@ -15733,7 +15811,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-03T12:38:31.758Z"
+    "updatedAt": "2026-10-03T15:57:57.843Z"
   },
   "ordenesSap": [
     {
@@ -25866,6 +25944,17 @@
           "cajas3": 480,
           "ticket4": "",
           "cajas4": 13360
+        },
+        {
+          "fechaInicio": "2026-10-03",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -25958,7 +26047,7 @@
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 1
+          "cajas4": 1718
         }
       ]
     },
@@ -25990,6 +26079,17 @@
           "cajas3": 480,
           "ticket4": "",
           "cajas4": 9760
+        },
+        {
+          "fechaInicio": "2026-10-03",
+          "ticket1": "16133",
+          "cajas1": 4080,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -26014,6 +26114,17 @@
         {
           "fechaInicio": "2026-10-02",
           "ticket1": "17998",
+          "cajas1": 1360,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        },
+        {
+          "fechaInicio": "2026-10-03",
+          "ticket1": "18000",
           "cajas1": 1360,
           "ticket2": "",
           "cajas2": 0,
@@ -158816,6 +158927,12 @@
           "jarabeReal": 520000,
           "ubb": 520,
           "producto": "643"
+        },
+        "auto-5-1790888057275": {
+          "cajasPlanificadas": 65945,
+          "producto": "562",
+          "jarabeReal": 340000,
+          "ubb": 340
         }
       },
       "linea-6": {
@@ -158967,6 +159084,18 @@
           "jarabeReal": 38073,
           "ubb": 13.23,
           "producto": "488"
+        },
+        "auto-6-1790887890172": {
+          "cajasPlanificadas": 16100,
+          "producto": "450",
+          "jarabeReal": 16630,
+          "ubb": 8
+        },
+        "auto-6-1790939693488": {
+          "cajasPlanificadas": 17250,
+          "producto": "375",
+          "jarabeReal": 6158,
+          "ubb": 2.14
         }
       },
       "linea-7": {
@@ -159201,6 +159330,11 @@
           "jarabeReal": 34135,
           "ubb": 22,
           "producto": "57"
+        },
+        "auto-7-1790888068568": {
+          "cajasPlanificadas": 107500,
+          "producto": "421",
+          "jarabeReal": 68
         }
       }
     },

@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState, type Dispatch, type SetStateAction } from 'react';
-import { addDays, eachDayOfInterval, endOfMonth, format, getISOWeek, startOfDay, startOfMonth, startOfWeek } from 'date-fns';
+import { addDays, eachDayOfInterval, endOfMonth, endOfWeek, format, getISOWeek, startOfDay, startOfMonth, startOfWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Box, Calendar as CalendarIcon, ClipboardList, Droplets, FlaskConical, TrendingUp } from 'lucide-react';
+import { Box, Calendar as CalendarIcon, ClipboardList, Droplets, FlaskConical, Package, Recycle, TrendingUp } from 'lucide-react';
 import {
   Bar,
   CartesianGrid,
@@ -18,6 +18,8 @@ import {
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+import { loadProductionWasteRows } from '@/lib/json-db';
+import { MermasDesperdiciosReporte, type WasteReportMode, type WasteReportPeriod, type WasteReportRow } from '@/components/planner/MermasDesperdiciosReporte';
 import { OrdenesReporteResumenMensual } from '@/components/planner/OrdenesReporteResumenMensual';
 import { JarabesResumenReporte } from '@/components/planner/JarabesModule';
 import { ProductoNoConformeReporte } from '@/components/planner/ProductoNoConformeReporte';
@@ -26,6 +28,113 @@ type Co2DailyRow = { cajas2L: string; cajas1L: string; cajas04L: string };
 type AguaDailyRow = { cajas2L: string; cajas1L: string; cajas1_5L: string; cajas04L: string };
 type StateSetter<T> = Dispatch<SetStateAction<T>>;
 type ReportesResumenSection = 'r-semanal' | 'r-mensual';
+
+interface WasteSummaryReportProps {
+  mode: WasteReportMode;
+  reportMonthDate: Date;
+  onMonthChange: (date: Date) => void;
+}
+
+const normalizeWasteRow = (row: Record<string, unknown>, date: string, index: number): WasteReportRow | null => {
+  const line = typeof row.line === 'string' ? row.line : '';
+  const flavor = typeof row.flavor === 'string' ? row.flavor : '';
+  const code = typeof row.code === 'string' ? row.code : '';
+  const material = typeof row.material === 'string' ? row.material : '';
+  const kind = row.kind === 'preformas' || row.kind === 'termo' ? row.kind : undefined;
+  const unit = typeof row.unit === 'string' && row.unit ? row.unit : kind === 'termo' ? 'Kg' : 'UND';
+  const quantity = typeof row.quantity === 'string' || typeof row.quantity === 'number' ? row.quantity : '';
+  if (!(line || flavor || code || material || quantity !== '')) return null;
+  return {
+    id: typeof row.id === 'string' && row.id ? row.id : date + '-' + index,
+    line,
+    flavor,
+    code,
+    material,
+    quantity,
+    unit,
+    kind,
+    preformSize: typeof row.preformSize === 'string' ? row.preformSize : undefined,
+    generated: row.generated === true,
+  };
+};
+
+const getWasteDatesForRange = (selectedWeek: Date, monthDate: Date, period: WasteReportPeriod) => {
+  const start = period === 'semanal' ? startOfWeek(selectedWeek, { weekStartsOn: 1 }) : startOfMonth(monthDate);
+  const end = period === 'semanal' ? endOfWeek(start, { weekStartsOn: 1 }) : endOfMonth(monthDate);
+  return eachDayOfInterval({ start, end });
+};
+
+const loadWasteRowsForRange = async (
+  mode: WasteReportMode,
+  selectedWeek: Date,
+  monthDate: Date,
+  period: WasteReportPeriod,
+): Promise<Record<string, WasteReportRow[]>> => {
+  const dates = getWasteDatesForRange(selectedWeek, monthDate, period);
+  const results = await Promise.all(dates.map(async (day) => {
+    const dateKey = format(day, 'yyyy-MM-dd');
+    const response = await loadProductionWasteRows(mode, dateKey);
+    if (!response) throw new Error('Unable to load production ' + mode + ' for ' + dateKey);
+    const rows = Array.isArray(response.rows) ? response.rows : [];
+    return [dateKey, rows
+      .filter((row): row is Record<string, unknown> => !!row && typeof row === 'object' && !Array.isArray(row))
+      .map((row, index) => normalizeWasteRow(row, dateKey, index))
+      .filter((row): row is WasteReportRow => Boolean(row))] as const;
+  }));
+  return Object.fromEntries(results);
+};
+
+function WasteSummaryReport({ mode, reportMonthDate, onMonthChange }: WasteSummaryReportProps) {
+  const [period, setPeriod] = useState<WasteReportPeriod>('semanal');
+  const [selectedWeek, setSelectedWeek] = useState(() => startOfWeek(reportMonthDate, { weekStartsOn: 1 }));
+  const [rowsByDate, setRowsByDate] = useState<Record<string, WasteReportRow[]>>({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setSelectedWeek((currentWeek) => {
+      const nextWeek = startOfWeek(reportMonthDate, { weekStartsOn: 1 });
+      return format(currentWeek, 'yyyy-MM-dd') === format(nextWeek, 'yyyy-MM-dd') ? currentWeek : nextWeek;
+    });
+  }, [reportMonthDate]);
+
+  useEffect(() => {
+    let ignore = false;
+    const loadRows = async () => {
+      setIsLoading(true);
+      setLoadError(null);
+      try {
+        const nextRows = await loadWasteRowsForRange(mode, selectedWeek, reportMonthDate, period);
+        if (!ignore) setRowsByDate(nextRows);
+      } catch (error) {
+        console.error('[REPORTES] Failed to load waste rows', error);
+        if (!ignore) {
+          setLoadError('No se pudieron cargar los datos de producci\u00f3n.');
+          setRowsByDate({});
+        }
+      } finally {
+        if (!ignore) setIsLoading(false);
+      }
+    };
+    loadRows();
+    return () => { ignore = true; };
+  }, [mode, period, reportMonthDate, selectedWeek]);
+
+  return (
+    <MermasDesperdiciosReporte
+      mode={mode}
+      period={period}
+      weeklyDate={selectedWeek}
+      monthlyDate={reportMonthDate}
+      rowsByDate={rowsByDate}
+      onWeeklyDateChange={setSelectedWeek}
+      onMonthlyDateChange={onMonthChange}
+      onPeriodChange={setPeriod}
+      loading={isLoading}
+      error={loadError}
+    />
+  );
+}
 
 interface ReportesResumenMensualProps {
   tipo: 'co2' | 'agua';
@@ -479,6 +588,8 @@ export function ReportesModule({
     }
   };
 
+
+
   return (
 <div className="flex flex-col h-full">
                          {!mttoCo2IsLoaded && (
@@ -492,14 +603,16 @@ export function ReportesModule({
                              {mttoCo2SyncError && <p>{mttoCo2SyncError}</p>}
                            </div>
                          )}
-                         <div className="flex flex-wrap items-center gap-2 mb-2 no-print">
-                            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                              {(['co2', 'agua', 'ordenes', 'rendimiento-azucar', 'producto-no-conforme'] as const).map((tab) => (
+                         <div className="mb-2 flex flex-col gap-2 no-print">
+                            <nav aria-label="Secciones principales de reportes" className="w-full min-w-0">
+                              <div className="grid w-full grid-cols-2 gap-1 rounded-2xl border border-slate-200 bg-slate-100/50 p-1 sm:grid-cols-3 lg:grid-cols-4">
+                              {(['co2', 'agua', 'ordenes', 'rendimiento-azucar', 'producto-no-conforme', 'mermas-botella-envasada', 'mermas-materiales-lineas'] as const).map((tab) => (
                                 <button
                                   key={tab}
                                   onClick={() => setInsumosSubTab(tab)}
+                                  aria-label={tab === 'co2' ? 'CO2' : tab === 'agua' ? 'Agua' : tab === 'ordenes' ? 'Órdenes' : tab === 'rendimiento-azucar' ? 'Rendimiento de azúcar' : tab === 'producto-no-conforme' ? 'Producto no conforme' : tab === 'mermas-botella-envasada' ? 'Mermas de Botella envasada' : 'Mermas de materiales en Lineas'}
                                   className={cn(
-                                    "pointer-events-auto inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                    "pointer-events-auto inline-flex min-h-9 min-w-0 items-center justify-center gap-1.5 rounded-full border-0 px-2 py-1 text-center text-[9px] font-bold uppercase leading-tight tracking-wide outline-none transition-none active:scale-95 select-none focus:ring-0 sm:px-3 sm:text-[10px] sm:tracking-widest",
                                     insumosSubTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                   )}
                                 >
@@ -508,30 +621,39 @@ export function ReportesModule({
                                   {tab === 'ordenes' && <ClipboardList className="h-3.5 w-3.5" />}
                                   {tab === 'rendimiento-azucar' && <TrendingUp className="h-3.5 w-3.5" />}
                                   {tab === 'producto-no-conforme' && <Box className="h-3.5 w-3.5" />}
-                                  <span className="hidden sm:inline">{tab === 'co2' ? 'CO2' : tab === 'agua' ? 'Agua' : tab === 'ordenes' ? 'Órdenes' : tab === 'rendimiento-azucar' ? 'Rendimiento de azúcar' : 'Producto no conforme'}</span>
+                                  {tab === 'mermas-botella-envasada' && <Recycle className="h-3.5 w-3.5" />}
+                                  {tab === 'mermas-materiales-lineas' && <Package className="h-3.5 w-3.5" />}
+                                  <span className="min-w-0 whitespace-normal">{tab === 'co2' ? 'CO2' : tab === 'agua' ? 'Agua' : tab === 'ordenes' ? 'Órdenes' : tab === 'rendimiento-azucar' ? 'Rendimiento de azúcar' : tab === 'producto-no-conforme' ? 'Producto no conforme' : tab === 'mermas-botella-envasada' ? 'Mermas de Botella envasada' : 'Mermas de materiales en Lineas'}</span>
                                 </button>
                               ))}
-                            </div>
-                           <input
-                             type="month"
-                             aria-label="Mes principal de reportes"
-                             value={format(reportMonthDate, 'yyyy-MM')}
-                             onChange={(event) => selectReportMonth(event.target.value)}
-                             className="pointer-events-auto h-9 rounded-full border-0 bg-white px-3 text-[10px] font-bold text-slate-700 shadow-sm outline-none"
-                           />
-                           {insumosSubTab !== 'ordenes' && insumosSubTab !== 'rendimiento-azucar' && insumosSubTab !== 'producto-no-conforme' && <div className="ml-auto">
-                             <Popover>
-                               <PopoverTrigger asChild>
-                                 <button className="pointer-events-auto inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
-                                   <CalendarIcon className="h-3.5 w-3.5 text-primary" />
-                                   {format(insumosFecha || new Date(), "dd 'de' MMM, yyyy", { locale: es })}
-                                 </button>
-                               </PopoverTrigger>
-                               <PopoverContent className="w-auto p-0" align="end">
-                                  <Calendar mode="single" selected={insumosFecha} onSelect={selectReportDate} locale={es} />
-                               </PopoverContent>
-                             </Popover>
-                           </div>}
+                              </div>
+                            </nav>
+                           <div className="flex w-full min-w-0 items-center justify-end gap-2">
+                             {insumosSubTab !== 'mermas-botella-envasada' && insumosSubTab !== 'mermas-materiales-lineas' && (
+                               <input
+                                 type="month"
+                                 aria-label="Mes principal de reportes"
+                                 value={format(reportMonthDate, 'yyyy-MM')}
+                                 onChange={(event) => selectReportMonth(event.target.value)}
+                                 className="pointer-events-auto h-9 min-w-0 flex-1 rounded-full border-0 bg-white px-3 text-[10px] font-bold text-slate-700 shadow-sm outline-none sm:flex-none"
+                               />
+                             )}
+                             {insumosSubTab !== 'ordenes' && insumosSubTab !== 'rendimiento-azucar' && insumosSubTab !== 'producto-no-conforme' && insumosSubTab !== 'mermas-botella-envasada' && insumosSubTab !== 'mermas-materiales-lineas' && (
+                               <div className="min-w-0 flex-1 sm:flex-none">
+                                 <Popover>
+                                   <PopoverTrigger asChild>
+                                     <button className="pointer-events-auto inline-flex h-9 w-full flex-shrink-0 items-center justify-center gap-2 rounded-full border-0 bg-white pl-3 pr-4 text-[10px] font-bold whitespace-nowrap text-slate-700 shadow-sm outline-none transition-none select-none sm:w-auto">
+                                       <CalendarIcon className="h-3.5 w-3.5 text-primary" />
+                                       {format(insumosFecha || new Date(), "dd 'de' MMM, yyyy", { locale: es })}
+                                     </button>
+                                   </PopoverTrigger>
+                                   <PopoverContent className="w-auto p-0" align="end">
+                                      <Calendar mode="single" selected={insumosFecha} onSelect={selectReportDate} locale={es} />
+                                   </PopoverContent>
+                                 </Popover>
+                               </div>
+                             )}
+                           </div>
                          </div>
                          {insumosSubTab === 'co2' && (
                            <>
@@ -975,6 +1097,20 @@ export function ReportesModule({
                            )}
                            {insumosSubTab === 'producto-no-conforme' && (
                              <ProductoNoConformeReporte reportMonthDate={reportMonthDate} />
+                           )}
+                           {insumosSubTab === 'mermas-botella-envasada' && (
+                             <WasteSummaryReport
+                               mode="mermas"
+                               reportMonthDate={reportMonthDate}
+                               onMonthChange={(date) => selectReportMonth(format(date, 'yyyy-MM'))}
+                             />
+                           )}
+                           {insumosSubTab === 'mermas-materiales-lineas' && (
+                             <WasteSummaryReport
+                               mode="desperdicios"
+                               reportMonthDate={reportMonthDate}
+                               onMonthChange={(date) => selectReportMonth(format(date, 'yyyy-MM'))}
+                             />
                            )}
                            {insumosSubTab === 'co2' &&
                              (insumosPeriodoSubTab === 'diario' || insumosPeriodoSubTab === 'resumen-tablas') && (

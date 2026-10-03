@@ -230,7 +230,7 @@ export function RequirementSection({ onPrint, onPrintCalculation, tasks, weekSta
     return 0;
   };
 
-  const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
+  const tabsTriggerClass = "pointer-events-auto inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
 
   const renderTable = (data: any[], unit: string = 'UND') => (
     <div className="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
