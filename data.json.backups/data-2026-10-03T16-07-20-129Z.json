@@ -15811,7 +15811,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-03T15:57:57.843Z"
+    "updatedAt": "2026-10-03T16:07:19.634Z"
   },
   "ordenesSap": [
     {
@@ -159095,7 +159095,7 @@
           "cajasPlanificadas": 17250,
           "producto": "375",
           "jarabeReal": 6158,
-          "ubb": 2.1
+          "ubb": 2.14
         }
       },
       "linea-7": {
@@ -159333,7 +159333,9 @@
         },
         "auto-7-1790888068568": {
           "cajasPlanificadas": 107500,
-          "producto": "421"
+          "producto": "421",
+          "jarabeReal": 68939,
+          "ubb": 23.96
         }
       }
     },
