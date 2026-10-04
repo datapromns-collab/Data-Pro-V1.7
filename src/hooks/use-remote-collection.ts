@@ -301,6 +301,26 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
     [persistLocal, enqueue, flushQueue, namespace]
   );
 
+  const savePatch = useCallback(async (patch: Partial<T>) => {
+    if (sendingRef.current) {
+      throw new Error(`Ya hay una sincronización activa para "${namespace}". Espera a que termine y vuelve a intentar.`);
+    }
+    if (queueRef.current.length > 0) {
+      await flushQueue();
+      if (queueRef.current.length > 0) {
+        throw new Error(`Hay cambios anteriores de "${namespace}" que todavía no se han guardado en la base compartida.`);
+      }
+    }
+
+    await sendToServer(patch);
+    setData((previous) => {
+      const next = deepMergeValues(previous, patch) as T;
+      persistLocal(next);
+      return next;
+    });
+    setSyncError(null);
+  }, [flushQueue, namespace, persistLocal, sendToServer]);
+
   const removeItem = useCallback((id: string) => {
     deletedRef.current.add(String(id));
     try {
@@ -503,5 +523,5 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
     load();
   }, [queryParamsKey, load]);
 
-  return { data, setData: setDataSynced, patchData, removeItem, removeKey, isLoaded, isLoading, loadError, syncError };
+  return { data, setData: setDataSynced, patchData, savePatch, removeItem, removeKey, isLoaded, isLoading, loadError, syncError };
 }

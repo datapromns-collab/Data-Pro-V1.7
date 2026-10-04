@@ -3,7 +3,7 @@
 import { useEffect, useState, type Dispatch, type SetStateAction } from 'react';
 import { addDays, eachDayOfInterval, endOfMonth, endOfWeek, format, getISOWeek, startOfDay, startOfMonth, startOfWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Box, Calendar as CalendarIcon, ClipboardList, Droplets, FlaskConical, Package, Recycle, TrendingUp } from 'lucide-react';
+import { BarChart3, Box, Calendar as CalendarIcon, ClipboardList, Droplets, FlaskConical, Package, Recycle, TrendingUp } from 'lucide-react';
 import {
   Bar,
   CartesianGrid,
@@ -23,6 +23,7 @@ import { MermasDesperdiciosReporte, type WasteReportMode, type WasteReportPeriod
 import { OrdenesReporteResumenMensual } from '@/components/planner/OrdenesReporteResumenMensual';
 import { JarabesResumenReporte } from '@/components/planner/JarabesModule';
 import { ProductoNoConformeReporte } from '@/components/planner/ProductoNoConformeReporte';
+import { VentasModule } from '@/components/planner/VentasModule';
 
 type Co2DailyRow = { cajas2L: string; cajas1L: string; cajas04L: string };
 type AguaDailyRow = { cajas2L: string; cajas1L: string; cajas1_5L: string; cajas04L: string };
@@ -588,6 +589,16 @@ export function ReportesModule({
     }
   };
 
+  useEffect(() => {
+    if (insumosSubTab !== 'analisis-ventas') return;
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    setInsumosFecha(yesterday);
+    setReportMonthDate(startOfMonth(yesterday));
+    localStorage.setItem('selected-insumos-fecha', JSON.stringify(format(yesterday, 'yyyy-MM-dd')));
+    localStorage.setItem('reportes-selected-month', format(yesterday, 'yyyy-MM'));
+  }, [insumosSubTab, setInsumosFecha]);
+
 
 
   return (
@@ -606,11 +617,11 @@ export function ReportesModule({
                          <div className="mb-2 flex flex-col gap-2 no-print">
                             <nav aria-label="Secciones principales de reportes" className="w-full min-w-0">
                               <div className="grid w-full grid-cols-2 gap-1 rounded-2xl border border-slate-200 bg-slate-100/50 p-1 sm:grid-cols-3 lg:grid-cols-4">
-                              {(['co2', 'agua', 'ordenes', 'rendimiento-azucar', 'producto-no-conforme', 'mermas-botella-envasada', 'mermas-materiales-lineas'] as const).map((tab) => (
+                              {(['co2', 'agua', 'ordenes', 'rendimiento-azucar', 'producto-no-conforme', 'mermas-botella-envasada', 'mermas-materiales-lineas', 'analisis-ventas'] as const).map((tab) => (
                                 <button
                                   key={tab}
                                   onClick={() => setInsumosSubTab(tab)}
-                                  aria-label={tab === 'co2' ? 'CO2' : tab === 'agua' ? 'Agua' : tab === 'ordenes' ? 'Órdenes' : tab === 'rendimiento-azucar' ? 'Rendimiento de azúcar' : tab === 'producto-no-conforme' ? 'Producto no conforme' : tab === 'mermas-botella-envasada' ? 'Mermas de Botella envasada' : 'Mermas de materiales en Lineas'}
+                                  aria-label={tab === 'co2' ? 'CO2' : tab === 'agua' ? 'Agua' : tab === 'ordenes' ? 'Órdenes' : tab === 'rendimiento-azucar' ? 'Rendimiento de azúcar' : tab === 'producto-no-conforme' ? 'Producto no conforme' : tab === 'mermas-botella-envasada' ? 'Mermas de Botella envasada' : tab === 'mermas-materiales-lineas' ? 'Mermas de materiales en Lineas' : 'Análisis de ventas'}
                                   className={cn(
                                     "pointer-events-auto inline-flex min-h-9 min-w-0 items-center justify-center gap-1.5 rounded-full border-0 px-2 py-1 text-center text-[9px] font-bold uppercase leading-tight tracking-wide outline-none transition-none active:scale-95 select-none focus:ring-0 sm:px-3 sm:text-[10px] sm:tracking-widest",
                                     insumosSubTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
@@ -623,7 +634,8 @@ export function ReportesModule({
                                   {tab === 'producto-no-conforme' && <Box className="h-3.5 w-3.5" />}
                                   {tab === 'mermas-botella-envasada' && <Recycle className="h-3.5 w-3.5" />}
                                   {tab === 'mermas-materiales-lineas' && <Package className="h-3.5 w-3.5" />}
-                                  <span className="min-w-0 whitespace-normal">{tab === 'co2' ? 'CO2' : tab === 'agua' ? 'Agua' : tab === 'ordenes' ? 'Órdenes' : tab === 'rendimiento-azucar' ? 'Rendimiento de azúcar' : tab === 'producto-no-conforme' ? 'Producto no conforme' : tab === 'mermas-botella-envasada' ? 'Mermas de Botella envasada' : 'Mermas de materiales en Lineas'}</span>
+                                  {tab === 'analisis-ventas' && <BarChart3 className="h-3.5 w-3.5" />}
+                                  <span className="min-w-0 whitespace-normal">{tab === 'co2' ? 'CO2' : tab === 'agua' ? 'Agua' : tab === 'ordenes' ? 'Órdenes' : tab === 'rendimiento-azucar' ? 'Rendimiento de azúcar' : tab === 'producto-no-conforme' ? 'Producto no conforme' : tab === 'mermas-botella-envasada' ? 'Mermas de Botella envasada' : tab === 'mermas-materiales-lineas' ? 'Mermas de materiales en Lineas' : 'Análisis de ventas'}</span>
                                 </button>
                               ))}
                               </div>
@@ -638,7 +650,7 @@ export function ReportesModule({
                                  className="pointer-events-auto h-9 min-w-0 flex-1 rounded-full border-0 bg-white px-3 text-[10px] font-bold text-slate-700 shadow-sm outline-none sm:flex-none"
                                />
                              )}
-                             {insumosSubTab !== 'ordenes' && insumosSubTab !== 'rendimiento-azucar' && insumosSubTab !== 'producto-no-conforme' && insumosSubTab !== 'mermas-botella-envasada' && insumosSubTab !== 'mermas-materiales-lineas' && (
+                             {insumosSubTab !== 'ordenes' && insumosSubTab !== 'rendimiento-azucar' && insumosSubTab !== 'producto-no-conforme' && insumosSubTab !== 'mermas-botella-envasada' && insumosSubTab !== 'mermas-materiales-lineas' && insumosSubTab !== 'analisis-ventas' && (
                                <div className="min-w-0 flex-1 sm:flex-none">
                                  <Popover>
                                    <PopoverTrigger asChild>
@@ -1110,6 +1122,14 @@ export function ReportesModule({
                                mode="desperdicios"
                                reportMonthDate={reportMonthDate}
                                onMonthChange={(date) => selectReportMonth(format(date, 'yyyy-MM'))}
+                             />
+                           )}
+                           {insumosSubTab === 'analisis-ventas' && (
+                             <VentasModule
+                               initialView="analisis"
+                               embeddedAnalysis
+                               selectedMonth={reportMonthDate}
+                               selectedDate={insumosFecha ? format(insumosFecha, 'yyyy-MM-dd') : undefined}
                              />
                            )}
                            {insumosSubTab === 'co2' &&

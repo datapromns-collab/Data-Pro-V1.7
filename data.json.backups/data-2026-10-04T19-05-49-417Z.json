@@ -16030,7 +16030,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-04T18:15:59.892Z"
+    "updatedAt": "2026-10-04T19:05:23.270Z"
   },
   "ordenesSap": [
     {
@@ -167595,7 +167595,98 @@
         }
       }
     },
-    "sala-jarabe-consumo-lineas": {}
+    "sala-jarabe-consumo-lineas": {},
+    "ventas-inventario-diario": {
+      "days": {
+        "2026-10-02": {
+          "PRODT-0007": 37767,
+          "PRODT-0008": 35395,
+          "PRODT-0009": 23680,
+          "PRODT-0010": 551,
+          "PRODT-0011": 0,
+          "PRODT-0012": 33638,
+          "PRODT-0049": 1080,
+          "PRODT-0097": 7953,
+          "PRODT-0098": 2906,
+          "PRODT-0082": 24214,
+          "PRODT-0084": 14035,
+          "PRODT-0086": 3031,
+          "PRODT-0088": 9099,
+          "PRODT-0104": 673,
+          "PRODT-0105": 1,
+          "PRODT-0107": 7642,
+          "PRODT-0092": 28605,
+          "PRODT-0093": 5152,
+          "PRODT-0094": 3151,
+          "PRODT-0095": 844,
+          "PRODT-0111": 15388,
+          "PRODT-0014": 29164,
+          "PRODT-0100": 11052,
+          "PRODT-0115": 7381,
+          "PRODT-0116": 8024
+        },
+        "2026-10-03": {
+          "PRODT-0007": 10258,
+          "PRODT-0008": 44657,
+          "PRODT-0009": 6856,
+          "PRODT-0010": 7,
+          "PRODT-0011": 0,
+          "PRODT-0012": 33045,
+          "PRODT-0049": 574,
+          "PRODT-0097": 2679,
+          "PRODT-0098": 2424,
+          "PRODT-0082": 24898,
+          "PRODT-0084": 13205,
+          "PRODT-0086": 662,
+          "PRODT-0088": 5067,
+          "PRODT-0104": 491,
+          "PRODT-0105": 1,
+          "PRODT-0107": 6624,
+          "PRODT-0092": 23485,
+          "PRODT-0093": 4682,
+          "PRODT-0094": 1121,
+          "PRODT-0095": 3237,
+          "PRODT-0111": 15348,
+          "PRODT-0014": 30808,
+          "PRODT-0100": 7282,
+          "PRODT-0115": 5546,
+          "PRODT-0116": 6854
+        },
+        "2026-10-04": {
+          "PRODT-0007": 39358,
+          "PRODT-0008": 39997,
+          "PRODT-0009": 18561,
+          "PRODT-0010": 16647,
+          "PRODT-0011": 0,
+          "PRODT-0012": 27917,
+          "PRODT-0049": 334,
+          "PRODT-0097": 1354,
+          "PRODT-0098": 2072,
+          "PRODT-0082": 20593,
+          "PRODT-0084": 12581,
+          "PRODT-0086": 38,
+          "PRODT-0088": 2717,
+          "PRODT-0104": 491,
+          "PRODT-0105": 1,
+          "PRODT-0107": 5454,
+          "PRODT-0092": 21089,
+          "PRODT-0093": 4332,
+          "PRODT-0094": 851,
+          "PRODT-0095": 2673,
+          "PRODT-0111": 14808,
+          "PRODT-0014": 29468,
+          "PRODT-0100": 5512,
+          "PRODT-0115": 4516,
+          "PRODT-0116": 5594
+        }
+      },
+      "openingOverrides": {
+        "2026-10-01": {
+          "PRODT-0014": 17504,
+          "PRODT-0115": 9621
+        }
+      }
+    }
   },
   "cacheVersion": 0,
   "deletedIds": {
@@ -167640,7 +167731,8 @@
     "ventas-pronostico-mensual": {},
     "mtto-co2-consumption": {},
     "logistica-inventario-mensual": {},
-    "sala-jarabe-consumo-lineas": {}
+    "sala-jarabe-consumo-lineas": {},
+    "ventas-inventario-diario": {}
   },
   "_deletedOrdenesSapIds": [
     "1-1785349102112",
