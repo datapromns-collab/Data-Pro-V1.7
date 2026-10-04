@@ -11328,12 +11328,12 @@
             "name": "GLUP COLA",
             "lineId": "4",
             "loadPerHour": 2800,
-            "quantity": 187600,
-            "durationHours": 67,
+            "quantity": 219800,
+            "durationHours": 78.5,
             "presentation": "2Lts",
-            "tanks": 21.75,
+            "tanks": 25.48,
             "startTime": "2026-10-01T14:00:00.000Z",
-            "endTime": "2026-10-04T09:00:00.000Z",
+            "endTime": "2026-10-04T20:30:00.000Z",
             "id": "mgcnmam96",
             "color": "#ec4899"
           },
@@ -11475,12 +11475,12 @@
             "name": "GLUP KOLITA",
             "lineId": "2",
             "loadPerHour": 2500,
-            "quantity": 100000,
-            "durationHours": 40,
+            "quantity": 143750,
+            "durationHours": 57.5,
             "presentation": "2Lts",
-            "tanks": 11.24,
+            "tanks": 16.16,
             "startTime": "2026-10-02T11:00:00.000Z",
-            "endTime": "2026-10-04T03:00:00.000Z",
+            "endTime": "2026-10-04T20:30:00.000Z",
             "id": "pu5b86ya4",
             "color": "#587593"
           },
@@ -11727,30 +11727,6 @@
             "endTime": "2026-10-02T19:48:30.000Z",
             "id": "ly0iv9bmd",
             "color": "#587593"
-          },
-          {
-            "name": "CIP 3P ALCALINO",
-            "lineId": "2",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 2,
-            "startTime": "2026-10-04T03:00:00.000Z",
-            "endTime": "2026-10-04T05:00:00.000Z",
-            "id": "6zigcm973",
-            "color": "#f59e0b"
-          },
-          {
-            "name": "GLUP COLA",
-            "lineId": "2",
-            "loadPerHour": 2500,
-            "quantity": 38750,
-            "durationHours": 15.5,
-            "presentation": "2Lts",
-            "tanks": 4.49,
-            "startTime": "2026-10-04T05:00:00.000Z",
-            "endTime": "2026-10-04T20:30:00.000Z",
-            "id": "0u2wed0wq",
-            "color": "#10b981"
           }
         ],
         "realProduction": {},
@@ -11797,7 +11773,9 @@
           "bbudn6eu3",
           "h2cq62l44",
           "bv3ox7ck6",
-          "xxobn9cup"
+          "xxobn9cup",
+          "0u2wed0wq",
+          "6zigcm973"
         ]
       },
       "2026-10-05": {
@@ -12657,6 +12635,41 @@
           "quimicosInsumosCantidad": {}
         },
         "2026-10-03": {
+          "tapas": {
+            "EMP_0095-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0095-Importada": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaEW": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaTipo2": {
+              "totalCajas": "",
+              "total": ""
+            }
+          },
+          "separadores": {},
+          "preformas": {},
+          "plasticos": {},
+          "adhesivoCantidad": "",
+          "etiquetasCantidad": {},
+          "azucarCantidad": {},
+          "concentradosCantidad": {},
+          "concentradosJustyCantidad": {},
+          "aditivosCantidad": {},
+          "solidosCantidad": {},
+          "quimicosInsumosCantidad": {}
+        },
+        "2026-10-04": {
           "tapas": {
             "EMP_0095-Alpla": {
               "totalCajas": "",
@@ -15811,7 +15824,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-03T22:20:40.493Z"
+    "updatedAt": "2026-10-04T12:18:01.181Z"
   },
   "ordenesSap": [
     {
@@ -26084,8 +26097,19 @@
           "fechaInicio": "2026-10-03",
           "ticket1": "16133",
           "cajas1": 4080,
-          "ticket2": "",
+          "ticket2": "16134",
           "cajas2": 2400,
+          "ticket3": "",
+          "cajas3": 3520,
+          "ticket4": "",
+          "cajas4": 16880
+        },
+        {
+          "fechaInicio": "2026-10-04",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -26126,12 +26150,12 @@
           "fechaInicio": "2026-10-03",
           "ticket1": "18000",
           "cajas1": 1360,
-          "ticket2": "",
+          "ticket2": "16251",
           "cajas2": 640,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 15760
         }
       ]
     },
@@ -26177,12 +26201,12 @@
           "fechaInicio": "2026-10-03",
           "ticket1": "16046",
           "cajas1": 2080,
-          "ticket2": "",
+          "ticket2": "16047",
           "cajas2": 80,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2960,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 14560
         }
       ]
     },
@@ -26197,6 +26221,17 @@
           "fechaInicio": "2026-10-03",
           "ticket1": "16086",
           "cajas1": 1920,
+          "ticket2": "16087",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 2400,
+          "ticket4": "",
+          "cajas4": 12320
+        },
+        {
+          "fechaInicio": "2026-10-04",
+          "ticket1": "",
+          "cajas1": 0,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
