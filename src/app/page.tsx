@@ -3596,7 +3596,86 @@ export default function PlannerPage() {
                    activeModule === 'permissions' ? 'MÓDULO DE PERMISOS' : 'MÓDULO DE PLANIFICACIÓN'}
               </div>
             </div>
-             <div className="flex items-center gap-2 justify-end">
+             <div className="flex min-w-0 items-center gap-2 justify-end overflow-x-auto">
+                  {activeModule === 'planning' && (
+                    <div className="flex shrink-0 items-center gap-2">
+                      <Popover open={planningDatePickerOpen} onOpenChange={setPlanningDatePickerOpen}>
+                        <PopoverTrigger asChild>
+                          <button
+                            type="button"
+                            className="inline-flex h-9 shrink-0 items-center gap-2 rounded-full border-0 bg-white pl-3 pr-4 text-[11px] font-bold text-slate-700 shadow-sm"
+                            aria-label="Abrir selector de fecha de planificación"
+                          >
+                            <CalendarIcon className="h-3.5 w-3.5 text-primary" />
+                            {format(weekStartDate, "dd 'de' MMM, yyyy", { locale: es })}
+                          </button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto rounded-lg border border-slate-200 bg-white p-2 shadow-lg" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={weekStartDate}
+                            onSelect={(date) => {
+                              if (!date) return;
+                              setWeekStartDate(date);
+                              setPlanningDatePickerOpen(false);
+                            }}
+                            locale={es}
+                            className="p-1"
+                            classNames={{
+                              month: "space-y-3",
+                              caption: "flex items-center justify-between px-1 pt-1 relative",
+                              caption_label: "text-xs font-semibold text-slate-800 capitalize",
+                              nav: "flex items-center gap-1",
+                              nav_button: "h-7 w-7 rounded-md border-0 bg-transparent p-0 text-slate-500 opacity-100 hover:bg-slate-100 hover:text-slate-900",
+                              nav_button_previous: "static",
+                              nav_button_next: "static",
+                              head_row: "flex",
+                              head_cell: "w-8 rounded-none text-center text-[10px] font-medium text-slate-600",
+                              row: "mt-1 flex w-full",
+                              cell: "relative h-8 w-8 p-0 text-center text-xs focus-within:z-20",
+                              day: "h-8 w-8 rounded-md p-0 text-xs font-normal text-slate-700 hover:bg-slate-100",
+                              day_selected: "bg-blue-600 text-white font-semibold hover:bg-blue-700 hover:text-white focus:bg-blue-700 focus:text-white",
+                              day_today: "bg-slate-100 font-semibold text-slate-900",
+                              day_outside: "text-slate-400 opacity-70",
+                            }}
+                          />
+                          <div className="flex justify-end border-t border-slate-100 px-1 pt-2">
+                            <button
+                              type="button"
+                              className="text-xs font-medium text-blue-600 hover:text-blue-800"
+                              onClick={() => {
+                                setWeekStartDate(new Date());
+                                setPlanningDatePickerOpen(false);
+                              }}
+                            >
+                              Hoy
+                            </button>
+                          </div>
+                        </PopoverContent>
+                      </Popover>
+                      <Select value={selectedLine} onValueChange={setSelectedLine}>
+                        <SelectTrigger className="h-9 w-[100px] shrink-0 rounded-full border-0 bg-white pl-3 pr-3 text-[11px] font-bold shadow-sm">
+                          <SelectValue placeholder="Línea" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {LINES.map((l, i) => (
+                            <SelectItem key={l} value={(i + 1).toString()} className="text-[11px] font-bold">
+                              Línea {i + 1}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      {getPermissionLevel(user.id, 'planning', 'gantt') === 'write' && (
+                        <button
+                          onClick={() => { setEditingTask(null); setIsDialogOpen(true); }}
+                          className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border-0 bg-[#F59E0B] pl-4 pr-5 text-[10px] font-black uppercase tracking-widest text-white shadow-sm transition-none active:scale-95"
+                        >
+                          <Plus className="h-3.5 w-3.5" />
+                          <span className="hidden sm:inline">Nueva Tarea</span>
+                        </button>
+                      )}
+                    </div>
+                  )}
                   {user && <MessagesCenter user={user} isAdmin={isAdmin} />}
                   <FcmManager userId={user?.id} />
                  {activeModule === 'ordenes-sap' && <CorrelativoSelector activeLinea={ordenesSapActiveLinea} selectedFecha={selectedFechaSap} />}
@@ -3604,9 +3683,6 @@ export default function PlannerPage() {
                   <>
                     <Badge variant="secondary" className="mr-2 bg-primary/10 text-primary border-primary/5 font-black text-[13px] h-8 px-3 hidden sm:flex items-center">
                       Semana {weekNumber}
-                    </Badge>
-                    <Badge variant="outline" className="mr-2 bg-primary/5 text-primary border-primary/20 font-black uppercase text-[10px] h-8 px-3 hidden sm:flex items-center">
-                      LÍNEA {selectedLine}
                     </Badge>
                     <Button 
                       variant="ghost" 
@@ -3694,79 +3770,6 @@ export default function PlannerPage() {
                              <CalculatorIcon className="h-3.5 w-3.5" />
                              <span className="hidden sm:inline">Calculadora</span>
                            </button>}
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Popover open={planningDatePickerOpen} onOpenChange={setPlanningDatePickerOpen}>
-                            <PopoverTrigger asChild>
-                              <button
-                                type="button"
-                                className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[11px] whitespace-nowrap border-0 bg-white text-slate-700 shadow-sm cursor-pointer"
-                                aria-label="Abrir selector de fecha de planificación"
-                              >
-                                <CalendarIcon className="h-3.5 w-3.5 text-primary" />
-                                {format(weekStartDate, "dd 'de' MMM, yyyy", { locale: es })}
-                              </button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto rounded-lg border border-slate-200 bg-white p-2 shadow-lg" align="start">
-                              <Calendar
-                                mode="single"
-                                selected={weekStartDate}
-                                onSelect={(date) => {
-                                  if (!date) return;
-                                  setWeekStartDate(date);
-                                  setPlanningDatePickerOpen(false);
-                                }}
-                                locale={es}
-                                className="p-1"
-                                classNames={{
-                                  month: "space-y-3",
-                                  caption: "flex items-center justify-between px-1 pt-1 relative",
-                                  caption_label: "text-xs font-semibold text-slate-800 capitalize",
-                                  nav: "flex items-center gap-1",
-                                  nav_button: "h-7 w-7 rounded-md border-0 bg-transparent p-0 text-slate-500 opacity-100 hover:bg-slate-100 hover:text-slate-900",
-                                  nav_button_previous: "static",
-                                  nav_button_next: "static",
-                                  head_row: "flex",
-                                  head_cell: "w-8 rounded-none text-center text-[10px] font-medium text-slate-600",
-                                  row: "mt-1 flex w-full",
-                                  cell: "relative h-8 w-8 p-0 text-center text-xs focus-within:z-20",
-                                  day: "h-8 w-8 rounded-md p-0 text-xs font-normal text-slate-700 hover:bg-slate-100",
-                                  day_selected: "bg-blue-600 text-white font-semibold hover:bg-blue-700 hover:text-white focus:bg-blue-700 focus:text-white",
-                                  day_today: "bg-slate-100 font-semibold text-slate-900",
-                                  day_outside: "text-slate-400 opacity-70",
-                                }}
-                              />
-                              <div className="flex justify-end border-t border-slate-100 px-1 pt-2">
-                                <button
-                                  type="button"
-                                  className="text-xs font-medium text-blue-600 hover:text-blue-800"
-                                  onClick={() => {
-                                    setWeekStartDate(new Date());
-                                    setPlanningDatePickerOpen(false);
-                                  }}
-                                >
-                                  Hoy
-                                </button>
-                              </div>
-                            </PopoverContent>
-                          </Popover>
-                          <Select value={selectedLine} onValueChange={setSelectedLine}>
-                            <SelectTrigger className="h-9 pl-3 pr-4 bg-white border-0 shadow-sm rounded-full font-bold gap-2 text-[11px] border-0">
-                              <SelectValue placeholder="Línea" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {LINES.map((l, i) => <SelectItem key={l} value={(i + 1).toString()} className="font-bold text-[11px]">Línea {i + 1}</SelectItem>)}
-                            </SelectContent>
-                          </Select>
-                           {getPermissionLevel(user.id, 'planning', 'gantt') === 'write' && (
-                            <button
-                              onClick={() => { setEditingTask(null); setIsDialogOpen(true); }}
-                              className="inline-flex items-center gap-1.5 h-9 pl-4 pr-5 rounded-full font-black uppercase text-[10px] tracking-widest whitespace-nowrap flex-shrink-0 outline-none select-none transition-none border-0 bg-[#F59E0B] text-white shadow-sm active:scale-95"
-                            >
-                              <Plus className="h-3.5 w-3.5" />
-                              Nueva Tarea
-                            </button>
-                          )}
                         </div>
                       </>
                     )}
