@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-21T00:00:00.000",
+      "weekStartDate": "2026-08-03T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -12176,6 +12176,17 @@
             "loadPerHour": 0,
             "quantity": 0,
             "durationHours": 0.5,
+            "startTime": "2026-10-07T01:31:00.000Z",
+            "endTime": "2026-10-07T02:01:00.000Z",
+            "id": "s1gk6ogpe",
+            "color": "#ec4899"
+          },
+          {
+            "name": "CS",
+            "lineId": "6",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
             "startTime": "2026-10-05T20:16:00.000Z",
             "endTime": "2026-10-05T20:46:00.000Z",
             "id": "kyviqmups",
@@ -12206,17 +12217,6 @@
             "endTime": "2026-10-08T07:40:00.000Z",
             "id": "m45cd9b0e",
             "color": "#ef4444"
-          },
-          {
-            "name": "CS",
-            "lineId": "6",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 0.5,
-            "startTime": "2026-10-07T01:31:00.000Z",
-            "endTime": "2026-10-07T02:01:00.000Z",
-            "id": "s1gk6ogpe",
-            "color": "#ec4899"
           },
           {
             "name": "CS",
@@ -16004,7 +16004,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-04T13:55:43.731Z"
+    "updatedAt": "2026-10-04T15:06:09.838Z"
   },
   "ordenesSap": [
     {
