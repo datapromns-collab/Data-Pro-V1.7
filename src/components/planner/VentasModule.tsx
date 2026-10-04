@@ -23,7 +23,7 @@ type InventarioDiarioData = {
   openingOverrides?: Record<string, Record<string, number>>;
   externalEntries?: Record<string, Record<string, number>>;
 };
-type AnalisisPeriodo = 'dia' | 'semana' | 'mes';
+type AnalisisPeriodo = 'dia' | 'promedio' | 'semana' | 'mes';
 type AnalisisFila = {
   periodo: string;
   articulo: string;
@@ -688,7 +688,8 @@ export function VentasModule({
           produccion: matchingRows.reduce((total, row) => total + row.produccion, 0),
           entradasExternas: matchingRows.reduce((total, row) => total + row.entradasExternas, 0),
           ventas: validRows.length > 0
-            ? validRows.reduce((total, row) => total + (row.ventas || 0), 0)
+            ? validRows.reduce((total, row) => total + (row.ventas || 0), 0) /
+              (periodoAnalisis === 'promedio' ? validRows.length : 1)
             : null,
           final: [...matchingRows].reverse().find((row) => row.final !== null)?.final ?? null,
           diasAnalizados: validRows.length,
@@ -879,6 +880,7 @@ export function VentasModule({
               <div className="flex items-center gap-2 rounded-full bg-slate-100 p-1">
                 {([
                   ['dia', 'Día'],
+                  ['promedio', 'Promedio de ventas'],
                   ['semana', 'Semana'],
                   ['mes', 'Mes'],
                 ] as const).map(([id, label]) => (
@@ -1000,32 +1002,56 @@ export function VentasModule({
           )}
 
           <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-            {[
-              {
-                label: 'Producción SAP',
-                value: analisisFilas.reduce((total, row) => total + row.produccion, 0),
-              },
-              {
-                label: 'Ventas estimadas',
-                value: analisisFilas.reduce((total, row) =>
-                  total + (row.ventas !== null && row.ventas >= 0 ? row.ventas : 0), 0),
-              },
-              {
-                label: 'Productos con datos completos',
-                value: analisisFilas.filter((row) =>
-                  row.ventas !== null && row.ventas >= 0 && row.diasAnalizados === row.diasEsperados
-                ).length,
-                isCount: true,
-              },
-            ].map(({ label, value, isCount }) => (
+            {(periodoAnalisis === 'promedio'
+              ? [
+                {
+                  label: 'Promedio diario total',
+                  value: analisisFilas.reduce((total, row) =>
+                    total + (row.ventas !== null && row.ventas >= 0 ? row.ventas : 0), 0),
+                },
+                {
+                  label: 'Días de venta analizados',
+                  value: Math.max(0, ...analisisFilas.map((row) => row.diasAnalizados)),
+                  isCount: true,
+                },
+              ]
+              : [
+                {
+                  label: 'Producción SAP',
+                  value: analisisFilas.reduce((total, row) => total + row.produccion, 0),
+                },
+                {
+                  label: 'Ventas estimadas',
+                  value: analisisFilas.reduce((total, row) =>
+                    total + (row.ventas !== null && row.ventas >= 0 ? row.ventas : 0), 0),
+                },
+                {
+                  label: 'Productos con datos completos',
+                  value: analisisFilas.filter((row) =>
+                    row.ventas !== null && row.ventas >= 0 && row.diasAnalizados === row.diasEsperados
+                  ).length,
+                  isCount: true,
+                },
+              ]).map(({ label, value, isCount }) => (
               <div key={label} className="rounded-2xl border border-slate-200 bg-white px-5 py-4">
                 <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">{label}</p>
                 <p className="mt-2 text-xl font-black text-slate-900">
-                  {isCount ? `${value} / ${analisisFilas.length}` : new Intl.NumberFormat('es-VE').format(value)}
+                  {isCount
+                    ? `${value} / ${analisisFilas.length}`
+                    : new Intl.NumberFormat('es-VE', {
+                      minimumFractionDigits: periodoAnalisis === 'promedio' ? 2 : 0,
+                      maximumFractionDigits: periodoAnalisis === 'promedio' ? 2 : 0,
+                    }).format(value)}
                 </p>
               </div>
             ))}
           </div>
+          {periodoAnalisis === 'promedio' && (
+            <p className="px-1 text-xs text-slate-500">
+              Se suman las ventas diarias estimadas de cada producto y se dividen entre los días de venta (lunes a sábado)
+              con datos disponibles. En esta vista solo se presenta el promedio; el inventario y la producción quedan en sus otras vistas.
+            </p>
+          )}
 
           {!inventarioDiarioStore.isLoaded || !inventarioInicialStore.isLoaded || !ordenesSapLoaded ? (
             <p className="rounded-xl bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-800">
@@ -1040,20 +1066,32 @@ export function VentasModule({
           )}
 
           <div className="min-h-[220px] flex-1 overflow-auto rounded-2xl border border-slate-200 bg-white">
-            <table className="w-full min-w-[1050px] border-collapse text-left text-sm">
+            <table className={`w-full ${periodoAnalisis === 'promedio' ? 'min-w-[620px]' : 'min-w-[1050px]'} border-collapse text-left text-sm`}>
               <thead className="sticky top-0 bg-slate-100">
                 <tr>
                   <th className="border-b border-slate-200 px-3 py-3 text-xs font-black uppercase tracking-wide text-slate-600">Período</th>
                   <th className="border-b border-slate-200 px-3 py-3 text-xs font-black uppercase tracking-wide text-slate-600">Artículo</th>
                   <th className="border-b border-slate-200 px-3 py-3 text-xs font-black uppercase tracking-wide text-slate-600">Producto</th>
-                  <th className="border-b border-slate-200 px-3 py-3 text-right text-xs font-black uppercase tracking-wide text-slate-600">Inv. inicial</th>
-                  <th className="border-b border-slate-200 px-3 py-3 text-right text-xs font-black uppercase tracking-wide text-slate-600">Producción</th>
-                  <th className="border-b border-slate-200 px-3 py-3 text-right text-xs font-black uppercase tracking-wide text-emerald-700">Entradas externas</th>
-                  <th className="border-b border-slate-200 px-3 py-3 text-right text-xs font-black uppercase tracking-wide text-slate-600">Ventas estimadas</th>
-                  <th className="border-b border-slate-200 px-3 py-3 text-right text-xs font-black uppercase tracking-wide text-slate-600">Inv. final</th>
-                  <th className="border-b border-slate-200 px-3 py-3 text-center text-xs font-black uppercase tracking-wide text-slate-600">Cobertura</th>
+                  {periodoAnalisis !== 'promedio' && (
+                    <>
+                      <th className="border-b border-slate-200 px-3 py-3 text-right text-xs font-black uppercase tracking-wide text-slate-600">Inv. inicial</th>
+                      <th className="border-b border-slate-200 px-3 py-3 text-right text-xs font-black uppercase tracking-wide text-slate-600">Producción</th>
+                      <th className="border-b border-slate-200 px-3 py-3 text-right text-xs font-black uppercase tracking-wide text-emerald-700">Entradas externas</th>
+                    </>
+                  )}
+                  <th className="border-b border-slate-200 px-3 py-3 text-right text-xs font-black uppercase tracking-wide text-slate-600">
+                    {periodoAnalisis === 'promedio' ? 'Promedio ventas diarias' : 'Ventas estimadas'}
+                  </th>
+                  {periodoAnalisis !== 'promedio' && (
+                    <>
+                      <th className="border-b border-slate-200 px-3 py-3 text-right text-xs font-black uppercase tracking-wide text-slate-600">Inv. final</th>
+                      <th className="border-b border-slate-200 px-3 py-3 text-center text-xs font-black uppercase tracking-wide text-slate-600">Cobertura</th>
+                    </>
+                  )}
                   {periodoAnalisis !== 'dia' && (
-                    <th className="border-b border-slate-200 px-3 py-3 text-center text-xs font-black uppercase tracking-wide text-slate-600">Días</th>
+                    <th className="border-b border-slate-200 px-3 py-3 text-center text-xs font-black uppercase tracking-wide text-slate-600">
+                      {periodoAnalisis === 'promedio' ? 'Días usados en promedio' : 'Días'}
+                    </th>
                   )}
                 </tr>
               </thead>
@@ -1071,19 +1109,21 @@ export function VentasModule({
                       ? fechaAjusteSeleccionada[rowKey]
                       : availableAdjustmentDates[0];
                   const [initialYear, initialMonth, initialDay] = (selectedAdjustmentDate || '').split('-').map(Number);
-                  const initialSource = selectedAdjustmentDate
+                  const initialSource = periodoAnalisis !== 'promedio' && selectedAdjustmentDate
                     ? initialDay === 1
                       ? inventarioInicialStore.data.periods?.[
                           `${initialYear}-${String(initialMonth).padStart(2, '0')}`
                         ]?.prodt || {}
                       : inventariosDiarios[selectedAdjustmentDate] || {}
                     : {};
-                  const initialOverride = selectedAdjustmentDate
+                  const initialOverride = periodoAnalisis !== 'promedio' && selectedAdjustmentDate
                     ? inventarioInicialOverrides[selectedAdjustmentDate]?.[normalizarArticulo(row.articulo)]
                     : undefined;
-                  const initialValue = initialOverride ??
-                    numeroInventario(initialSource[normalizarArticulo(row.articulo)]) ??
-                    row.inicial;
+                  const initialValue = periodoAnalisis === 'promedio'
+                    ? null
+                    : initialOverride ??
+                      numeroInventario(initialSource[normalizarArticulo(row.articulo)]) ??
+                      row.inicial;
                   const produccionSuficiente = row.ventas !== null && !incompleto && !ajuste &&
                     row.inicial !== null && row.produccion >= row.ventas;
                   const suficienteConEntradas = row.ventas !== null && !incompleto && !ajuste &&
@@ -1106,6 +1146,8 @@ export function VentasModule({
                           : 'Insuficiente';
                   const dateLabel = periodoAnalisis === 'dia'
                     ? row.periodo
+                    : periodoAnalisis === 'promedio'
+                      ? `${MESES[mes]} ${anio}`
                     : periodoAnalisis === 'mes'
                       ? `${MESES[mes]} ${anio}`
                       : `Semana del ${row.periodo}`;
@@ -1114,7 +1156,8 @@ export function VentasModule({
                       <td className="whitespace-nowrap px-3 py-2.5 text-slate-600">{dateLabel}</td>
                       <td className="whitespace-nowrap px-3 py-2.5 font-semibold text-slate-800">{row.articulo}</td>
                       <td className="px-3 py-2.5 text-slate-700">{row.denominacion}</td>
-                      <td className="px-3 py-2.5 text-right tabular-nums text-slate-700">
+                      {periodoAnalisis !== 'promedio' && (
+                        <td className="px-3 py-2.5 text-right tabular-nums text-slate-700">
                         {ajuste && selectedAdjustmentDate ? (
                           <div className="flex min-w-[130px] flex-col items-end gap-1">
                             {availableAdjustmentDates.length > 1 && (
@@ -1162,33 +1205,47 @@ export function VentasModule({
                         ) : (
                           row.inicial === null ? '—' : new Intl.NumberFormat('es-VE').format(row.inicial)
                         )}
-                      </td>
-                      <td className="px-3 py-2.5 text-right tabular-nums text-slate-700">
+                        </td>
+                      )}
+                      {periodoAnalisis !== 'promedio' && (
+                        <td className="px-3 py-2.5 text-right tabular-nums text-slate-700">
                         {new Intl.NumberFormat('es-VE').format(row.produccion)}
-                      </td>
-                      <td className="px-3 py-2.5 text-right tabular-nums font-semibold text-emerald-800">
+                        </td>
+                      )}
+                      {periodoAnalisis !== 'promedio' && (
+                        <td className="px-3 py-2.5 text-right tabular-nums font-semibold text-emerald-800">
                         {new Intl.NumberFormat('es-VE').format(row.entradasExternas)}
-                      </td>
+                        </td>
+                      )}
                       <td className="px-3 py-2.5 text-right tabular-nums font-bold text-slate-900">
                         {row.ventas === null
                           ? '—'
                           : row.ventas < 0
                             ? `Ajuste +${new Intl.NumberFormat('es-VE').format(-row.ventas)}`
-                            : new Intl.NumberFormat('es-VE').format(row.ventas)}
+                            : new Intl.NumberFormat('es-VE', {
+                              minimumFractionDigits: periodoAnalisis === 'promedio' ? 2 : 0,
+                              maximumFractionDigits: periodoAnalisis === 'promedio' ? 2 : 0,
+                            }).format(row.ventas)}
                       </td>
-                      <td className="px-3 py-2.5 text-right tabular-nums text-slate-700">
+                      {periodoAnalisis !== 'promedio' && (
+                        <td className="px-3 py-2.5 text-right tabular-nums text-slate-700">
                         {row.final === null ? '—' : new Intl.NumberFormat('es-VE').format(row.final)}
-                      </td>
-                      <td className={cn(
-                        'whitespace-nowrap px-3 py-2.5 text-center text-xs font-bold',
-                        sinVentaDomingo ? 'text-sky-700' : incompleto || ajuste ? 'text-amber-700' :
-                          produccionSuficiente || cubiertoConInventario ? 'text-emerald-700' : 'text-red-700'
-                      )}>
-                        {cobertura}
-                      </td>
+                        </td>
+                      )}
+                      {periodoAnalisis !== 'promedio' && (
+                        <td className={cn(
+                          'whitespace-nowrap px-3 py-2.5 text-center text-xs font-bold',
+                          sinVentaDomingo ? 'text-sky-700' : incompleto || ajuste ? 'text-amber-700' :
+                            produccionSuficiente || cubiertoConInventario ? 'text-emerald-700' : 'text-red-700'
+                        )}>
+                          {cobertura}
+                        </td>
+                      )}
                       {periodoAnalisis !== 'dia' && (
                         <td className="px-3 py-2.5 text-center tabular-nums text-slate-600">
-                          {row.diasAnalizados}/{row.diasEsperados}
+                          {periodoAnalisis === 'promedio'
+                            ? row.diasAnalizados
+                            : `${row.diasAnalizados}/${row.diasEsperados}`}
                         </td>
                       )}
                     </tr>
