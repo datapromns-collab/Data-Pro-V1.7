@@ -626,6 +626,38 @@ export function VentasModule({
     produccionPorFecha.production,
   ]);
 
+  const diasDeVentaDelMes = diasDelMes.filter(esDiaVenta).length;
+  const diasConDatos = useMemo(() => {
+    if (!ordenesSapLoaded) return 0;
+    return diasDelMes.filter((dateKey) => {
+      if (!esDiaVenta(dateKey)) return false;
+      const [year, month, day] = dateKey.split('-').map(Number);
+      const openingByCode = day === 1
+        ? inventarioInicialStore.data.periods?.[`${year}-${String(month).padStart(2, '0')}`]?.prodt || {}
+        : inventariosDiarios[dateKey] || {};
+      const closingByCode = inventariosDiarios[sumarDias(dateKey, 1)] || {};
+      const productionByCode = produccionPorFecha.production[dateKey] || {};
+      const externalEntriesByCode = entradasExternasDiarias[dateKey] || {};
+      return productosTerminados.flat().some(([articulo]) => {
+        const key = normalizarArticulo(articulo);
+        const opening = numeroInventario(inventarioInicialOverrides[dateKey]?.[key] ?? openingByCode[key]);
+        const closing = numeroInventario(closingByCode[key]);
+        const sales = opening !== null && closing !== null
+          ? opening + (productionByCode[key] || 0) + (externalEntriesByCode[key] || 0) - closing
+          : null;
+        return sales !== null && sales >= 0;
+      });
+    }).length;
+  }, [
+    diasDelMes,
+    entradasExternasDiarias,
+    inventarioInicialOverrides,
+    inventarioInicialStore.data.periods,
+    inventariosDiarios,
+    ordenesSapLoaded,
+    produccionPorFecha.production,
+  ]);
+
   const analisisFilas = useMemo(() => {
     if (periodoAnalisis === 'dia') return analisisDiario;
 
@@ -1010,8 +1042,13 @@ export function VentasModule({
                     total + (row.ventas !== null && row.ventas >= 0 ? row.ventas : 0), 0),
                 },
                 {
-                  label: 'Días de venta analizados',
-                  value: Math.max(0, ...analisisFilas.map((row) => row.diasAnalizados)),
+                  label: 'Días con datos',
+                  value: diasConDatos,
+                  isCount: true,
+                },
+                {
+                  label: 'Días de venta',
+                  value: diasDeVentaDelMes,
                   isCount: true,
                 },
               ]
@@ -1037,7 +1074,7 @@ export function VentasModule({
                 <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">{label}</p>
                 <p className="mt-2 text-xl font-black text-slate-900">
                   {isCount
-                    ? `${value} / ${analisisFilas.length}`
+                    ? value
                     : new Intl.NumberFormat('es-VE', {
                       minimumFractionDigits: periodoAnalisis === 'promedio' ? 2 : 0,
                       maximumFractionDigits: periodoAnalisis === 'promedio' ? 2 : 0,
