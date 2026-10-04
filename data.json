@@ -16039,7 +16039,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-04T21:54:58.481Z"
+    "updatedAt": "2026-10-04T22:04:46.802Z"
   },
   "ordenesSap": [
     {
@@ -26422,6 +26422,17 @@
           "cajas3": 2960,
           "ticket4": "",
           "cajas4": 14560
+        },
+        {
+          "fechaInicio": "2026-10-04",
+          "ticket1": "16048",
+          "cajas1": 12880,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -167687,6 +167698,33 @@
           "PRODT-0100": 5512,
           "PRODT-0115": 4516,
           "PRODT-0116": 5594
+        },
+        "2026-10-05": {
+          "PRODT-0007": 56663,
+          "PRODT-0008": 39997,
+          "PRODT-0009": 31441,
+          "PRODT-0010": 29728,
+          "PRODT-0011": 0,
+          "PRODT-0012": 27917,
+          "PRODT-0049": 334,
+          "PRODT-0097": 1354,
+          "PRODT-0098": 2072,
+          "PRODT-0082": 20593,
+          "PRODT-0084": 12581,
+          "PRODT-0086": 38,
+          "PRODT-0088": 2717,
+          "PRODT-0104": 491,
+          "PRODT-0105": 1,
+          "PRODT-0107": 5454,
+          "PRODT-0092": 21089,
+          "PRODT-0093": 4332,
+          "PRODT-0094": 851,
+          "PRODT-0095": 2673,
+          "PRODT-0111": 14808,
+          "PRODT-0014": 29468,
+          "PRODT-0100": 5512,
+          "PRODT-0115": 4516,
+          "PRODT-0116": 5594
         }
       },
       "openingOverrides": {
@@ -167759,8 +167797,8 @@
     "filename": "stock-producto-terminado.xlsx",
     "originalName": "Formato Inventario  Fisico Almacen PT DIARIO ACT  0888.xlsx",
     "tipo": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "tamano": 34981,
-    "uploadedAt": "2026-10-04T17:36:57.686Z",
+    "tamano": 35002,
+    "uploadedAt": "2026-10-04T22:03:42.233Z",
     "uploadedBy": "local-user"
   }
 }
