@@ -7,6 +7,12 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useRemoteCollection } from '@/hooks/use-remote-collection';
 import { useOrdenesSap } from '@/hooks/use-ordenes-sap';
+import {
+  normalizarArticulo,
+  normalizarTexto,
+  productosTerminados,
+  skuPorSaborYLinea,
+} from '@/lib/production-tracking-utils';
 
 const MESES = [
   'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
@@ -42,42 +48,6 @@ type AnalisisFila = {
 const EMPTY_PRONOSTICO_MENSUAL: PronosticoMensualData = { periods: {} };
 const EMPTY_INVENTARIO_DIARIO: InventarioDiarioData = { days: {} };
 
-const productosTerminados = [
-  [
-    ['PRODT-0007', 'GLUP! COLA NEGRA 6X2000ML', '2Lts'],
-    ['PRODT-0008', 'GLUP! UVA 6X2000ML', '2Lts'],
-    ['PRODT-0009', 'GLUP! KOLITA 6X2000ML', '2Lts'],
-    ['PRODT-0010', 'GLUP! PIÑA 6X2000ML', '2Lts'],
-    ['PRODT-0011', 'GLUP! NARANJA 6X2000ML', '2Lts'],
-    ['PRODT-0012', 'GLUP! FRESH 6X2000ML', '2Lts'],
-    ['PRODT-0049', 'GLUP! MANZANA VERDE CAJA X 6BOT X 2LTS', '2Lts'],
-    ['PRODT-0097', 'GLUP! MANZANA ROJA CAJA X 6BOT X 2.0LTS', '2Lts'],
-    ['PRODT-0098', 'GLUP! PIÑA PARCHITA CAJA X 6BOT X 2.0LTS', '2Lts'],
-  ],
-  [
-    ['PRODT-0082', 'GLUP! COLA NEGRA CAJA X 12BOT X 1LTS', '1Lt'],
-    ['PRODT-0084', 'GLUP! UVA CAJA X 12BOT X 1.0LTS', '1Lt'],
-    ['PRODT-0086', 'GLUP! FRESH CAJA X 12BOT X 1.0LTS', '1Lt'],
-    ['PRODT-0088', 'GLUP! KOLITA CAJA X 12BOT X 1.0LTS', '1Lt'],
-    ['PRODT-0104', 'GLUP! PIÑA CAJA X 12BOT X 1.0LTS', '1Lt'],
-    ['PRODT-0105', 'GLUP! NARANJA CAJA X 12BOT X 1.0LTS', '1Lt'],
-    ['PRODT-0107', 'GLUP! MANZANA ROJA CAJA X 12BOT X 1.0LTS', '1Lt'],
-  ],
-  [
-    ['PRODT-0092', 'GLUP! COLA NEGRA CAJA X 15 BOT X 0.400LTS', '0.4Lts'],
-    ['PRODT-0093', 'GLUP! UVA CAJA X 15BOT X 0.400LTS', '0.4Lts'],
-    ['PRODT-0094', 'GLUP! KOLITA CAJA X 15BOT X 0.400LTS', '0.4Lts'],
-    ['PRODT-0095', 'GLUP! FRESH CAJA X 15BOT X 0.400LTS', '0.4Lts'],
-    ['PRODT-0111', 'GLUP! MANZANA ROJA CAJA X 15BOT X 0.400LTS', '0.4Lts'],
-  ],
-  [
-    ['PRODT-0014', 'JUSTY NARANJA 1,5 LTRS', '1.5Lts'],
-    ['PRODT-0100', 'JUSTY DURAZNO CAJA X 12BOT X 1.5LTS', '1.5Lts'],
-    ['PRODT-0115', 'JUSTY PERA CAJA X 12BOT X 1.5LTS', '1.5Lts'],
-    ['PRODT-0116', 'JUSTY MANZANA CAJA X 12BOT X 1.5LTS', '1.5Lts'],
-  ],
-] as const;
-
 const materiasPrimas = [
   { title: 'Azúcar', rows: [['MATP_0001', 'AZÚCAR REFINADA', 'sacos x 50kg']] },
   { title: 'Concentrados GLUP', rows: [['MATP_0002', 'CONCENTRADO COLA NEGRA A', '18,93 Lts'], ['MATP_0003', 'CONCENTRADO FRESH Nª IX3102B', '18,93 Lts'], ['MATP_0004', 'CONCENTRADO NARANJA Nª IX10431', '18,93 Lts'], ['MATP_0005', 'CONCENTRADO UVA IX10201', '18,93 Lts'], ['MATP_0006', 'CONCENTRADO PIÑA IX640B', '18,93 Lts'], ['MATP_0007', 'CONCENTRADO KOLITA I0441FV', '18,93 Lts'], ['MATP_0009', 'CONCENTRADO COLA NEGRA B', '18,93 Lts'], ['MATP_0032', 'CONCENTRADO MANZANA VERDE IX1151FVAL', '18,93 Lts'], ['MATP_0038', 'CONCENTRADO PIÑA PARCHITA IX12941VF', '18,93 Lts'], ['MATP_0039', 'CONCENTRADO MANZANA ROJA IX30610VF', '18,93 Lts']] },
@@ -101,19 +71,6 @@ const normalizarEncabezado = (valor: unknown) =>
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-zA-Z0-9]/g, '')
     .toLowerCase();
-
-const normalizarArticulo = (valor: unknown) =>
-  String(valor ?? '')
-    .trim()
-    .toUpperCase()
-    .replace(/\s+/g, '');
-
-const normalizarTexto = (valor: unknown) =>
-  String(valor ?? '')
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-zA-Z0-9]/g, '')
-    .toUpperCase();
 
 const fechaLocalKey = (date: Date) =>
   `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
@@ -152,22 +109,6 @@ const numeroInventario = (value: unknown): number | null => {
   }
   const parsed = Number(normalized);
   return Number.isFinite(parsed) ? parsed : null;
-};
-
-const skuPorSaborYLinea: Record<string, Partial<Record<number, string>>> = {
-  GLUPCOLA: { 1: 'PRODT-0007', 2: 'PRODT-0007', 3: 'PRODT-0007', 4: 'PRODT-0007', 6: 'PRODT-0092', 7: 'PRODT-0082' },
-  GLUPUVA: { 1: 'PRODT-0008', 2: 'PRODT-0008', 3: 'PRODT-0008', 4: 'PRODT-0008', 6: 'PRODT-0093', 7: 'PRODT-0084' },
-  GLUPKOLITA: { 1: 'PRODT-0009', 2: 'PRODT-0009', 3: 'PRODT-0009', 4: 'PRODT-0009', 6: 'PRODT-0094', 7: 'PRODT-0088' },
-  GLUPPINA: { 1: 'PRODT-0010', 2: 'PRODT-0010', 3: 'PRODT-0010', 4: 'PRODT-0010', 7: 'PRODT-0104' },
-  GLUPNARANJA: { 1: 'PRODT-0011', 2: 'PRODT-0011', 3: 'PRODT-0011', 4: 'PRODT-0011', 7: 'PRODT-0105' },
-  GLUPFRESH: { 1: 'PRODT-0012', 2: 'PRODT-0012', 3: 'PRODT-0012', 4: 'PRODT-0012', 6: 'PRODT-0095', 7: 'PRODT-0086' },
-  GLUPMANZANAVERDE: { 1: 'PRODT-0049', 2: 'PRODT-0049', 3: 'PRODT-0049', 4: 'PRODT-0049' },
-  GLUPMANZANAROJA: { 1: 'PRODT-0097', 2: 'PRODT-0097', 3: 'PRODT-0097', 4: 'PRODT-0097', 6: 'PRODT-0111', 7: 'PRODT-0107' },
-  GLUPPINAPARCHITA: { 1: 'PRODT-0098', 2: 'PRODT-0098', 3: 'PRODT-0098', 4: 'PRODT-0098' },
-  JUSTYNARANJA: { 5: 'PRODT-0014' },
-  JUSTYDURAZNO: { 5: 'PRODT-0100' },
-  JUSTYPERA: { 5: 'PRODT-0115' },
-  JUSTYMANZANA: { 5: 'PRODT-0116' },
 };
 
 const productoPorCodigo = new Map(
@@ -1133,7 +1074,9 @@ export function VentasModule({
                 </tr>
               </thead>
               <tbody>
-                {analisisFilas.map((row) => {
+                {analisisFilas.map((row, index) => {
+                  const inicioPresentacion = index === 0 ||
+                    analisisFilas[index - 1].presentacion !== row.presentacion;
                   const sinVentaDomingo = periodoAnalisis === 'dia' && !esDiaVenta(row.periodo);
                   const incompleto = !sinVentaDomingo && (row.ventas === null ||
                     (periodoAnalisis !== 'dia' && row.diasAnalizados < row.diasEsperados));
@@ -1188,8 +1131,22 @@ export function VentasModule({
                     : periodoAnalisis === 'mes'
                       ? `${MESES[mes]} ${anio}`
                       : `Semana del ${row.periodo}`;
+                  const columnCount = 4 +
+                    (periodoAnalisis !== 'promedio' ? 5 : 0) +
+                    (periodoAnalisis !== 'dia' ? 1 : 0);
                   return (
-                    <tr key={`${row.periodo}-${row.articulo}`} className="border-b border-slate-100 last:border-b-0">
+                    <React.Fragment key={`${row.periodo}-${row.articulo}`}>
+                    {inicioPresentacion && (
+                      <tr>
+                        <td
+                          colSpan={columnCount}
+                          className="border-y-2 border-slate-700 bg-slate-700 px-3 py-1.5 text-left text-[10px] font-black uppercase tracking-widest text-white"
+                        >
+                          Presentación {row.presentacion}
+                        </td>
+                      </tr>
+                    )}
+                    <tr className="border-b border-slate-100 last:border-b-0">
                       <td className="whitespace-nowrap px-3 py-2.5 text-slate-600">{dateLabel}</td>
                       <td className="whitespace-nowrap px-3 py-2.5 font-semibold text-slate-800">{row.articulo}</td>
                       <td className="px-3 py-2.5 text-slate-700">{row.denominacion}</td>
@@ -1286,6 +1243,7 @@ export function VentasModule({
                         </td>
                       )}
                     </tr>
+                    </React.Fragment>
                   );
                 })}
               </tbody>

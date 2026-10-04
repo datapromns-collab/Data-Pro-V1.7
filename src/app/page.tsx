@@ -99,6 +99,7 @@ const CalculationReport = lazyModule(() => import('@/components/planner/Calculat
 const SummaryReport = lazyModule(() => import('@/components/planner/SummaryReport').then((module) => module.SummaryReport));
 const DailyPlanSection = lazyModule(() => import('@/components/planner/DailyPlanSection').then((module) => module.DailyPlanSection));
 const WeeklyPlanSection = lazyModule(() => import('@/components/planner/WeeklyPlanSection').then((module) => module.WeeklyPlanSection));
+const SeguimientoProdtSection = lazyModule(() => import('@/components/planner/SeguimientoProdtSection').then((module) => module.SeguimientoProdtSection));
 const PreparationSection = lazyModule(() => import('@/components/planner/PreparationSection').then((module) => module.PreparationSection));
 const AdminReportTool = lazyModule(() => import('@/components/planner/AdminReportTool').then((module) => module.AdminReportTool));
 const ProductionEntryDialog = lazyModule(() => import('@/components/planner/ProductionEntryDialog').then((module) => module.ProductionEntryDialog));
@@ -3658,6 +3659,13 @@ export default function PlannerPage() {
                              <CalendarRange className="h-3.5 w-3.5" />
                              <span className="hidden sm:inline">Plan Semana</span>
                            </button>}
+                           {getPermissionLevel(user.id, 'planning', 'seguimiento-prodt') !== 'none' && <button
+                             onClick={() => setActiveTab('seguimiento-prodt')}
+                             className={cn(navTabClass(activeTab === 'seguimiento-prodt'))}
+                           >
+                             <BarChart3 className="h-3.5 w-3.5" />
+                             <span className="hidden sm:inline">Seguimiento Prodt</span>
+                           </button>}
                            {getPermissionLevel(user.id, 'planning', 'preparation') !== 'none' && <button
                              onClick={() => setActiveTab('preparation')}
                              className={cn(navTabClass(activeTab === 'preparation'))}
@@ -3829,6 +3837,9 @@ export default function PlannerPage() {
                         )}
                         {activeTab === 'plan-semana' && getPermissionLevel(user.id, 'planning', 'plan-semana') !== 'none' && (
                           <WeeklyPlanSection tasks={tasks} weekStartDate={weekStartDate} />
+                        )}
+                        {activeTab === 'seguimiento-prodt' && getPermissionLevel(user.id, 'planning', 'seguimiento-prodt') !== 'none' && (
+                          <SeguimientoProdtSection weekStartDate={weekStartDate} />
                         )}
                         {activeTab === 'preparation' && getPermissionLevel(user.id, 'planning', 'preparation') !== 'none' && (
                           <PreparationSection tasks={tasks} weekStartDate={weekStartDate} onPrint={handlePrintPreparation} />
