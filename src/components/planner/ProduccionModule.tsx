@@ -32,6 +32,12 @@ type WasteTableRow = {
   generated?: boolean;
 };
 type WasteProduct = { code: string; material: string };
+type RejectMaterialOption = WasteProduct & {
+  unit: string;
+  kind?: WasteTableRow['kind'];
+  flavor?: string;
+  preformSize?: string;
+};
 type WasteTablesBySection = Record<WasteSectionKey, Record<string, WasteTableRow[]>>;
 type NonConformingRow = {
   id: string;
@@ -206,6 +212,45 @@ const WASTE_PRODUCTS_BY_LINE: Record<string, Record<string, WasteProduct>> = {
     'GLUP MANZANA ROJA': { code: 'ENV-00103', material: 'BOTELLA ENVASADA GLUP MANZANA ROJA 1.0 L (LINEA 7)' },
   },
 };
+
+const REJECT_EXTRA_MATERIALS: RejectMaterialOption[] = [
+  { code: 'EMP_0022', material: 'ETIQUETA UVA 2000ML', unit: 'kg' },
+  { code: 'EMP_0026', material: 'ETIQUETA PIÑA 2000ML', unit: 'Kg' },
+  { code: 'EMP_0030', material: 'ETIQUETA NARANJA 2000 ML', unit: 'Kg' },
+  { code: 'EMP_0034', material: 'ETIQUETA KOLITA 2000ML', unit: 'Kg' },
+  { code: 'EMP_0038', material: 'ETIQUETA FRESH 2000ML', unit: 'Kg' },
+  { code: 'EMP_0042', material: 'ETIQUETA COLA NEGRA 2000ML', unit: 'Kg' },
+  { code: 'EMP_0048', material: 'ETIQUETA JUSTY  NARANJA 1.5 LITROS', unit: 'kg' },
+  { code: 'EMP_0076', material: 'ETIQUETA VITA TE LIMON 1.5 LTS', unit: 'kg' },
+  { code: 'EMP_0077', material: 'ETIQUETA VITA TE  DURAZNO 1.5 LTS', unit: 'kg' },
+  { code: 'EMP_0101', material: 'ETIQUETA MANZANA VERDE 2000ML', unit: 'Kg' },
+  { code: 'EMP_0110', material: 'ETIQUETA COLA NEGRA 400ML', unit: 'Kg' },
+  { code: 'EMP_0111', material: 'ETIQUETA COLA NEGRA 1000ML', unit: 'Kg' },
+  { code: 'EMP_0112', material: 'ETIQUETA UVA 400ML', unit: 'Kg' },
+  { code: 'EMP_0113', material: 'ETIQUETA UVA 1000ML', unit: 'Kg' },
+  { code: 'EMP_0114', material: 'ETIQUETA KOLITA 400ML', unit: 'Kg' },
+  { code: 'EMP_0115', material: 'ETIQUETA KOLITA 1000ML', unit: 'Kg' },
+  { code: 'EMP_0116', material: 'ETIQUETA FRESH 400ML', unit: 'Kg' },
+  { code: 'EMP_0117', material: 'ETIQUETA FRESH 1000ML', unit: 'Kg' },
+  { code: 'EMP_0118', material: 'ETIQUETA MANZANA VERDE 1000ML', unit: 'Kg' },
+  { code: 'EMP_0119', material: 'ETIQUETA MANZANA VERDE 400ML', unit: 'Kg' },
+  { code: 'EMP_0136', material: 'ETIQUETA MANZANITA 2000ML', unit: 'Kg' },
+  { code: 'EMP_0137', material: 'ETIQUETA PIÑA PARCHITA 2000ML', unit: 'Kg' },
+  { code: 'EMP_0141', material: 'ETIQUETA JUSTY NARANJA 400ML', unit: 'Kg' },
+  { code: 'EMP_0142', material: 'ETIQUETA JUSTY DURAZNO 1.5 LITROS', unit: 'Kg' },
+  { code: 'EMP_0147', material: 'ETIQUETA PIÑA 1000ML', unit: 'Kg' },
+  { code: 'EMP_0148', material: 'ETIQUETA NARANJA 1000ML', unit: 'Kg' },
+  { code: 'EMP_0149', material: 'ETIQUETA PIÑA PARCHITA 1000ML', unit: 'Kg' },
+  { code: 'EMP_0150', material: 'ETIQUETA MANZANITA 1000ML', unit: 'Kg' },
+  { code: 'EMP_0151', material: 'ETIQUETA PIÑA 400ML', unit: 'Kg' },
+  { code: 'EMP_0152', material: 'ETIQUETA NARANJA 400ML', unit: 'Kg' },
+  { code: 'EMP_0153', material: 'ETIQUETA JUSTY MANZANA 400ML', unit: 'Kg' },
+  { code: 'EMP_0154', material: 'ETIQUETA PIÑA PARCHITA 400ML', unit: 'Kg' },
+  { code: 'EMP_0155', material: 'ETIQUETA MANZANITA 400ML', unit: 'Kg' },
+  { code: 'EMP_0157', material: 'ETIQUETA JUSTY MANZANA 1.5LITROS', unit: 'Kg' },
+  { code: 'EMP_0158', material: 'ETIQUETA JUSTY PERA 1.5 LITROS', unit: 'Kg' },
+  { code: 'EMP_0078', material: 'ADHESIVO KRONES COLFIX HIM 1195 N', unit: 'kg' },
+];
 
 const findWasteFlavor = (line: string, code: string): string => (
   Object.entries(WASTE_PRODUCTS_BY_LINE[line] || {}).find(([, product]) => product.code === code)?.[0] || ''
@@ -419,6 +464,37 @@ const wasteProductForOperation = (
   }
   return undefined;
 };
+
+const createRejectOperationMaterial = (
+  line: string,
+  kind: NonNullable<WasteTableRow['kind']>,
+  flavor: string,
+  preformSize: string,
+  unit: string,
+): RejectMaterialOption | undefined => {
+  const product = wasteProductForOperation(line, kind, flavor, preformSize);
+  return product ? { ...product, unit, kind, flavor, preformSize } : undefined;
+};
+
+const REJECT_OPERATION_MATERIALS = [
+  createRejectOperationMaterial('Linea 1', 'preformas', 'transparente', '', 'UND'),
+  createRejectOperationMaterial('Linea 1', 'preformas', 'verde', '', 'UND'),
+  createRejectOperationMaterial('Linea 5', 'preformas', 'transparente', '', 'UND'),
+  createRejectOperationMaterial('Linea 6', 'preformas', 'transparente', '', 'UND'),
+  createRejectOperationMaterial('Linea 6', 'preformas', 'verde', '', 'UND'),
+  createRejectOperationMaterial('Linea 7', 'preformas', 'transparente', '29', 'UND'),
+  createRejectOperationMaterial('Linea 7', 'preformas', 'transparente', '33', 'UND'),
+  createRejectOperationMaterial('Linea 7', 'preformas', 'verde', '', 'UND'),
+  createRejectOperationMaterial('Linea 1', 'termo', '', '', 'Kg'),
+  createRejectOperationMaterial('Linea 5', 'termo', '', '', 'Kg'),
+  createRejectOperationMaterial('Linea 6', 'termo', '', '', 'Kg'),
+  createRejectOperationMaterial('T', 'tapas', 'azul', '', 'UND'),
+  createRejectOperationMaterial('T', 'tapas', 'verde', '', 'UND'),
+].filter((item): item is RejectMaterialOption => item !== undefined);
+
+const REJECT_MATERIALS_BY_CODE = new Map(
+  [...REJECT_OPERATION_MATERIALS, ...REJECT_EXTRA_MATERIALS].map((item) => [item.code, item])
+);
 
 const getWasteRowsWithGeneratedCapsForProduction = (rows: WasteTableRow[]): WasteTableRow[] => (
   getWasteRowsWithGeneratedCaps(rows).map((row) => ({ ...row, quantity: String(row.quantity) }))
@@ -971,6 +1047,25 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   const updateWasteLine = (rowId: string, line: string) => {
     setWasteDraftRows((rows) => rows.map((row) => row.id === rowId
       ? { ...row, line, flavor: '', code: '', material: '' }
+      : row));
+  };
+
+  const updateRejectWasteLine = (rowId: string, line: string) => {
+    setWasteDraftRows((rows) => rows.map((row) => row.id === rowId ? { ...row, line } : row));
+  };
+
+  const updateRejectMaterial = (rowId: string, code: string) => {
+    const material = REJECT_MATERIALS_BY_CODE.get(code);
+    setWasteDraftRows((rows) => rows.map((row) => row.id === rowId
+      ? {
+          ...row,
+          code: material?.code || '',
+          material: material?.material || '',
+          unit: material?.unit || '',
+          kind: material?.kind,
+          flavor: material?.flavor || '',
+          preformSize: material?.preformSize || '',
+        }
       : row));
   };
 
@@ -3088,10 +3183,16 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                 />
                               </td>
                               <td className="px-3 py-2">
-                                {isMermas ? (
+                                {isMermas || section === 'rechazos' || section === 'devoluciones' ? (
                                   <select
                                     value={row.line}
-                                    onChange={(event) => updateWasteLine(row.id, event.target.value)}
+                                    onChange={(event) => {
+                                      if (section === 'rechazos' || section === 'devoluciones') {
+                                        updateRejectWasteLine(row.id, event.target.value);
+                                      } else {
+                                        updateWasteLine(row.id, event.target.value);
+                                      }
+                                    }}
                                     disabled={!isWasteEditing}
                                     className="w-full bg-transparent px-1 py-1 outline-none disabled:appearance-none disabled:text-slate-700"
                                     aria-label="Línea"
@@ -3113,9 +3214,6 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                       <option key={`${line}-preformas`} value={`${line}::preformas`}>{line} preformas</option>,
                                       <option key={`${line}-termo`} value={`${line}::termo`}>{line} termo</option>,
                                     ])}
-                                    {(section === 'rechazos' || section === 'devoluciones') && (
-                                      <option value="T::tapas">Tapas</option>
-                                    )}
                                     {row.line && !row.kind && (
                                       <option value={`${row.line}::legacy`}>{row.line}</option>
                                     )}
@@ -3125,7 +3223,36 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                 )}
                               </td>
                               <td className="px-3 py-2">
-                                {isMermas ? (
+                                {section === 'rechazos' || section === 'devoluciones' ? (
+                                  isWasteEditing ? (
+                                    <div>
+                                      <select
+                                        value={row.code}
+                                        onChange={(event) => updateRejectMaterial(row.id, event.target.value)}
+                                        className="w-full bg-transparent px-1 py-1 outline-none"
+                                        aria-label="Código y descripción del material"
+                                      >
+                                        <option value="">Seleccionar material</option>
+                                        {row.code && !REJECT_MATERIALS_BY_CODE.has(row.code) && (
+                                          <option value={row.code}>{row.code} · {row.material}</option>
+                                        )}
+                                        {Array.from(REJECT_MATERIALS_BY_CODE.values()).map((item) => (
+                                          <option key={item.code} value={item.code}>{item.code} · {item.material}</option>
+                                        ))}
+                                      </select>
+                                      {row.code && (
+                                        <span className="block px-1 text-[9px] leading-tight text-slate-500">
+                                          {row.code} · {row.material}
+                                        </span>
+                                      )}
+                                    </div>
+                                  ) : (
+                                    <span className="block px-1 py-1 text-slate-700">
+                                      <span className="block font-bold">{row.code}</span>
+                                      {row.material && <span className="block text-[9px] leading-tight text-slate-500">{row.material}</span>}
+                                    </span>
+                                  )
+                                ) : isMermas ? (
                                   isWasteEditing ? (
                                     <div>
                                       <select
@@ -3145,7 +3272,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                   ) : (
                                     <span className="block px-1 py-1 text-slate-700">{row.code}</span>
                                   )
-                                ) : (isDesperdicios || section === 'rechazos' || section === 'devoluciones') && row.kind === 'preformas' && isWasteEditing && !row.generated ? (
+                                ) : isDesperdicios && row.kind === 'preformas' && isWasteEditing && !row.generated ? (
                                   <div>
                                     <select
                                       value={row.flavor}
@@ -3171,22 +3298,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                     )}
                                     {row.code && <span className="block px-1 text-[10px] text-slate-500">{row.code}</span>}
                                   </div>
-                                ) : (section === 'rechazos' || section === 'devoluciones') && row.kind === 'tapas' && isWasteEditing ? (
-                                  <div>
-                                    <select
-                                      value={row.flavor}
-                                      onChange={(event) => updateWasteFlavor(row.id, event.target.value)}
-                                      className="w-full bg-transparent px-1 py-1 outline-none"
-                                      aria-label="Color de tapa"
-                                    >
-                                      <option value="">Seleccionar tapa</option>
-                                      <option value="azul">Azul</option>
-                                      <option value="verde">Verde</option>
-                                    </select>
-                                    {row.code && <span className="block px-1 text-[10px] text-slate-500">{row.code}</span>}
-                                  </div>
-                                ) : ((isDesperdicios && (row.kind === 'termo' || row.kind === 'preformas' || row.generated)) ||
-                                  ((section === 'rechazos' || section === 'devoluciones') && (row.kind === 'termo' || row.kind === 'tapas'))) ? (
+                                ) : isDesperdicios && (row.kind === 'termo' || row.kind === 'preformas' || row.generated) ? (
                                   <span className="block px-1 py-1 text-slate-700">{row.code}</span>
                                 ) : (
                                   <input
@@ -3200,10 +3312,9 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                 )}
                               </td>
                               <td className="px-3 py-2">
-                                {isMermas ? (
+                                {isMermas || section === 'rechazos' || section === 'devoluciones' ? (
                                   <span className="block px-1 py-1 text-slate-700">{row.material}</span>
-                                ) : (isDesperdicios && (row.kind === 'termo' || row.kind === 'preformas' || row.generated)) ||
-                                  ((section === 'rechazos' || section === 'devoluciones') && row.kind) ? (
+                                ) : isDesperdicios && (row.kind === 'termo' || row.kind === 'preformas' || row.generated) ? (
                                   <span className="block px-1 py-1 text-slate-700">{row.material}</span>
                                 ) : (
                                   <input
@@ -3228,7 +3339,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                               </td>
                               <td className="px-3 py-2">
                                 {isMermas || (isDesperdicios && (row.kind === 'preformas' || row.kind === 'termo' || row.generated)) ||
-                                  ((section === 'rechazos' || section === 'devoluciones') && row.kind) ? (
+                                  section === 'rechazos' || section === 'devoluciones' ? (
                                   <span className="block px-1 py-1 text-center text-slate-700">
                                     {isMermas || row.generated || row.kind === 'preformas' || row.kind === 'tapas' ? 'UND' : row.unit}
                                   </span>
