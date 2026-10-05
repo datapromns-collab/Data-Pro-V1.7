@@ -23,7 +23,7 @@ type WasteTableRow = {
   id: string;
   line: string;
   flavor: string;
-  kind?: 'preformas' | 'termo';
+  kind?: 'preformas' | 'termo' | 'tapas';
   preformSize?: string;
   code: string;
   material: string;
@@ -324,7 +324,7 @@ const normalizeWasteRows = (value: unknown): WasteTableRow[] => {
     .map((row) => {
       const line = typeof row.line === 'string' ? row.line : '';
       const kind: WasteTableRow['kind'] =
-        row.kind === 'preformas' || row.kind === 'termo' ? row.kind : undefined;
+        row.kind === 'preformas' || row.kind === 'termo' || row.kind === 'tapas' ? row.kind : undefined;
       const flavor = typeof row.flavor === 'string' && row.flavor
         ? row.flavor
         : findWasteFlavor(line, typeof row.code === 'string' ? row.code : '');
@@ -339,7 +339,7 @@ const normalizeWasteRows = (value: unknown): WasteTableRow[] => {
         code: product?.code || (typeof row.code === 'string' ? row.code : ''),
         material: product?.material || (typeof row.material === 'string' ? row.material : ''),
         quantity: typeof row.quantity === 'string' ? row.quantity : '',
-        unit: kind === 'termo' ? 'Kg' : kind === 'preformas' ? 'UND' : typeof row.unit === 'string' ? row.unit : '',
+        unit: kind === 'termo' ? 'Kg' : kind === 'preformas' || kind === 'tapas' ? 'UND' : typeof row.unit === 'string' ? row.unit : '',
       };
     })
     .filter((row) => row.id);
@@ -380,6 +380,11 @@ const wasteProductForOperation = (
   flavor: string,
   preformSize: string
 ): WasteProduct | undefined => {
+  if (kind === 'tapas') {
+    if (flavor === 'azul') return { code: 'EMP_0105', material: 'TAPA AZUL REFRESCOS CON IMPRESIÓN-1881' };
+    if (flavor === 'verde') return { code: 'EMP_0095', material: 'TAPA VERDE REFRESCOS CON IMPRESION-1881' };
+    return undefined;
+  }
   if (kind === 'termo') {
     if (line === 'Linea 5') return { code: 'EMP_0017', material: 'POLIETILENO TERMOENCOGIBLE 55 X 0.07' };
     if (line === 'Linea 6') return { code: 'EMP_0130', material: 'POLIETILENO TERMOENCOGIBLE 43 x 0.06' };
@@ -971,7 +976,8 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
 
   const updateWasteOperation = (rowId: string, value: string) => {
     const [line, kindValue] = value.split('::');
-    const kind = kindValue === 'preformas' || kindValue === 'termo' ? kindValue : undefined;
+    const kind: WasteTableRow['kind'] =
+      kindValue === 'preformas' || kindValue === 'termo' || kindValue === 'tapas' ? kindValue : undefined;
     const flavor = kind === 'preformas' && line === 'Linea 5' ? 'transparente' : '';
     const product = wasteProductForOperation(line, kind, flavor, '');
     setWasteDraftRows((rows) => rows.map((row) => row.id === rowId
@@ -983,7 +989,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
           preformSize: '',
           code: product?.code || '',
           material: product?.material || '',
-          unit: kind === 'termo' ? 'Kg' : kind === 'preformas' ? 'UND' : '',
+          unit: kind === 'termo' ? 'Kg' : kind === 'preformas' || kind === 'tapas' ? 'UND' : '',
         }
       : row));
   };
@@ -1001,6 +1007,10 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
           material: product?.material || '',
           unit: 'UND',
         };
+      }
+      if (row.kind === 'tapas') {
+        const product = wasteProductForOperation(row.line, row.kind, flavor, '');
+        return { ...row, flavor, code: product?.code || '', material: product?.material || '', unit: 'UND' };
       }
       const product = WASTE_PRODUCTS_BY_LINE[row.line]?.[flavor];
       return { ...row, flavor, code: product?.code || '', material: product?.material || '' };
@@ -1249,7 +1259,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
           ? 'UND'
           : row.kind === 'termo'
             ? 'Kg'
-            : row.kind === 'preformas'
+            : row.kind === 'preformas' || row.kind === 'tapas'
               ? 'UND'
               : row.unit,
       }));
@@ -3078,7 +3088,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                 />
                               </td>
                               <td className="px-3 py-2">
-                                {isMermas || section === 'rechazos' || section === 'devoluciones' ? (
+                                {isMermas ? (
                                   <select
                                     value={row.line}
                                     onChange={(event) => updateWasteLine(row.id, event.target.value)}
@@ -3096,13 +3106,16 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                     value={row.kind ? `${row.line}::${row.kind}` : row.line ? `${row.line}::legacy` : ''}
                                     onChange={(event) => updateWasteOperation(row.id, event.target.value)}
                                     className="w-full bg-transparent px-1 py-1 outline-none"
-                                    aria-label="Línea y tipo de desperdicio"
+                                    aria-label="Línea y tipo de material"
                                   >
                                     <option value="">Seleccionar línea</option>
                                     {Array.from({ length: 7 }, (_, lineIndex) => `Linea ${lineIndex + 1}`).flatMap((line) => [
                                       <option key={`${line}-preformas`} value={`${line}::preformas`}>{line} preformas</option>,
                                       <option key={`${line}-termo`} value={`${line}::termo`}>{line} termo</option>,
                                     ])}
+                                    {(section === 'rechazos' || section === 'devoluciones') && (
+                                      <option value="T::tapas">Tapas</option>
+                                    )}
                                     {row.line && !row.kind && (
                                       <option value={`${row.line}::legacy`}>{row.line}</option>
                                     )}
@@ -3132,7 +3145,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                   ) : (
                                     <span className="block px-1 py-1 text-slate-700">{row.code}</span>
                                   )
-                                ) : isDesperdicios && row.kind === 'preformas' && isWasteEditing && !row.generated ? (
+                                ) : (isDesperdicios || section === 'rechazos' || section === 'devoluciones') && row.kind === 'preformas' && isWasteEditing && !row.generated ? (
                                   <div>
                                     <select
                                       value={row.flavor}
@@ -3158,7 +3171,22 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                     )}
                                     {row.code && <span className="block px-1 text-[10px] text-slate-500">{row.code}</span>}
                                   </div>
-                                ) : isDesperdicios && (row.kind === 'termo' || row.kind === 'preformas' || row.generated) ? (
+                                ) : (section === 'rechazos' || section === 'devoluciones') && row.kind === 'tapas' && isWasteEditing ? (
+                                  <div>
+                                    <select
+                                      value={row.flavor}
+                                      onChange={(event) => updateWasteFlavor(row.id, event.target.value)}
+                                      className="w-full bg-transparent px-1 py-1 outline-none"
+                                      aria-label="Color de tapa"
+                                    >
+                                      <option value="">Seleccionar tapa</option>
+                                      <option value="azul">Azul</option>
+                                      <option value="verde">Verde</option>
+                                    </select>
+                                    {row.code && <span className="block px-1 text-[10px] text-slate-500">{row.code}</span>}
+                                  </div>
+                                ) : ((isDesperdicios && (row.kind === 'termo' || row.kind === 'preformas' || row.generated)) ||
+                                  ((section === 'rechazos' || section === 'devoluciones') && (row.kind === 'termo' || row.kind === 'tapas'))) ? (
                                   <span className="block px-1 py-1 text-slate-700">{row.code}</span>
                                 ) : (
                                   <input
@@ -3174,7 +3202,8 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                               <td className="px-3 py-2">
                                 {isMermas ? (
                                   <span className="block px-1 py-1 text-slate-700">{row.material}</span>
-                                ) : isDesperdicios && (row.kind === 'termo' || row.kind === 'preformas' || row.generated) ? (
+                                ) : (isDesperdicios && (row.kind === 'termo' || row.kind === 'preformas' || row.generated)) ||
+                                  ((section === 'rechazos' || section === 'devoluciones') && row.kind) ? (
                                   <span className="block px-1 py-1 text-slate-700">{row.material}</span>
                                 ) : (
                                   <input
@@ -3198,9 +3227,10 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                 />
                               </td>
                               <td className="px-3 py-2">
-                                {isMermas || (isDesperdicios && (row.kind === 'preformas' || row.kind === 'termo' || row.generated)) ? (
+                                {isMermas || (isDesperdicios && (row.kind === 'preformas' || row.kind === 'termo' || row.generated)) ||
+                                  ((section === 'rechazos' || section === 'devoluciones') && row.kind) ? (
                                   <span className="block px-1 py-1 text-center text-slate-700">
-                                    {isMermas || row.generated ? 'UND' : row.unit}
+                                    {isMermas || row.generated || row.kind === 'preformas' || row.kind === 'tapas' ? 'UND' : row.unit}
                                   </span>
                                 ) : (
                                   <input

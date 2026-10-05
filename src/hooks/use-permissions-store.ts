@@ -22,37 +22,34 @@ export interface ManagementPermissions {
   [userId: string]: ManagementSection[];
 }
 
-const DEFAULT_PLANNING_READ: PlanningSection[] = ['gantt', 'daily', 'preparation', 'requirement'];
-const DEFAULT_PLANNING_WRITE: PlanningSection[] = ['gantt', 'daily', 'preparation', 'requirement'];
-
 const DEFAULT_PLANNING_PERMISSIONS: PlanningPermissions = {
-  mds: { read: DEFAULT_PLANNING_READ, write: [] },
-  'jaime.r': { read: DEFAULT_PLANNING_READ, write: DEFAULT_PLANNING_WRITE },
-  demon: { read: DEFAULT_PLANNING_READ, write: DEFAULT_PLANNING_WRITE },
-  demon2: { read: DEFAULT_PLANNING_READ, write: DEFAULT_PLANNING_WRITE },
-  'maria.mds': { read: DEFAULT_PLANNING_READ, write: [] },
-  'alex.mds': { read: DEFAULT_PLANNING_READ, write: [] },
-  'anto.mds': { read: DEFAULT_PLANNING_READ, write: [] },
-  'prodtj.mds': { read: DEFAULT_PLANNING_READ, write: [] },
-  'prodtg.mds': { read: DEFAULT_PLANNING_READ, write: [] },
-  'procj.mds': { read: DEFAULT_PLANNING_READ, write: [] },
-  'proc1.mds': { read: DEFAULT_PLANNING_READ, write: [] },
-  'proc2.mds': { read: DEFAULT_PLANNING_READ, write: [] },
-  'procs1.mds': { read: DEFAULT_PLANNING_READ, write: [] },
-  'procs2.mds': { read: DEFAULT_PLANNING_READ, write: [] },
-  'finan.mds': { read: DEFAULT_PLANNING_READ, write: [] },
-  'cald.mds': { read: DEFAULT_PLANNING_READ, write: [] },
-  'prodt.mds': { read: DEFAULT_PLANNING_READ, write: [] },
-  'proc.mds': { read: DEFAULT_PLANNING_READ, write: [] },
-  'g.tec.mds': { read: DEFAULT_PLANNING_READ, write: [] },
-  'enf.mds': { read: DEFAULT_PLANNING_READ, write: [] },
-  'etq.mds': { read: DEFAULT_PLANNING_READ, write: [] },
-  'prodts.mds': { read: DEFAULT_PLANNING_READ, write: [] },
-  'prodt1.mds': { read: DEFAULT_PLANNING_READ, write: [] },
-  'prodt2.mds': { read: DEFAULT_PLANNING_READ, write: [] },
-  'logg.mds': { read: DEFAULT_PLANNING_READ, write: [] },
-  'mtto.mds': { read: DEFAULT_PLANNING_READ, write: [] },
-  'MDS': { read: DEFAULT_PLANNING_READ, write: [] },
+  mds: { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'jaime.r': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: ['gantt', 'daily', 'preparation', 'requirement'] },
+  demon: { read: ['gantt', 'daily', 'preparation', 'requirement'], write: ['gantt', 'daily', 'preparation', 'requirement'] },
+  demon2: { read: ['gantt', 'daily', 'preparation', 'requirement'], write: ['gantt', 'daily', 'preparation', 'requirement'] },
+  'maria.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'alex.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'anto.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'prodtj.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'prodtg.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'procj.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'proc1.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'proc2.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'procs1.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'procs2.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'finan.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'cald.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'prodt.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'proc.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'g.tec.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'enf.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'etq.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'prodts.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'prodt1.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'prodt2.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'logg.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'mtto.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'MDS': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
 };
 
 const DEFAULT_MANAGEMENT_PERMISSIONS: ManagementPermissions = {
@@ -266,7 +263,6 @@ export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
     { id: 'gantt', label: 'Programación' },
     { id: 'daily', label: 'Plan día a día' },
     { id: 'plan-semana', label: 'Plan Semana' },
-    { id: 'seguimiento-prodt', label: 'Seguimiento Prodt' },
     { id: 'preparation', label: 'Preparación' },
     { id: 'requirement', label: 'Requerimiento' },
     { id: 'speeds', label: 'Velocidades' },
@@ -420,23 +416,40 @@ export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
     ] },
     { id: 'rendimiento-azucar', label: 'Rendimiento de azúcar', children: [
       { id: 'semanal', label: 'Semanal', children: [
-        { id: 'r-estandar-sem', label: 'R estandar sem' },
-        { id: 'r-promedio-sem', label: 'R promedio sem' },
+        { id: 'estandar', label: 'R estándar sem' },
+        { id: 'promedio', label: 'R promedio sem' },
       ] },
       { id: 'mensual', label: 'Mensual', children: [
-        { id: 'r-estandar-mes', label: 'R estandar mes' },
-        { id: 'r-promedio-mes', label: 'R promedio mes' },
+        { id: 'estandar', label: 'R estándar mes' },
+        { id: 'promedio', label: 'R promedio mes' },
       ] },
     ] },
     { id: 'producto-no-conforme', label: 'Producto no conforme', children: [
-      { id: 'semanal', label: 'Semanal', children: [
-        { id: 'por-lineas', label: 'Por líneas' },
-        { id: 'por-no-conformidad', label: 'Por no conformidad' },
+      { id: 'semanal', label: 'Semanal' },
+      { id: 'mensual', label: 'Mensual' },
+      { id: 'por-lineas', label: 'Por líneas' },
+      { id: 'por-no-conformidad', label: 'Por no conformidad' },
+    ] },
+    { id: 'mermas-botella-envasada', label: 'Mermas de botella envasada', children: [
+      { id: 'semanal', label: 'Resumen semanal' },
+      { id: 'mensual', label: 'Resumen mensual' },
+      { id: 'por-lineas', label: 'Por líneas' },
+      { id: 'por-presentacion-sabor', label: 'Por presentación y sabor' },
+    ] },
+    { id: 'mermas-materiales-lineas', label: 'Mermas de materiales en líneas', children: [
+      { id: 'semanal', label: 'Resumen semanal' },
+      { id: 'mensual', label: 'Resumen mensual' },
+      { id: 'por-lineas', label: 'Por líneas', children: [
+        { id: 'preformas', label: 'Preformas' },
+        { id: 'termo', label: 'Termos' },
       ] },
-      { id: 'mensual', label: 'Mensual', children: [
-        { id: 'por-lineas', label: 'Por líneas' },
-        { id: 'por-no-conformidad', label: 'Por no conformidad' },
-      ] },
+      { id: 'por-material', label: 'Por material' },
+    ] },
+    { id: 'analisis-ventas', label: 'Análisis de ventas', children: [
+      { id: 'dia', label: 'Día' },
+      { id: 'promedio', label: 'Promedio de ventas' },
+      { id: 'semana', label: 'Semana' },
+      { id: 'mes', label: 'Mes' },
     ] },
   ],
   logistica: [
@@ -673,27 +686,21 @@ export function usePermissionsStore() {
       persistedStateRef.current = next;
     };
 
-    applyState(localState);
-    setIsLoaded(true);
-    remoteReadyRef.current = true;
-
     const hydrateFromApi = async () => {
-      try {
-        const remote = await loadSharedPermissions();
-        if (remote) {
-          applyState(remote);
-          return;
+      const remote = await loadSharedPermissions();
+      if (remote) {
+        applyState(remote);
+      } else {
+        applyState(localState);
+        try {
+          await saveSharedPermissions(localState);
+          setSyncError(false);
+        } catch {
+          setSyncError(true);
         }
-      } catch {
-        // keep local data visible while the remote sync refreshes in the background
       }
-
-      try {
-        await saveSharedPermissions(localState);
-        setSyncError(false);
-      } catch {
-        setSyncError(true);
-      }
+      remoteReadyRef.current = true;
+      setIsLoaded(true);
     };
 
     void hydrateFromApi();

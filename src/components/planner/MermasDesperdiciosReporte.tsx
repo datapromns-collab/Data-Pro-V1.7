@@ -12,7 +12,7 @@ export type WasteReportRow = {
   id: string;
   line: string;
   flavor: string;
-  kind?: 'preformas' | 'termo';
+  kind?: 'preformas' | 'termo' | 'tapas';
   preformSize?: string;
   code: string;
   material: string;
@@ -221,7 +221,7 @@ export function MermasDesperdiciosReporte({
               type="button"
               onClick={() => onPeriodChange(value)}
               className={cn(
-                'h-9 rounded-full px-4 text-[10px] font-black uppercase tracking-widest',
+                'pointer-events-auto h-9 rounded-full px-4 text-[10px] font-black uppercase tracking-widest',
                 period === value
                   ? mode === 'mermas' ? 'bg-blue-700 text-white' : 'bg-green-700 text-white'
                   : 'text-slate-500 hover:text-slate-700'
@@ -243,7 +243,7 @@ export function MermasDesperdiciosReporte({
               const [year, month] = event.target.value.split('-').map(Number);
               if (year && month) setWeeklyMonthDate(new Date(year, month - 1, 1));
             }}
-            className="h-9 rounded-full border border-slate-200 bg-white px-3 text-[10px] font-bold uppercase tracking-widest text-slate-700"
+            className="pointer-events-auto h-9 rounded-full border border-slate-200 bg-white px-3 text-[10px] font-bold uppercase tracking-widest text-slate-700"
           />
           <input
             type="week"
@@ -255,7 +255,7 @@ export function MermasDesperdiciosReporte({
               const date = setISOWeek(new Date(Number(match[1]), 0, 4), Number(match[2]));
               onWeeklyDateChange(startOfWeek(date, { weekStartsOn: 1 }));
             }}
-            className="h-9 rounded-full border border-slate-200 bg-white px-3 text-[10px] font-bold uppercase tracking-widest text-slate-700"
+            className="pointer-events-auto h-9 rounded-full border border-slate-200 bg-white px-3 text-[10px] font-bold uppercase tracking-widest text-slate-700"
           />
           <span className="text-[10px] font-black uppercase tracking-widest text-slate-600">
             Semana {getISOWeek(weekStart)} · {format(weekStart, 'dd/MM/yyyy')} al {format(weekEnd, 'dd/MM/yyyy')} · Mes: {format(weeklyMonthDate, 'MMMM yyyy', { locale: es })}
@@ -271,7 +271,7 @@ export function MermasDesperdiciosReporte({
               const [year, month] = event.target.value.split('-').map(Number);
               if (year && month) onMonthlyDateChange(new Date(year, month - 1, 1));
             }}
-            className="h-9 rounded-full border border-slate-200 bg-white px-3 text-[10px] font-bold uppercase tracking-widest text-slate-700"
+            className="pointer-events-auto h-9 rounded-full border border-slate-200 bg-white px-3 text-[10px] font-bold uppercase tracking-widest text-slate-700"
           />
         </div>
       )}
@@ -283,7 +283,7 @@ export function MermasDesperdiciosReporte({
             { id: 'por-presentacion-sabor' as const, label: 'Por presentación y sabor' },
           ]).map(({ id, label }) => (
             <button key={id} type="button" onClick={() => setMermasView(id)}
-              className={cn('rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-widest',
+              className={cn('pointer-events-auto rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-widest',
                 mermasView === id ? 'bg-blue-700 text-white' : 'bg-slate-100 text-slate-600')}>
               {label}
             </button>
@@ -297,7 +297,7 @@ export function MermasDesperdiciosReporte({
               { id: 'por-material' as const, label: 'Por material' },
             ]).map(({ id, label }) => (
               <button key={id} type="button" onClick={() => setDesperdiciosView(id)}
-                className={cn('rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-widest',
+                className={cn('pointer-events-auto rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-widest',
                   desperdiciosView === id ? 'bg-green-700 text-white' : 'bg-slate-100 text-slate-600')}>
                 {label}
               </button>
@@ -310,7 +310,7 @@ export function MermasDesperdiciosReporte({
                 { id: 'termo' as const, label: 'Termos' },
               ]).map(({ id, label }) => (
                 <button key={id} type="button" onClick={() => setLineKind(id)}
-                  className={cn('rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-widest',
+                  className={cn('pointer-events-auto rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-widest',
                     lineKind === id ? 'bg-emerald-800 text-white' : 'bg-slate-100 text-slate-600')}>
                   {label}
                 </button>

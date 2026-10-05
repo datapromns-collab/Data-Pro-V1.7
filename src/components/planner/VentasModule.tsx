@@ -862,7 +862,7 @@ export function VentasModule({
                     type="button"
                     onClick={() => setPeriodoAnalisis(id)}
                     className={cn(
-                      'rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-widest',
+                      'pointer-events-auto rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-widest',
                       periodoAnalisis === id ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500'
                     )}
                   >
@@ -870,7 +870,7 @@ export function VentasModule({
                   </button>
                 ))}
               </div>
-              <label className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-600">
+              <label className="pointer-events-auto flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-600">
                 <CalendarDays className="h-4 w-4" />
                 <span>{periodoAnalisis === 'dia' ? 'Fecha de análisis' : 'Fecha de carga'}</span>
                 <input
@@ -880,11 +880,11 @@ export function VentasModule({
                     setFechaAnalisis(event.target.value);
                     if (event.target.value) setSemanaSeleccionada(inicioSemanaKey(event.target.value));
                   }}
-                  className="bg-transparent text-xs font-bold text-slate-800 outline-none"
+                  className="pointer-events-auto bg-transparent text-xs font-bold text-slate-800 outline-none"
                 />
               </label>
               {periodoAnalisis === 'semana' && (
-                <label className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-600">
+                <label className="pointer-events-auto flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-600">
                   <span>Semana</span>
                   <select
                     aria-label="Seleccionar semana del mes"
