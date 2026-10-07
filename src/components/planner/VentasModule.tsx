@@ -128,8 +128,31 @@ const textoCelda = (cell: ExcelJS.Cell) => {
 const esColumnaArticulo = (encabezado: string) =>
   encabezado.includes('articulo') ||
   encabezado.includes('codigo') ||
+  encabezado.startsWith('cod') ||
+  encabezado.includes('sku') ||
+  encabezado.includes('material') ||
   encabezado.includes('item') ||
   encabezado.includes('referencia');
+
+const esColumnaEntradaExterna = (encabezado: string) =>
+  encabezado.includes('entrada') ||
+  encabezado.includes('ingreso') ||
+  encabezado.includes('recepcion') ||
+  encabezado.includes('recibido') ||
+  encabezado.includes('recibida') ||
+  encabezado.includes('ingresado') ||
+  encabezado.includes('ingresada') ||
+  encabezado.includes('stock') ||
+  encabezado.includes('existencia') ||
+  encabezado.includes('inventario') ||
+  encabezado.includes('cantidad') ||
+  encabezado.includes('unidades') ||
+  encabezado.includes('unidad') ||
+  encabezado.includes('cajas') ||
+  encabezado.includes('caja') ||
+  encabezado === 'cant' ||
+  encabezado.startsWith('cant') ||
+  encabezado === 'qty';
 
 const esColumnaStock = (encabezado: string) =>
   encabezado.includes('stock') ||
@@ -367,6 +390,7 @@ export function VentasModule({
       let headerRowNumber: number | null = null;
       let articuloColumn: number | null = null;
       let cantidadColumn: number | null = null;
+      const scannedHeaders: string[] = [];
 
       for (const candidate of workbook.worksheets) {
         let found = false;
@@ -377,15 +401,11 @@ export function VentasModule({
             const encabezado = normalizarEncabezado(textoCelda(cell));
             if (encabezado) columns.push({ encabezado, columnNumber });
           });
+          if (columns.length > 0 && scannedHeaders.length < 12) {
+            scannedHeaders.push(`${candidate.name}, fila ${row.number}: ${columns.map(({ encabezado }) => encabezado).join(', ')}`);
+          }
           const articulo = columns.find(({ encabezado }) => esColumnaArticulo(encabezado))?.columnNumber;
-          const cantidad = columns.find(({ encabezado }) =>
-            encabezado.includes('entrada') ||
-            encabezado.includes('ingreso') ||
-            encabezado.includes('recepcion') ||
-            encabezado.includes('cantidad') ||
-            encabezado.includes('unidades') ||
-            encabezado.includes('cajas')
-          )?.columnNumber;
+          const cantidad = columns.find(({ encabezado }) => esColumnaEntradaExterna(encabezado))?.columnNumber;
           if (articulo && cantidad) {
             worksheet = candidate;
             headerRowNumber = row.number;
@@ -398,7 +418,12 @@ export function VentasModule({
       }
 
       if (!worksheet || !headerRowNumber || !articuloColumn || !cantidadColumn) {
-        throw new Error('El Excel debe incluir columnas Artículo/Código y Entrada/Cantidad/Cajas.');
+        const foundHeaders = scannedHeaders.length > 0
+          ? ` Encabezados detectados: ${scannedHeaders.join(' | ')}.`
+          : '';
+        throw new Error(
+          `No pude identificar las columnas de artículo y cantidad de entrada. Se aceptan Artículo/Código/SKU/Material y Entrada/Ingreso/Recepción/Recibido/Cantidad/Unidades/Cajas.${foundHeaders}`
+        );
       }
 
       const parsedEntries: Record<string, number> = {};

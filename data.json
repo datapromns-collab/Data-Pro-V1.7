@@ -39847,6 +39847,38 @@
             "preparado": "16",
             "final": "16"
           }
+        },
+        "2026-04-18": {
+          "GLUP COLA": {
+            "inicial": "49.96",
+            "preparado": "48",
+            "final": ""
+          },
+          "GLUP KOLITA": {
+            "inicial": "18",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP FRESH": {
+            "inicial": "2.6",
+            "preparado": "12",
+            "final": ""
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "29",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP UVA": {
+            "inicial": "4.99",
+            "preparado": "22",
+            "final": ""
+          },
+          "GLUP MANZANA ROJA": {
+            "inicial": "16",
+            "preparado": "",
+            "final": ""
+          }
         }
       },
       "sugar": {
@@ -41077,6 +41109,18 @@
             "recepcionSacos": "3000",
             "invFinalSacos": "1960"
           }
+        },
+        "2026-04-18": {
+          "PORTUGUESA": {
+            "invInicialSacos": "7519",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          },
+          "MONTALBAN": {
+            "invInicialSacos": "1960",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          }
         }
       },
       "tanques": {
@@ -42167,6 +42211,12 @@
         "2026-04-17": {
           "JARABE SIMPLE": {
             "invInicialSacos": "295",
+            "invFinalSacos": "406"
+          }
+        },
+        "2026-04-18": {
+          "JARABE SIMPLE": {
+            "invInicialSacos": "406",
             "invFinalSacos": ""
           }
         }
@@ -42241,7 +42291,21 @@
         "2026-10-01": "50.44",
         "2026-10-02": "50.51",
         "2026-10-03": "50.45",
-        "2026-10-04": "50.49"
+        "2026-10-04": "50.49",
+        "2026-04-01": "50.52",
+        "2026-04-05": "50.52",
+        "2026-04-06": "50.50",
+        "2026-04-07": "50.5",
+        "2026-04-08": "50.5",
+        "2026-04-09": "50.5",
+        "2026-04-10": "50.5",
+        "2026-04-11": "50.5",
+        "2026-04-12": "50.5",
+        "2026-04-13": "50.52",
+        "2026-04-14": "50.52",
+        "2026-04-15": "50.52",
+        "2026-04-16": "50.52",
+        "2026-04-17": "50.52"
       },
       "costoAzucar": {
         "2026-07-28": "1.43",
