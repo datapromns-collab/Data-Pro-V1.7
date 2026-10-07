@@ -12981,6 +12981,41 @@
           "aditivosCantidad": {},
           "solidosCantidad": {},
           "quimicosInsumosCantidad": {}
+        },
+        "2026-10-07": {
+          "tapas": {
+            "EMP_0095-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0095-Importada": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaEW": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaTipo2": {
+              "totalCajas": "",
+              "total": ""
+            }
+          },
+          "separadores": {},
+          "preformas": {},
+          "plasticos": {},
+          "adhesivoCantidad": "",
+          "etiquetasCantidad": {},
+          "azucarCantidad": {},
+          "concentradosCantidad": {},
+          "concentradosJustyCantidad": {},
+          "aditivosCantidad": {},
+          "solidosCantidad": {},
+          "quimicosInsumosCantidad": {}
         }
       },
       "semanal": {
@@ -16792,7 +16827,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-07T10:55:29.145Z"
+    "updatedAt": "2026-10-07T12:05:55.746Z"
   },
   "ordenesSap": [
     {
@@ -27242,12 +27277,12 @@
           "fechaInicio": "2026-10-06",
           "ticket1": "16235",
           "cajas1": 1404,
-          "ticket2": "",
+          "ticket2": "16236",
           "cajas2": 12246,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 936,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 6393
         }
       ]
     },
@@ -27273,12 +27308,12 @@
           "fechaInicio": "2026-10-06",
           "ticket1": "15211",
           "cajas1": 1700,
-          "ticket2": "",
+          "ticket2": "15212",
           "cajas2": 4400,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 500,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 3200
         }
       ]
     },
@@ -27304,12 +27339,12 @@
           "fechaInicio": "2026-10-06",
           "ticket1": "16139",
           "cajas1": 5520,
-          "ticket2": "",
+          "ticket2": "16140",
           "cajas2": 15680,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1280,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 11120
         }
       ]
     },
@@ -27335,12 +27370,12 @@
           "fechaInicio": "2026-10-06",
           "ticket1": "16254",
           "cajas1": 3520,
-          "ticket2": "",
+          "ticket2": "16255",
           "cajas2": 18240,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 880,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 8640
         }
       ]
     },
@@ -27397,12 +27432,12 @@
           "fechaInicio": "2026-10-06",
           "ticket1": "16091",
           "cajas1": 3200,
-          "ticket2": "",
+          "ticket2": "16092",
           "cajas2": 9440,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 880,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 6240
         }
       ]
     },
@@ -27448,12 +27483,32 @@
           "fechaInicio": "2026-10-06",
           "ticket1": "16301",
           "cajas1": 6880,
-          "ticket2": "",
+          "ticket2": "16302",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1680,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 14000
+        }
+      ]
+    },
+    {
+      "id": "6-1791374112487",
+      "linea": 6,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "64077",
+      "semana": 41,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-06",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16185",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 320,
+          "ticket4": "",
+          "cajas4": 5600
         }
       ]
     }
@@ -42211,7 +42266,7 @@
         "2026-09-14|2026-09": 1174355.86,
         "2026-09-21|2026-09": 1009476.45,
         "2026-09-28|2026-09": 550986.53,
-        "2026-10-01|2026-10": 479385.1,
+        "2026-10-01|2026-10": 0,
         "2026-04-13|2026-04": 1079058.55
       }
     },
@@ -160476,6 +160531,12 @@
           "jarabeReal": 86174,
           "ubb": 30,
           "producto": "384"
+        },
+        "auto-1-1791062606569": {
+          "producto": "239",
+          "cajasPlanificadas": 60000,
+          "jarabeReal": 72868,
+          "ubb": 41.72
         }
       },
       "linea-2": {
@@ -160719,6 +160780,12 @@
           "ubb": 67.91,
           "pnc": 1260,
           "jarabeReal": 105485
+        },
+        "auto-2-1791048785936": {
+          "producto": "179",
+          "cajasPlanificadas": 100000,
+          "jarabeReal": 67454,
+          "ubb": 68.2
         }
       },
       "linea-3": {
@@ -161081,7 +161148,11 @@
           "producto": "634"
         },
         "auto-4-1790889966788": {
-          "pnc": 216
+          "pnc": 216,
+          "producto": "429",
+          "cajasPlanificadas": 126000,
+          "jarabeReal": 198959,
+          "ubb": 69.22
         }
       },
       "linea-5": {
@@ -168252,7 +168323,12 @@
       "2026-10-05-suave": "236065",
       "2026-10-05-procesos": "2291425,91",
       "2026-10-05-filtrada": "3578179,57",
-      "2026-10-05-total": "3067134"
+      "2026-10-05-total": "3067134",
+      "2026-10-06-servicio": "20381",
+      "2026-10-06-suave": "267081",
+      "2026-10-06-procesos": "3040147,25",
+      "2026-10-06-filtrada": "4611284,58",
+      "2026-10-06-total": "3011244,20"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
@@ -169283,7 +169359,75 @@
       "2026-10-06-Gamma Ro-432-0": "166,5",
       "2026-10-06-RO Cleaner-0": "213,7",
       "2026-10-06-Sanitizer-0": "200",
-      "2026-10-06-LARK CLEAN 21C-0": "0"
+      "2026-10-06-LARK CLEAN 21C-0": "0",
+      "2026-10-06-Lark Desengrasante-2": "0",
+      "2026-10-06-Lark Desengrasante-4": "0",
+      "2026-10-06-LP20-2": "196,5",
+      "2026-10-06-LP20-4": "196,5",
+      "2026-10-06-Cloro-2": "466",
+      "2026-10-06-Cloro-4": "466",
+      "2026-10-06-AntiEscalante-2": "817,3",
+      "2026-10-06-AntiEscalante-4": "817,3",
+      "2026-10-06-Sal-2": "7880",
+      "2026-10-06-Sal-4": "7880",
+      "2026-10-06-Alcalino-2": "2968,6",
+      "2026-10-06-Alcalino-4": "2968,6",
+      "2026-10-06-Peracetico-2": "435,7",
+      "2026-10-06-Peracetico-4": "435,7",
+      "2026-10-06-Lark Foam Quat-2": "256,5",
+      "2026-10-06-Lark Foam Quat-4": "256,5",
+      "2026-10-06-Lark Foam IN-2": "169,5",
+      "2026-10-06-Lark Foam IN-4": "169,5",
+      "2026-10-06-Soda Caustica-2": "496,6",
+      "2026-10-06-Soda Caustica-4": "496,6",
+      "2026-10-06-GermiQuat-2": "225",
+      "2026-10-06-GermiQuat-4": "225",
+      "2026-10-06-Lark Inox-2": "18",
+      "2026-10-06-Lark Inox-4": "18",
+      "2026-10-06-TM Smart-2": "357,2",
+      "2026-10-06-TM Smart-4": "357,2",
+      "2026-10-06-Gamma Ro-432-2": "166,5",
+      "2026-10-06-Gamma Ro-432-4": "166,5",
+      "2026-10-06-RO Cleaner-2": "213,7",
+      "2026-10-06-RO Cleaner-4": "213,7",
+      "2026-10-06-Sanitizer-2": "200",
+      "2026-10-06-Sanitizer-4": "200",
+      "2026-10-06-LARK CLEAN 21C-2": "0",
+      "2026-10-06-LARK CLEAN 21C-4": "0",
+      "2026-10-06-LP20-6": "195,3",
+      "2026-10-06-Cloro-6": "450",
+      "2026-10-06-AntiEscalante-6": "796,3",
+      "2026-10-06-Sal-6": "7540",
+      "2026-10-06-Alcalino-6": "2913",
+      "2026-10-06-Peracetico-6": "418,3",
+      "2026-10-06-Lark Foam Quat-6": "256,5",
+      "2026-10-06-Lark Foam IN-6": "169,5",
+      "2026-10-06-Lark Desengrasante-6": "0",
+      "2026-10-06-Soda Caustica-6": "496,6",
+      "2026-10-06-GermiQuat-6": "225",
+      "2026-10-06-Lark Inox-6": "18",
+      "2026-10-06-TM Smart-6": "329,6",
+      "2026-10-06-Gamma Ro-432-6": "166,5",
+      "2026-10-06-RO Cleaner-6": "213,7",
+      "2026-10-06-Sanitizer-6": "200",
+      "2026-10-06-LARK CLEAN 21C-6": "0",
+      "2026-10-07-LP20-0": "195,3",
+      "2026-10-07-Cloro-0": "450",
+      "2026-10-07-AntiEscalante-0": "796,3",
+      "2026-10-07-Sal-0": "7540",
+      "2026-10-07-Alcalino-0": "2913",
+      "2026-10-07-Peracetico-0": "418,3",
+      "2026-10-07-Lark Foam Quat-0": "256,5",
+      "2026-10-07-Lark Foam IN-0": "169,5",
+      "2026-10-07-Lark Desengrasante-0": "0",
+      "2026-10-07-Soda Caustica-0": "496,6",
+      "2026-10-07-GermiQuat-0": "225",
+      "2026-10-07-Lark Inox-0": "18",
+      "2026-10-07-TM Smart-0": "329,6",
+      "2026-10-07-Gamma Ro-432-0": "166,5",
+      "2026-10-07-RO Cleaner-0": "213,7",
+      "2026-10-07-Sanitizer-0": "200",
+      "2026-10-07-LARK CLEAN 21C-0": "0"
     },
     "sala-jarabe-glup": [
       {
@@ -169955,6 +170099,33 @@
           "PRODT-0100": 8149,
           "PRODT-0115": 1283,
           "PRODT-0116": 9742
+        },
+        "2026-10-07": {
+          "PRODT-0007": 33234,
+          "PRODT-0008": 18447,
+          "PRODT-0009": 18324,
+          "PRODT-0010": 18101,
+          "PRODT-0011": 0,
+          "PRODT-0012": 22398,
+          "PRODT-0049": 10,
+          "PRODT-0097": 22562,
+          "PRODT-0098": 1033,
+          "PRODT-0082": 100,
+          "PRODT-0084": 9060,
+          "PRODT-0086": 39358,
+          "PRODT-0088": 1185,
+          "PRODT-0104": 296,
+          "PRODT-0105": 1,
+          "PRODT-0107": 3118,
+          "PRODT-0092": 10966,
+          "PRODT-0093": 1367,
+          "PRODT-0094": 0,
+          "PRODT-0095": 24424,
+          "PRODT-0111": 12428,
+          "PRODT-0014": 22720,
+          "PRODT-0100": 13193,
+          "PRODT-0115": 121,
+          "PRODT-0116": 5774
         }
       },
       "openingOverrides": {
@@ -170037,8 +170208,8 @@
     "filename": "stock-producto-terminado.xlsx",
     "originalName": "Formato Inventario  Fisico Almacen PT DIARIO ACT  0888.xlsx",
     "tipo": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "tamano": 35002,
-    "uploadedAt": "2026-10-04T22:03:42.233Z",
+    "tamano": 34906,
+    "uploadedAt": "2026-10-07T12:01:54.968Z",
     "uploadedBy": "local-user"
   }
 }
