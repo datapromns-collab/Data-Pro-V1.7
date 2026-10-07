@@ -40564,6 +40564,33 @@
             "preparado": "",
             "final": ""
           }
+        },
+        "2026-05-01": {
+          "GLUP COLA": {
+            "inicial": "35.37",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP FRESH": {
+            "inicial": "10.35",
+            "preparado": "",
+            "final": ""
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "34",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP KOLITA": {
+            "inicial": "15.52",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP MANZANA ROJA": {
+            "inicial": "5.54",
+            "preparado": "",
+            "final": ""
+          }
         }
       },
       "sugar": {
@@ -41922,6 +41949,13 @@
             "recepcionSacos": "",
             "invFinalSacos": ""
           }
+        },
+        "2026-05-01": {
+          "PORTUGUESA": {
+            "invInicialSacos": "11896",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          }
         }
       },
       "tanques": {
@@ -43104,6 +43138,16 @@
           },
           "Sala 1": {
             "invInicialSacos": "1167",
+            "invFinalSacos": ""
+          }
+        },
+        "2026-05-01": {
+          "JARABE SIMPLE": {
+            "invInicialSacos": "50",
+            "invFinalSacos": ""
+          },
+          "KITS PREP.": {
+            "invInicialSacos": "35",
             "invFinalSacos": ""
           }
         }
