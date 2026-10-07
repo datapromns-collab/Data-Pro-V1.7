@@ -17066,7 +17066,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-07T15:28:37.333Z"
+    "updatedAt": "2026-10-07T17:45:36.070Z"
   },
   "ordenesSap": [
     {
@@ -150113,44 +150113,6 @@
         "bloqueado": true
       },
       {
-        "fecha": "2026-08-20",
-        "semana": 34,
-        "turno": "DIURNO",
-        "operador": "DAVID REYES ",
-        "linea": "Línea 3",
-        "equipo": "SOPLADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "07:25",
-        "finParada": "07:34",
-        "totalMin": "9",
-        "zona": "Llenado",
-        "falla": "MALA ENTREGA MOLDE #11",
-        "orden": "",
-        "observaciones": "",
-        "usuario": "Luis Sanchez",
-        "id": 1787237062452,
-        "bloqueado": true
-      },
-      {
-        "fecha": "2026-08-20",
-        "semana": 34,
-        "turno": "DIURNO",
-        "operador": "",
-        "linea": "Línea 6",
-        "equipo": "TRANSPORTADOR AÉREO",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "10:57",
-        "finParada": "11:07",
-        "totalMin": "10",
-        "zona": "Llenado",
-        "falla": "CAMBIO DE GUIA DE BOTELLAS TRANSPORTADOR AEREO ",
-        "orden": "",
-        "observaciones": "",
-        "usuario": "Luis Sanchez",
-        "id": 1787247465383,
-        "bloqueado": true
-      },
-      {
         "fecha": "2026-08-22",
         "semana": 34,
         "turno": "DIURNO",
@@ -160678,7 +160640,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1790433303463,
+        "id": 1791395166044.791,
         "fechaOrden": "2026-09-23",
         "orden": "9759",
         "fechaEmision": "2026-09-23",
@@ -160701,7 +160663,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
@@ -160786,7 +160748,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1790435481420,
+        "id": 1791395166044.9924,
         "fechaOrden": "2026-09-23",
         "orden": "9624",
         "fechaEmision": "2026-09-23",
@@ -160809,11 +160771,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1790435728219,
+        "id": 1791395166044.0613,
         "fechaOrden": "2026-09-23",
         "orden": "9710",
         "fechaEmision": "2026-09-23",
@@ -160836,7 +160798,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
@@ -160894,7 +160856,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1790437454875,
+        "id": 1791395166044.3782,
         "fechaOrden": "2026-09-24",
         "orden": "9665",
         "fechaEmision": "2026-09-24",
@@ -160917,7 +160879,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
@@ -160948,7 +160910,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1790444081108,
+        "id": 1791395166044.5374,
         "fechaOrden": "2026-09-23",
         "orden": "9658",
         "fechaEmision": "2026-09-23",
@@ -160971,11 +160933,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1790444247221,
+        "id": 1791395166044.2708,
         "fechaOrden": "2026-09-23",
         "orden": "9659",
         "fechaEmision": "2026-09-23",
@@ -160998,7 +160960,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
@@ -161056,7 +161018,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1790448917716,
+        "id": 1791395166044.7773,
         "fechaOrden": "2026-09-24",
         "orden": "9760",
         "fechaEmision": "2026-09-24",
@@ -161079,7 +161041,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
@@ -161110,7 +161072,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1790457931584,
+        "id": 1791395166044.3572,
         "fechaOrden": "2026-09-25",
         "orden": "9714",
         "fechaEmision": "2026-09-25",
@@ -161133,11 +161095,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1790458674293,
+        "id": 1791395166044.6626,
         "fechaOrden": "2026-09-25",
         "orden": "9627",
         "fechaEmision": "2026-09-25",
@@ -161160,11 +161122,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1790516549693,
+        "id": 1791395166044.3499,
         "fechaOrden": "2026-09-25",
         "orden": "9716",
         "fechaEmision": "2026-09-25",
@@ -161187,11 +161149,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1790517522323,
+        "id": 1791395166044.2683,
         "fechaOrden": "2026-09-25",
         "orden": "9596",
         "fechaEmision": "2026-09-25",
@@ -161214,11 +161176,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1790518237100,
+        "id": 1791395166044.2727,
         "fechaOrden": "2026-09-25",
         "orden": "9595",
         "fechaEmision": "2026-09-25",
@@ -161241,7 +161203,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
@@ -161524,6 +161486,12 @@
           "cajasPlanificadas": 60000,
           "jarabeReal": 72868,
           "ubb": 41.72
+        },
+        "auto-1-1791209936015": {
+          "cajasPlanificadas": 120000,
+          "producto": "232",
+          "jarabeReal": 0,
+          "ubb": 0
         }
       },
       "linea-2": {
@@ -161773,6 +161741,13 @@
           "cajasPlanificadas": 100000,
           "jarabeReal": 67454,
           "ubb": 68.2
+        },
+        "auto-2-1791209921826": {
+          "cajasPlanificadas": 58750,
+          "producto": "67",
+          "ubb": 0,
+          "jarabeReal": 0,
+          "pnc": 240
         }
       },
       "linea-3": {
@@ -161977,6 +161952,11 @@
           "ubb": 17.87,
           "pnc": 253,
           "producto": "204"
+        },
+        "auto-3-1791209909992": {
+          "cajasPlanificadas": 134400,
+          "producto": "288",
+          "jarabeReal": 0
         }
       },
       "linea-4": {
@@ -162140,6 +162120,10 @@
           "cajasPlanificadas": 126000,
           "jarabeReal": 198959,
           "ubb": 69.22
+        },
+        "auto-4-1791209897954": {
+          "cajasPlanificadas": 134400,
+          "producto": "182"
         }
       },
       "linea-5": {
@@ -162282,6 +162266,10 @@
           "producto": "562",
           "jarabeReal": 340000,
           "ubb": 340
+        },
+        "auto-5-1791209888142": {
+          "cajasPlanificadas": 55660,
+          "producto": "310"
         }
       },
       "linea-6": {
@@ -162445,6 +162433,11 @@
           "producto": "375",
           "jarabeReal": 6158,
           "ubb": 2.14
+        },
+        "auto-6-1791223099512": {
+          "cajasPlanificadas": 28290,
+          "producto": "348",
+          "pnc": 125
         }
       },
       "linea-7": {
@@ -162685,6 +162678,10 @@
           "producto": "421",
           "jarabeReal": 68939,
           "ubb": 23.96
+        },
+        "auto-7-1791206906611": {
+          "cajasPlanificadas": 43125,
+          "producto": "563"
         }
       }
     },
@@ -171165,7 +171162,64 @@
   "deletedIds": {
     "planta-informes-operacionales": {
       "*": [
-        "1790371816310"
+        "1790371816310",
+        "1784566101946",
+        "1784568143186",
+        "1785014920340",
+        "1785358753845",
+        "1785358876155",
+        "1785414190166",
+        "1785414573668",
+        "1785415183096",
+        "1785415259439",
+        "1785415351871",
+        "1785415572542",
+        "1785415633951",
+        "1785415689630",
+        "1785415811823",
+        "1785415847510",
+        "1785415957655",
+        "1785416031310",
+        "1785416298630",
+        "1785416369910",
+        "1785416608317",
+        "1785416736028",
+        "1785416910693",
+        "1785417138565",
+        "1785417183419",
+        "1785417331300",
+        "1785417417646",
+        "1785417479222",
+        "1785418190316",
+        "1785508515291",
+        "1785509131922",
+        "1786024306648",
+        "1786024932528",
+        "1786037074553",
+        "1786037361081",
+        "1786037547921",
+        "1786037695201",
+        "1786037731718",
+        "1786037990748",
+        "1786037996096",
+        "1786038155639",
+        "1786038321776",
+        "1786027053232",
+        "1786040712235",
+        "1786119936092",
+        "1786128206608",
+        "1786456646957",
+        "1786456705797",
+        "1786996948604",
+        "1787086190625",
+        "1787086273033",
+        "1787938439979",
+        "1787237062452",
+        "1787247465383",
+        "1787959521278",
+        "1788293882619",
+        "1788991023411",
+        "1788978219703"
       ]
     },
     "planta-ordenes-trabajo": {
