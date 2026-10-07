@@ -15879,6 +15879,26 @@
               "nonConformity": "Exposicion de Taca",
               "quantity": "216"
             }
+          ],
+          "2026-10-05": [
+            {
+              "id": "74636c25-c82d-4e9f-9a72-6282d0c43027",
+              "line": "Linea 2",
+              "flavor": "GLUP KOLITA",
+              "code": "PRODT-0009",
+              "description": "GLUP! KOLITA  CAJA X 6BOT X 2.0LTS",
+              "nonConformity": "Bajo Brix",
+              "quantity": "240"
+            },
+            {
+              "id": "5b247843-4bbc-49d2-b177-268bfe7779e5",
+              "line": "Linea 6",
+              "flavor": "GLUP FRESH",
+              "code": "PRODT-0095",
+              "description": "GLUP! FRESH CAJA X 15BOT X 0.400LTS",
+              "nonConformity": "Bajo Brix",
+              "quantity": "125"
+            }
           ]
         }
       },
@@ -16827,7 +16847,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-07T12:05:55.746Z"
+    "updatedAt": "2026-10-07T12:56:12.148Z"
   },
   "ordenesSap": [
     {
