@@ -17066,7 +17066,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-07T15:06:04.845Z"
+    "updatedAt": "2026-10-07T15:28:37.333Z"
   },
   "ordenesSap": [
     {
@@ -27748,6 +27748,17 @@
           "cajas3": 320,
           "ticket4": "",
           "cajas4": 5600
+        },
+        {
+          "fechaInicio": "2026-10-07",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -43241,9 +43252,9 @@
         "2026-09-21|2026-09": 1009476.45,
         "2026-09-28|2026-09": 550986.53,
         "2026-10-01|2026-10": 0,
-        "2026-04-13|2026-04": 1079058.55,
+        "2026-04-13|2026-04": 1316706.34,
         "2026-04-27|2026-04": 1059135.18,
-        "2026-04-01|2026-04": 0
+        "2026-04-01|2026-04": 158348.96
       }
     },
     "seguimiento-etiquetadora": {
@@ -171214,8 +171225,8 @@
     "filename": "stock-producto-terminado.xlsx",
     "originalName": "Formato Inventario  Fisico Almacen PT DIARIO ACT  0888.xlsx",
     "tipo": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "tamano": 34906,
-    "uploadedAt": "2026-10-07T12:01:54.968Z",
+    "tamano": 34965,
+    "uploadedAt": "2026-10-07T15:19:18.316Z",
     "uploadedBy": "local-user"
   }
 }
