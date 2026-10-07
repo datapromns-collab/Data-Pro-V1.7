@@ -39852,32 +39852,93 @@
           "GLUP COLA": {
             "inicial": "49.96",
             "preparado": "48",
-            "final": ""
+            "final": "70.86"
           },
           "GLUP KOLITA": {
             "inicial": "18",
-            "preparado": "",
-            "final": ""
+            "preparado": "36",
+            "final": "15.18"
           },
           "GLUP FRESH": {
             "inicial": "2.6",
             "preparado": "12",
-            "final": ""
+            "final": "2.19"
           },
           "JUSTY DURAZNO": {
             "inicial": "29",
-            "preparado": "",
+            "preparado": "100",
             "final": ""
           },
           "GLUP UVA": {
             "inicial": "4.99",
             "preparado": "22",
-            "final": ""
+            "final": "6.76"
           },
           "GLUP MANZANA ROJA": {
             "inicial": "16",
+            "preparado": "8",
+            "final": ""
+          },
+          "GLUP MANZANA VERDE": {
+            "preparado": "19",
+            "final": "19"
+          }
+        },
+        "2026-04-19": {
+          "GLUP COLA": {
+            "inicial": "70.86",
+            "preparado": "18",
+            "final": "74.29"
+          },
+          "GLUP KOLITA": {
+            "inicial": "15.18",
+            "preparado": "54",
+            "final": "32.78"
+          },
+          "GLUP FRESH": {
+            "inicial": "2.19",
+            "preparado": "18",
+            "final": "20"
+          },
+          "GLUP UVA": {
+            "inicial": "6.76",
+            "preparado": "44",
+            "final": "30.6"
+          },
+          "GLUP MANZANA VERDE": {
+            "inicial": "19",
             "preparado": "",
             "final": ""
+          }
+        },
+        "2026-04-20": {
+          "GLUP COLA": {
+            "inicial": "74.29",
+            "preparado": "24",
+            "final": "66.4"
+          },
+          "GLUP KOLITA": {
+            "inicial": "32.78",
+            "preparado": "54",
+            "final": "14.10"
+          },
+          "GLUP FRESH": {
+            "inicial": "20",
+            "preparado": "30",
+            "final": "15.2"
+          },
+          "GLUP UVA": {
+            "inicial": "30.6",
+            "preparado": "44",
+            "final": "5.4"
+          },
+          "GLUP NARANJA": {
+            "preparado": "11",
+            "final": "11"
+          },
+          "JUSTY NARANJA": {
+            "preparado": "300",
+            "final": "17"
           }
         }
       },
@@ -41113,11 +41174,25 @@
         "2026-04-18": {
           "PORTUGUESA": {
             "invInicialSacos": "7519",
-            "recepcionSacos": "",
-            "invFinalSacos": ""
+            "recepcionSacos": "2120",
+            "invFinalSacos": "7561"
           },
           "MONTALBAN": {
             "invInicialSacos": "1960",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          }
+        },
+        "2026-04-19": {
+          "PORTUGUESA": {
+            "invInicialSacos": "7561",
+            "recepcionSacos": "",
+            "invFinalSacos": "4741"
+          }
+        },
+        "2026-04-20": {
+          "PORTUGUESA": {
+            "invInicialSacos": "4741",
             "recepcionSacos": "",
             "invFinalSacos": ""
           }
@@ -42211,12 +42286,24 @@
         "2026-04-17": {
           "JARABE SIMPLE": {
             "invInicialSacos": "295",
-            "invFinalSacos": "406"
+            "invFinalSacos": "405"
           }
         },
         "2026-04-18": {
           "JARABE SIMPLE": {
-            "invInicialSacos": "406",
+            "invInicialSacos": "405",
+            "invFinalSacos": "480"
+          }
+        },
+        "2026-04-19": {
+          "JARABE SIMPLE": {
+            "invInicialSacos": "480",
+            "invFinalSacos": "296"
+          }
+        },
+        "2026-04-20": {
+          "JARABE SIMPLE": {
+            "invInicialSacos": "296",
             "invFinalSacos": ""
           }
         }
@@ -42305,7 +42392,10 @@
         "2026-04-14": "50.52",
         "2026-04-15": "50.52",
         "2026-04-16": "50.52",
-        "2026-04-17": "50.52"
+        "2026-04-17": "50.52",
+        "2026-04-18": "50.52",
+        "2026-04-19": "50.52",
+        "2026-04-20": "50.40"
       },
       "costoAzucar": {
         "2026-07-28": "1.43",
@@ -170216,6 +170306,23 @@
         "2026-10-01": {
           "PRODT-0014": 17504,
           "PRODT-0115": 9621
+        }
+      },
+      "externalEntries": {
+        "2026-10-01": {
+          "PRODT-0116": 7000
+        },
+        "2026-10-02": {
+          "PRODT-0116": 1400
+        },
+        "2026-10-03": {
+          "PRODT-0116": 1400
+        },
+        "2026-10-05": {
+          "PRODT-0116": 5600
+        },
+        "2026-10-06": {
+          "PRODT-0116": 2700
         }
       }
     },

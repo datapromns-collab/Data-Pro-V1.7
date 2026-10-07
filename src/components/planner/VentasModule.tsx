@@ -162,6 +162,15 @@ const esColumnaStock = (encabezado: string) =>
   encabezado.includes('pronostico') ||
   encabezado.includes('forecast');
 
+const cajasPorPaleta = (presentacion: string): number => {
+  const normalized = normalizarTexto(presentacion);
+  if (normalized.includes('04L')) return 160;
+  if (normalized.includes('15L')) return 50;
+  if (normalized.includes('2L')) return 80;
+  if (normalized.includes('1L')) return 78;
+  return 1;
+};
+
 interface VentasModuleProps {
   initialView?: 'pronostico' | 'analisis';
   embeddedAnalysis?: boolean;
@@ -1069,7 +1078,7 @@ export function VentasModule({
           )}
 
           <div className="min-h-[220px] flex-1 overflow-auto rounded-2xl border border-slate-200 bg-white">
-            <table className={`w-full ${periodoAnalisis === 'promedio' ? 'min-w-[620px]' : 'min-w-[1050px]'} border-collapse text-left text-sm`}>
+            <table className={`w-full ${periodoAnalisis === 'promedio' ? 'min-w-[700px]' : 'min-w-[1170px]'} border-collapse text-left text-sm`}>
               <thead className="sticky top-0 bg-slate-100">
                 <tr>
                   <th className="border-b border-slate-200 px-3 py-3 text-xs font-black uppercase tracking-wide text-slate-600">Período</th>
@@ -1083,7 +1092,10 @@ export function VentasModule({
                     </>
                   )}
                   <th className="border-b border-slate-200 px-3 py-3 text-right text-xs font-black uppercase tracking-wide text-slate-600">
-                    {periodoAnalisis === 'promedio' ? 'Promedio ventas diarias' : 'Ventas estimadas'}
+                    {periodoAnalisis === 'promedio' ? 'Promedio ventas diarias (Cajas)' : 'Ventas estimadas (Cajas)'}
+                  </th>
+                  <th className="border-b border-slate-200 px-3 py-3 text-right text-xs font-black uppercase tracking-wide text-slate-600">
+                    Paletas
                   </th>
                   {periodoAnalisis !== 'promedio' && (
                     <>
@@ -1156,7 +1168,7 @@ export function VentasModule({
                     : periodoAnalisis === 'mes'
                       ? `${MESES[mes]} ${anio}`
                       : `Semana del ${row.periodo}`;
-                  const columnCount = 4 +
+                  const columnCount = 5 +
                     (periodoAnalisis !== 'promedio' ? 5 : 0) +
                     (periodoAnalisis !== 'dia' ? 1 : 0);
                   return (
@@ -1245,6 +1257,14 @@ export function VentasModule({
                               minimumFractionDigits: periodoAnalisis === 'promedio' ? 2 : 0,
                               maximumFractionDigits: periodoAnalisis === 'promedio' ? 2 : 0,
                             }).format(row.ventas)}
+                      </td>
+                      <td className="px-3 py-2.5 text-right tabular-nums font-semibold text-indigo-800">
+                        {row.ventas === null || row.ventas < 0
+                          ? '—'
+                          : new Intl.NumberFormat('es-VE', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          }).format(row.ventas / cajasPorPaleta(row.presentacion))}
                       </td>
                       {periodoAnalisis !== 'promedio' && (
                         <td className="px-3 py-2.5 text-right tabular-nums text-slate-700">
