@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-10-06T00:00:00.000",
+      "weekStartDate": "2026-10-05T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -11921,12 +11921,12 @@
             "name": "GLUP MANZANA ROJA",
             "lineId": "2",
             "loadPerHour": 2500,
-            "quantity": 64380,
-            "durationHours": 25.752,
+            "quantity": 64416,
+            "durationHours": 25.7664,
             "presentation": "2Lts",
             "tanks": 8,
             "startTime": "2026-10-06T11:00:00.000Z",
-            "endTime": "2026-10-07T12:45:07.200Z",
+            "endTime": "2026-10-07T12:45:59.040Z",
             "id": "xrodqjxwf",
             "color": "#6366f1"
           },
@@ -11945,12 +11945,12 @@
             "name": "GLUP COLA",
             "lineId": "3",
             "loadPerHour": 2800,
-            "quantity": 100800,
-            "durationHours": 36,
+            "quantity": 168000,
+            "durationHours": 60,
             "presentation": "2Lts",
-            "tanks": 11.69,
+            "tanks": 19.48,
             "startTime": "2026-10-08T21:00:00.000Z",
-            "endTime": "2026-10-10T09:00:00.000Z",
+            "endTime": "2026-10-11T09:00:00.000Z",
             "id": "y5mlkpui6",
             "color": "#ef4444"
           },
@@ -12065,12 +12065,12 @@
             "name": "JUSTY DURAZNO",
             "lineId": "5",
             "loadPerHour": 1210,
-            "quantity": 15730,
-            "durationHours": 13,
+            "quantity": 29040,
+            "durationHours": 24,
             "presentation": "1.5Lts",
-            "tanks": 14.16,
+            "tanks": 26.14,
             "startTime": "2026-10-09T19:00:00.000Z",
-            "endTime": "2026-10-10T08:00:00.000Z",
+            "endTime": "2026-10-10T19:00:00.000Z",
             "id": "nhge9ay1h",
             "color": "#10b981"
           },
@@ -12102,12 +12102,12 @@
             "name": "GLUP FRESH",
             "lineId": "6",
             "loadPerHour": 1200,
-            "quantity": 28290,
-            "durationHours": 23.575,
+            "quantity": 28300,
+            "durationHours": 23.583333333333332,
             "presentation": "0.4Lts",
             "tanks": 1.64,
             "startTime": "2026-10-05T11:00:00.000Z",
-            "endTime": "2026-10-06T10:34:30.000Z",
+            "endTime": "2026-10-06T10:35:00.000Z",
             "id": "4v5x54iez",
             "color": "#587593"
           },
@@ -12196,12 +12196,12 @@
             "name": "GLUP FRESH",
             "lineId": "1",
             "loadPerHour": 1500,
-            "quantity": 49395,
-            "durationHours": 32.93,
+            "quantity": 85395,
+            "durationHours": 56.93,
             "presentation": "2Lts",
-            "tanks": 5.73,
+            "tanks": 9.9,
             "startTime": "2026-10-09T00:04:00.000Z",
-            "endTime": "2026-10-10T08:59:48.000Z",
+            "endTime": "2026-10-11T08:59:48.000Z",
             "id": "zklm2ezxc",
             "color": "#f59e0b"
           },
@@ -12220,12 +12220,12 @@
             "name": "GLUP KOLITA",
             "lineId": "2",
             "loadPerHour": 2500,
-            "quantity": 110575,
-            "durationHours": 44.23,
+            "quantity": 169325,
+            "durationHours": 67.73,
             "presentation": "2Lts",
-            "tanks": 12.43,
+            "tanks": 19.04,
             "startTime": "2026-10-07T14:46:00.000Z",
-            "endTime": "2026-10-09T10:59:48.000Z",
+            "endTime": "2026-10-10T10:29:48.000Z",
             "id": "dz05n15sf",
             "color": "#ec4899"
           },
@@ -12412,14 +12412,62 @@
             "name": "GLUP UVA",
             "lineId": "6",
             "loadPerHour": 1200,
-            "quantity": 7539,
-            "durationHours": 6.2825,
+            "quantity": 14652,
+            "durationHours": 12.21,
             "presentation": "0.4Lts",
-            "tanks": 0.53,
+            "tanks": 1.03,
             "startTime": "2026-10-09T22:30:00.000Z",
-            "endTime": "2026-10-10T04:46:57.000Z",
+            "endTime": "2026-10-10T10:42:36.000Z",
             "id": "gyyucudu3",
             "color": "#47CCB0"
+          },
+          {
+            "name": "CS",
+            "lineId": "2",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-10-10T10:30:00.000Z",
+            "endTime": "2026-10-10T11:00:00.000Z",
+            "id": "6an02s0wp",
+            "color": "#47CCB0"
+          },
+          {
+            "name": "GLUP UVA",
+            "lineId": "2",
+            "loadPerHour": 2500,
+            "quantity": 55000,
+            "durationHours": 22,
+            "presentation": "2Lts",
+            "tanks": 7.73,
+            "startTime": "2026-10-10T11:00:00.000Z",
+            "endTime": "2026-10-11T09:00:00.000Z",
+            "id": "ur1ourzlk",
+            "color": "#10b981"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "5",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-10-10T19:00:00.000Z",
+            "endTime": "2026-10-10T21:00:00.000Z",
+            "id": "pess3r0aq",
+            "color": "#10b981"
+          },
+          {
+            "name": "JUSTY DURAZNO",
+            "lineId": "5",
+            "loadPerHour": 1210,
+            "quantity": 8470,
+            "durationHours": 7,
+            "presentation": "1.5Lts",
+            "tanks": 7.62,
+            "startTime": "2026-10-10T21:00:00.000Z",
+            "endTime": "2026-10-11T04:00:00.000Z",
+            "id": "a13k7fmn6",
+            "color": "#ec4899"
           }
         ],
         "realProduction": {},
@@ -12467,6 +12515,119 @@
           "ph8veuu81",
           "eyql1mvbt"
         ]
+      },
+      "2026-10-12": {
+        "tasks": [
+          {
+            "name": "GLUP UVA",
+            "lineId": "2",
+            "loadPerHour": 2500,
+            "quantity": 60000,
+            "durationHours": 24,
+            "presentation": "2Lts",
+            "tanks": 8.44,
+            "startTime": "2026-10-12T11:00:00.000Z",
+            "endTime": "2026-10-13T11:00:00.000Z",
+            "id": "33wczttjo",
+            "color": "#ec4899"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "7",
+            "loadPerHour": 2500,
+            "quantity": 60000,
+            "durationHours": 24,
+            "presentation": "2Lts",
+            "tanks": 6.96,
+            "startTime": "2026-10-12T11:00:00.000Z",
+            "endTime": "2026-10-13T11:00:00.000Z",
+            "id": "plehddxov",
+            "color": "#10b981"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "6",
+            "loadPerHour": 1200,
+            "quantity": 28800,
+            "durationHours": 24,
+            "presentation": "0.4Lts",
+            "tanks": 1.67,
+            "startTime": "2026-10-12T11:00:00.000Z",
+            "endTime": "2026-10-13T11:00:00.000Z",
+            "id": "vghajsbwd",
+            "color": "#6366f1"
+          },
+          {
+            "name": "GLUP FRESH",
+            "lineId": "1",
+            "loadPerHour": 1500,
+            "quantity": 36000,
+            "durationHours": 24,
+            "presentation": "2Lts",
+            "tanks": 4.17,
+            "startTime": "2026-10-12T11:00:00.000Z",
+            "endTime": "2026-10-13T11:00:00.000Z",
+            "id": "hiwgg87uj",
+            "color": "#587593"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "3",
+            "loadPerHour": 2800,
+            "quantity": 67200,
+            "durationHours": 24,
+            "presentation": "2Lts",
+            "tanks": 7.79,
+            "startTime": "2026-10-12T11:00:00.000Z",
+            "endTime": "2026-10-13T11:00:00.000Z",
+            "id": "94v6kucff",
+            "color": "#587593"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "4",
+            "loadPerHour": 2800,
+            "quantity": 67200,
+            "durationHours": 24,
+            "presentation": "2Lts",
+            "tanks": 7.79,
+            "startTime": "2026-10-12T11:00:00.000Z",
+            "endTime": "2026-10-13T11:00:00.000Z",
+            "id": "og4inhop1",
+            "color": "#ef4444"
+          },
+          {
+            "name": "JUSTY NARANJA",
+            "lineId": "5",
+            "loadPerHour": 1210,
+            "quantity": 29040,
+            "durationHours": 24,
+            "presentation": "1.5Lts",
+            "tanks": 26.14,
+            "startTime": "2026-10-12T11:00:00.000Z",
+            "endTime": "2026-10-13T11:00:00.000Z",
+            "id": "l1hh7kdwm",
+            "color": "#6366f1"
+          }
+        ],
+        "realProduction": {},
+        "rawMaterialStock": {},
+        "manualUBB": {},
+        "initialUBBTanks": {},
+        "finalUBBTanks": {},
+        "initialUBBTanksDaily": {},
+        "finalUBBTanksDaily": {},
+        "salesProjection": {},
+        "finishedProductInventory": {},
+        "productionPlan": {},
+        "logisticsInventory": {},
+        "plantInventory": {},
+        "salesProjectionAW": {},
+        "finishedProductInventoryAW": {},
+        "productionPlanAW": {},
+        "logisticsInventoryAW": {},
+        "plantInventoryAW": {},
+        "deletedTaskIds": []
       }
     },
     "productionInventory": {
@@ -16288,15 +16449,6 @@
           ],
           "2026-09-29": [
             {
-              "id": "bd00e8ef-7420-428e-bf33-916bf62b7a02",
-              "line": "Linea 7",
-              "flavor": "GLUP COLA",
-              "code": "PRODT-0082",
-              "description": "GLUP! COLA NEGRA CAJA X 12BOT X 1LTS",
-              "nonConformity": "Exposicion de Taca",
-              "quantity": "234"
-            },
-            {
               "id": "1becef24-f4d6-4314-8ca4-2320683d2aea",
               "line": "Linea 3",
               "flavor": "GLUP COLA",
@@ -16373,6 +16525,17 @@
               "description": "GLUP! FRESH CAJA X 15BOT X 0.400LTS",
               "nonConformity": "Bajo Brix",
               "quantity": "125"
+            }
+          ],
+          "2026-09-28": [
+            {
+              "id": "0185e7be-b009-42e6-9096-cf030274906b",
+              "line": "Linea 7",
+              "flavor": "GLUP COLA",
+              "code": "PRODT-0082",
+              "description": "GLUP! COLA NEGRA CAJA X 12BOT X 1LTS",
+              "nonConformity": "Exposicion de Taca",
+              "quantity": "234"
             }
           ]
         }
@@ -17322,7 +17485,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-08T17:41:03.786Z"
+    "updatedAt": "2026-10-08T21:03:54.750Z"
   },
   "ordenesSap": [
     {
@@ -28111,8 +28274,8 @@
         },
         {
           "fechaInicio": "2026-10-08",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "15215",
+          "cajas1": 1550,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -28207,7 +28370,7 @@
           "ticket1": "16188",
           "cajas1": 1280,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 3680,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -28235,8 +28398,8 @@
         },
         {
           "fechaInicio": "2026-10-08",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16238",
+          "cajas1": 3354,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -135950,7 +136113,7 @@
         "zona": "Llenado",
         "falla": "FALTA DE VACIO Y AJUSTE EN LA POSICION NOMINAL DE -3 Y SE LLEVA A -6",
         "orden": "",
-        "observaciones": "9478",
+        "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1790353030565,
         "bloqueado": true
@@ -137157,7 +137320,7 @@
         "semana": 39,
         "turno": "DIURNO",
         "operador": "IVAN PEREZ",
-        "linea": "Línea 2",
+        "linea": "Línea 1",
         "equipo": "ENFARDADORA",
         "tipoParada": "OPERACIONAL",
         "inicioParada": "07:48",
@@ -139435,7 +139598,7 @@
       {
         "fecha": "2026-09-21",
         "semana": 39,
-        "turno": "NOCTURNO",
+        "turno": "DIURNO",
         "operador": "DANIEL PARRA",
         "linea": "Línea 1",
         "equipo": "ETIQUETADORA",
@@ -139492,7 +139655,7 @@
       {
         "fecha": "2026-09-21",
         "semana": 39,
-        "turno": "NOCTURNO",
+        "turno": "DIURNO",
         "operador": "DANIEL PARRA",
         "linea": "Línea 1",
         "equipo": "ENFARDADORA",
@@ -139549,7 +139712,7 @@
       {
         "fecha": "2026-09-21",
         "semana": 39,
-        "turno": "NOCTURNO",
+        "turno": "DIURNO",
         "operador": "FELIX BLANCO",
         "linea": "Línea 1",
         "equipo": "PALETIZADORA",
@@ -139587,7 +139750,7 @@
       {
         "fecha": "2026-09-21",
         "semana": 39,
-        "turno": "NOCTURNO",
+        "turno": "DIURNO",
         "operador": "DANIEL PARRA",
         "linea": "Línea 1",
         "equipo": "PALETIZADORA",
@@ -139606,7 +139769,7 @@
       {
         "fecha": "2026-09-21",
         "semana": 39,
-        "turno": "NOCTURNO",
+        "turno": "DIURNO",
         "operador": "",
         "linea": "Línea 1",
         "equipo": "",
@@ -139625,7 +139788,7 @@
       {
         "fecha": "2026-09-21",
         "semana": 39,
-        "turno": "NOCTURNO",
+        "turno": "DIURNO",
         "operador": "DANIEL PARRA",
         "linea": "Línea 1",
         "equipo": "ENFARDADORA",
@@ -150698,6 +150861,63 @@
         "usuario": "Ronald Valera",
         "id": 1787424322682,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-21",
+        "semana": 39,
+        "turno": "DIURNO",
+        "operador": "DANIEL PARRA",
+        "linea": "Línea 1",
+        "equipo": "LLENADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "22:36",
+        "finParada": "23:00",
+        "totalMin": "24",
+        "zona": "Llenado",
+        "falla": "RUPTURA DE RIEL DE BOTELLA EN SALIDA DE LLENADORA",
+        "orden": "9706",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1790362156237,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-21",
+        "semana": 39,
+        "turno": "DIURNO",
+        "operador": "LEYBERGLER SILVA",
+        "linea": "Línea 1",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "23:14",
+        "finParada": "23:21",
+        "totalMin": "7",
+        "zona": "Llenado",
+        "falla": "PERDIDA DE FASE POR BOTELLA CAIDA EN EMPLAYADO",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1790362266500,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-21",
+        "semana": 39,
+        "turno": "DIURNO",
+        "operador": "DANIEL PARRA",
+        "linea": "Línea 1",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "00:07",
+        "finParada": "00:11",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1790362347092,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -158984,7 +159204,7 @@
         "turno": "DIURNO",
         "solicitante": "",
         "linea": "Línea 7",
-        "maquina": "OPERACIONAL",
+        "maquina": "PALETIZADORA",
         "aviso": "",
         "fechaParada": "2026-09-07",
         "inicioMtto": "",
@@ -160406,7 +160626,7 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1790350708206,
+        "id": 1790350718279.292,
         "fechaOrden": "2026-09-21",
         "orden": "9620",
         "fechaEmision": "2026-09-21",
@@ -160429,11 +160649,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1790351374299,
+        "id": 1790351409843.8572,
         "fechaOrden": "2026-09-21",
         "orden": "9621",
         "fechaEmision": "2026-09-21",
@@ -160456,7 +160676,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
