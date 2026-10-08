@@ -17322,7 +17322,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-08T12:22:39.468Z"
+    "updatedAt": "2026-10-08T14:28:33.831Z"
   },
   "ordenesSap": [
     {
@@ -28173,8 +28173,8 @@
         },
         {
           "fechaInicio": "2026-10-08",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16305",
+          "cajas1": 3680,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -28204,8 +28204,8 @@
         },
         {
           "fechaInicio": "2026-10-08",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16188",
+          "cajas1": 1280,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -41030,6 +41030,36 @@
             "preparado": "32",
             "final": "16.24"
           }
+        },
+        "2026-10-07": {
+          "GLUP COLA": {
+            "inicial": "65.87",
+            "preparado": "74.46",
+            "final": "31.23"
+          },
+          "GLUP FRESH": {
+            "inicial": "12",
+            "preparado": "6",
+            "final": "7.56"
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "24",
+            "preparado": "280",
+            "final": "4"
+          },
+          "GLUP MANZANA ROJA": {
+            "inicial": "16.24",
+            "preparado": "8",
+            "final": ""
+          },
+          "GLUP MANZANA VERDE": {
+            "preparado": "19",
+            "final": "19"
+          },
+          "GLUP KOLITA": {
+            "preparado": "54",
+            "final": "42.28"
+          }
         }
       },
       "sugar": {
@@ -42402,6 +42432,13 @@
             "recepcionSacos": "5200",
             "invFinalSacos": "12800"
           }
+        },
+        "2026-10-07": {
+          "PORTUGUESA": {
+            "invInicialSacos": "12800",
+            "recepcionSacos": "4640",
+            "invFinalSacos": "12840"
+          }
         }
       },
       "tanques": {
@@ -43606,6 +43643,16 @@
             "invInicialSacos": "443",
             "invFinalSacos": "256"
           }
+        },
+        "2026-10-07": {
+          "JARABE SIMPLE": {
+            "invInicialSacos": "349",
+            "invFinalSacos": "76"
+          },
+          "Sala 1": {
+            "invInicialSacos": "256",
+            "invFinalSacos": "33"
+          }
         }
       },
       "realKgPerSack": {
@@ -43733,7 +43780,8 @@
         "2026-09-14": "1.02",
         "2026-09-07": "1.02",
         "2026-10-04": "1.02",
-        "2026-04-30": "1.34"
+        "2026-04-30": "1.34",
+        "2026-10-07": "1"
       },
       "_deletedIds": {},
       "weeklyFisico": {
@@ -43754,7 +43802,8 @@
         "2026-10-01|2026-10": 0,
         "2026-04-13|2026-04": 1316706.34,
         "2026-04-27|2026-04": 1059135.18,
-        "2026-04-01|2026-04": 0
+        "2026-04-01|2026-04": 0,
+        "2026-10-05|2026-10": 740739.91
       }
     },
     "seguimiento-etiquetadora": {
@@ -162778,7 +162827,12 @@
         },
         "auto-5-1791209888142": {
           "cajasPlanificadas": 55660,
-          "producto": "310"
+          "producto": "310",
+          "jarabeReal": 352000,
+          "ubb": 352
+        },
+        "auto-5-1791385360217": {
+          "jarabeReal": 0
         }
       },
       "linea-6": {
@@ -162946,11 +163000,15 @@
         "auto-6-1791223099512": {
           "cajasPlanificadas": 28290,
           "producto": "348",
-          "pnc": 125
+          "pnc": 125,
+          "jarabeReal": 26781,
+          "ubb": 9.31
         },
         "auto-6-1791395950206": {
           "cajasPlanificadas": 34500,
-          "producto": "526"
+          "producto": "526",
+          "ubb": 8.94,
+          "jarabeReal": 25765
         }
       },
       "linea-7": {
@@ -163194,7 +163252,9 @@
         },
         "auto-7-1791206906611": {
           "cajasPlanificadas": 43125,
-          "producto": "563"
+          "producto": "563",
+          "jarabeReal": 87841,
+          "ubb": 30.55
         }
       }
     },
