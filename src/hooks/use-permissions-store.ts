@@ -412,7 +412,7 @@ export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
     { id: 'ordenes', label: 'Órdenes', children: [
       { id: 'resumen-por-sabor', label: 'Resumen por sabor' },
       { id: 'resumen-por-lineas', label: 'Resumen por líneas' },
-      { id: 'rendimiento-azucar', label: 'Rendimiento de azúcar' },
+      { id: 'rendimiento-azucar', label: 'Pérdida de azúcar por jarabe en línea' },
     ] },
     { id: 'rendimiento-azucar', label: 'Rendimiento de azúcar', children: [
       { id: 'semanal', label: 'Semanal', children: [

@@ -265,7 +265,7 @@ export function OrdenesReporteResumenMensual({ reportMonthDate }: OrdenesReporte
   const subsections: { id: ResumenMensualSubsection; label: string }[] = [
     { id: 'resumen-por-sabor', label: 'RESUMEN POR SABOR' },
     { id: 'resumen-por-lineas', label: 'RESUMEN POR LÍNEAS' },
-    { id: 'rendimiento-azucar', label: 'RENDIMIENTO DE AZÚCAR' },
+    { id: 'rendimiento-azucar', label: 'PÉRDIDA DE AZÚCAR POR JARABE EN LÍNEA' },
   ];
 
   return (
