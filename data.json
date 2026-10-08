@@ -17322,7 +17322,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-08T14:28:33.831Z"
+    "updatedAt": "2026-10-08T17:41:03.786Z"
   },
   "ordenesSap": [
     {
@@ -28018,8 +28018,8 @@
         },
         {
           "fechaInicio": "2026-10-08",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16095",
+          "cajas1": 6720,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -28049,8 +28049,8 @@
         },
         {
           "fechaInicio": "2026-10-08",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16258",
+          "cajas1": 5120,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -28080,8 +28080,8 @@
         },
         {
           "fechaInicio": "2026-10-08",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16143",
+          "cajas1": 9280,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -28174,7 +28174,7 @@
         {
           "fechaInicio": "2026-10-08",
           "ticket1": "16305",
-          "cajas1": 3680,
+          "cajas1": 7200,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -43781,7 +43781,7 @@
         "2026-09-07": "1.02",
         "2026-10-04": "1.02",
         "2026-04-30": "1.34",
-        "2026-10-07": "1"
+        "2026-10-07": "1.02"
       },
       "_deletedIds": {},
       "weeklyFisico": {
@@ -171956,8 +171956,8 @@
     "filename": "stock-producto-terminado.xlsx",
     "originalName": "Formato Inventario  Fisico Almacen PT DIARIO ACT  0888.xlsx",
     "tipo": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "tamano": 35008,
-    "uploadedAt": "2026-10-08T12:09:46.359Z",
+    "tamano": 35063,
+    "uploadedAt": "2026-10-08T17:34:53.139Z",
     "uploadedBy": "local-user"
   }
 }
