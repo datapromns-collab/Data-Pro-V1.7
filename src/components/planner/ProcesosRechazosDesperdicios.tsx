@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from 'react';
 import { format } from 'date-fns';
+import { FileDown } from 'lucide-react';
+import jsPDF from 'jspdf';
 import { useRemoteCollection } from '@/hooks/use-remote-collection';
 
 type ProcessSection = 'rechazos' | 'desperdicios' | 'devolucion';
@@ -92,6 +94,7 @@ export function ProcesosRechazosDesperdicios() {
   const [draftRows, setDraftRows] = useState<ProcessRow[]>([]);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [saveError, setSaveError] = useState('');
+  const [pdfStatus, setPdfStatus] = useState<'idle' | 'generating' | 'error'>('idle');
 
   const rows = useMemo(
     () => normalizeRows(store.data.records?.[section]?.[date]),
@@ -147,6 +150,171 @@ export function ProcesosRechazosDesperdicios() {
       console.error('[PROCESOS] Failed to save shared reject/waste records', { section, date, error });
       setSaveStatus('error');
       setSaveError(error instanceof Error ? error.message : 'No se pudieron guardar los datos compartidos.');
+    }
+  };
+
+  const exportPdf = async () => {
+    if (!rows.length || editing) return;
+    setPdfStatus('generating');
+    try {
+      const logoResponse = await fetch('/Logo-MDS.png');
+      if (!logoResponse.ok) throw new Error(`No se pudo cargar el logo MDS: HTTP ${logoResponse.status}`);
+      const logoBlob = await logoResponse.blob();
+      const logoData = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error('No se pudo leer el logo MDS para el PDF'));
+        reader.onload = () => {
+          if (typeof reader.result !== 'string') {
+            reject(new Error('Datos del logo MDS inválidos'));
+            return;
+          }
+          resolve(reader.result);
+        };
+        reader.readAsDataURL(logoBlob);
+      });
+
+      const pageWidth = 210;
+      const pageHeight = 297;
+      const halfHeight = pageHeight / 2;
+      const margin = 8;
+      const columns = [
+        { title: 'N°', width: 10 },
+        { title: 'LÍNEA', width: 20 },
+        { title: 'CÓDIGO', width: 30 },
+        { title: 'MATERIAL', width: 94 },
+        { title: 'CANTIDAD', width: 24 },
+        { title: 'UM', width: 16 },
+      ];
+      const measurementPdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      measurementPdf.setFont('helvetica', 'normal');
+      measurementPdf.setFontSize(7);
+      const materialWidth = columns[3].width - 2;
+      const measuredRows = rows.map((row, index) => {
+        const materialLines = measurementPdf.splitTextToSize(row.material || '', materialWidth);
+        return {
+          row,
+          index,
+          materialLines,
+          rowHeight: Math.max(5.5, materialLines.length * 3 + 1.5),
+        };
+      });
+      const tableTopOffset = 36;
+      const tableHeaderHeight = 8;
+      const tableBottomOffset = 130;
+      const availableRowsHeight = tableBottomOffset - tableTopOffset - tableHeaderHeight;
+      const requestedRowsHeight = measuredRows.reduce((height, item) => height + item.rowHeight, 0);
+      const rowScale = Math.min(1, availableRowsHeight / Math.max(requestedRowsHeight, 1));
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      const reportTitle = section === 'devolucion'
+        ? 'REPORTE DE DEVOLUCIÓN'
+        : section === 'rechazos'
+          ? 'REPORTE DE RECHAZOS'
+          : 'REPORTE DE DESPERDICIOS';
+      const headerFillColor = section === 'rechazos' ? [250, 204, 21]
+        : section === 'desperdicios' ? [21, 128, 61]
+          : [249, 115, 22];
+      const headerBorderColor = section === 'rechazos' ? [161, 98, 7]
+        : section === 'desperdicios' ? [22, 101, 52]
+          : [194, 65, 12];
+      const headerTextColor = section === 'rechazos' ? [20, 30, 40] : [255, 255, 255];
+
+      const addTicket = (copyLabel: string, top: number) => {
+        pdf.setFillColor(255, 255, 255);
+        pdf.rect(0, top, pageWidth, halfHeight, 'F');
+        pdf.addImage(logoData, 'PNG', margin, top + 5, 45, 13);
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(12);
+        pdf.text(reportTitle, pageWidth - margin, top + 10, { align: 'right' });
+        pdf.setFontSize(9);
+        pdf.text(copyLabel, pageWidth - margin, top + 17, { align: 'right' });
+        pdf.setFont('helvetica', 'normal');
+        pdf.setFontSize(8);
+        pdf.text(`Fecha: ${format(new Date(`${date}T12:00:00`), 'dd/MM/yyyy')}`, margin, top + 27);
+        pdf.text(`Emitido: ${format(new Date(), 'dd/MM/yyyy HH:mm')}`, pageWidth - margin, top + 27, { align: 'right' });
+
+        const tableTop = top + tableTopOffset;
+        const tableWidth = columns.reduce((width, column) => width + column.width, 0);
+        pdf.setFillColor(headerFillColor[0], headerFillColor[1], headerFillColor[2]);
+        pdf.rect(margin, tableTop, tableWidth, tableHeaderHeight, 'F');
+        pdf.setDrawColor(headerBorderColor[0], headerBorderColor[1], headerBorderColor[2]);
+        pdf.setLineWidth(0.35);
+        pdf.line(margin, tableTop, margin + tableWidth, tableTop);
+        pdf.line(margin, tableTop + tableHeaderHeight, margin + tableWidth, tableTop + tableHeaderHeight);
+        pdf.line(margin, tableTop, margin, tableTop + tableHeaderHeight);
+        let x = margin;
+        columns.forEach((column) => {
+          x += column.width;
+          pdf.line(x, tableTop, x, tableTop + tableHeaderHeight);
+        });
+
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(8);
+        pdf.setTextColor(headerTextColor[0], headerTextColor[1], headerTextColor[2]);
+        x = margin;
+        columns.forEach((column) => {
+          pdf.text(column.title, x + column.width / 2, tableTop + 5.5, {
+            align: 'center',
+            baseline: 'middle',
+            maxWidth: column.width - 1,
+          });
+          x += column.width;
+        });
+
+        let y = tableTop + tableHeaderHeight;
+        pdf.setFont('helvetica', 'normal');
+        pdf.setFontSize(Math.max(4, 7 * rowScale));
+        pdf.setTextColor(15, 23, 42);
+        pdf.setDrawColor(100, 116, 139);
+        pdf.setLineWidth(0.3);
+        measuredRows.forEach(({ row, index, materialLines, rowHeight }) => {
+          const fittedRowHeight = rowHeight * rowScale;
+          const values: (string | string[])[] = [
+            String(index + 1),
+            row.line,
+            row.code,
+            materialLines,
+            row.quantity,
+            row.unit,
+          ];
+          x = margin;
+          columns.forEach((column, columnIndex) => {
+            pdf.rect(x, y, column.width, fittedRowHeight);
+            const value = values[columnIndex];
+            if (Array.isArray(value)) {
+              pdf.text(value, x + 1, y + Math.min(3.4, fittedRowHeight / 2 + 1), { maxWidth: column.width - 2 });
+            } else {
+              const centered = columnIndex === 0 || columnIndex === 4 || columnIndex === 5;
+              pdf.text(value || '', x + (centered ? column.width / 2 : 1), y + fittedRowHeight / 2 + 1, {
+                align: centered ? 'center' : 'left',
+                maxWidth: column.width - 2,
+              });
+            }
+            x += column.width;
+          });
+          y += fittedRowHeight;
+        });
+
+        pdf.setFont('helvetica', 'normal');
+        pdf.setFontSize(8);
+        pdf.text('Entregado por: __________________________', margin, top + 139);
+        pdf.text('Recibido por: __________________________', pageWidth - margin, top + 139, { align: 'right' });
+        pdf.setFontSize(7);
+        pdf.text('Firma y fecha', margin + 18, top + 144);
+        pdf.text('Firma y fecha', pageWidth - margin - 18, top + 144, { align: 'right' });
+      };
+
+      addTicket('COPIA - PROCESOS', 0);
+      addTicket('COPIA - ALMACÉN', halfHeight);
+      pdf.setDrawColor(15, 23, 42);
+      pdf.setLineWidth(0.6);
+      pdf.setLineDashPattern([2, 1.5], 0);
+      pdf.line(0, halfHeight, pageWidth, halfHeight);
+      pdf.setLineDashPattern([], 0);
+      pdf.save(`${section}_${date}_Procesos.pdf`);
+      setPdfStatus('idle');
+    } catch (error) {
+      console.error('[PROCESOS] No se pudo generar el reporte PDF', { section, date, error });
+      setPdfStatus('error');
     }
   };
 
@@ -218,6 +386,7 @@ export function ProcesosRechazosDesperdicios() {
       {store.syncError && <p role="alert" className="mb-3 text-xs font-bold text-red-600">{store.syncError}</p>}
       {saveError && <p role="alert" className="mb-3 text-xs font-bold text-red-600">{saveError}</p>}
       {saveStatus === 'saved' && <p role="status" className="mb-3 text-xs font-bold text-emerald-700">Datos guardados en la base compartida.</p>}
+      {pdfStatus === 'error' && <p role="alert" className="mb-3 text-xs font-bold text-red-600">No se pudo generar el PDF. Verifica que el logo esté disponible e inténtalo de nuevo.</p>}
 
       <div className="overflow-x-auto rounded-2xl border border-slate-200">
         <div className="flex items-center justify-between gap-3 border-b border-slate-200 px-4 py-3">
@@ -225,6 +394,17 @@ export function ProcesosRechazosDesperdicios() {
             {sectionLabel} · {format(new Date(`${date}T12:00:00`), 'dd/MM/yyyy')}
           </h3>
           <div className="flex items-center gap-2">
+            {!editing && (
+              <button
+                type="button"
+                onClick={() => void exportPdf()}
+                disabled={!rows.length || pdfStatus === 'generating'}
+                className="inline-flex items-center gap-1.5 rounded-full bg-slate-700 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-white disabled:opacity-50"
+              >
+                <FileDown className="h-3.5 w-3.5" />
+                {pdfStatus === 'generating' ? 'Generando PDF…' : 'Reporte PDF'}
+              </button>
+            )}
             {editing ? (
               <>
                 <button
