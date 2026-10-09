@@ -17485,7 +17485,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-08T21:26:41.147Z"
+    "updatedAt": "2026-10-09T11:52:08.584Z"
   },
   "ordenesSap": [
     {
@@ -28183,12 +28183,12 @@
           "fechaInicio": "2026-10-08",
           "ticket1": "16095",
           "cajas1": 6720,
-          "ticket2": "",
+          "ticket2": "16096",
           "cajas2": 3200,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1280,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 8073
         }
       ]
     },
@@ -28214,12 +28214,12 @@
           "fechaInicio": "2026-10-08",
           "ticket1": "16258",
           "cajas1": 5120,
-          "ticket2": "",
+          "ticket2": "16259",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 480,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 16000
         }
       ]
     },
@@ -28245,12 +28245,12 @@
           "fechaInicio": "2026-10-08",
           "ticket1": "16143",
           "cajas1": 9280,
-          "ticket2": "",
+          "ticket2": "16144",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 800,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 20000
         }
       ]
     },
@@ -28276,12 +28276,12 @@
           "fechaInicio": "2026-10-08",
           "ticket1": "15215",
           "cajas1": 1550,
-          "ticket2": "",
+          "ticket2": "15216",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 8200
         }
       ]
     },
@@ -28338,12 +28338,12 @@
           "fechaInicio": "2026-10-08",
           "ticket1": "16305",
           "cajas1": 7200,
-          "ticket2": "",
+          "ticket2": "1630",
           "cajas2": 1920,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2720,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 17440
         }
       ]
     },
@@ -28369,12 +28369,12 @@
           "fechaInicio": "2026-10-08",
           "ticket1": "16188",
           "cajas1": 1280,
-          "ticket2": "",
+          "ticket2": "16189",
           "cajas2": 3680,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 800,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 9782
         }
       ]
     },
@@ -28400,12 +28400,32 @@
           "fechaInicio": "2026-10-08",
           "ticket1": "16238",
           "cajas1": 3354,
-          "ticket2": "",
+          "ticket2": "16239",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 546,
+          "ticket4": "",
+          "cajas4": 16224
+        }
+      ]
+    },
+    {
+      "id": "1-1791545497208",
+      "linea": 1,
+      "sabor": "GLUP MANZANA VERDE",
+      "ordenNumero": "64129",
+      "semana": 41,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-08",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16096",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 4000
         }
       ]
     }
@@ -170110,7 +170130,8 @@
       "2026-10-07-suave": "260678",
       "2026-10-07-procesos": "2753179,27",
       "2026-10-07-filtrada": "4310335,71",
-      "2026-10-07-total": "3246742,67"
+      "2026-10-07-total": "3246742,67",
+      "2026-10-08-servicio": "29404"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
