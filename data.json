@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-10-09T00:00:00.000",
+      "weekStartDate": "2026-10-05T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -18054,7 +18054,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-09T21:32:40.283Z"
+    "updatedAt": "2026-10-10T12:06:31.667Z"
   },
   "ordenesSap": [
     {
@@ -28918,12 +28918,12 @@
           "fechaInicio": "2026-10-09",
           "ticket1": "16308",
           "cajas1": 4960,
-          "ticket2": "",
+          "ticket2": "16309",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 3200,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 21392
         }
       ]
     },
@@ -28991,12 +28991,12 @@
           "fechaInicio": "2026-10-09",
           "ticket1": "16240",
           "cajas1": 312,
-          "ticket2": "",
+          "ticket2": "16241",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 561
         }
       ]
     },
@@ -29042,8 +29042,19 @@
           "fechaInicio": "2026-10-09",
           "ticket1": "16260",
           "cajas1": 2160,
-          "ticket2": "",
+          "ticket2": "16261",
           "cajas2": 3280,
+          "ticket3": "",
+          "cajas3": 3760,
+          "ticket4": "",
+          "cajas4": 21120
+        },
+        {
+          "fechaInicio": "2026-10-10",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -29062,8 +29073,19 @@
           "fechaInicio": "2026-10-09",
           "ticket1": "16145",
           "cajas1": 2000,
-          "ticket2": "",
+          "ticket2": "16146",
           "cajas2": 3920,
+          "ticket3": "",
+          "cajas3": 3520,
+          "ticket4": "",
+          "cajas4": 26880
+        },
+        {
+          "fechaInicio": "2026-10-10",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -29082,6 +29104,17 @@
           "fechaInicio": "2026-10-09",
           "ticket1": "15217",
           "cajas1": 350,
+          "ticket2": "15218",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 1650,
+          "ticket4": "",
+          "cajas4": 8106
+        },
+        {
+          "fechaInicio": "2026-10-10",
+          "ticket1": "",
+          "cajas1": 0,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -29102,12 +29135,103 @@
           "fechaInicio": "2026-10-09",
           "ticket1": "16097",
           "cajas1": 800,
-          "ticket2": "",
+          "ticket2": "16098",
           "cajas2": 2720,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
+          "cajas4": 2825
+        }
+      ]
+    },
+    {
+      "id": "1-1791631518237",
+      "linea": 1,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "64158",
+      "semana": 41,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-09",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16098",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 8080
+        },
+        {
+          "fechaInicio": "2026-10-10",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
           "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "6-1791633230517",
+      "linea": 6,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "64176",
+      "semana": 41,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-09",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16190",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 4608
+        }
+      ]
+    },
+    {
+      "id": "6-1791633504318",
+      "linea": 6,
+      "sabor": "GLUP UVA",
+      "ordenNumero": "64164",
+      "semana": 41,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-09",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16190",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 5121
+        }
+      ]
+    },
+    {
+      "id": "7-1791633967032",
+      "linea": 7,
+      "sabor": "GLUP PIÑA",
+      "ordenNumero": "64183",
+      "semana": 41,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-09",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16241",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 11856
         }
       ]
     }
@@ -170899,7 +171023,11 @@
       "2026-10-07-procesos": "2753179,27",
       "2026-10-07-filtrada": "4310335,71",
       "2026-10-07-total": "3246742,67",
-      "2026-10-08-servicio": "29404"
+      "2026-10-08-servicio": "29404",
+      "2026-10-08-suave": "250026",
+      "2026-10-08-procesos": "2655114,47",
+      "2026-10-08-filtrada": "4089246,01",
+      "2026-10-08-total": "2742953,6"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
