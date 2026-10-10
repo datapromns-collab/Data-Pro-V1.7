@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Beaker, Pipette, Activity, FileSpreadsheet, TrendingUp, ScrollText, CalendarIcon } from 'lucide-react';
-import { format, startOfMonth, endOfMonth, startOfWeek, addDays, isSameMonth } from 'date-fns';
+import { format, startOfMonth, endOfMonth, startOfWeek, addDays, isSameMonth, getISOWeek, getISOWeekYear, setISOWeek, startOfISOWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { getWeekDays, getWeeksInMonth, weekMonthKey } from '@/lib/planner-utils';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Line, ComposedChart } from 'recharts';
@@ -1671,14 +1671,31 @@ function JarabesResumenReporteInner({
   onPrintMonthlyStandard,
   onPrintMonthlyPromedio,
 }: JarabesResumenReporteProps) {
-  const { data, getWeeklyFisico } = useJarabes();
+  const { data, getWeeklyFisico, isLoaded } = useJarabes();
   const selectedFecha = useMemo(() => startOfMonth(reportMonthDate), [reportMonthDate]);
+  const [selectedWeekDate, setSelectedWeekDate] = useState(reportMonthDate);
   const [activeResumenTab, setActiveResumenTab] = useState('semanal');
   const [activeResumenSemanalTab, setActiveResumenSemanalTab] = useState('r-estandar-sem');
   const [activeResumenMensualTab, setActiveResumenMensualTab] = useState('r-estandar-mes');
   const [updateCounter, setUpdateCounter] = useState(0);
   const [realKgPerSack, setRealKgPerSack] = useState<number>();
   const [costoAzucar, setCostoAzucar] = useState<number>();
+
+  useEffect(() => {
+    setSelectedWeekDate(reportMonthDate);
+  }, [reportMonthDate]);
+
+  const handleWeekChange = (value: string) => {
+    const match = /^(\d{4})-W(\d{2})$/.exec(value);
+    if (!match) return;
+    const year = Number(match[1]);
+    const week = Number(match[2]);
+    if (week < 1 || week > 53) return;
+    const weekStart = startOfISOWeek(setISOWeek(new Date(year, 0, 4), week));
+    const dateInReportMonth = Array.from({ length: 7 }, (_, index) => addDays(weekStart, index))
+      .find((day) => isSameMonth(day, reportMonthDate));
+    setSelectedWeekDate(dateInReportMonth ?? weekStart);
+  };
 
   useEffect(() => {
     const key = dk(selectedFecha);
@@ -1692,6 +1709,11 @@ function JarabesResumenReporteInner({
 
   return (
     <div className="w-full">
+      {!isLoaded && (
+        <p role="status" className="mb-3 text-xs font-semibold text-slate-500">
+          Cargando datos de rendimiento de azúcar...
+        </p>
+      )}
       <Tabs value={activeResumenTab} onValueChange={setActiveResumenTab} className="w-full">
         <div className="mb-6 flex w-full items-center justify-between gap-3 no-print">
           <div className="flex h-11 items-center rounded-full border border-slate-200 bg-slate-100/50 p-1">
@@ -1713,26 +1735,38 @@ function JarabesResumenReporteInner({
 
         <TabsContent value="semanal" className="m-0 animate-in fade-in-50 duration-500">
           <Tabs value={activeResumenSemanalTab} onValueChange={setActiveResumenSemanalTab} className="w-full">
-            <div className="mb-6 flex h-11 w-fit items-center rounded-full border border-slate-200 bg-slate-100/50 p-1 no-print">
-              <TabsList className="h-auto bg-transparent p-0">
-                <TabsTrigger value="r-estandar-sem" className={tabsTriggerClass}>
-                  <FileSpreadsheet className="h-3.5 w-3.5" /> R estandar sem
-                </TabsTrigger>
-                <TabsTrigger value="r-promedio-sem" className={tabsTriggerClass}>
-                  <TrendingUp className="h-3.5 w-3.5" /> R promedio sem
-                </TabsTrigger>
-              </TabsList>
+            <div className="mb-6 flex flex-wrap items-center justify-between gap-3 no-print">
+              <div className="flex h-11 w-fit items-center rounded-full border border-slate-200 bg-slate-100/50 p-1">
+                <TabsList className="h-auto bg-transparent p-0">
+                  <TabsTrigger value="r-estandar-sem" className={tabsTriggerClass}>
+                    <FileSpreadsheet className="h-3.5 w-3.5" /> R estandar sem
+                  </TabsTrigger>
+                  <TabsTrigger value="r-promedio-sem" className={tabsTriggerClass}>
+                    <TrendingUp className="h-3.5 w-3.5" /> R promedio sem
+                  </TabsTrigger>
+                </TabsList>
+              </div>
+              <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-600">
+                Semana
+                <input
+                  type="week"
+                  aria-label="Seleccionar semana de rendimiento de azúcar"
+                  value={`${getISOWeekYear(selectedWeekDate)}-W${String(getISOWeek(selectedWeekDate)).padStart(2, '0')}`}
+                  onChange={(event) => handleWeekChange(event.target.value)}
+                  className="pointer-events-auto h-9 rounded-full border-0 bg-white px-3 text-[10px] font-bold text-slate-700 shadow-sm outline-none"
+                />
+              </label>
             </div>
             <TabsContent value="r-estandar-sem" className="m-0 animate-in fade-in-50 duration-500">
               <REstandarSemTable
-                selectedFecha={selectedFecha}
+                selectedFecha={selectedWeekDate}
                 costoAzucar={costoAzucar}
                 onPrintWeeklyStandard={onPrintWeeklyStandard}
               />
             </TabsContent>
             <TabsContent value="r-promedio-sem" className="m-0 animate-in fade-in-50 duration-500">
               <RPromedioSemTable
-                selectedFecha={selectedFecha}
+                selectedFecha={selectedWeekDate}
                 costoAzucar={costoAzucar}
                 realKgPerSack={realKgPerSack}
                 updateCounter={updateCounter}

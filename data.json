@@ -12089,12 +12089,12 @@
             "name": "GLUP PIÑA PARCHITA",
             "lineId": "1",
             "loadPerHour": 1500,
-            "quantity": 6813,
-            "durationHours": 4.542,
+            "quantity": 6825,
+            "durationHours": 4.55,
             "presentation": "2Lts",
             "tanks": 1,
             "startTime": "2026-10-08T17:31:00.000Z",
-            "endTime": "2026-10-08T22:03:31.200Z",
+            "endTime": "2026-10-08T22:04:00.000Z",
             "id": "xwe5nhr0m",
             "color": "#f59e0b"
           },
@@ -12268,12 +12268,12 @@
             "name": "GLUP KOLITA",
             "lineId": "6",
             "loadPerHour": 1200,
-            "quantity": 35580,
-            "durationHours": 29.65,
+            "quantity": 35600,
+            "durationHours": 29.666666666666668,
             "presentation": "0.4Lts",
             "tanks": 2,
             "startTime": "2026-10-07T16:20:00.000Z",
-            "endTime": "2026-10-08T21:59:00.000Z",
+            "endTime": "2026-10-08T22:00:00.000Z",
             "id": "523owl17e",
             "color": "#587593"
           },
@@ -12283,8 +12283,8 @@
             "loadPerHour": 0,
             "quantity": 0,
             "durationHours": 0.5,
-            "startTime": "2026-10-08T21:59:00.000Z",
-            "endTime": "2026-10-08T22:29:00.000Z",
+            "startTime": "2026-10-08T22:00:00.000Z",
+            "endTime": "2026-10-08T22:30:00.000Z",
             "id": "skvioa7ej",
             "color": "#587593"
           },
@@ -17409,6 +17409,37 @@
               "nonConformity": "Exposicion de Taca",
               "quantity": "234"
             }
+          ],
+          "2026-10-08": [
+            {
+              "id": "1f5830c9-87de-494d-8890-707b65d65702",
+              "line": "Linea 6",
+              "flavor": "GLUP KOLITA",
+              "code": "PRODT-0094",
+              "description": "GLUP! KOLITA  CAJA X 15BOT X 0.400LTS",
+              "nonConformity": "Bajo Brix",
+              "quantity": "341"
+            }
+          ],
+          "2026-10-09": [
+            {
+              "id": "8dd3e4b5-6d04-437a-90b9-c7e8f778c1e1",
+              "line": "Linea 1",
+              "flavor": "GLUP MANZANA",
+              "code": "PRODT-0049",
+              "description": "GLUP! MANZANA VERDE CAJA X 6BOT X 2.0 LTS",
+              "nonConformity": "Problemas de Soplado",
+              "quantity": "65"
+            },
+            {
+              "id": "ad5eba3c-8577-4e7f-b378-b745b5b4e486",
+              "line": "Linea 3",
+              "flavor": "GLUP COLA",
+              "code": "PRODT-0007",
+              "description": "GLUP! COLA NEGRA  CAJA X 6BOT X 2.0LTS",
+              "nonConformity": "Prueba",
+              "quantity": "236"
+            }
           ]
         }
       },
@@ -18357,7 +18388,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-10T14:00:20.489Z"
+    "updatedAt": "2026-10-10T21:28:36.421Z"
   },
   "ordenesSap": [
     {
@@ -29354,8 +29385,8 @@
         },
         {
           "fechaInicio": "2026-10-10",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16262",
+          "cajas1": 6640,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -29385,10 +29416,10 @@
         },
         {
           "fechaInicio": "2026-10-10",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16147",
+          "cajas1": 7280,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 5360,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -29467,10 +29498,10 @@
         },
         {
           "fechaInicio": "2026-10-10",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16099",
+          "cajas1": 3760,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 80,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -29515,6 +29546,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 5121
+        },
+        {
+          "fechaInicio": "2026-10-10",
+          "ticket1": "16191",
+          "cajas1": 480,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -29535,6 +29577,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 11856
+        },
+        {
+          "fechaInicio": "2026-10-10",
+          "ticket1": "16242",
+          "cajas1": 2108,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -29548,9 +29601,9 @@
         {
           "fechaInicio": "2026-10-10",
           "ticket1": "16310",
-          "cajas1": 2240,
+          "cajas1": 6000,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 7840,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -45169,11 +45222,12 @@
         "2026-09-14|2026-09": 1174355.86,
         "2026-09-21|2026-09": 1009476.45,
         "2026-09-28|2026-09": 550986.53,
-        "2026-10-01|2026-10": 0,
+        "2026-10-01|2026-10": 479385.1,
         "2026-04-13|2026-04": 1316706.34,
         "2026-04-27|2026-04": 1059135.18,
         "2026-04-01|2026-04": 0,
-        "2026-10-05|2026-10": 859306.97
+        "2026-10-05|2026-10": 859306.97,
+        "2026-10-12|2026-10": 0
       }
     },
     "seguimiento-etiquetadora": {

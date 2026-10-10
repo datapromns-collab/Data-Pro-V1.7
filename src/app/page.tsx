@@ -57,6 +57,7 @@ import { ProductionGantt } from '@/components/planner/ProductionGantt';
 import { useRemoteCollection } from '@/hooks/use-remote-collection';
 import OrdenesSapModule, { CorrelativoSelector } from '@/components/planner/OrdenesSapModule';
 import { useOrdenesSap } from '@/hooks/use-ordenes-sap';
+import PlantaReporteResumen from '@/components/planner/PlantaReporteResumen';
 import type { PurchasingSummaryPrintData } from '@/components/planner/PurchasingModule';
 import { usePlannerStore, getWeekKey } from '@/hooks/use-planner-store';
 import { getWeekDays } from '@/lib/planner-utils';
@@ -4695,7 +4696,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                     ))}
                                  </div>
                                </div>
-                                 {(reporteSubTab === 'diario' || reporteSubTab === 'por-turno' || reporteSubTab === 'resumen') && (
+                                 {(reporteSubTab === 'diario' || reporteSubTab === 'por-turno') && (
                                  <div className="flex items-center">
                                    <input
                                      type="date"
@@ -4946,6 +4947,14 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                            </>
                                          )}
                                       </div>
+                                     )}
+                                     {reporteSubTab === 'resumen' && (
+                                       <PlantaReporteResumen
+                                         informesOperacionales={allInformesOperacionales}
+                                         tasks={allTasks}
+                                         lineSpeeds={lineSpeeds}
+                                         ordenesSap={allOrdenesSap}
+                                       />
                                      )}
                                </div>
                             </div>
@@ -6214,53 +6223,6 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                   {row.enviarALinea ? `Linea ${row.enviarALinea}` : (
                                                                      <button onClick={() => { setSelectedLineaRow({ id: row.id, type: 'justy' }); setSelectedLinea(null); setLineaModalOpen(true); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Enviar</button>
                                       )}
-                                     {reporteSubTab === 'resumen' && (
-                                       <div className="flex flex-col gap-3">
-                                         <div className="border border-slate-200 rounded-[2.5rem] bg-slate-50/30 overflow-visible">
-                                           <div className="p-4">
-                                             <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
-                                               <table className="w-full border-collapse text-center" style={{ minWidth: 1400 }}>
-                                                 <thead>
-                                                   <tr className="bg-slate-100">
-                                                     <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36 text-left">Línea</th>
-                                                     <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Planificado</th>
-                                                     <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Alcance</th>
-                                                     <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">% Cumplimiento</th>
-                                                     <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Disponibilidad</th>
-                                                     <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">OT</th>
-                                                     <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Tiempo Muerto</th>
-                                                     <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Observaciones</th>
-                                                   </tr>
-                                                 </thead>
-                                                 <tbody>
-                                                   {(() => {
-                                                     const row = calcularTotalesDiario(allInformesOperacionales, tasks, realProduction, lineSpeeds, reporteDiarioFecha, planificadasPorDia, allOrdenesTrabajo, undefined, allOrdenesSap, 'DIARIO');
-                                                     return [1,2,3,4,5,6,7].map((linea) => (
-                                                       <tr key={linea} className={linea % 2 === 0 ? 'even:bg-slate-50/60' : ''}>
-                                                         <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 text-left">Línea {linea}</td>
-                                                         <td className="px-2 py-1 border-b border-slate-100 text-center tabular-nums">{row.totalPlanificadoTD}</td>
-                                                         <td className="px-2 py-1 border-b border-slate-100 text-center tabular-nums">{row.totalAlcanceTD}</td>
-                                                         <td className="px-2 py-1 border-b border-slate-100 text-center tabular-nums">{row.cumplimientoTD}</td>
-                                                         <td className="px-2 py-1 border-b border-slate-100 text-center tabular-nums">{row.disponibilidadTotal}</td>
-                                                         <td className="px-2 py-1 border-b border-slate-100 text-center tabular-nums">0</td>
-                                                         <td className="px-2 py-1 border-b border-slate-100 text-center tabular-nums">0</td>
-                                                         <td className="px-2 py-1 border-b border-slate-100 text-left">
-                                                           <input
-                                                             type="text"
-                                                             className="w-full bg-transparent text-[10px] text-slate-700 outline-none focus:bg-slate-50 rounded px-1 py-0.5"
-                                                             placeholder="Sin observaciones"
-                                                           />
-                                                         </td>
-                                                       </tr>
-                                                     ));
-                                                   })()}
-                                                 </tbody>
-                                               </table>
-                                             </div>
-                                           </div>
-                                         </div>
-                                       </div>
-                                     )}
                                                                 </td>
                                                                 {showRevisionColumn && (
                                                                   <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
@@ -7905,6 +7867,10 @@ function getResumenPorLinea(informesOperacionales: any[], tasks: any[], realProd
     const tiempoMuertoInexplicableRaw = disponibilidadRealHrs - horasEfectivasLinea;
     const tiempoMuerto = tiempoMuertoInexplicableRaw.toFixed(2).replace('.', ',');
     const ausentismo = minutosAHorasDecimal(paradasLinea.filter((r: any) => String(r.tipoParada || '').toUpperCase() === 'AUSENTISMO').reduce((acc: number, r: any) => acc + (Number(r.totalMin) || 0), 0));
+    const horasACajas = (horas: string) => {
+      const horasNum = Number.parseFloat(horas.replace(',', '.')) || 0;
+      return String(Math.round(horasNum * cajasHNum));
+    };
     const disponibilidad = planificado > 0 ? ((produccionTeorica / planificado) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
 
     const alcance = alcanceTD + alcanceTN;
@@ -7917,10 +7883,10 @@ function getResumenPorLinea(informesOperacionales: any[], tasks: any[], realProd
       cumplimiento,
       produccionTeorica: Number.isFinite(produccionTeorica) ? produccionTeorica.toFixed(0) : '0',
       diferenciaTeoricaReal,
-      ot: String(ot),
-      adecuaciones: String(adecuaciones),
-      tiempoMuerto,
-      ausentismo: String(ausentismo),
+      ot: horasACajas(ot),
+      adecuaciones: horasACajas(adecuaciones),
+      tiempoMuerto: horasACajas(tiempoMuerto),
+      ausentismo: horasACajas(ausentismo),
       disponibilidad,
     };
   });
@@ -7933,19 +7899,17 @@ function TablaResumenPorLinea({ informesOperacionales, tasks, realProduction, li
     <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
       <div className="p-4">
         <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
-          <table className="w-full border-collapse text-center" style={{ minWidth: 1400 }}>
+          <table className="w-full border-collapse text-center" style={{ minWidth: 1200 }}>
             <thead>
               <tr className="bg-slate-100">
                 <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Línea</th>
                 <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Planificado</th>
                 <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Alcance</th>
                 <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Cumplimiento</th>
-                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Producción Teórica</th>
-                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Diferencia Teórica-Real</th>
-                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">OT</th>
-                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Adecuaciones</th>
-                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Tiempo Muerto</th>
-                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Ausentismo</th>
+                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">OT (Cajas)</th>
+                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[100px]">Adecuaciones (Cajas)</th>
+                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[110px]">Tiempo Muerto (Cajas)</th>
+                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[100px]">Ausentismo (Cajas)</th>
                 <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[80px]">Disponibilidad de Máquina</th>
               </tr>
             </thead>
@@ -7956,8 +7920,6 @@ function TablaResumenPorLinea({ informesOperacionales, tasks, realProduction, li
                   <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.planificado}</td>
                   <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.alcance}</td>
                   <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.cumplimiento}</td>
-                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.produccionTeorica}</td>
-                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.diferenciaTeoricaReal}</td>
                   <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.ot}</td>
                   <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.adecuaciones}</td>
                   <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.tiempoMuerto}</td>
