@@ -13560,6 +13560,41 @@
           "aditivosCantidad": {},
           "solidosCantidad": {},
           "quimicosInsumosCantidad": {}
+        },
+        "2026-10-10": {
+          "tapas": {
+            "EMP_0095-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0095-Importada": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaEW": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaTipo2": {
+              "totalCajas": "",
+              "total": ""
+            }
+          },
+          "separadores": {},
+          "preformas": {},
+          "plasticos": {},
+          "adhesivoCantidad": "",
+          "etiquetasCantidad": {},
+          "azucarCantidad": {},
+          "concentradosCantidad": {},
+          "concentradosJustyCantidad": {},
+          "aditivosCantidad": {},
+          "solidosCantidad": {},
+          "quimicosInsumosCantidad": {}
         }
       },
       "semanal": {
@@ -15033,6 +15068,107 @@
               "code": "ENV-00078",
               "material": "BOTELLA ENVASADA GLUP COLA NEGRA 1.0 L (LINEA 7)",
               "quantity": "486",
+              "unit": "UND"
+            }
+          ],
+          "2026-10-09": [
+            {
+              "id": "199460e4-20d4-4554-aee0-24193d81a4e6",
+              "line": "Linea 1",
+              "flavor": "GLUP FRESH",
+              "code": "ENV-00013",
+              "material": "BOTELLA ENVASADA GLUP FRESH 2.0.LTS",
+              "quantity": "20",
+              "unit": "UND"
+            },
+            {
+              "id": "462cfb9b-8fc2-4542-afac-140fdbac2c59",
+              "line": "Linea 1",
+              "flavor": "GLUP MANZANA",
+              "code": "ENV-00053",
+              "material": "BOTELLA ENVASADA GLUP MANZANA VERDE  2.0.LTS",
+              "quantity": "141",
+              "unit": "UND"
+            },
+            {
+              "id": "7dc07722-4207-41bd-9a01-b6dd020cbe84",
+              "line": "Linea 1",
+              "flavor": "GLUP PIÑA PARCHITA",
+              "code": "ENV-00089",
+              "material": "BOTELLA ENVASADA PIÑA PARCHITA 2.0 L (LINEA 1)",
+              "quantity": "168",
+              "unit": "UND"
+            },
+            {
+              "id": "6f4e4bb9-ed07-4af0-8161-e881dd81bc4b",
+              "line": "Linea 2",
+              "flavor": "GLUP KOLITA",
+              "code": "ENV-00040",
+              "material": "BOTELLA ENVASADA GLUP KOLITA 2.0.LTS  (EN LINEA 2)",
+              "quantity": "24",
+              "unit": "UND"
+            },
+            {
+              "id": "6a715bcb-33e3-4c20-8675-8eaa75b50fc4",
+              "line": "Linea 3",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00063",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 2L (LINEA 3)",
+              "quantity": "72",
+              "unit": "UND"
+            },
+            {
+              "id": "1bf51df8-13f9-4ad5-8729-65afcba29937",
+              "line": "Linea 4",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00054",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 2.LTS (LINEA 4)",
+              "quantity": "103",
+              "unit": "UND"
+            },
+            {
+              "id": "b017c87f-bf8b-4780-a158-7023b601f1e8",
+              "line": "Linea 5",
+              "flavor": "JUSTY DURAZNO",
+              "code": "ENV-00095",
+              "material": "BOTELLA ENVASADA JUSTY DURAZNO 1.5 LTS",
+              "quantity": "102",
+              "unit": "UND"
+            },
+            {
+              "id": "086cbf50-6293-488b-af99-8f84df06907a",
+              "line": "Linea 6",
+              "flavor": "GLUP KOLITA",
+              "code": "ENV-00061",
+              "material": "BOTELLA ENVASADA GLUP KOLITA 400 ML (LINEA 6)",
+              "quantity": "81",
+              "unit": "UND"
+            },
+            {
+              "id": "37274bb2-d04c-49b2-bdb0-8b613eca5516",
+              "line": "Linea 6",
+              "flavor": "GLUP UVA",
+              "code": "ENV-00059",
+              "material": "BOTELLA ENVASADA GLUP UVA 400 ML (LINEA 6)",
+              "quantity": "120",
+              "unit": "UND"
+            },
+            {
+              "id": "1a0635ef-949a-4b2f-8151-e7f4523675d6",
+              "line": "Linea 7",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00078",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 1.0 L (LINEA 7)",
+              "quantity": "102",
+              "unit": "UND"
+            },
+            {
+              "id": "94cb75eb-151a-49a9-804d-103524c21210",
+              "line": "Linea 7",
+              "flavor": "GLUP PIÑA",
+              "code": "ENV-00100",
+              "material": "BOTELLA ENVASADA GLUP PIÑA 1.0 L (LINEA 7)",
+              "quantity": "45",
               "unit": "UND"
             }
           ]
@@ -16801,6 +16937,173 @@
               "kind": "termo",
               "preformSize": ""
             }
+          ],
+          "2026-10-09": [
+            {
+              "id": "edae8589-8a6c-418e-bf93-736319f28bbb",
+              "line": "Linea 1",
+              "flavor": "verde",
+              "code": "EMP_0103",
+              "material": "PREFORMA VERDE 42,64 GR-1881",
+              "quantity": "714",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "f508cb40-e148-4cc8-858e-0c8fb2b06639",
+              "line": "Linea 1",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "4595",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "7d9d15b3-2843-45da-93d3-9efdc863c65e",
+              "line": "Linea 1",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "2,42",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "20d1d015-f88c-43f8-8af0-19df5a9f88ac",
+              "line": "Linea 2",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "1784",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "b2f34702-0d29-4797-bfb5-605b278b4cb6",
+              "line": "Linea 2",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "2,28",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "44900903-84b0-47ce-a0f2-d43e168b8a39",
+              "line": "Linea 3",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "1856",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "3edfe03e-8145-4566-9573-605ea710b141",
+              "line": "Linea 3",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "1,67",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "5de54c5f-f2e8-46d0-b338-40dd2db80666",
+              "line": "Linea 4",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "4737",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "2b1c7af8-5e30-45e5-9d6f-ed6ca0e526e0",
+              "line": "Linea 4",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "2,82",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "a2157129-89c0-435c-a939-16e80e9730d4",
+              "line": "Linea 5",
+              "flavor": "transparente",
+              "code": "EMP_0068",
+              "material": "PREFORMA TRANSPARENTE 36 GR-1881",
+              "quantity": "1055",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "92e8190d-ee32-4609-8451-dc1780afe9a4",
+              "line": "Linea 5",
+              "flavor": "",
+              "code": "EMP_0017",
+              "material": "POLIETILENO TERMOENCOGIBLE 55 X 0.07",
+              "quantity": "1,33",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "2c6d210a-c2b6-4c82-8e60-5fcdcb2c9d46",
+              "line": "Linea 6",
+              "flavor": "transparente",
+              "code": "EMP_0126",
+              "material": "PREFORMA TRANSPARENTE 20,55GR-1881",
+              "quantity": "1100",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "ed53f7a2-4e8e-4e47-8454-2cfa21ef9180",
+              "line": "Linea 6",
+              "flavor": "",
+              "code": "EMP_0130",
+              "material": "POLIETILENO TERMOENCOGIBLE 43 x 0.06",
+              "quantity": "0,61",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "71edc8f0-e314-428a-8713-905c361ab3fd",
+              "line": "Linea 7",
+              "flavor": "transparente",
+              "code": "EMP_0166",
+              "material": "PREFORMA TRANSPARENTE 33 GR-1881",
+              "quantity": "3757",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": "33"
+            },
+            {
+              "id": "8e39ac46-f31c-412e-8d22-5fb0589c4777",
+              "line": "Linea 7",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "1,22",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            }
           ]
         }
       },
@@ -18054,7 +18357,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-10T12:47:42.575Z"
+    "updatedAt": "2026-10-10T13:16:01.779Z"
   },
   "ordenesSap": [
     {
@@ -163151,6 +163454,18 @@
           "producto": "307",
           "jarabeReal": 68927,
           "ubb": 24
+        },
+        "auto-1-1791545497208": {
+          "cajasPlanificadas": 8275,
+          "producto": "141",
+          "jarabeReal": 16550,
+          "ubb": 19
+        },
+        "auto-1-1791568710553": {
+          "cajasPlanificadas": 6813,
+          "producto": "168",
+          "jarabeReal": 16370,
+          "ubb": 6
         }
       },
       "linea-2": {
@@ -164141,6 +164456,12 @@
           "jarabeReal": 19874,
           "ubb": 20.15,
           "pnc": 341
+        },
+        "auto-6-1791633230517": {
+          "cajasPlanificadas": 13000,
+          "jarabeReal": 5069,
+          "producto": "81",
+          "ubb": 5.13
         }
       },
       "linea-7": {
@@ -164387,6 +164708,12 @@
           "producto": "563",
           "jarabeReal": 87841,
           "ubb": 30.55
+        },
+        "auto-7-1791461097679": {
+          "cajasPlanificadas": 51750,
+          "jarabeReal": 63925,
+          "producto": "813",
+          "ubb": 22.21
         }
       }
     },
@@ -173119,6 +173446,33 @@
           "PRODT-0100": 27215,
           "PRODT-0115": 121,
           "PRODT-0116": 145
+        },
+        "2026-10-10": {
+          "PRODT-0007": 59412,
+          "PRODT-0008": 9,
+          "PRODT-0009": 34456,
+          "PRODT-0010": 193,
+          "PRODT-0011": 0,
+          "PRODT-0012": 8137,
+          "PRODT-0049": 7538,
+          "PRODT-0097": 33466,
+          "PRODT-0098": 6450,
+          "PRODT-0082": 7868,
+          "PRODT-0084": 2671,
+          "PRODT-0086": 23489,
+          "PRODT-0088": 40,
+          "PRODT-0104": 11986,
+          "PRODT-0105": 1,
+          "PRODT-0107": 43,
+          "PRODT-0092": 4767,
+          "PRODT-0093": 5343,
+          "PRODT-0094": 20364,
+          "PRODT-0095": 13129,
+          "PRODT-0111": 8528,
+          "PRODT-0014": 7744,
+          "PRODT-0100": 31840,
+          "PRODT-0115": 4688,
+          "PRODT-0116": 32
         }
       },
       "openingOverrides": {
@@ -173145,6 +173499,9 @@
         },
         "2026-10-07": {
           "PRODT-0115": 1400
+        },
+        "2026-10-09": {
+          "PRODT-0115": 7000
         }
       }
     },
@@ -173282,8 +173639,8 @@
     "filename": "stock-producto-terminado.xlsx",
     "originalName": "Formato Inventario  Fisico Almacen PT DIARIO ACT  0888.xlsx",
     "tipo": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "tamano": 35029,
-    "uploadedAt": "2026-10-09T11:55:57.587Z",
+    "tamano": 35053,
+    "uploadedAt": "2026-10-10T13:15:00.005Z",
     "uploadedBy": "local-user"
   }
 }
