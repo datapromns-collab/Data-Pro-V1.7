@@ -12827,6 +12827,19 @@
             "color": "#10b981"
           },
           {
+            "name": "GLUP MANZANA ROJA",
+            "lineId": "7",
+            "loadPerHour": 2500,
+            "quantity": 16125,
+            "durationHours": 6.45,
+            "presentation": "1Lt",
+            "tanks": 2,
+            "startTime": "2026-10-14T02:14:00.000Z",
+            "endTime": "2026-10-14T08:41:00.000Z",
+            "id": "nnmuxr9cm",
+            "color": "#ec4899"
+          },
+          {
             "name": "CS",
             "lineId": "7",
             "loadPerHour": 0,
@@ -12859,19 +12872,6 @@
             "startTime": "2026-10-14T01:44:00.000Z",
             "endTime": "2026-10-14T02:14:00.000Z",
             "id": "4f426a7f3",
-            "color": "#ec4899"
-          },
-          {
-            "name": "GLUP MANZANA ROJA",
-            "lineId": "7",
-            "loadPerHour": 2500,
-            "quantity": 16125,
-            "durationHours": 6.45,
-            "presentation": "1Lt",
-            "tanks": 2,
-            "startTime": "2026-10-14T02:14:00.000Z",
-            "endTime": "2026-10-14T08:41:00.000Z",
-            "id": "nnmuxr9cm",
             "color": "#ec4899"
           },
           {
@@ -12934,6 +12934,19 @@
             "color": "#ef4444"
           },
           {
+            "name": "GLUP COLA",
+            "lineId": "6",
+            "loadPerHour": 1200,
+            "quantity": 17856,
+            "durationHours": 14.88,
+            "presentation": "",
+            "tanks": 0,
+            "startTime": "2026-10-16T18:07:00.000Z",
+            "endTime": "2026-10-17T08:59:48.000Z",
+            "id": "7p8mcs6zg",
+            "color": "#ec4899"
+          },
+          {
             "name": "GLUP UVA",
             "lineId": "6",
             "loadPerHour": 1200,
@@ -12980,19 +12993,6 @@
             "endTime": "2026-10-16T18:07:00.000Z",
             "id": "gdaaar5lp",
             "color": "#ef4444"
-          },
-          {
-            "name": "GLUP COLA",
-            "lineId": "6",
-            "loadPerHour": 1200,
-            "quantity": 17856,
-            "durationHours": 14.88,
-            "presentation": "",
-            "tanks": 0,
-            "startTime": "2026-10-16T18:07:00.000Z",
-            "endTime": "2026-10-17T08:59:48.000Z",
-            "id": "7p8mcs6zg",
-            "color": "#ec4899"
           }
         ],
         "realProduction": {},
@@ -18770,7 +18770,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-12T19:28:18.214Z"
+    "updatedAt": "2026-10-12T21:01:54.534Z"
   },
   "ordenesSap": [
     {
@@ -174634,7 +174634,8 @@
         "1787959521278",
         "1788293882619",
         "1788991023411",
-        "1788978219703"
+        "1788978219703",
+        "1790538581551"
       ]
     },
     "planta-ordenes-trabajo": {
