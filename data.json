@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-10-05T00:00:00.000",
+      "weekStartDate": "2026-10-12T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -13595,6 +13595,76 @@
           "aditivosCantidad": {},
           "solidosCantidad": {},
           "quimicosInsumosCantidad": {}
+        },
+        "2026-10-12": {
+          "tapas": {
+            "EMP_0095-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0095-Importada": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaEW": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaTipo2": {
+              "totalCajas": "",
+              "total": ""
+            }
+          },
+          "separadores": {},
+          "preformas": {},
+          "plasticos": {},
+          "adhesivoCantidad": "",
+          "etiquetasCantidad": {},
+          "azucarCantidad": {},
+          "concentradosCantidad": {},
+          "concentradosJustyCantidad": {},
+          "aditivosCantidad": {},
+          "solidosCantidad": {},
+          "quimicosInsumosCantidad": {}
+        },
+        "2026-10-11": {
+          "tapas": {
+            "EMP_0095-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0095-Importada": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaEW": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaTipo2": {
+              "totalCajas": "",
+              "total": ""
+            }
+          },
+          "separadores": {},
+          "preformas": {},
+          "plasticos": {},
+          "adhesivoCantidad": "",
+          "etiquetasCantidad": {},
+          "azucarCantidad": {},
+          "concentradosCantidad": {},
+          "concentradosJustyCantidad": {},
+          "aditivosCantidad": {},
+          "solidosCantidad": {},
+          "quimicosInsumosCantidad": {}
         }
       },
       "semanal": {
@@ -13973,6 +14043,50 @@
           "quimicosInsumosCantidad": {}
         },
         "2026-01-19": {
+          "tapas": {
+            "EMP_0095-Alpla": {
+              "totalCajas": "924000",
+              "total": ""
+            },
+            "EMP_0095-Importada": {
+              "totalCajas": "1464000",
+              "total": ""
+            },
+            "EMP_0105-Alpla": {
+              "totalCajas": "1183000",
+              "total": ""
+            },
+            "EMP_0105-ImportadaEW": {
+              "totalCajas": "2592000",
+              "total": ""
+            },
+            "EMP_0105-ImportadaTipo2": {
+              "totalCajas": "1435200",
+              "total": ""
+            }
+          },
+          "separadores": {},
+          "preformas": {
+            "EMP_0009": "232200",
+            "EMP_0068": "706500",
+            "EMP_0093-Ultrapack": "781886",
+            "EMP_0103-Ultrapack": "484320",
+            "EMP_0120-Ultrapack": "455800",
+            "EMP_0126-Ultrapack": "751080",
+            "EMP_0135-Alpla": "450360",
+            "EMP_0166": "911600"
+          },
+          "plasticos": {},
+          "adhesivoCantidad": "",
+          "etiquetasCantidad": {},
+          "azucarCantidad": {},
+          "concentradosCantidad": {},
+          "concentradosJustyCantidad": {},
+          "aditivosCantidad": {},
+          "solidosCantidad": {},
+          "quimicosInsumosCantidad": {}
+        },
+        "2026-10-12": {
           "tapas": {
             "EMP_0095-Alpla": {
               "totalCajas": "924000",
@@ -18388,7 +18502,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-10T21:28:36.421Z"
+    "updatedAt": "2026-10-12T11:21:09.263Z"
   },
   "ordenesSap": [
     {
@@ -29387,12 +29501,12 @@
           "fechaInicio": "2026-10-10",
           "ticket1": "16262",
           "cajas1": 6640,
-          "ticket2": "",
+          "ticket2": "16263",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 15077
         }
       ]
     },
@@ -29418,12 +29532,12 @@
           "fechaInicio": "2026-10-10",
           "ticket1": "16147",
           "cajas1": 7280,
-          "ticket2": "",
+          "ticket2": "16148",
           "cajas2": 5360,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 15144
         }
       ]
     },
@@ -29500,12 +29614,12 @@
           "fechaInicio": "2026-10-10",
           "ticket1": "16099",
           "cajas1": 3760,
-          "ticket2": "",
+          "ticket2": "160100",
           "cajas2": 80,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1200,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 14953
         }
       ]
     },
@@ -29551,12 +29665,12 @@
           "fechaInicio": "2026-10-10",
           "ticket1": "16191",
           "cajas1": 480,
-          "ticket2": "",
+          "ticket2": "16193",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 496
         }
       ]
     },
@@ -29602,12 +29716,32 @@
           "fechaInicio": "2026-10-10",
           "ticket1": "16310",
           "cajas1": 6000,
-          "ticket2": "",
+          "ticket2": "16311",
           "cajas2": 7840,
+          "ticket3": "",
+          "cajas3": 3120,
+          "ticket4": "",
+          "cajas4": 11046
+        }
+      ]
+    },
+    {
+      "id": "2-1791803497145",
+      "linea": 2,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "64195",
+      "semana": 41,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-10",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16311",
+          "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 5084
         }
       ]
     }
