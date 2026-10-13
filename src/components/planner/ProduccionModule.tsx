@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowLeftRight, Box, CalendarDays, CalendarIcon, CalendarRange, Droplets, FileDown, Package, Recycle, RotateCcw, Truck } from 'lucide-react';
 import { addDays, endOfWeek, format, getISOWeek, getISOWeekYear, setISOWeek, startOfISOWeek, startOfMonth, startOfWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import { loadProductionInventoryData, loadProductionInventoryPeriod, loadProductionNonConformingData, loadProductionReceptions, loadProductionWasteRows, savePlannerData, saveProductionNonConformingRows } from '@/lib/json-db';
 import { useAuthStore } from '@/hooks/use-auth-store';
 import { normalizeNonConformingRows, parseNonConformingQuantity, summarizeNonConformingRows } from '@/lib/non-conforming-utils';
+import { parseCantidadCajas } from '@/lib/production-tracking-utils';
 import { getWasteRowsWithGeneratedCaps, MermasDesperdiciosReporte } from '@/components/planner/MermasDesperdiciosReporte';
 
 type WasteSectionKey = 'mermas' | 'desperdicios' | 'rechazos' | 'devoluciones';
@@ -403,20 +404,13 @@ const normalizeProductionNonConformingRows = (value: unknown): NonConformingRow[
 
 const sumNumericValues = (values: string[]): string => {
   const total = values.reduce((sum, value) => {
-    const normalized = value.trim().replace(/\s/g, '').replace(',', '.');
-    const number = Number(normalized);
-    return sum + (Number.isFinite(number) ? number : 0);
+    return sum + (parseCantidadCajas(value) ?? 0);
   }, 0);
   return total ? String(Number(total.toFixed(6))) : '';
 };
 
 const parseProductionNumber = (value: string): number => {
-  const normalized = value.trim().replace(/\s/g, '').replace(/[^0-9,.-]/g, '');
-  const decimalNormalized = normalized.includes(',')
-    ? normalized.replace(/\./g, '').replace(',', '.')
-    : normalized;
-  const number = Number(decimalNormalized);
-  return Number.isFinite(number) ? number : 0;
+  return parseCantidadCajas(value) ?? 0;
 };
 
 const wasteProductForOperation = (
@@ -535,6 +529,136 @@ const summarizeReceptionDays = (days: ProductionTableValues[]): ProductionTableV
   return summary;
 };
 
+type MaterialComparisonData = {
+  initial: ProductionTableValues;
+  reception: ProductionTableValues;
+  final: ProductionTableValues;
+  segments?: {
+    id: string;
+    label: string;
+    initial: ProductionTableValues;
+    reception: ProductionTableValues;
+    final: ProductionTableValues;
+  }[];
+};
+
+type MaterialComparisonGroup = {
+  title: string;
+  initial: Record<string, string>;
+  reception: Record<string, string>;
+  final: Record<string, string>;
+};
+
+const materialComparisonDescriptions: Record<string, string> = {
+  EMP_0095: 'TAPA VERDE REFRESCOS CON IMPRESIÓN-1881',
+  EMP_0105: 'TAPA AZUL REFRESCOS CON IMPRESIÓN-1881',
+  EMP_0134: 'SEPARADORES DE CARTÓN (USADOS)',
+  EMP_0138: 'SEPARADORES DE CARTÓN 1x30x0,88 (NUEVOS)',
+  EMP_0009: 'PREFORMA TRANSPARENTE 29,6GR 1881',
+  EMP_0068: 'PREFORMA TRANSPARENTE 36 GR-1881',
+  EMP_0093: 'PREFORMA TRANSPARENTE 42,64 GR-1881',
+  EMP_0103: 'PREFORMA VERDE 42,64 GR-1881',
+  EMP_0120: 'PREFORMA VERDE 29.6GR 1881',
+  EMP_0126: 'PREFORMA TRANSPARENTE 20,55GR-1881',
+  EMP_0135: 'PREFORMA VERDE 20,5-1881',
+  EMP_0166: 'PREFORMA TRANSPARENTE 33 GR-1881',
+  EMP_0078: 'ADHESIVO KRONES COLFIX HMI 1195 N',
+  EMP_0017: 'POLIETILENO TERMOENCOGIBLE 55 X 0.07',
+  EMP_0019: 'FILM POLIESTRECH 23 MIC',
+  EMP_0080: 'POLIETILENO TERMOENCOGIBLE 48x0.06',
+  EMP_0084: 'FILM POLIESTRECH 20 MIC',
+  EMP_0130: 'POLIETILENO TERMOENCOGIBLE 43 x 0.06',
+  EMP_0022: 'ETIQUETA UVA 2000ML',
+  EMP_0026: 'ETIQUETA PIÑA 2000ML',
+  EMP_0030: 'ETIQUETA NARANJA 2000 ML',
+  EMP_0034: 'ETIQUETA KOLITA 2000ML',
+  EMP_0038: 'ETIQUETA FRESH 2000ML',
+  EMP_0042: 'ETIQUETA COLA NEGRA 2000ML',
+  EMP_0048: 'ETIQUETA JUSTY NARANJA 1.5 LITROS',
+  EMP_0076: 'ETIQUETA VITA TE LIMON 1.5 LTS',
+  EMP_0077: 'ETIQUETA VITA TE DURAZNO 1.5 LTS',
+  EMP_0101: 'ETIQUETA MANZANA VERDE 200ML',
+  EMP_0110: 'ETIQUETA COLA NEGRA 400ML',
+  EMP_0111: 'ETIQUETA COLA NEGRA 1000ML',
+  EMP_0112: 'ETIQUETA UVA 400ML',
+  EMP_0113: 'ETIQUETA UVA 1000ML',
+  EMP_0114: 'ETIQUETA KOLITA 400ML',
+  EMP_0115: 'ETIQUETA KOLITA 1000ML',
+  EMP_0116: 'ETIQUETA FRESH 400ML',
+  EMP_0117: 'ETIQUETA FRESH 1000ML',
+  EMP_0118: 'ETIQUETA MANZANA VERDE 1000ML',
+  EMP_0119: 'ETIQUETA MANZANA VERDE 400ML',
+  EMP_0122: 'ETIQUETA COLA NEGRA NAVIDAD 2000ML',
+  EMP_0136: 'ETIQUETA MANZANITA 2000ML',
+  EMP_0137: 'ETIQUETA PIÑA PARCHITA 2000ML',
+  EMP_0142: 'ETIQUETA JUSTY DURAZNO 1.5 LITROS',
+  EMP_0143: 'ETIQUETA JUSTY MANDARINA 1.5 LITROS',
+  EMP_0144: 'ETIQUETA JUSTY SANDIA 1.5 LITROS',
+  EMP_0145: 'ETIQUETA JUSTY TAMARINDO 1.5 LITROS',
+  EMP_0146: 'ETIQUETA JUSTY LIMON 1.5 LITROS',
+  EMP_0147: 'ETIQUETA PIÑA 1000ML',
+  EMP_0148: 'ETIQUETA NARANJA 1000ML',
+  EMP_0149: 'ETIQUETA PIÑA PARCHITA 1000ML',
+  EMP_0150: 'ETIQUETA MANZANITA 1000ML',
+  EMP_0151: 'ETIQUETA PIÑA 400ML',
+  EMP_0152: 'ETIQUETA NARANJA 400ML',
+  EMP_0154: 'ETIQUETA PIÑA PARCHITA 400ML',
+  EMP_0155: 'ETIQUETA MANZANITA 400ML',
+  EMP_0157: 'ETIQUETA JUSTY MANZANA 1.5LITROS',
+  EMP_0158: 'ETIQUETA JUSTY PERA 1.5 LITROS',
+};
+
+const getMaterialComparisonDescription = (key: string): string => {
+  const separatorIndex = key.indexOf('-');
+  const code = separatorIndex < 0 ? key : key.slice(0, separatorIndex);
+  const variant = separatorIndex < 0 ? '' : key.slice(separatorIndex + 1);
+  const description = materialComparisonDescriptions[code] || code;
+  return variant ? `${description} - ${variant.replace(/-/g, ' ')}` : description;
+};
+
+const buildMaterialComparisonGroups = (data: MaterialComparisonData | null): MaterialComparisonGroup[] => data ? [
+  {
+    title: 'Tapas',
+    initial: Object.fromEntries(Object.entries(data.initial.tapas).map(([key, value]) => [key, value.totalCajas])),
+    reception: Object.fromEntries(Object.entries(data.reception.tapas).map(([key, value]) => [key, value.totalCajas])),
+    final: Object.fromEntries(Object.entries(data.final.tapas).map(([key, value]) => [key, value.totalCajas])),
+  },
+  {
+    title: 'Separadores',
+    initial: data.initial.separadores,
+    reception: data.reception.separadores,
+    final: data.final.separadores,
+  },
+  {
+    title: 'Preformas',
+    initial: data.initial.preformas,
+    reception: data.reception.preformas,
+    final: data.final.preformas,
+  },
+  {
+    title: 'Adhesivo',
+    initial: data.initial.adhesivoCantidad.trim() ? { EMP_0078: data.initial.adhesivoCantidad } : {},
+    reception: data.reception.adhesivoCantidad.trim() ? { EMP_0078: data.reception.adhesivoCantidad } : {},
+    final: data.final.adhesivoCantidad.trim() ? { EMP_0078: data.final.adhesivoCantidad } : {},
+  },
+  {
+    title: 'Plásticos',
+    initial: data.initial.plasticos,
+    reception: data.reception.plasticos,
+    final: data.final.plasticos,
+  },
+  {
+    title: 'Etiquetas',
+    initial: data.initial.etiquetasCantidad,
+    reception: data.reception.etiquetasCantidad,
+    final: data.final.etiquetasCantidad,
+  },
+] : [];
+
+const formatComparisonValue = (value: string): string => value.trim()
+  ? parseProductionNumber(value).toLocaleString('es-VE', { maximumFractionDigits: 6 })
+  : '—';
+
 interface ProduccionModuleProps {
   weeklyOnly?: boolean;
 }
@@ -570,6 +694,11 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   const wasteLocalWriteVersion = useRef(0);
   const [recepcionesDiariasFecha, setRecepcionesDiariasFecha] = useState<Date>(() => new Date());
   const [recepcionesSemanalFecha, setRecepcionesSemanalFecha] = useState<Date>(() => new Date());
+  const [consumoMaterialesPeriod, setConsumoMaterialesPeriod] = useState<'semanal' | 'mensual'>('mensual');
+  const [consumoMaterialesMonthDate, setConsumoMaterialesMonthDate] = useState<Date>(() => new Date());
+  const [consumoMaterialesWeekDate, setConsumoMaterialesWeekDate] = useState<Date>(() => startOfWeek(new Date(), { weekStartsOn: 1 }));
+  const [consumoMaterialesData, setConsumoMaterialesData] = useState<MaterialComparisonData | null>(null);
+  const [consumoMaterialesLoadStatus, setConsumoMaterialesLoadStatus] = useState<'idle' | 'loading' | 'ready' | 'error'>('idle');
   const [inventariosSubTab, setInventariosSubTab] = useState<'diarios' | 'semanal' | 'mensual'>(weeklyOnly ? 'semanal' : 'diarios');
   const [inventariosMensualSubTab, setInventariosMensualSubTab] = useState<'empaque' | 'materia-prima' | 'insumos'>('empaque');
   const [inventariosDiariosFecha, setInventariosDiariosFecha] = useState<Date>(() => new Date());
@@ -606,6 +735,19 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   const activePeriodData = productionByPeriod[inventariosSubTab][activePeriodKey] || EMPTY_PRODUCTION_DATA;
   const receptionsDailyPeriodKey = format(recepcionesDiariasFecha, 'yyyy-MM-dd');
   const receptionWeekStart = startOfWeek(recepcionesSemanalFecha, { weekStartsOn: 1 });
+  const consumoMaterialesMonthStart = startOfMonth(consumoMaterialesMonthDate);
+  const consumoMaterialesMonthKey = format(consumoMaterialesMonthStart, 'yyyy-MM');
+  const consumoMaterialesNextMonthKey = format(new Date(consumoMaterialesMonthStart.getFullYear(), consumoMaterialesMonthStart.getMonth() + 1, 1), 'yyyy-MM');
+  const consumoMaterialesWeekStart = startOfWeek(consumoMaterialesWeekDate, { weekStartsOn: 1 });
+  const consumoMaterialesWeekKey = format(consumoMaterialesWeekStart, 'yyyy-MM-dd');
+  const consumoMaterialesWeekOptions = useMemo(() => {
+    const monthEnd = new Date(consumoMaterialesMonthStart.getFullYear(), consumoMaterialesMonthStart.getMonth() + 1, 0);
+    const options: Date[] = [];
+    for (let weekStart = startOfWeek(consumoMaterialesMonthStart, { weekStartsOn: 1 }); weekStart <= monthEnd; weekStart = addDays(weekStart, 7)) {
+      options.push(weekStart);
+    }
+    return options;
+  }, [consumoMaterialesMonthStart]);
   const nonConformingDateKey = format(nonConformingDailyDate, 'yyyy-MM-dd');
   const nonConformingWeekStart = startOfWeek(nonConformingWeeklyDate, { weekStartsOn: 1 });
   const nonConformingWeekEnd = endOfWeek(nonConformingWeekStart, { weekStartsOn: 1 });
@@ -725,6 +867,201 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
     void loadWeek();
     return () => { cancelled = true; };
   }, [activeProduccionSection, receptionWeekStart]);
+
+  useEffect(() => {
+    if (activeProduccionSection !== 'consumo-materiales') return;
+    let cancelled = false;
+    setConsumoMaterialesLoadStatus('loading');
+    setConsumoMaterialesData(null);
+
+    const loadComparisonData = async () => {
+      try {
+        let initialValue: unknown | undefined;
+        let finalValue: unknown | undefined;
+        let reception: ProductionTableValues;
+        let monthlySegments: NonNullable<MaterialComparisonData['segments']> = [];
+
+        if (consumoMaterialesPeriod === 'semanal') {
+          const weekStart = consumoMaterialesWeekStart;
+          const weekEnd = addDays(weekStart, 6);
+          const segments = [];
+          for (let segmentStart = weekStart; segmentStart <= weekEnd;) {
+            const segmentEnd = new Date(Math.min(
+              weekEnd.getTime(),
+              new Date(segmentStart.getFullYear(), segmentStart.getMonth() + 1, 0).getTime(),
+            ));
+            segments.push({ start: segmentStart, end: segmentEnd });
+            segmentStart = addDays(segmentEnd, 1);
+          }
+          const monthlyInventoryKeys = Array.from(new Set(segments.flatMap(({ start, end }) => [
+            ...(start.getDate() === 1 ? [format(start, 'yyyy-MM')] : []),
+            ...(end.getDate() === new Date(end.getFullYear(), end.getMonth() + 1, 0).getDate()
+              ? [format(new Date(end.getFullYear(), end.getMonth() + 1, 1), 'yyyy-MM')]
+              : []),
+          ])));
+          const [weeklyReception, previousInventoryValue, currentInventoryValue, ...monthlyInventoryValues] = await Promise.all([
+            loadProductionReceptions(consumoMaterialesWeekKey),
+            loadProductionInventoryPeriod('semanal', format(addDays(weekStart, -7), 'yyyy-MM-dd')),
+            loadProductionInventoryPeriod('semanal', consumoMaterialesWeekKey),
+            ...monthlyInventoryKeys.map((monthKey) => loadProductionInventoryPeriod('mensual', monthKey)),
+          ]);
+          if (
+            weeklyReception === null ||
+            previousInventoryValue === undefined ||
+            currentInventoryValue === undefined ||
+            monthlyInventoryValues.some((value) => value === undefined)
+          ) {
+            throw new Error('No se pudieron cargar todos los datos semanales de materiales.');
+          }
+          const monthlyInventoryByKey = new Map(monthlyInventoryKeys.map((monthKey, index) => {
+            const value = monthlyInventoryValues[index];
+            return [monthKey, isProductionValues(value) ? normalizeProductionValues(value) : emptyProductionValues()] as const;
+          }));
+          const previousInventory = isProductionValues(previousInventoryValue)
+            ? normalizeProductionValues(previousInventoryValue)
+            : emptyProductionValues();
+          const currentInventory = isProductionValues(currentInventoryValue)
+            ? normalizeProductionValues(currentInventoryValue)
+            : emptyProductionValues();
+          const dailyValuesByDate = new Map<string, ProductionTableValues>();
+          Object.entries(weeklyReception.diarias || {}).forEach(([dateKey, values]) => {
+            if (isProductionValues(values)) dailyValuesByDate.set(dateKey, normalizeProductionValues(values));
+          });
+          const receptionDays = Array.from({ length: 7 }, (_, index) => {
+            const dayKey = format(addDays(weekStart, index), 'yyyy-MM-dd');
+            return dailyValuesByDate.get(dayKey) || emptyProductionValues();
+          });
+          reception = summarizeReceptionDays(receptionDays);
+          monthlySegments = segments.map(({ start, end }) => {
+            const segmentReception = summarizeReceptionDays(
+              Array.from({ length: end.getDate() - start.getDate() + 1 }, (_, index) => {
+                const dayKey = format(addDays(start, index), 'yyyy-MM-dd');
+                return dailyValuesByDate.get(dayKey) || emptyProductionValues();
+              }),
+            );
+            const segmentInitial = start.getDate() === 1
+              ? monthlyInventoryByKey.get(format(start, 'yyyy-MM')) || emptyProductionValues()
+              : previousInventory;
+            const segmentFinal = end.getDate() === new Date(end.getFullYear(), end.getMonth() + 1, 0).getDate()
+              ? monthlyInventoryByKey.get(format(new Date(end.getFullYear(), end.getMonth() + 1, 1), 'yyyy-MM')) || emptyProductionValues()
+              : currentInventory;
+            return {
+              id: format(start, 'yyyy-MM-dd'),
+              label: `Semana ${getISOWeek(weekStart)} · ${format(start, 'MMMM', { locale: es })}`,
+              initial: segmentInitial,
+              reception: segmentReception,
+              final: segmentFinal,
+            };
+          });
+          initialValue = monthlySegments[0]?.initial;
+          finalValue = monthlySegments[monthlySegments.length - 1]?.final;
+        } else {
+          const monthStart = new Date(`${consumoMaterialesMonthKey}-01T00:00:00`);
+          const monthEnd = new Date(monthStart.getFullYear(), monthStart.getMonth() + 1, 0);
+          const weekStarts: Date[] = [];
+          for (
+            let weekStart = startOfWeek(monthStart, { weekStartsOn: 1 });
+            weekStart <= monthEnd;
+            weekStart = addDays(weekStart, 7)
+          ) {
+            weekStarts.push(weekStart);
+          }
+          const inventoryWeekKeys = Array.from(new Set([
+            format(addDays(weekStarts[0], -7), 'yyyy-MM-dd'),
+            ...weekStarts.map((weekStart) => format(weekStart, 'yyyy-MM-dd')),
+          ]));
+          const [openingInventory, closingInventory, ...loadedData] = await Promise.all([
+            loadProductionInventoryPeriod('mensual', consumoMaterialesMonthKey),
+            loadProductionInventoryPeriod('mensual', consumoMaterialesNextMonthKey),
+            ...weekStarts.map((weekStart) => loadProductionReceptions(format(weekStart, 'yyyy-MM-dd'))),
+            ...inventoryWeekKeys.map((weekKey) => loadProductionInventoryPeriod('semanal', weekKey)),
+          ]);
+          const weeklyReceptions = loadedData.slice(0, weekStarts.length) as (Record<string, any> | null)[];
+          const weeklyInventoryValues = loadedData.slice(weekStarts.length);
+          if (
+            openingInventory === undefined ||
+            closingInventory === undefined ||
+            weeklyReceptions.some((week) => week === null) ||
+            weeklyInventoryValues.some((week) => week === undefined)
+          ) {
+            throw new Error('No se pudieron cargar todos los datos mensuales de materiales.');
+          }
+          initialValue = openingInventory;
+          finalValue = closingInventory;
+          const weeklyInventoryByKey = new Map(inventoryWeekKeys.map((weekKey, index) => {
+            const value = weeklyInventoryValues[index];
+            return [weekKey, isProductionValues(value) ? normalizeProductionValues(value) : emptyProductionValues()] as const;
+          }));
+          const dailyValuesByDate = new Map<string, ProductionTableValues>();
+          weeklyReceptions.forEach((week) => {
+            Object.entries(week?.diarias || {}).forEach(([dateKey, values]) => {
+              if (isProductionValues(values)) dailyValuesByDate.set(dateKey, normalizeProductionValues(values));
+            });
+          });
+          const receptionDays = Array.from(
+            { length: monthEnd.getDate() },
+            (_, dayIndex) => {
+              const dateKey = format(new Date(monthStart.getFullYear(), monthStart.getMonth(), dayIndex + 1), 'yyyy-MM-dd');
+              return dailyValuesByDate.get(dateKey) || emptyProductionValues();
+            },
+          );
+          reception = summarizeReceptionDays(receptionDays);
+          const opening = isProductionValues(openingInventory) ? normalizeProductionValues(openingInventory) : emptyProductionValues();
+          const closing = isProductionValues(closingInventory) ? normalizeProductionValues(closingInventory) : emptyProductionValues();
+          monthlySegments = weekStarts.map((weekStart) => {
+            const weekEnd = addDays(weekStart, 6);
+            const segmentStart = weekStart < monthStart ? monthStart : weekStart;
+            const segmentEnd = weekEnd > monthEnd ? monthEnd : weekEnd;
+            const segmentReception = summarizeReceptionDays(
+              Array.from({ length: segmentEnd.getDate() - segmentStart.getDate() + 1 }, (_, index) => {
+                const day = new Date(segmentStart);
+                day.setDate(segmentStart.getDate() + index);
+                return dailyValuesByDate.get(format(day, 'yyyy-MM-dd')) || emptyProductionValues();
+              }),
+            );
+            const segmentInitial = segmentStart.getDate() === 1
+              ? opening
+              : weeklyInventoryByKey.get(format(addDays(weekStart, -7), 'yyyy-MM-dd')) || emptyProductionValues();
+            const segmentFinal = segmentEnd.getTime() === monthEnd.getTime()
+              ? closing
+              : weeklyInventoryByKey.get(format(weekStart, 'yyyy-MM-dd')) || emptyProductionValues();
+            return {
+              id: format(segmentStart, 'yyyy-MM-dd'),
+              label: `Semana ${getISOWeek(segmentStart)} · ${format(segmentStart, 'MMMM', { locale: es })}`,
+              initial: segmentInitial,
+              reception: segmentReception,
+              final: segmentFinal,
+            };
+          });
+        }
+        if (cancelled) return;
+
+        const initial = isProductionValues(initialValue) ? normalizeProductionValues(initialValue) : emptyProductionValues();
+        const final = isProductionValues(finalValue) ? normalizeProductionValues(finalValue) : emptyProductionValues();
+
+        setConsumoMaterialesData({
+          initial,
+          reception,
+          final,
+          segments: monthlySegments,
+        });
+        setConsumoMaterialesLoadStatus('ready');
+      } catch (error) {
+        if (cancelled) return;
+        console.error('[PRODUCCION] Failed to load material comparison', error);
+        setConsumoMaterialesLoadStatus('error');
+      }
+    };
+
+    void loadComparisonData();
+    return () => { cancelled = true; };
+  }, [
+    activeProduccionSection,
+    consumoMaterialesPeriod,
+    consumoMaterialesMonthKey,
+    consumoMaterialesNextMonthKey,
+    consumoMaterialesWeekKey,
+  ]);
 
   useEffect(() => {
     if ((activeProduccionSection !== 'mermas-desperdicios' && activeProduccionSection !== 'rechazos-devoluciones') || !productionLoaded || !wasteSectionKey || isWasteEditing) return;
@@ -3892,9 +4229,192 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                 </>
                               )}
                             </div>
+                          ) : activeProduccionSection === 'consumo-materiales' ? (
+                            <section className="flex min-h-0 flex-1 flex-col gap-4 overflow-auto rounded-[2.5rem] bg-white p-4 sm:p-6">
+                              <header className="flex flex-wrap items-center justify-between gap-3">
+                                <div>
+                                  <h2 className="text-lg font-black uppercase tracking-wide text-slate-900">Consumo comparativo de materiales</h2>
+                                  <p className="mt-1 text-xs text-slate-500">
+                                    {consumoMaterialesPeriod === 'mensual'
+                                      ? 'Total del mes y desglose semanal · Recepciones sumadas por fecha · Los cortes usan inventarios semanales y mensuales'
+                                      : 'Selecciona el mes y la semana · Las semanas que cruzan de mes aparecen divididas'}
+                                    {' · Consumo: inicial + recepción − final'}
+                                  </p>
+                                </div>
+                                <div className="flex flex-wrap items-center gap-2">
+                                  <div className="flex rounded-full border border-slate-200 bg-slate-100 p-1">
+                                    {(['mensual', 'semanal'] as const).map((period) => (
+                                      <button
+                                        key={period}
+                                        type="button"
+                                        onClick={() => setConsumoMaterialesPeriod(period)}
+                                        aria-pressed={consumoMaterialesPeriod === period}
+                                        className={cn(
+                                          'rounded-full px-3 py-2 text-[10px] font-black uppercase tracking-widest',
+                                          consumoMaterialesPeriod === period ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500',
+                                        )}
+                                      >
+                                        {period === 'mensual' ? 'Mensual' : 'Semanal'}
+                                      </button>
+                                    ))}
+                                  </div>
+                                  <label className="flex items-center gap-2 text-xs font-bold text-slate-600">
+                                    Mes
+                                    <input
+                                      type="month"
+                                      value={format(consumoMaterialesMonthDate, 'yyyy-MM')}
+                                      onChange={(event) => {
+                                        const match = /^(\d{4})-(\d{2})$/.exec(event.target.value);
+                                        if (match) {
+                                          const selectedMonth = new Date(Number(match[1]), Number(match[2]) - 1, 1);
+                                          setConsumoMaterialesMonthDate(selectedMonth);
+                                          setConsumoMaterialesWeekDate(startOfWeek(selectedMonth, { weekStartsOn: 1 }));
+                                        }
+                                      }}
+                                      className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800"
+                                    />
+                                  </label>
+                                  {consumoMaterialesPeriod === 'semanal' && (
+                                    <label className="flex items-center gap-2 text-xs font-bold text-slate-600">
+                                      Semana
+                                      <select
+                                        value={consumoMaterialesWeekKey}
+                                        onChange={(event) => {
+                                          const [year, month, day] = event.target.value.split('-').map(Number);
+                                          setConsumoMaterialesWeekDate(new Date(year, month - 1, day));
+                                        }}
+                                        className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800"
+                                      >
+                                        {consumoMaterialesWeekOptions.map((weekStart) => (
+                                          <option key={format(weekStart, 'yyyy-MM-dd')} value={format(weekStart, 'yyyy-MM-dd')}>
+                                            Semana {getISOWeek(weekStart)} · {format(weekStart, 'dd/MM')}–{format(addDays(weekStart, 6), 'dd/MM')}
+                                          </option>
+                                        ))}
+                                      </select>
+                                    </label>
+                                  )}
+                                </div>
+                              </header>
+                              <p className="text-xs font-semibold text-slate-500">
+                                {consumoMaterialesPeriod === 'mensual'
+                                  ? `${format(consumoMaterialesMonthStart, 'MMMM yyyy', { locale: es })} · inventario final tomado como apertura de ${format(new Date(consumoMaterialesMonthStart.getFullYear(), consumoMaterialesMonthStart.getMonth() + 1, 1), 'MMMM yyyy', { locale: es })}`
+                                  : `Semana ${getISOWeek(consumoMaterialesWeekStart)} · ${format(consumoMaterialesWeekStart, 'dd/MM/yyyy')} al ${format(addDays(consumoMaterialesWeekStart, 6), 'dd/MM/yyyy')} · las recepciones se asignan por día`}
+                              </p>
+                              {consumoMaterialesLoadStatus === 'loading' ? (
+                                <div role="status" className="rounded-2xl border border-slate-200 bg-slate-50 p-6 text-center text-sm text-slate-500">
+                                  Cargando inventarios y recepciones del periodo…
+                                </div>
+                              ) : consumoMaterialesLoadStatus === 'error' ? (
+                                <div role="alert" className="rounded-2xl border border-red-200 bg-red-50 p-6 text-center text-sm font-semibold text-red-700">
+                                  No se pudieron cargar los datos comparativos. Cambia el mes o vuelve a intentarlo.
+                                </div>
+                              ) : (
+                                <div className="grid gap-4 xl:grid-cols-2">
+                                  {buildMaterialComparisonGroups(consumoMaterialesData).map((group) => {
+                                    const segmentGroups = (consumoMaterialesData?.segments || []).map((segment) => ({
+                                      segment,
+                                      group: buildMaterialComparisonGroups(segment).find((item) => item.title === group.title),
+                                    }));
+                                    const keys = Array.from(new Set([
+                                      ...Object.keys(group.initial),
+                                      ...Object.keys(group.reception),
+                                      ...Object.keys(group.final),
+                                      ...segmentGroups.flatMap(({ group: segmentGroup }) => [
+                                        ...Object.keys(segmentGroup?.initial || {}),
+                                        ...Object.keys(segmentGroup?.reception || {}),
+                                        ...Object.keys(segmentGroup?.final || {}),
+                                      ]),
+                                    ])).sort((a, b) => a.localeCompare(b, 'es'));
+                                    const comparisonRows = consumoMaterialesPeriod === 'mensual'
+                                      ? [
+                                        {
+                                          id: 'month-total',
+                                          label: 'Total mes',
+                                          initial: group.initial,
+                                          reception: group.reception,
+                                          final: group.final,
+                                        },
+                                        ...segmentGroups.map(({ segment, group: segmentGroup }) => {
+                                          return {
+                                            id: segment.id,
+                                            label: segment.label,
+                                            initial: segmentGroup?.initial || {},
+                                            reception: segmentGroup?.reception || {},
+                                            final: segmentGroup?.final || {},
+                                          };
+                                        }),
+                                      ]
+                                      : segmentGroups.map(({ segment, group: segmentGroup }) => ({
+                                        id: segment.id,
+                                        label: segment.label,
+                                        initial: segmentGroup?.initial || {},
+                                        reception: segmentGroup?.reception || {},
+                                        final: segmentGroup?.final || {},
+                                      }));
+                                    return (
+                                      <section key={group.title} className="overflow-hidden rounded-2xl border border-slate-200">
+                                        <h3 className="bg-indigo-700 px-4 py-3 text-xs font-black uppercase tracking-widest text-white">{group.title}</h3>
+                                        <div className="overflow-x-auto">
+                                          <table className="w-full min-w-[760px] border-collapse text-left text-xs">
+                                            <thead>
+                                              <tr className="bg-slate-50 text-slate-600">
+                                                <th className="px-3 py-3 font-black uppercase tracking-wide">Código</th>
+                                                <th className="px-3 py-3 font-black uppercase tracking-wide">Descripción</th>
+                                                <th className="px-3 py-3 font-black uppercase tracking-wide">Periodo</th>
+                                                <th className="px-3 py-3 text-right font-black uppercase tracking-wide">Inicial</th>
+                                                <th className="px-3 py-3 text-right font-black uppercase tracking-wide">Recepción</th>
+                                                <th className="px-3 py-3 text-right font-black uppercase tracking-wide">Final</th>
+                                                <th className="px-3 py-3 text-right font-black uppercase tracking-wide">Consumo</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              {keys.map((key) => {
+                                                const code = key.split('-', 1)[0];
+                                                return (
+                                                  <Fragment key={key}>
+                                                    {comparisonRows.map((row) => {
+                                                      const initial = row.initial[key] || '';
+                                                      const reception = row.reception[key] || '0';
+                                                      const final = row.final[key] || '';
+                                                      const initialValue = parseCantidadCajas(initial);
+                                                      const finalValue = parseCantidadCajas(final);
+                                                      const consumption = initialValue !== null && finalValue !== null
+                                                        ? initialValue + (parseCantidadCajas(reception) ?? 0) - finalValue
+                                                        : null;
+                                                      return (
+                                                        <tr key={`${key}-${row.id}`} className={cn('border-t border-slate-100', row.id === 'month-total' && 'bg-indigo-50/70 font-semibold')}>
+                                                          <td className="px-3 py-2 font-semibold text-slate-700">{code}</td>
+                                                          <td className="px-3 py-2 text-slate-600">{getMaterialComparisonDescription(key)}</td>
+                                                          <td className="px-3 py-2 text-slate-600">{row.label}</td>
+                                                          <td className="px-3 py-2 text-right tabular-nums">{formatComparisonValue(initial)}</td>
+                                                          <td className="px-3 py-2 text-right tabular-nums">{formatComparisonValue(reception)}</td>
+                                                          <td className="px-3 py-2 text-right tabular-nums">{formatComparisonValue(final)}</td>
+                                                          <td className="px-3 py-2 text-right font-bold tabular-nums text-indigo-800">
+                                                            {consumption === null ? '—' : consumption.toLocaleString('es-VE', { maximumFractionDigits: 6 })}
+                                                          </td>
+                                                        </tr>
+                                                      );
+                                                    })}
+                                                  </Fragment>
+                                                );
+                                              })}
+                                              {keys.length === 0 && (
+                                                <tr>
+                                                  <td colSpan={7} className="px-3 py-6 text-center text-slate-400">Sin materiales registrados para este periodo.</td>
+                                                </tr>
+                                              )}
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                      </section>
+                                    );
+                                  })}
+                                </div>
+                              )}
+                            </section>
                           ) : (
-          <div className="flex-1 min-h-0 bg-white rounded-[2.5rem]" />
-        )
+                            <div className="flex-1 min-h-0 rounded-[2.5rem] bg-white" />
+                          )
       )}
     </div>
   );
