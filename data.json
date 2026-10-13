@@ -13746,6 +13746,41 @@
           "aditivosCantidad": {},
           "solidosCantidad": {},
           "quimicosInsumosCantidad": {}
+        },
+        "2026-10-13": {
+          "tapas": {
+            "EMP_0095-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0095-Importada": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaEW": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaTipo2": {
+              "totalCajas": "",
+              "total": ""
+            }
+          },
+          "separadores": {},
+          "preformas": {},
+          "plasticos": {},
+          "adhesivoCantidad": "",
+          "etiquetasCantidad": {},
+          "azucarCantidad": {},
+          "concentradosCantidad": {},
+          "concentradosJustyCantidad": {},
+          "aditivosCantidad": {},
+          "solidosCantidad": {},
+          "quimicosInsumosCantidad": {}
         }
       },
       "semanal": {
@@ -18991,7 +19026,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-13T11:50:34.792Z"
+    "updatedAt": "2026-10-13T12:17:47.252Z"
   },
   "ordenesSap": [
     {
@@ -30240,6 +30275,17 @@
           "cajas3": 3200,
           "ticket4": "",
           "cajas4": 11280
+        },
+        {
+          "fechaInicio": "2026-10-13",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -30260,6 +30306,17 @@
           "cajas3": 2960,
           "ticket4": "",
           "cajas4": 19360
+        },
+        {
+          "fechaInicio": "2026-10-13",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -30280,6 +30337,17 @@
           "cajas3": 3760,
           "ticket4": "",
           "cajas4": 21520
+        },
+        {
+          "fechaInicio": "2026-10-13",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -30300,6 +30368,17 @@
           "cajas3": 1600,
           "ticket4": "",
           "cajas4": 8450
+        },
+        {
+          "fechaInicio": "2026-10-13",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -30320,6 +30399,17 @@
           "cajas3": 1920,
           "ticket4": "",
           "cajas4": 11520
+        },
+        {
+          "fechaInicio": "2026-10-13",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -30340,6 +30430,17 @@
           "cajas3": 1560,
           "ticket4": "",
           "cajas4": 17784
+        },
+        {
+          "fechaInicio": "2026-10-13",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -30360,6 +30461,17 @@
           "cajas3": 2160,
           "ticket4": "",
           "cajas4": 13200
+        },
+        {
+          "fechaInicio": "2026-10-13",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     }
@@ -174752,6 +174864,33 @@
           "PRODT-0100": 29829,
           "PRODT-0115": 5023,
           "PRODT-0116": 32
+        },
+        "2026-10-13": {
+          "PRODT-0007": 132808,
+          "PRODT-0008": 51465,
+          "PRODT-0009": 22608,
+          "PRODT-0010": 193,
+          "PRODT-0011": 0,
+          "PRODT-0012": 34750,
+          "PRODT-0049": 7018,
+          "PRODT-0097": 29174,
+          "PRODT-0098": 6163,
+          "PRODT-0082": 34504,
+          "PRODT-0084": 1218,
+          "PRODT-0086": 16912,
+          "PRODT-0088": 1,
+          "PRODT-0104": 13158,
+          "PRODT-0105": 1,
+          "PRODT-0107": 4,
+          "PRODT-0092": 23157,
+          "PRODT-0093": 5533,
+          "PRODT-0094": 16455,
+          "PRODT-0095": 9959,
+          "PRODT-0111": 7543,
+          "PRODT-0014": 20564,
+          "PRODT-0100": 26444,
+          "PRODT-0115": 7260,
+          "PRODT-0116": 10833
         }
       },
       "openingOverrides": {
@@ -174784,6 +174923,10 @@
         },
         "2026-10-10": {
           "PRODT-0115": 1400
+        },
+        "2026-10-12": {
+          "PRODT-0115": 4200,
+          "PRODT-0116": 12600
         }
       }
     },
@@ -174923,8 +175066,8 @@
     "filename": "stock-producto-terminado.xlsx",
     "originalName": "Formato Inventario  Fisico Almacen PT DIARIO ACT  0888.xlsx",
     "tipo": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "tamano": 34989,
-    "uploadedAt": "2026-10-12T14:13:12.308Z",
+    "tamano": 35027,
+    "uploadedAt": "2026-10-13T11:56:04.025Z",
     "uploadedBy": "local-user"
   }
 }
