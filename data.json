@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-10-12T00:00:00.000",
+      "weekStartDate": "2026-10-13T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -19026,7 +19026,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-13T14:05:18.245Z"
+    "updatedAt": "2026-10-13T19:04:15.756Z"
   },
   "ordenesSap": [
     {
@@ -30430,6 +30430,17 @@
           "cajas3": 1560,
           "ticket4": "",
           "cajas4": 17784
+        },
+        {
+          "fechaInicio": "2026-10-13",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -30453,8 +30464,8 @@
         },
         {
           "fechaInicio": "2026-10-13",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16353",
+          "cajas1": 3024,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -30473,8 +30484,8 @@
       "dias": [
         {
           "fechaInicio": "2026-10-13",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16353",
+          "cajas1": 4000,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -46308,7 +46319,8 @@
         "2026-10-07": "1.02",
         "2026-10-08": "1.02",
         "2026-10-01": "1.02",
-        "2026-10-11": "1.02"
+        "2026-10-11": "1.02",
+        "2026-10-09": "1.02"
       },
       "_deletedIds": {},
       "weeklyFisico": {
@@ -46326,7 +46338,7 @@
         "2026-09-14|2026-09": 1174355.86,
         "2026-09-21|2026-09": 1009476.45,
         "2026-09-28|2026-09": 550986.53,
-        "2026-10-01|2026-10": 479385.1,
+        "2026-10-01|2026-10": 0,
         "2026-04-13|2026-04": 1316706.34,
         "2026-04-27|2026-04": 1059135.18,
         "2026-04-01|2026-04": 0,
@@ -174127,7 +174139,9 @@
       "2026-10-12-Sanitizer-6": "200",
       "2026-10-13-Gamma Ro-432-0": "166,5",
       "2026-10-13-RO Cleaner-0": "213,7",
-      "2026-10-13-Sanitizer-0": "200"
+      "2026-10-13-Sanitizer-0": "200",
+      "2026-10-12-LARK CLEAN 21C-6": "0",
+      "2026-10-13-LARK CLEAN 21C-0": "0"
     },
     "sala-jarabe-glup": [
       {
@@ -174641,7 +174655,19 @@
       "2026-10-09-tank-3": "-20",
       "2026-10-09-tank-4": "13270",
       "2026-10-09-tank-5": "40",
-      "2026-10-09-tank-6": "4341"
+      "2026-10-09-tank-6": "4341",
+      "2026-10-10-tank-1": "130",
+      "2026-10-10-tank-2": "5139",
+      "2026-10-10-tank-3": "150",
+      "2026-10-10-tank-4": "5960",
+      "2026-10-10-tank-5": "1120",
+      "2026-10-10-tank-6": "2699",
+      "2026-10-11-tank-1": "-70",
+      "2026-10-11-tank-2": "200",
+      "2026-10-11-tank-3": "-80",
+      "2026-10-11-tank-4": "1270",
+      "2026-10-11-tank-5": "-20",
+      "2026-10-11-tank-6": "220"
     },
     "logistica-inventario-mensual": {
       "periods": {
@@ -174697,6 +174723,34 @@
         {
           "sourcePrepKey": "justy:row_1791897872117_03vr9e",
           "fechaFiltro": "2026-10-11",
+          "fecha": "2026-10-12",
+          "dia": "lunes",
+          "turno": "Diurno",
+          "tanque": "5",
+          "sabor": "JUSTY NARANJA",
+          "horaInicio": "6:20",
+          "ubbInicial": "20",
+          "volInicialTanque": "20000",
+          "ubbFinal": "0",
+          "volFinalTanque": "0"
+        },
+        {
+          "sourcePrepKey": "justy:row_1791898073189_m3s8fe",
+          "fechaFiltro": "2026-10-11",
+          "fecha": "2026-10-12",
+          "dia": "lunes",
+          "turno": "Diurno",
+          "tanque": "6",
+          "sabor": "JUSTY NARANJA",
+          "horaInicio": "8:00",
+          "ubbInicial": "20",
+          "volInicialTanque": "20000",
+          "ubbFinal": "0",
+          "volFinalTanque": "0"
+        },
+        {
+          "sourcePrepKey": "justy:row_1791897872117_03vr9e",
+          "fechaFiltro": "2026-10-11",
           "fecha": "",
           "dia": "",
           "turno": "",
@@ -174713,6 +174767,102 @@
           "dia": "",
           "turno": "",
           "tanque": "6",
+          "sabor": "JUSTY NARANJA",
+          "horaInicio": "",
+          "ubbInicial": "20",
+          "volInicialTanque": "20000"
+        },
+        {
+          "sourcePrepKey": "justy:row_1791895130611_79p8g1",
+          "fechaFiltro": "2026-10-12",
+          "fecha": "2026-10-12",
+          "dia": "lunes",
+          "turno": "Diurno",
+          "tanque": "5",
+          "sabor": "JUSTY NARANJA",
+          "horaInicio": "10:00",
+          "ubbInicial": "20",
+          "volInicialTanque": "20000",
+          "ubbFinal": "0",
+          "volFinalTanque": "0"
+        },
+        {
+          "sourcePrepKey": "justy:row_1791895204676_coacd1",
+          "fechaFiltro": "2026-10-12",
+          "fecha": "2026-10-12",
+          "dia": "lunes",
+          "turno": "Diurno",
+          "tanque": "6",
+          "sabor": "JUSTY NARANJA",
+          "horaInicio": "11.34",
+          "ubbInicial": "20",
+          "volInicialTanque": "20000",
+          "ubbFinal": "0",
+          "volFinalTanque": "0"
+        },
+        {
+          "sourcePrepKey": "justy:row_1791895242611_pkcvq6",
+          "fechaFiltro": "2026-10-12",
+          "fecha": "2026-10-12",
+          "dia": "lunes",
+          "turno": "Diurno",
+          "tanque": "5",
+          "sabor": "JUSTY NARANJA",
+          "horaInicio": "13:07",
+          "ubbInicial": "20",
+          "volInicialTanque": "20000",
+          "ubbFinal": "0",
+          "volFinalTanque": "0"
+        },
+        {
+          "sourcePrepKey": "justy:row_1791895357499_phrs6c",
+          "fechaFiltro": "2026-10-12",
+          "fecha": "2026-10-12",
+          "dia": "lunes",
+          "turno": "Diurno",
+          "tanque": "6",
+          "sabor": "JUSTY NARANJA",
+          "horaInicio": "14:20",
+          "ubbInicial": "20",
+          "volInicialTanque": "20000",
+          "ubbFinal": "0",
+          "volFinalTanque": "0"
+        },
+        {
+          "sourcePrepKey": "justy:row_1791895501012_gtgzbf",
+          "fechaFiltro": "2026-10-12",
+          "fecha": "2026-10-12",
+          "dia": "lunes",
+          "turno": "",
+          "tanque": "5",
+          "sabor": "JUSTY NARANJA",
+          "horaInicio": "15:23",
+          "ubbInicial": "20",
+          "volInicialTanque": "20000",
+          "ubbFinal": "0",
+          "volFinalTanque": "0"
+        },
+        {
+          "sourcePrepKey": "justy:row_1791895549179_dmy9th",
+          "fechaFiltro": "2026-10-12",
+          "fecha": "2026-10-12",
+          "dia": "lunes",
+          "turno": "Diurno",
+          "tanque": "6",
+          "sabor": "JUSTY NARANJA",
+          "horaInicio": "16:16",
+          "ubbInicial": "20",
+          "volInicialTanque": "20000",
+          "ubbFinal": "0",
+          "volFinalTanque": "0"
+        },
+        {
+          "sourcePrepKey": "justy:row_1791895591531_m6ceol",
+          "fechaFiltro": "2026-10-12",
+          "fecha": "",
+          "dia": "",
+          "turno": "",
+          "tanque": "5",
           "sabor": "JUSTY NARANJA",
           "horaInicio": "",
           "ubbInicial": "20",
@@ -175106,7 +175256,7 @@
         "litros": "20000",
         "ubb": "20",
         "brix": "10.77",
-        "estado": "preparado",
+        "estado": "enviado a linea",
         "enviarALinea": 5,
         "editando": false,
         "editandoPor": null
@@ -175121,7 +175271,7 @@
         "litros": "20000",
         "ubb": "20",
         "brix": "10.75",
-        "estado": "preparado",
+        "estado": "enviado a linea",
         "enviarALinea": 5,
         "editando": false,
         "editandoPor": null
@@ -175136,7 +175286,7 @@
         "litros": "20000",
         "ubb": "20",
         "brix": "10.75",
-        "estado": "preparado",
+        "estado": "enviado a linea",
         "enviarALinea": 5,
         "editando": false,
         "editandoPor": null
@@ -175151,8 +175301,8 @@
         "litros": "20000",
         "ubb": "20",
         "brix": "10.76",
-        "estado": "preparado",
-        "enviarALinea": null,
+        "estado": "enviado a linea",
+        "enviarALinea": 5,
         "editando": false,
         "editandoPor": null
       },
@@ -175166,8 +175316,8 @@
         "litros": "20000",
         "ubb": "20",
         "brix": "10.77",
-        "estado": "preparado",
-        "enviarALinea": null,
+        "estado": "enviado a linea",
+        "enviarALinea": 5,
         "editando": false,
         "editandoPor": null
       },
@@ -175181,8 +175331,8 @@
         "litros": "20000",
         "ubb": "20",
         "brix": "10.77",
-        "estado": "preparado",
-        "enviarALinea": null,
+        "estado": "enviado a linea",
+        "enviarALinea": 5,
         "editando": false,
         "editandoPor": null
       },
@@ -175196,8 +175346,8 @@
         "litros": "20000",
         "ubb": "20",
         "brix": "10.77",
-        "estado": "preparado",
-        "enviarALinea": null,
+        "estado": "enviado a linea",
+        "enviarALinea": 5,
         "editando": false,
         "editandoPor": null
       },
@@ -175226,7 +175376,7 @@
         "litros": "20000",
         "ubb": "20",
         "brix": "10.76",
-        "estado": "preparado",
+        "estado": "enviado a linea",
         "enviarALinea": 5,
         "editando": false,
         "editandoPor": null
@@ -175256,7 +175406,7 @@
         "litros": "20000",
         "ubb": "20",
         "brix": "10.76",
-        "estado": "preparado",
+        "estado": "enviado a linea",
         "enviarALinea": 5,
         "editando": false,
         "editandoPor": null
@@ -175328,7 +175478,7 @@
         "numeroTanques": "5",
         "sala": "1",
         "sabor": "JUSTY NARANJA",
-        "litros": "20001",
+        "litros": "20000",
         "ubb": "20",
         "brix": "10.77",
         "estado": "preparado",
@@ -175496,8 +175646,8 @@
     "filename": "stock-producto-terminado.xlsx",
     "originalName": "Formato Inventario  Fisico Almacen PT DIARIO ACT  0888.xlsx",
     "tipo": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "tamano": 35027,
-    "uploadedAt": "2026-10-13T11:56:04.025Z",
+    "tamano": 35139,
+    "uploadedAt": "2026-10-13T18:34:47.762Z",
     "uploadedBy": "local-user"
   }
 }
