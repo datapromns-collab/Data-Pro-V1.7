@@ -748,9 +748,24 @@ export default function PlannerPage() {
   const [insumosPeriodoSubTab, setInsumosPeriodoSubTab] = useState('diario');
   const consumoLineasStore = useRemoteCollection<Record<number, ConsumoLineaRow[]>>('sala-jarabe-consumo-lineas', {});
   const consumoLineasDataPorLinea = consumoLineasStore.data;
-  const setConsumoLineasDataPorLinea = consumoLineasStore.setData;
+  const setConsumoLineasDataPorLinea = (updater: typeof consumoLineasDataPorLinea | ((prev: typeof consumoLineasDataPorLinea) => typeof consumoLineasDataPorLinea)) => {
+    consumoLineasStore.patchData((prev) => {
+      const next = typeof updater === 'function' ? updater(prev) : updater;
+      const changedLines: Partial<typeof next> = {};
+      for (const [lineaKey, rows] of Object.entries(next)) {
+        const linea = Number(lineaKey);
+        if (prev[linea] !== rows) changedLines[linea] = rows;
+      }
+      return changedLines;
+    });
+  };
   const [consumoLineasMonth, setConsumoLineasMonth] = useState(() => startOfMonth(new Date()));
   const [consumoLineasWeekStart, setConsumoLineasWeekStart] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }));
+  const [consumoLitrosSection, setConsumoLitrosSection] = useState<'diario' | 'semanal' | 'mensual'>('diario');
+  const [consumoLitrosDailyDate, setConsumoLitrosDailyDate] = useState(() => new Date());
+  const [consumoLitrosWeeklyDate, setConsumoLitrosWeeklyDate] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }));
+  const [consumoLitrosWeeklyMonth, setConsumoLitrosWeeklyMonth] = useState(() => startOfMonth(new Date()));
+  const [consumoLitrosMonthlyDate, setConsumoLitrosMonthlyDate] = useState(() => startOfMonth(new Date()));
   const [consumoUbbSection, setConsumoUbbSection] = useState<'diario' | 'semanal' | 'mensual'>('diario');
   const [consumoUbbDailyDate, setConsumoUbbDailyDate] = useState(() => new Date());
   const [consumoUbbWeeklyDate, setConsumoUbbWeeklyDate] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }));
@@ -833,6 +848,100 @@ export default function PlannerPage() {
   const formatConsumoUbb = (value: number) => value === 0
     ? ''
     : value.toLocaleString('es-VE', { maximumFractionDigits: 2 });
+  const handleConsumoLitrosWeeklyMonthChange = (value: string) => {
+    const [year, month] = value.split('-').map(Number);
+    if (!Number.isInteger(year) || !Number.isInteger(month) || month < 1 || month > 12) return;
+    const nextMonth = new Date(year, month - 1, 1);
+    setConsumoLitrosWeeklyMonth(nextMonth);
+    setConsumoLitrosWeeklyDate(startOfWeek(nextMonth, { weekStartsOn: 1 }));
+  };
+  const consumoLitrosFirstWeekOfMonth = startOfWeek(startOfMonth(consumoLitrosWeeklyMonth), { weekStartsOn: 1 });
+  const consumoLitrosLastWeekOfMonth = startOfWeek(endOfMonth(consumoLitrosWeeklyMonth), { weekStartsOn: 1 });
+  const consumoLitrosSelectedWeekStart = startOfWeek(consumoLitrosWeeklyDate, { weekStartsOn: 1 });
+  const getConsumoLitrosSummary = (periodStart: Date, periodEnd: Date) => {
+    const flavors = new Map<string, string>(
+      CONSUMO_UBB_FLAVORS.map((flavor) => [normalizarSaborConsumoUbb(flavor), flavor])
+    );
+    for (const rows of Object.values(consumoLineasDataPorLinea)) {
+      for (const row of rows) {
+        const flavor = row.sabor.trim();
+        if (flavor) flavors.set(normalizarSaborConsumoUbb(flavor), flavors.get(normalizarSaborConsumoUbb(flavor)) || flavor);
+      }
+    }
+
+    const totalsByFlavor = new Map<string, number[]>(
+      Array.from(flavors.keys(), (flavor) => [flavor, Array(7).fill(0)])
+    );
+    for (const [lineaKey, rows] of Object.entries(consumoLineasDataPorLinea)) {
+      const linea = Number(lineaKey);
+      if (!Number.isInteger(linea) || linea < 1 || linea > 7) continue;
+      for (const row of rows) {
+        const rowDate = parseFecha(row.fecha);
+        if (!rowDate || rowDate < periodStart || rowDate > periodEnd || !row.volFinalTanque?.trim()) continue;
+        const flavorTotals = totalsByFlavor.get(normalizarSaborConsumoUbb(row.sabor));
+        const inicial = parseNumeroConsumo(row.volInicialTanque);
+        const final = parseNumeroConsumo(row.volFinalTanque);
+        if (!flavorTotals || inicial === null || final === null) continue;
+        flavorTotals[linea - 1] += inicial - final;
+      }
+    }
+
+    return Array.from(flavors, ([key, flavor]) => ({
+      flavor,
+      lines: totalsByFlavor.get(key) || Array(7).fill(0),
+    }));
+  };
+  const formatConsumoLitros = (value: number) => value === 0
+    ? ''
+    : value.toLocaleString('es-VE', { maximumFractionDigits: 2 });
+  const renderConsumoLitrosTable = (periodStart: Date, periodEnd: Date) => {
+    const summary = getConsumoLitrosSummary(periodStart, periodEnd);
+    const lineTotals = Array.from({ length: 7 }, (_, lineIndex) =>
+      summary.reduce((total, row) => total + row.lines[lineIndex], 0)
+    );
+    const grandTotal = lineTotals.reduce((total, value) => total + value, 0);
+
+    return (
+      <div className="min-w-full overflow-x-auto rounded-xl border border-slate-300 bg-white">
+        <table className="w-full min-w-[900px] border-collapse text-[11px]">
+          <thead>
+            <tr className="bg-[#5b9bd5] text-white">
+              <th className="border border-slate-300 px-2 py-1.5 text-left font-black uppercase">Sabores</th>
+              {Array.from({ length: 7 }, (_, index) => (
+                <th key={index} className="border border-slate-300 px-2 py-1.5 text-center font-black uppercase">Línea {index + 1} (L)</th>
+              ))}
+              <th className="border border-slate-300 px-2 py-1.5 text-center font-black uppercase">Total (L)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {summary.map(({ flavor, lines }, rowIndex) => {
+              const flavorTotal = lines.reduce((total, value) => total + value, 0);
+              return (
+                <tr key={flavor} className={rowIndex % 2 === 0 ? 'bg-[#deebf7]' : 'bg-white'}>
+                  <td className="border border-slate-300 px-2 py-1 text-left font-bold text-slate-800">{flavor}</td>
+                  {lines.map((value, lineIndex) => (
+                    <td key={lineIndex} className="border border-slate-300 px-2 py-1 text-right tabular-nums text-slate-800">
+                      {formatConsumoLitros(value)}
+                    </td>
+                  ))}
+                  <td className="border border-slate-300 px-2 py-1 text-right font-bold tabular-nums text-slate-800">
+                    {formatConsumoLitros(flavorTotal)}
+                  </td>
+                </tr>
+              );
+            })}
+            <tr className="bg-[#5b9bd5] font-black text-white">
+              <td className="border border-slate-300 px-2 py-1.5">Total</td>
+              {lineTotals.map((value, lineIndex) => (
+                <td key={lineIndex} className="border border-slate-300 px-2 py-1.5 text-right tabular-nums">{formatConsumoLitros(value)}</td>
+              ))}
+              <td className="border border-slate-300 px-2 py-1.5 text-right tabular-nums">{formatConsumoLitros(grandTotal)}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    );
+  };
   const renderConsumoUbbTable = (periodStart: Date, periodEnd: Date) => {
     const summary = getConsumoUbbSummary(periodStart, periodEnd);
     const lineTotals = Array.from({ length: 7 }, (_, lineIndex) =>
@@ -993,12 +1102,13 @@ export default function PlannerPage() {
   const [lineaModalOpen, setLineaModalOpen] = useState(false);
   const [selectedLineaRow, setSelectedLineaRow] = useState<SelectedLineaRow | null>(null);
    const [selectedLinea, setSelectedLinea] = useState<number | null>(null);
-   const [salaJarabeSubTab, setSalaJarabeSubTab] = useState<'preparacion' | 'consumo-lineas' | 'consumo-ubb' | 'resumen'>('preparacion');
+   const [salaJarabeSubTab, setSalaJarabeSubTab] = useState<'preparacion' | 'consumo-lineas' | 'consumo-litros' | 'consumo-ubb' | 'resumen'>('preparacion');
    const [selectedEstadoRow, setSelectedEstadoRow] = useState<{ id: string; type: 'glup' | 'justy' } | null>(null);
   const [estadoModalOpen, setEstadoModalOpen] = useState(false);
   const [revisionEditingRow, setRevisionEditingRow] = useState<{ id: string; type: 'glup' | 'justy'; scope: 'privileged' | 'public' } | null>(null);
   const [revisionEditForm, setRevisionEditForm] = useState<{ fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string; brix: string; estado: 'preparado' | 'enviado a linea' | 'retenido' | 'liberado'; enviarALinea: number | null } | null>(null);
   const isRevisionUser = user?.id === 'maria.mds' || user?.id === 'alex.mds' || user?.id === 'demon';
+  const canDeleteConsumoLinea = user?.id === 'demon' || user?.id === 'maria.mds';
   const isProcjUser = user?.id === 'procj.mds';
   const showRevisionColumn = isRevisionUser || glupRows.some((r) => r.editando) || justyRows.some((r) => r.editando);
   const canEditRow = (row: { editando: boolean; editandoPor: string | null }) => {
@@ -1023,6 +1133,30 @@ export default function PlannerPage() {
       setRevisionEditingRow(null);
       setRevisionEditForm(null);
     }
+  };
+  const deleteConsumoLineaRow = (linea: number, rowIndex: number) => {
+    if (!canDeleteConsumoLinea) return;
+    const row = (consumoLineasDataPorLinea[linea] || [])[rowIndex];
+    if (!row) {
+      toast({ title: 'No se encontró el tanque en la línea', variant: 'destructive' });
+      return;
+    }
+    if (!window.confirm('¿Eliminar este tanque de la línea? La preparación asociada volverá al estado Preparado.')) return;
+
+    const [sourceType, ...sourceIdParts] = String(row.sourcePrepKey || '').split(':');
+    const sourceId = sourceIdParts.join(':');
+    if (sourceId && (sourceType === 'glup' || sourceType === 'justy')) {
+      const updatePreparations = sourceType === 'glup' ? setGlupRows : setJustyRows;
+      updatePreparations((previous) => previous.map((preparation) => preparation.id === sourceId
+        ? { ...preparation, estado: 'preparado', enviarALinea: null }
+        : preparation));
+    }
+
+    setConsumoLineasDataPorLinea((previous) => ({
+      ...previous,
+      [linea]: (previous[linea] || []).filter((_, index) => index !== rowIndex),
+    }));
+    toast({ title: 'Tanque eliminado de la línea; preparación restaurada' });
   };
   const salaJarabePrepWeekStart = salaJarabePrepWeekStartDate;
   const salaJarabePrepWeekEnd = addDays(salaJarabePrepWeekStart, 6);
@@ -5727,6 +5861,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                       {[
                                         { key: 'preparacion', label: 'Preparacion', icon: FlaskConical },
                                         { key: 'consumo-lineas', label: 'Consumo en Lineas', icon: Activity },
+                                        { key: 'consumo-litros', label: 'Consumo Litros', icon: Droplets },
                                         { key: 'consumo-ubb', label: 'Consumo Ubb', icon: BarChart3 },
                                         { key: 'resumen', label: 'Resumen', icon: FileText },
                                       ].map((tab) => (
@@ -5743,7 +5878,33 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                        </button>
                                      ))}
                                    </div>
+                                   <span
+                                     role="status"
+                                     className={cn(
+                                       'hidden text-[10px] font-bold sm:inline',
+                                       [glupStore.loadError, glupStore.syncError, justyStore.loadError, justyStore.syncError, consumoLineasStore.loadError, consumoLineasStore.syncError].some(Boolean)
+                                         ? 'text-red-600'
+                                         : 'text-slate-500'
+                                     )}
+                                   >
+                                     {[glupStore.syncError, justyStore.syncError, consumoLineasStore.syncError].some(Boolean)
+                                       ? 'Error de sincronización'
+                                       : [glupStore.loadError, justyStore.loadError, consumoLineasStore.loadError].some(Boolean)
+                                         ? 'Error al cargar datos'
+                                         : [glupStore.isSaving, justyStore.isSaving, consumoLineasStore.isSaving].some(Boolean)
+                                       ? 'Guardando cambios...'
+                                       : [glupStore.hasPendingChanges, justyStore.hasPendingChanges, consumoLineasStore.hasPendingChanges].some(Boolean)
+                                         ? 'Cambios pendientes de sincronizar'
+                                         : [glupStore.isLoaded, justyStore.isLoaded, consumoLineasStore.isLoaded].every(Boolean)
+                                           ? 'Datos sincronizados'
+                                           : 'Cargando datos...'}
+                                   </span>
                                  </div>
+                                 {[glupStore.loadError, glupStore.syncError, justyStore.loadError, justyStore.syncError, consumoLineasStore.loadError, consumoLineasStore.syncError]
+                                   .filter((error): error is string => Boolean(error))
+                                   .map((error, index) => (
+                                     <p key={`${index}-${error}`} role="alert" className="text-[10px] font-bold text-red-600">{error}</p>
+                                   ))}
                                   {salaJarabeSubTab === 'preparacion' && (
                                     <div className="flex items-center gap-2">
                                       <button
@@ -5866,11 +6027,14 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                      <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[130px]">Consumo total litros</th>
                                                      <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[120px]">Consumo total UBB</th>
                                                      <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[130px]">Enviar a línea</th>
+                                                     {canDeleteConsumoLinea && (
+                                                       <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-slate-200 min-w-[100px]">Acción</th>
+                                                     )}
                                                    </tr>
                                                  </thead>
                                                  <tbody>
                                                    {consumoLineasRowsForSelectedWeek.length === 0 && (
-                                                     <tr><td colSpan={15} className="px-2 py-4 text-center text-slate-400 uppercase font-black text-xs tracking-widest">Sin registros</td></tr>
+                                                     <tr><td colSpan={canDeleteConsumoLinea ? 16 : 15} className="px-2 py-4 text-center text-slate-400 uppercase font-black text-xs tracking-widest">Sin registros</td></tr>
                                                    )}
                                                    {consumoLineasRowsForSelectedWeek.map(({ row, index }) => (
                                                      <tr key={index} className="border-b border-slate-100 hover:bg-slate-50/50">
@@ -5929,6 +6093,20 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                            )}
                                                          </td>
                                                        ))}
+                                                       {canDeleteConsumoLinea && (
+                                                         <td className="border border-slate-100 px-2 py-2 text-center">
+                                                           <button
+                                                             type="button"
+                                                             onClick={() => deleteConsumoLineaRow(salaJarabeLinea, index)}
+                                                             aria-label={`Eliminar tanque ${row.tanque} de Línea ${salaJarabeLinea}`}
+                                                             title="Eliminar tanque y devolver la preparación a estado inicial"
+                                                             className="inline-flex h-8 items-center justify-center gap-1 rounded-full bg-red-600 px-3 text-[10px] font-black uppercase tracking-widest text-white hover:bg-red-700"
+                                                           >
+                                                             <Trash2 className="h-3.5 w-3.5" />
+                                                             Eliminar
+                                                           </button>
+                                                         </td>
+                                                       )}
                                                      </tr>
                                                    ))}
                                                  </tbody>
@@ -6267,6 +6445,113 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                 </table>
                                               )}
                                           </div>
+                                        </div>
+                                      )}
+                                      {salaJarabeSubTab === 'consumo-litros' && (
+                                        <div className="flex min-h-0 flex-1 flex-col gap-3">
+                                          <div className="flex flex-wrap items-center justify-between gap-2">
+                                            <div className="flex items-center rounded-full border border-slate-200 bg-slate-100/50 p-1">
+                                              {([
+                                                { id: 'diario', label: 'Diario' },
+                                                { id: 'semanal', label: 'Semanal' },
+                                                { id: 'mensual', label: 'Mensual' },
+                                              ] as const).map((section) => (
+                                                <button
+                                                  key={section.id}
+                                                  type="button"
+                                                  onClick={() => setConsumoLitrosSection(section.id)}
+                                                  aria-pressed={consumoLitrosSection === section.id}
+                                                  className={cn(
+                                                    'h-8 rounded-full px-4 text-[10px] font-bold uppercase tracking-widest',
+                                                    consumoLitrosSection === section.id ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                                                  )}
+                                                >
+                                                  {section.label}
+                                                </button>
+                                              ))}
+                                            </div>
+                                            {consumoLitrosSection === 'diario' && (
+                                              <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                                                Fecha
+                                                <input
+                                                  type="date"
+                                                  aria-label="Fecha del consumo de litros diario"
+                                                  value={format(consumoLitrosDailyDate, 'yyyy-MM-dd')}
+                                                  onChange={(event) => {
+                                                    const date = parseFecha(event.target.value);
+                                                    if (date) setConsumoLitrosDailyDate(date);
+                                                  }}
+                                                  className="h-8 rounded-full border border-slate-200 bg-white px-3 text-[11px] font-bold normal-case tracking-normal text-slate-700"
+                                                />
+                                              </label>
+                                            )}
+                                            {consumoLitrosSection === 'semanal' && (
+                                              <div className="flex flex-wrap items-center justify-end gap-3">
+                                                <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                                                  Mes
+                                                  <input
+                                                    type="month"
+                                                    aria-label="Mes del resumen semanal de consumo de litros"
+                                                    value={format(consumoLitrosWeeklyMonth, 'yyyy-MM')}
+                                                    onChange={(event) => handleConsumoLitrosWeeklyMonthChange(event.target.value)}
+                                                    className="h-8 rounded-full border border-slate-200 bg-white px-3 text-[11px] font-bold normal-case tracking-normal text-slate-700"
+                                                  />
+                                                </label>
+                                                <div className="flex min-w-[280px] items-center justify-between gap-2">
+                                                  <button
+                                                    type="button"
+                                                    onClick={() => setConsumoLitrosWeeklyDate((current) => addDays(current, -7))}
+                                                    aria-label="Semana anterior"
+                                                    disabled={consumoLitrosSelectedWeekStart <= consumoLitrosFirstWeekOfMonth}
+                                                    className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                                                  >
+                                                    <ChevronLeft className="h-4 w-4" />
+                                                  </button>
+                                                  <span className="text-center text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                                                    Semana {getISOWeek(consumoLitrosSelectedWeekStart)} del {format(consumoLitrosSelectedWeekStart, 'd/M/yyyy')} a {format(addDays(consumoLitrosSelectedWeekStart, 6), 'd/M/yyyy')}
+                                                  </span>
+                                                  <button
+                                                    type="button"
+                                                    onClick={() => setConsumoLitrosWeeklyDate((current) => addDays(current, 7))}
+                                                    aria-label="Semana siguiente"
+                                                    disabled={consumoLitrosSelectedWeekStart >= consumoLitrosLastWeekOfMonth}
+                                                    className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                                                  >
+                                                    <ChevronRight className="h-4 w-4" />
+                                                  </button>
+                                                </div>
+                                              </div>
+                                            )}
+                                            {consumoLitrosSection === 'mensual' && (
+                                              <label className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                                                Mes / Año
+                                                <input
+                                                  type="month"
+                                                  aria-label="Mes y año del consumo de litros mensual"
+                                                  value={format(consumoLitrosMonthlyDate, 'yyyy-MM')}
+                                                  onChange={(event) => {
+                                                    const [year, month] = event.target.value.split('-').map(Number);
+                                                    if (Number.isInteger(year) && Number.isInteger(month) && month >= 1 && month <= 12) {
+                                                      setConsumoLitrosMonthlyDate(new Date(year, month - 1, 1));
+                                                    }
+                                                  }}
+                                                  className="h-8 rounded-full border border-slate-200 bg-white px-3 text-[11px] font-bold normal-case tracking-normal text-slate-700"
+                                                />
+                                              </label>
+                                            )}
+                                          </div>
+                                          <p className="text-[10px] text-slate-500">
+                                            Litros consumidos = volumen inicial − volumen final. Solo se incluyen registros con fecha y ambas lecturas completas.
+                                          </p>
+                                          {consumoLitrosSection === 'diario' && renderConsumoLitrosTable(startOfDay(consumoLitrosDailyDate), endOfDay(consumoLitrosDailyDate))}
+                                          {consumoLitrosSection === 'semanal' && renderConsumoLitrosTable(
+                                            consumoLitrosSelectedWeekStart,
+                                            endOfDay(addDays(consumoLitrosSelectedWeekStart, 6))
+                                          )}
+                                          {consumoLitrosSection === 'mensual' && renderConsumoLitrosTable(
+                                            startOfMonth(consumoLitrosMonthlyDate),
+                                            endOfDay(endOfMonth(consumoLitrosMonthlyDate))
+                                          )}
                                         </div>
                                       )}
                                       {salaJarabeSubTab === 'consumo-ubb' && (

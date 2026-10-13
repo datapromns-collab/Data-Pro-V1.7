@@ -296,7 +296,7 @@ export async function POST(request: Request) {
         const merged: any = { ...base };
         for (const key of Object.keys(incomingClean)) {
           const value = incomingClean[key];
-          if (Array.isArray(value) && value.length === 0) continue;
+          if (Array.isArray(value) && value.length === 0 && ns !== 'sala-jarabe-consumo-lineas') continue;
           if (value && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0) continue;
           merged[key] = deepMerge(base[key], value);
         }

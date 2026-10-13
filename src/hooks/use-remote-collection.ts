@@ -95,6 +95,8 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
   const [data, setData] = useState<T>(initial);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [hasPendingChanges, setHasPendingChanges] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [syncError, setSyncError] = useState<string | null>(null);
   const cacheKey = `rc_${namespace}`;
@@ -109,6 +111,7 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
   queryParamsRef.current = queryParams;
   const queryParamsKey = JSON.stringify(queryParams || {});
   const queryCacheKey = `rc_q_${namespace}_${queryParamsKey}`;
+  const previousQueryParamsKeyRef = useRef(queryParamsKey);
 
   const getQueryCache = useCallback(<U = any>(key: string): U | null => {
     try {
@@ -138,10 +141,11 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
   const persistLocal = useCallback((next: T) => {
     try {
       localStorage.setItem(cacheKey, JSON.stringify(next));
-    } catch {
-      // ignore
+    } catch (error) {
+      console.error(`[RC] Failed to persist local snapshot for ${namespace}`, error);
+      setSyncError(`No se pudo guardar una copia local de "${namespace}". Verifica el espacio disponible en el navegador.`);
     }
-  }, [cacheKey]);
+  }, [cacheKey, namespace]);
 
   const enqueue = useCallback((payload: any) => {
     const item: PendingOperation = {
@@ -156,7 +160,9 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
       const activeRequestOwnsLastItem = sendingRef.current && lastIndex === 0;
       if (activeRequestOwnsLastItem) {
         queueRef.current = [...queueRef.current, item];
-        savePendingQueue(namespace, queueRef.current);
+        if (!savePendingQueue(namespace, queueRef.current)) {
+          setSyncError(`No se pudo conservar la cola local de "${namespace}". Mantén esta página abierta hasta confirmar la sincronización.`);
+        }
         return;
       }
       const lastIsArrayState = last.payload && typeof last.payload === 'object' && Array.isArray(last.payload.items);
@@ -164,13 +170,17 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
       if (lastIsArrayState && newIsArrayState) {
         last.payload = payload;
         last.timestamp = Date.now();
-        savePendingQueue(namespace, queueRef.current);
+        if (!savePendingQueue(namespace, queueRef.current)) {
+          setSyncError(`No se pudo conservar la cola local de "${namespace}". Mantén esta página abierta hasta confirmar la sincronización.`);
+        }
         return;
       }
       if (!lastIsArrayState && !newIsArrayState && typeof payload === 'object' && typeof last.payload === 'object') {
         last.payload = deepMerge(last.payload, payload);
         last.timestamp = Date.now();
-        savePendingQueue(namespace, queueRef.current);
+        if (!savePendingQueue(namespace, queueRef.current)) {
+          setSyncError(`No se pudo conservar la cola local de "${namespace}". Mantén esta página abierta hasta confirmar la sincronización.`);
+        }
         return;
       }
     }
@@ -179,17 +189,17 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
     } else {
       queueRef.current = [...queueRef.current, item];
     }
-    savePendingQueue(namespace, queueRef.current);
+    if (!savePendingQueue(namespace, queueRef.current)) {
+      setSyncError(`No se pudo conservar la cola local de "${namespace}". Mantén esta página abierta hasta confirmar la sincronización.`);
+    }
   }, [namespace]);
 
   const sendToServer = useCallback(async (payload: any) => {
-    console.log('[RC] sendToServer', namespace, 'payload keys', typeof payload === 'object' && payload ? Object.keys(payload).slice(0, 5) : typeof payload);
     const res = await fetch(`/api/collection/${encodeURIComponent(namespace)}`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(payload),
     });
-    console.log('[RC] sendToServer result', namespace, 'status', res.status);
     if (!res.ok) {
       let detail = '';
       try {
@@ -206,6 +216,7 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
   const flushQueue = useCallback(async () => {
     if (sendingRef.current) return;
     sendingRef.current = true;
+    setIsSaving(true);
     try {
       while (queueRef.current.length > 0) {
         const current = queueRef.current[0];
@@ -230,6 +241,7 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
           setSyncError(`No se pudo limpiar la cola local de "${namespace}" después de sincronizar.`);
         }
         pendingRef.current = false;
+        setHasPendingChanges(false);
       }
     } catch (error) {
       console.error(`[RC] Unexpected synchronization failure for ${namespace}`, error);
@@ -237,6 +249,8 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
       pendingRef.current = true;
     } finally {
       sendingRef.current = false;
+      setIsSaving(false);
+      setHasPendingChanges(queueRef.current.length > 0);
       if (queueRef.current.length > 0) {
         const retries = queueRef.current[0]?.retries || 1;
         const retryDelay = Math.min(1000 * 2 ** Math.min(retries - 1, 5), 30000);
@@ -255,6 +269,7 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
       : next);
     enqueue(finalPayload);
     pendingRef.current = true;
+    setHasPendingChanges(true);
     timerRef.current = setTimeout(() => {
       flushQueue();
     }, 150);
@@ -270,6 +285,7 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
         : next;
       enqueue(payload);
       pendingRef.current = true;
+      setHasPendingChanges(true);
       if (timerRef.current) clearTimeout(timerRef.current);
       timerRef.current = setTimeout(() => {
         flushQueue();
@@ -286,11 +302,13 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
     (patch: Partial<T> | ((prev: T) => Partial<T>)) => {
       setData((prev) => {
         const delta = typeof patch === 'function' ? (patch as (p: T) => Partial<T>)(prev) : patch;
+        if (!delta || typeof delta !== 'object' || Object.keys(delta).length === 0) return prev;
         const next = deepMergeValues(prev, delta) as T;
         console.log('[RC] patchData', namespace, 'delta keys', typeof delta === 'object' && delta ? Object.keys(delta as Record<string, any>).slice(0, 5) : 'none');
         persistLocal(next);
         enqueue(delta);
         pendingRef.current = true;
+        setHasPendingChanges(true);
         if (timerRef.current) clearTimeout(timerRef.current);
         timerRef.current = setTimeout(() => {
           flushQueue();
@@ -335,6 +353,7 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
         persistLocal(next);
         enqueue(payload);
         pendingRef.current = true;
+        setHasPendingChanges(true);
         if (timerRef.current) clearTimeout(timerRef.current);
         timerRef.current = setTimeout(() => {
           flushQueue();
@@ -395,6 +414,7 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
         queueRef.current = loadPendingQueue(namespace);
         if (queueRef.current.length > 0) {
           pendingRef.current = true;
+          setHasPendingChanges(true);
         }
       }
 
@@ -474,7 +494,7 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
              const merged = { ...(prev as Record<string, any>) };
              for (const key of Object.keys(remoteObj)) {
                const value = remoteObj[key];
-               if (Array.isArray(value) && value.length === 0) continue;
+               if (Array.isArray(value) && value.length === 0 && namespace !== 'sala-jarabe-consumo-lineas') continue;
                if (value && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0) continue;
                merged[key] = deepMerge(merged[key], value);
              }
@@ -519,9 +539,11 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
   }, [isLoaded, load]);
 
   useEffect(() => {
+    if (previousQueryParamsKeyRef.current === queryParamsKey) return;
+    previousQueryParamsKeyRef.current = queryParamsKey;
     setIsLoaded(false);
     load();
   }, [queryParamsKey, load]);
 
-  return { data, setData: setDataSynced, patchData, savePatch, removeItem, removeKey, isLoaded, isLoading, loadError, syncError };
+  return { data, setData: setDataSynced, patchData, savePatch, removeItem, removeKey, isLoaded, isLoading, isSaving, hasPendingChanges, loadError, syncError };
 }
