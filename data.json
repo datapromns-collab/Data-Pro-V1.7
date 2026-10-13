@@ -174109,7 +174109,25 @@
       "2026-10-12-GermiQuat-6": "225",
       "2026-10-12-Lark Inox-6": "38",
       "2026-10-12-TM Smart-6": "368,3",
-      "2026-10-12-Gamma Ro-432-6": "166,5"
+      "2026-10-12-Gamma Ro-432-6": "166,5",
+      "2026-10-13-LP20-0": "186,9",
+      "2026-10-13-Cloro-0": "700",
+      "2026-10-13-AntiEscalante-0": "845,6",
+      "2026-10-13-Sal-0": "7280",
+      "2026-10-13-Alcalino-0": "2447,1",
+      "2026-10-13-Peracetico-0": "683,2",
+      "2026-10-13-Lark Foam Quat-0": "256,5",
+      "2026-10-13-Lark Foam IN-0": "399,5",
+      "2026-10-13-Lark Desengrasante-0": "0",
+      "2026-10-13-Soda Caustica-0": "496,6",
+      "2026-10-13-GermiQuat-0": "225",
+      "2026-10-13-Lark Inox-0": "38",
+      "2026-10-13-TM Smart-0": "368,3",
+      "2026-10-12-RO Cleaner-6": "213,7",
+      "2026-10-12-Sanitizer-6": "200",
+      "2026-10-13-Gamma Ro-432-0": "166,5",
+      "2026-10-13-RO Cleaner-0": "213,7",
+      "2026-10-13-Sanitizer-0": "200"
     },
     "sala-jarabe-glup": [
       {
@@ -174701,18 +174719,6 @@
           "volInicialTanque": "20000"
         },
         {
-          "sourcePrepKey": "justy:row_1791895204676_coacd1",
-          "fechaFiltro": "2026-10-12",
-          "fecha": "",
-          "dia": "",
-          "turno": "",
-          "tanque": "6",
-          "sabor": "JUSTY NARANJA",
-          "horaInicio": "",
-          "ubbInicial": "20",
-          "volInicialTanque": "20000"
-        },
-        {
           "sourcePrepKey": "justy:row_1791895242611_pkcvq6",
           "fechaFiltro": "2026-10-12",
           "fecha": "",
@@ -174731,6 +174737,18 @@
           "dia": "",
           "turno": "",
           "tanque": "5",
+          "sabor": "JUSTY NARANJA",
+          "horaInicio": "",
+          "ubbInicial": "20",
+          "volInicialTanque": "20000"
+        },
+        {
+          "sourcePrepKey": "justy:row_1791895204676_coacd1",
+          "fechaFiltro": "2026-10-12",
+          "fecha": "",
+          "dia": "",
+          "turno": "",
+          "tanque": "6",
           "sabor": "JUSTY NARANJA",
           "horaInicio": "",
           "ubbInicial": "20",
