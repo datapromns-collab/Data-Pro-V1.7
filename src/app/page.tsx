@@ -1134,7 +1134,8 @@ export default function PlannerPage() {
       setRevisionEditForm(null);
     }
   };
-  const deleteConsumoLineaRow = (linea: number, rowIndex: number) => {
+  const [deletingConsumoLineaKey, setDeletingConsumoLineaKey] = useState<string | null>(null);
+  const deleteConsumoLineaRow = async (linea: number, rowIndex: number) => {
     if (!canDeleteConsumoLinea) return;
     const row = (consumoLineasDataPorLinea[linea] || [])[rowIndex];
     if (!row) {
@@ -1143,20 +1144,38 @@ export default function PlannerPage() {
     }
     if (!window.confirm('¿Eliminar este tanque de la línea? La preparación asociada volverá al estado Preparado.')) return;
 
+    const deletionKey = `${linea}:${rowIndex}`;
+    if (deletingConsumoLineaKey) return;
+    setDeletingConsumoLineaKey(deletionKey);
+
     const [sourceType, ...sourceIdParts] = String(row.sourcePrepKey || '').split(':');
     const sourceId = sourceIdParts.join(':');
-    if (sourceId && (sourceType === 'glup' || sourceType === 'justy')) {
-      const updatePreparations = sourceType === 'glup' ? setGlupRows : setJustyRows;
+    const sourcePreparations = sourceType === 'glup' ? glupRows : justyRows;
+    const sourcePreparation = sourceId ? sourcePreparations.find((preparation) => preparation.id === sourceId) : undefined;
+    const updatePreparations = sourceType === 'glup' ? setGlupRows : setJustyRows;
+    const nextRows = (consumoLineasDataPorLinea[linea] || []).filter((_, index) => index !== rowIndex);
+    if (sourcePreparation && (sourceType === 'glup' || sourceType === 'justy')) {
       updatePreparations((previous) => previous.map((preparation) => preparation.id === sourceId
         ? { ...preparation, estado: 'preparado', enviarALinea: null }
         : preparation));
     }
-
-    setConsumoLineasDataPorLinea((previous) => ({
-      ...previous,
-      [linea]: (previous[linea] || []).filter((_, index) => index !== rowIndex),
-    }));
-    toast({ title: 'Tanque eliminado de la línea; preparación restaurada' });
+    try {
+      await consumoLineasStore.savePatch({ [linea]: nextRows });
+      toast({ title: 'Tanque eliminado y cambios guardados; preparación restaurada' });
+    } catch (error) {
+      console.error('[PROCESOS] Failed to delete syrup tank from line', { linea, rowIndex, error });
+      if (sourcePreparation && (sourceType === 'glup' || sourceType === 'justy')) {
+        updatePreparations((previous) => previous.map((preparation) => preparation.id === sourceId
+          ? sourcePreparation
+          : preparation));
+      }
+      toast({
+        title: error instanceof Error ? `No se pudo guardar la eliminación: ${error.message}` : 'No se pudo guardar la eliminación del tanque',
+        variant: 'destructive',
+      });
+    } finally {
+      setDeletingConsumoLineaKey(null);
+    }
   };
   const salaJarabePrepWeekStart = salaJarabePrepWeekStartDate;
   const salaJarabePrepWeekEnd = addDays(salaJarabePrepWeekStart, 6);
@@ -6098,12 +6117,13 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                            <button
                                                              type="button"
                                                              onClick={() => deleteConsumoLineaRow(salaJarabeLinea, index)}
+                                                             disabled={deletingConsumoLineaKey !== null}
                                                              aria-label={`Eliminar tanque ${row.tanque} de Línea ${salaJarabeLinea}`}
-                                                             title="Eliminar tanque y devolver la preparación a estado inicial"
-                                                             className="inline-flex h-8 items-center justify-center gap-1 rounded-full bg-red-600 px-3 text-[10px] font-black uppercase tracking-widest text-white hover:bg-red-700"
+                                                             title={deletingConsumoLineaKey === `${salaJarabeLinea}:${index}` ? 'Guardando eliminación...' : 'Eliminar tanque y devolver la preparación a estado inicial'}
+                                                             className="inline-flex h-8 items-center justify-center gap-1 rounded-full bg-red-600 px-3 text-[10px] font-black uppercase tracking-widest text-white hover:bg-red-700 disabled:cursor-wait disabled:opacity-60"
                                                            >
                                                              <Trash2 className="h-3.5 w-3.5" />
-                                                             Eliminar
+                                                             {deletingConsumoLineaKey === `${salaJarabeLinea}:${index}` ? 'Guardando...' : 'Eliminar'}
                                                            </button>
                                                          </td>
                                                        )}
