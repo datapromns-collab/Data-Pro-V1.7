@@ -17475,6 +17475,162 @@
               "kind": "termo",
               "preformSize": ""
             }
+          ],
+          "2026-10-12": [
+            {
+              "id": "097e4f91-fa62-4ed0-827f-67995884ddfd",
+              "line": "Linea 1",
+              "flavor": "verde",
+              "code": "EMP_0103",
+              "material": "PREFORMA VERDE 42,64 GR-1881",
+              "quantity": "2738",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "e7affd0d-0836-431b-ac82-2deec051ec1b",
+              "line": "Linea 1",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "2.10",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "051b76de-a18d-4c5a-8e4e-08543b7fcb91",
+              "line": "Linea 1",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "2439",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "1a25ef27-5e47-4e3b-b573-03efe9df14b6",
+              "line": "Linea 1",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "2.47",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "b1e5bc7e-55f2-4c19-bb60-0e4a74ccc237",
+              "line": "Linea 3",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "1594",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "9175d647-a3b4-4e3a-b777-b4ad29b282c4",
+              "line": "Linea 3",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "5.76",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "8b06740d-2254-4694-bfa4-0bb7e61110e9",
+              "line": "Linea 4",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "1688",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "f11cc2a5-aaa5-4fdf-a30a-fe5e6186d878",
+              "line": "Linea 4",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "5.54",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "ecd994b5-b903-4801-8f6a-52e8fdf123e5",
+              "line": "Linea 5",
+              "flavor": "transparente",
+              "code": "EMP_0068",
+              "material": "PREFORMA TRANSPARENTE 36 GR-1881",
+              "quantity": "2583",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "61a46f95-0c2f-4436-b509-6ff9ea198a65",
+              "line": "Linea 5",
+              "flavor": "",
+              "code": "EMP_0017",
+              "material": "POLIETILENO TERMOENCOGIBLE 55 X 0.07",
+              "quantity": "3.36",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "af2aa935-7e1a-46cf-ab70-c79935b0142f",
+              "line": "Linea 6",
+              "flavor": "transparente",
+              "code": "EMP_0126",
+              "material": "PREFORMA TRANSPARENTE 20,55GR-1881",
+              "quantity": "2579",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "f745bbf7-a4e0-4966-b585-1964d3963905",
+              "line": "Linea 6",
+              "flavor": "",
+              "code": "EMP_0130",
+              "material": "POLIETILENO TERMOENCOGIBLE 43 x 0.06",
+              "quantity": "2.5",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "4a60a2c5-7dc3-4486-a89a-c969dbee42f9",
+              "line": "Linea 7",
+              "flavor": "transparente",
+              "code": "EMP_0166",
+              "material": "PREFORMA TRANSPARENTE 33 GR-1881",
+              "quantity": "2030",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": "33"
+            },
+            {
+              "id": "40c7111c-fcd5-4f74-a3c0-1c1ed6e673f9",
+              "line": "Linea 7",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "3",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            }
           ]
         }
       },
@@ -18770,7 +18926,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-12T21:35:05.973Z"
+    "updatedAt": "2026-10-13T11:46:01.029Z"
   },
   "ordenesSap": [
     {
@@ -30013,12 +30169,12 @@
           "fechaInicio": "2026-10-12",
           "ticket1": "16312",
           "cajas1": 12480,
-          "ticket2": "",
+          "ticket2": "16313",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 3200,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 11280
         }
       ]
     },
@@ -30033,12 +30189,12 @@
           "fechaInicio": "2026-10-12",
           "ticket1": "16264",
           "cajas1": 14640,
-          "ticket2": "",
+          "ticket2": "162265",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2960,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 19360
         }
       ]
     },
@@ -30053,12 +30209,12 @@
           "fechaInicio": "2026-10-12",
           "ticket1": "16149",
           "cajas1": 18720,
-          "ticket2": "",
+          "ticket2": "16150",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 3760,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 21520
         }
       ]
     },
@@ -30073,12 +30229,12 @@
           "fechaInicio": "2026-10-12",
           "ticket1": "15219",
           "cajas1": 2000,
-          "ticket2": "",
+          "ticket2": "15220",
           "cajas2": 5550,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1600,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 8450
         }
       ]
     },
@@ -30133,12 +30289,12 @@
           "fechaInicio": "2026-10-12",
           "ticket1": "16351",
           "cajas1": 12320,
-          "ticket2": "",
+          "ticket2": "16352",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2160,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 13200
         }
       ]
     }
@@ -161178,7 +161334,7 @@
         "turno": "DIURNO",
         "solicitante": "",
         "linea": "Línea 7",
-        "maquina": "PALETIZADORA",
+        "maquina": "OPERACIONAL",
         "aviso": "",
         "fechaParada": "2026-09-07",
         "inicioMtto": "",
@@ -162600,7 +162756,7 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1790350718279.292,
+        "id": 1790350708206,
         "fechaOrden": "2026-09-21",
         "orden": "9620",
         "fechaEmision": "2026-09-21",
@@ -162623,11 +162779,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1790351409843.8572,
+        "id": 1790351374299,
         "fechaOrden": "2026-09-21",
         "orden": "9621",
         "fechaEmision": "2026-09-21",
@@ -162650,7 +162806,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
@@ -163010,7 +163166,7 @@
         "orden": "9706",
         "fechaEmision": "2026-09-21",
         "semana": 39,
-        "turno": "NOCTURNO",
+        "turno": "DIURNO",
         "solicitante": "",
         "linea": "Línea 1",
         "maquina": "LLENADORA",
@@ -163023,7 +163179,7 @@
         "tMtto": "24",
         "tipoParada": "AVERÍA",
         "mtto": "",
-        "falla": "RUPTURA DE RIEL DE BOTELLA EN LA SALIDA DE LLENADORA",
+        "falla": "RUPTURA DE RIEL DE BOTELLA EN SALIDA DE LLENADORA",
         "mttoEsp": "",
         "descripcionFalla": "",
         "descripcionAccion": "",
@@ -172213,7 +172369,12 @@
       "2026-10-11-suave": "180901",
       "2026-10-11-procesos": "779493,28",
       "2026-10-11-filtrada": "1567690,84",
-      "2026-10-11-total": "2634376,67"
+      "2026-10-11-total": "2634376,67",
+      "2026-10-12-servicio": "22169",
+      "2026-10-12-suave": "354970",
+      "2026-10-12-procesos": "3184051,56",
+      "2026-10-12-filtrada": "4880654,24",
+      "2026-10-12-total": "3305289,27"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
