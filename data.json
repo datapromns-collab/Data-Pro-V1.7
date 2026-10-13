@@ -19026,7 +19026,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-13T12:17:47.252Z"
+    "updatedAt": "2026-10-13T13:54:59.976Z"
   },
   "ordenesSap": [
     {
@@ -30430,17 +30430,6 @@
           "cajas3": 1560,
           "ticket4": "",
           "cajas4": 17784
-        },
-        {
-          "fechaInicio": "2026-10-13",
-          "ticket1": "",
-          "cajas1": 0,
-          "ticket2": "",
-          "cajas2": 0,
-          "ticket3": "",
-          "cajas3": 0,
-          "ticket4": "",
-          "cajas4": 0
         }
       ]
     },
@@ -30466,6 +30455,66 @@
           "fechaInicio": "2026-10-13",
           "ticket1": "",
           "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "1-1791899462591",
+      "linea": 1,
+      "sabor": "GLUP PIÑA",
+      "ordenNumero": "64206",
+      "semana": 42,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-13",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "2-1791899477810",
+      "linea": 2,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "64247",
+      "semana": 42,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-13",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "7-1791899681410",
+      "linea": 7,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "64253",
+      "semana": 42,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-13",
+          "ticket1": "16246",
+          "cajas1": 3120,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -43416,23 +43465,31 @@
         "2026-10-12": {
           "GLUP COLA": {
             "inicial": "72.62",
-            "preparado": "",
-            "final": ""
+            "preparado": "78",
+            "final": "61.19"
           },
           "GLUP FRESH": {
             "inicial": "9.98",
-            "preparado": "",
-            "final": ""
+            "preparado": "12",
+            "final": "2.43"
           },
           "GLUP UVA": {
             "inicial": "26.97",
-            "preparado": "",
-            "final": ""
+            "preparado": "22",
+            "final": "4.83"
           },
           "JUSTY NARANJA": {
             "inicial": "40",
-            "preparado": "",
-            "final": ""
+            "preparado": "320",
+            "final": "31"
+          },
+          "GLUP PIÑA": {
+            "final": "20",
+            "preparado": "20"
+          },
+          "GLUP KOLITA": {
+            "final": "54",
+            "preparado": "54"
           }
         }
       },
@@ -44846,7 +44903,7 @@
           "PORTUGUESA": {
             "invInicialSacos": "15160",
             "recepcionSacos": "",
-            "invFinalSacos": ""
+            "invFinalSacos": "10200"
           }
         }
       },
@@ -46106,11 +46163,11 @@
         "2026-10-12": {
           "JARABE SIMPLE": {
             "invInicialSacos": "466",
-            "invFinalSacos": ""
+            "invFinalSacos": "406"
           },
           "Sala 1": {
             "invInicialSacos": "937",
-            "invFinalSacos": ""
+            "invFinalSacos": "270"
           }
         }
       },
@@ -46218,7 +46275,8 @@
         "2026-10-07": "50.44",
         "2026-10-09": "50.37",
         "2026-10-10": "50.39",
-        "2026-10-11": "50.43"
+        "2026-10-11": "50.43",
+        "2026-10-12": "50.40"
       },
       "costoAzucar": {
         "2026-07-28": "1.43",
@@ -174565,7 +174623,64 @@
         }
       }
     },
-    "sala-jarabe-consumo-lineas": {},
+    "sala-jarabe-consumo-lineas": {
+      "5": [
+        {
+          "sourcePrepKey": "justy:row_1791895130611_79p8g1",
+          "fechaFiltro": "2026-10-12",
+          "fecha": "2026-10-12",
+          "dia": "lunes",
+          "turno": "Diurno",
+          "tanque": "5",
+          "sabor": "JUSTY NARANJA",
+          "horaInicio": "10",
+          "ubbInicial": "20",
+          "volInicialTanque": "20000",
+          "ubbFinal": "1",
+          "volFinalTanque": "1000"
+        },
+        {
+          "sourcePrepKey": "justy:row_1791895204676_coacd1",
+          "fechaFiltro": "2026-10-12",
+          "fecha": "2026-10-12",
+          "dia": "lunes",
+          "turno": "Diurno",
+          "tanque": "6",
+          "sabor": "JUSTY NARANJA",
+          "horaInicio": "8",
+          "ubbInicial": "20",
+          "volInicialTanque": "20000",
+          "ubbFinal": "0",
+          "volFinalTanque": "0"
+        },
+        {
+          "sourcePrepKey": "justy:row_1791897872117_03vr9e",
+          "fechaFiltro": "2026-10-11",
+          "fecha": "2026-10-12",
+          "dia": "lunes",
+          "turno": "Diurno",
+          "tanque": "5",
+          "sabor": "JUSTY NARANJA",
+          "horaInicio": "6:20",
+          "ubbInicial": "20",
+          "volInicialTanque": "20000",
+          "ubbFinal": "0",
+          "volFinalTanque": "0"
+        },
+        {
+          "sourcePrepKey": "justy:row_1791898073189_m3s8fe",
+          "fechaFiltro": "2026-10-11",
+          "fecha": "",
+          "dia": "",
+          "turno": "",
+          "tanque": "6",
+          "sabor": "JUSTY NARANJA",
+          "horaInicio": "",
+          "ubbInicial": "20",
+          "volInicialTanque": "20000"
+        }
+      ]
+    },
     "ventas-inventario-diario": {
       "days": {
         "2026-10-02": {
@@ -174940,7 +175055,279 @@
           "2026-10-09": []
         }
       }
-    }
+    },
+    "sala-jarabe-justy": [
+      {
+        "id": "row_1791895130611_79p8g1",
+        "fecha": "2026-10-12",
+        "hora": "08:02",
+        "numeroTanques": "5",
+        "sala": "1",
+        "sabor": "JUSTY NARANJA",
+        "litros": "20000",
+        "ubb": "20",
+        "brix": "10.77",
+        "estado": "liberado",
+        "enviarALinea": 5,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1791895204676_coacd1",
+        "fecha": "2026-10-12",
+        "hora": "10:00",
+        "numeroTanques": "6",
+        "sala": "1",
+        "sabor": "JUSTY NARANJA",
+        "litros": "20000",
+        "ubb": "20",
+        "brix": "10.75",
+        "estado": "enviado a linea",
+        "enviarALinea": 5,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1791895242611_pkcvq6",
+        "fecha": "2026-10-12",
+        "hora": "12:00",
+        "numeroTanques": "5",
+        "sala": "1",
+        "sabor": "JUSTY NARANJA",
+        "litros": "20000",
+        "ubb": "20",
+        "brix": "10.75",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1791895357499_phrs6c",
+        "fecha": "2026-10-12",
+        "hora": "13:15",
+        "numeroTanques": "6",
+        "sala": "1",
+        "sabor": "JUSTY NARANJA",
+        "litros": "20000",
+        "ubb": "20",
+        "brix": "10.76",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1791895501012_gtgzbf",
+        "fecha": "2026-10-12",
+        "hora": "14:22",
+        "numeroTanques": "5",
+        "sala": "1",
+        "sabor": "JUSTY NARANJA",
+        "litros": "20000",
+        "ubb": "20",
+        "brix": "10.77",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1791895549179_dmy9th",
+        "fecha": "2026-10-12",
+        "hora": "15:22",
+        "numeroTanques": "6",
+        "sala": "1",
+        "sabor": "JUSTY NARANJA",
+        "litros": "20000",
+        "ubb": "20",
+        "brix": "10.77",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1791895591531_m6ceol",
+        "fecha": "2026-10-12",
+        "hora": "16:16",
+        "numeroTanques": "5",
+        "sala": "1",
+        "sabor": "JUSTY NARANJA",
+        "litros": "20000",
+        "ubb": "20",
+        "brix": "10.77",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1791895635411_koiwem",
+        "fecha": "2026-10-12",
+        "hora": "17:29",
+        "numeroTanques": "6",
+        "sala": "1",
+        "sabor": "JUSTY NARANJA",
+        "litros": "20000",
+        "ubb": "20",
+        "brix": "10.77",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1791897872117_03vr9e",
+        "fecha": "2026-10-11",
+        "hora": "03:00",
+        "numeroTanques": "5",
+        "sala": "1",
+        "sabor": "JUSTY NARANJA",
+        "litros": "20000",
+        "ubb": "20",
+        "brix": "10.76",
+        "estado": "liberado",
+        "enviarALinea": 5,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1791898006644_o32yvt",
+        "fecha": "2026-11-12",
+        "hora": "03:15",
+        "numeroTanques": "6",
+        "sala": "1",
+        "sabor": "JUSTY NARANJA",
+        "litros": "20000",
+        "ubb": "20",
+        "brix": "10.76",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1791898073189_m3s8fe",
+        "fecha": "2026-10-11",
+        "hora": "03:15",
+        "numeroTanques": "6",
+        "sala": "1",
+        "sabor": "JUSTY NARANJA",
+        "litros": "20000",
+        "ubb": "20",
+        "brix": "10.76",
+        "estado": "liberado",
+        "enviarALinea": 5,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1791898269141_rj4ifh",
+        "fecha": "2026-10-12",
+        "hora": "18:50",
+        "numeroTanques": "5",
+        "sala": "1",
+        "sabor": "JUSTY NARANJA",
+        "litros": "20000",
+        "ubb": "20",
+        "brix": "10.76",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1791898323051_9ilz6c",
+        "fecha": "2026-10-12",
+        "hora": "20:23",
+        "numeroTanques": "6",
+        "sala": "1",
+        "sabor": "JUSTY NARANJA",
+        "litros": "20000",
+        "ubb": "20",
+        "brix": "10.74",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1791898474607_d6nggn",
+        "fecha": "2026-10-12",
+        "hora": "21:00",
+        "numeroTanques": "5",
+        "sala": "1",
+        "sabor": "JUSTY NARANJA",
+        "litros": "20000",
+        "ubb": "20",
+        "brix": "10.76",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1791898516775_llke6c",
+        "fecha": "2026-10-13",
+        "hora": "01:20",
+        "numeroTanques": "6",
+        "sala": "1",
+        "sabor": "JUSTY NARANJA",
+        "litros": "20000",
+        "ubb": "20",
+        "brix": "10.76",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1791898608479_38u1dl",
+        "fecha": "2026-10-13",
+        "hora": "02:31",
+        "numeroTanques": "5",
+        "sala": "1",
+        "sabor": "JUSTY NARANJA",
+        "litros": "20001",
+        "ubb": "20",
+        "brix": "10.77",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1791898649784_3xdl1m",
+        "fecha": "2026-10-13",
+        "hora": "03:37",
+        "numeroTanques": "6",
+        "sala": "1",
+        "sabor": "JUSTY NARANJA",
+        "litros": "20000",
+        "ubb": "20",
+        "brix": "10.77",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1791898687407_1av4va",
+        "fecha": "2026-10-13",
+        "hora": "04:37",
+        "numeroTanques": "5",
+        "sala": "1",
+        "sabor": "JUSTY NARANJA",
+        "litros": "20000",
+        "ubb": "20",
+        "brix": "10.77",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      }
+    ]
   },
   "cacheVersion": 0,
   "deletedIds": {
@@ -175045,7 +175432,10 @@
     "logistica-inventario-mensual": {},
     "sala-jarabe-consumo-lineas": {},
     "ventas-inventario-diario": {},
-    "procesos-rechazos-desperdicios": {}
+    "procesos-rechazos-desperdicios": {},
+    "sala-jarabe-justy": {
+      "*": []
+    }
   },
   "_deletedOrdenesSapIds": [
     "1-1785349102112",
@@ -175060,7 +175450,8 @@
     "4-1790888046631",
     "6-1791209874652",
     "6-1791374112487",
-    "1-1791811962984"
+    "1-1791811962984",
+    "7-1791899489586"
   ],
   "logisticsStockFile": {
     "filename": "stock-producto-terminado.xlsx",
