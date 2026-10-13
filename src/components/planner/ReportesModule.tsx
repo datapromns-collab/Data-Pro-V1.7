@@ -18,7 +18,11 @@ import {
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-import { loadProductionWasteRows } from '@/lib/json-db';
+import { loadProductionInventoryPeriod, loadProductionReceptions, loadProductionWasteRows } from '@/lib/json-db';
+import { parseCantidadCajas } from '@/lib/production-tracking-utils';
+import { ADHESIVE_FACTORS, ALL_LINES_SUMMARY, PRODUCT_LIST } from '@/lib/planner-utils';
+import { getBebidaTerminadaMultiplier } from '@/lib/seguimiento-utils';
+import { useOrdenesSap } from '@/hooks/use-ordenes-sap';
 import { MermasDesperdiciosReporte, type WasteReportMode, type WasteReportPeriod, type WasteReportRow } from '@/components/planner/MermasDesperdiciosReporte';
 import { OrdenesReporteResumenMensual } from '@/components/planner/OrdenesReporteResumenMensual';
 import { JarabesResumenReporte } from '@/components/planner/JarabesModule';
@@ -134,6 +138,261 @@ function WasteSummaryReport({ mode, reportMonthDate, onMonthChange }: WasteSumma
       loading={isLoading}
       error={loadError}
     />
+  );
+}
+
+interface AdhesiveMonthlyData {
+  week: string;
+  physical: number | null;
+  theoretical: number;
+  yield: number | null;
+}
+
+const getAdhesiveInventoryValue = (value: unknown): number | null => {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  return parseCantidadCajas((value as Record<string, unknown>).adhesivoCantidad);
+};
+
+function AdhesiveMonthlyReport({ reportMonthDate }: { reportMonthDate: Date }) {
+  const { ordenes: ordenesSap } = useOrdenesSap();
+  const [monthlyData, setMonthlyData] = useState<AdhesiveMonthlyData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const monthKey = format(reportMonthDate, 'yyyy-MM');
+  const monthStart = startOfMonth(reportMonthDate);
+  const monthEnd = endOfMonth(reportMonthDate);
+
+  useEffect(() => {
+    let cancelled = false;
+    const loadMonthlyData = async () => {
+      setIsLoading(true);
+      setLoadError(null);
+      try {
+        const monthStart = startOfMonth(reportMonthDate);
+        const monthEnd = endOfMonth(reportMonthDate);
+        const weekStarts: Date[] = [];
+        for (
+          let weekStart = startOfWeek(monthStart, { weekStartsOn: 1 });
+          weekStart <= monthEnd;
+          weekStart = addDays(weekStart, 7)
+        ) {
+          weekStarts.push(weekStart);
+        }
+        const weekKeys = weekStarts.map((weekStart) => format(weekStart, 'yyyy-MM-dd'));
+        const inventoryWeekKeys = Array.from(new Set(weekStarts.flatMap((weekStart) => [
+          format(addDays(weekStart, -7), 'yyyy-MM-dd'),
+          format(weekStart, 'yyyy-MM-dd'),
+        ])));
+        const nextMonthKey = format(new Date(monthStart.getFullYear(), monthStart.getMonth() + 1, 1), 'yyyy-MM');
+        const [openingInventory, closingInventory, ...loaded] = await Promise.all([
+          loadProductionInventoryPeriod('mensual', monthKey),
+          loadProductionInventoryPeriod('mensual', nextMonthKey),
+          ...weekKeys.map((weekKey) => loadProductionReceptions(weekKey)),
+          ...inventoryWeekKeys.map((weekKey) => loadProductionInventoryPeriod('semanal', weekKey)),
+        ]);
+        const receptions = loaded.slice(0, weekKeys.length) as (Record<string, any> | null)[];
+        const inventoryValues = loaded.slice(weekKeys.length);
+        if (
+          openingInventory === undefined ||
+          closingInventory === undefined ||
+          receptions.some((week) => week === null) ||
+          inventoryValues.some((week) => week === undefined)
+        ) {
+          throw new Error('No se pudieron cargar los datos mensuales de adhesivo.');
+        }
+
+        const inventoryByWeek = new Map(inventoryWeekKeys.map((weekKey, index) => [
+          weekKey,
+          getAdhesiveInventoryValue(inventoryValues[index]),
+        ]));
+        const receptionByDate = new Map<string, number>();
+        receptions.forEach((week) => {
+          Object.entries(week?.diarias || {}).forEach(([dateKey, values]) => {
+            const quantity = getAdhesiveInventoryValue(values);
+            if (quantity !== null) receptionByDate.set(dateKey, (receptionByDate.get(dateKey) || 0) + quantity);
+          });
+        });
+        const opening = getAdhesiveInventoryValue(openingInventory);
+        const closing = getAdhesiveInventoryValue(closingInventory);
+        const data = weekStarts.map((weekStart, index) => {
+          const weekEnd = addDays(weekStart, 6);
+          const segmentStart = weekStart < monthStart ? monthStart : weekStart;
+          const segmentEnd = weekEnd > monthEnd ? monthEnd : weekEnd;
+          const initial = segmentStart.getTime() === monthStart.getTime()
+            ? opening
+            : inventoryByWeek.get(format(addDays(weekStart, -7), 'yyyy-MM-dd')) ?? null;
+          const final = segmentEnd.getTime() === monthEnd.getTime()
+            ? closing
+            : inventoryByWeek.get(weekKeys[index]) ?? null;
+          let reception = 0;
+          for (let day = segmentStart; day <= segmentEnd; day = addDays(day, 1)) {
+            reception += receptionByDate.get(format(day, 'yyyy-MM-dd')) || 0;
+          }
+          const physical = initial !== null && final !== null ? initial + reception - final : null;
+          let theoretical = 0;
+          ordenesSap.forEach((orden) => {
+            if (!ALL_LINES_SUMMARY.includes(String(orden.linea)) || !PRODUCT_LIST.includes(orden.sabor)) return;
+            const lineSize = getBebidaTerminadaMultiplier(`Línea ${orden.linea}`);
+            const presentationFactor = {
+              2: ADHESIVE_FACTORS['2Lts'],
+              1: ADHESIVE_FACTORS['1Lt'],
+              1.5: ADHESIVE_FACTORS['1.5Lts'],
+              0.4: ADHESIVE_FACTORS['0.4Lts'],
+            }[lineSize];
+            if (presentationFactor === undefined) return;
+            orden.dias.forEach((day) => {
+              if (day.fechaInicio < format(segmentStart, 'yyyy-MM-dd') || day.fechaInicio > format(segmentEnd, 'yyyy-MM-dd')) return;
+              const boxes = (Number(day.cajas1) || 0) + (Number(day.cajas2) || 0) +
+                (Number(day.cajas3) || 0) + (Number(day.cajas4) || 0);
+              theoretical += boxes * presentationFactor;
+            });
+          });
+          return {
+            week: `SEM ${getISOWeek(weekStart)}`,
+            physical,
+            theoretical,
+            yield: physical !== null && theoretical > 0 ? physical / theoretical : 0,
+          };
+        });
+        if (!cancelled) setMonthlyData(data);
+      } catch (error) {
+        console.error('[REPORTES] Failed to load monthly adhesive consumption', error);
+        if (!cancelled) {
+          setMonthlyData([]);
+          setLoadError('No se pudieron cargar los datos mensuales de adhesivo.');
+        }
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    };
+    void loadMonthlyData();
+    return () => { cancelled = true; };
+  }, [monthKey, ordenesSap]);
+
+  const totalPhysical = monthlyData.some((week) => week.physical === null)
+    ? null
+    : monthlyData.reduce((total, week) => total + (week.physical ?? 0), 0);
+  const totalTheoretical = monthlyData.reduce((total, week) => total + week.theoretical, 0);
+  const totalYield = totalPhysical !== null && totalTheoretical > 0 ? totalPhysical / totalTheoretical : 0;
+  const formatValue = (value: number) => value.toLocaleString('es-VE', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  const rows = [
+    { label: 'CONSUMO FÍSICO (KG)', key: 'physical' as const },
+    { label: 'CONSUMO TEÓRICO (KG)', key: 'theoretical' as const },
+    { label: 'RENDIMIENTO DE ADHESIVO', key: 'yield' as const },
+  ];
+
+  return (
+    <div className="flex min-h-0 flex-col gap-3">
+      {isLoading && <p role="status" className="text-[10px] font-bold text-slate-500">Cargando consumo mensual de adhesivo...</p>}
+      {loadError && <div role="alert" className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[10px] font-semibold text-amber-800">{loadError}</div>}
+      <AdhesiveConsumptionView
+        title={format(reportMonthDate, 'MMMM yyyy', { locale: es })}
+        chartTitle="Consumo de adhesivo - Gráfico mensual"
+        data={monthlyData}
+        rows={rows}
+        totalPhysical={totalPhysical}
+        totalTheoretical={totalTheoretical}
+        totalYield={totalYield}
+        formatValue={formatValue}
+        isLoading={isLoading}
+        emptyLabel="Sin datos para graficar"
+      />
+    </div>
+  );
+}
+
+function AdhesiveConsumptionView({
+  title,
+  chartTitle,
+  data,
+  rows,
+  totalPhysical,
+  totalTheoretical,
+  totalYield,
+  formatValue,
+  isLoading,
+  emptyLabel,
+}: {
+  title: string;
+  chartTitle: string;
+  data: AdhesiveMonthlyData[];
+  rows: { label: string; key: 'physical' | 'theoretical' | 'yield' }[];
+  totalPhysical: number | null;
+  totalTheoretical: number;
+  totalYield: number | null;
+  formatValue: (value: number) => string;
+  isLoading: boolean;
+  emptyLabel: string;
+}) {
+  return (
+    <div className="flex min-h-0 flex-col gap-3">
+      <div className="rounded-2xl border border-slate-200 bg-white">
+        <div className="px-4 py-2 text-[11px] font-black uppercase tracking-widest text-slate-700">
+          {title}
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[520px] border-collapse text-[11px]">
+            <thead>
+              <tr className="bg-[#002D82] text-white">
+                <th className="border border-white/10 px-2 py-2 text-left font-black uppercase tracking-wider">Adhesivo</th>
+                {data.map((week, index) => (
+                  <th key={`${week.week}-${index}`} className="min-w-[90px] border border-white/10 px-2 py-2 text-center font-black uppercase tracking-wider">{week.week}</th>
+                ))}
+                <th className="min-w-[100px] border border-white/10 px-2 py-2 text-center font-black uppercase tracking-wider">TOTAL</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map(({ label, key }) => (
+                <tr key={key} className="border-b border-slate-100 hover:bg-slate-50/50">
+                  <td className="whitespace-nowrap border border-slate-100 px-2 py-2 font-bold text-slate-700">{label}</td>
+                  {data.map((week, index) => (
+                    <td key={`${week.week}-${index}`} className="border border-slate-100 px-2 py-2 text-center">
+                      <div className="flex h-8 min-w-[14ch] items-center justify-center rounded border border-slate-200 bg-slate-100 text-[11px] font-black text-slate-700">
+                        {week[key] === null ? '—' : formatValue(week[key] ?? 0)}
+                      </div>
+                    </td>
+                  ))}
+                  <td className="border border-slate-100 bg-slate-50 px-2 py-2 text-center">
+                    <div className="flex h-8 min-w-[14ch] items-center justify-center rounded border border-slate-200 bg-slate-100 text-[11px] font-black text-slate-700">
+                      {(key === 'physical' && totalPhysical === null)
+                        ? '—'
+                        : formatValue(key === 'physical' ? totalPhysical ?? 0 : key === 'theoretical' ? totalTheoretical : totalYield ?? 0)}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div className="rounded-2xl border border-slate-100 bg-white p-4">
+        <div className="mb-2 text-xs font-black uppercase tracking-widest text-slate-700">{chartTitle}</div>
+        <div className="min-h-[320px]">
+          {data.length > 0 ? (
+            <ResponsiveContainer width="100%" height={320}>
+              <ComposedChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="week" />
+                <YAxis yAxisId="left" />
+                <YAxis yAxisId="right" orientation="right" />
+                <Tooltip />
+                <Legend />
+                <Bar yAxisId="left" dataKey="physical" fill="#0ea5e9" name="Consumo físico (kg)" />
+                <Bar yAxisId="left" dataKey="theoretical" fill="#10b981" name="Consumo teórico (kg)" />
+                <Line yAxisId="right" type="monotone" dataKey="yield" stroke="#f59e0b" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} name="Rendimiento" />
+              </ComposedChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="flex h-[320px] items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-white/50 text-xs font-black uppercase tracking-widest text-slate-400">
+              {isLoading ? 'Cargando datos' : emptyLabel}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -617,11 +876,11 @@ export function ReportesModule({
                          <div className="mb-2 flex flex-col gap-2 no-print">
                             <nav aria-label="Secciones principales de reportes" className="w-full min-w-0">
                               <div className="grid w-full grid-cols-2 gap-1 rounded-2xl border border-slate-200 bg-slate-100/50 p-1 sm:grid-cols-3 lg:grid-cols-4">
-                              {(['co2', 'agua', 'ordenes', 'rendimiento-azucar', 'producto-no-conforme', 'mermas-botella-envasada', 'mermas-materiales-lineas', 'analisis-ventas'] as const).map((tab) => (
+                              {(['co2', 'agua', 'ordenes', 'rendimiento-azucar', 'producto-no-conforme', 'mermas-botella-envasada', 'mermas-materiales-lineas', 'analisis-ventas', 'consumo-materiales'] as const).map((tab) => (
                                 <button
                                   key={tab}
                                   onClick={() => setInsumosSubTab(tab)}
-                                  aria-label={tab === 'co2' ? 'CO2' : tab === 'agua' ? 'Agua' : tab === 'ordenes' ? 'Órdenes' : tab === 'rendimiento-azucar' ? 'Rendimiento de azúcar' : tab === 'producto-no-conforme' ? 'Producto no conforme' : tab === 'mermas-botella-envasada' ? 'Mermas de Botella envasada' : tab === 'mermas-materiales-lineas' ? 'Mermas de materiales en Lineas' : 'Análisis de ventas'}
+                                  aria-label={tab === 'co2' ? 'CO2' : tab === 'agua' ? 'Agua' : tab === 'ordenes' ? 'Órdenes' : tab === 'rendimiento-azucar' ? 'Rendimiento de azúcar' : tab === 'producto-no-conforme' ? 'Producto no conforme' : tab === 'mermas-botella-envasada' ? 'Mermas de Botella envasada' : tab === 'mermas-materiales-lineas' ? 'Mermas de materiales en Lineas' : tab === 'consumo-materiales' ? 'Consumo de materiales' : 'Análisis de ventas'}
                                   className={cn(
                                     "pointer-events-auto inline-flex min-h-9 min-w-0 items-center justify-center gap-1.5 rounded-full border-0 px-2 py-1 text-center text-[9px] font-bold uppercase leading-tight tracking-wide outline-none transition-none active:scale-95 select-none focus:ring-0 sm:px-3 sm:text-[10px] sm:tracking-widest",
                                     insumosSubTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
@@ -635,7 +894,8 @@ export function ReportesModule({
                                   {tab === 'mermas-botella-envasada' && <Recycle className="h-3.5 w-3.5" />}
                                   {tab === 'mermas-materiales-lineas' && <Package className="h-3.5 w-3.5" />}
                                   {tab === 'analisis-ventas' && <BarChart3 className="h-3.5 w-3.5" />}
-                                  <span className="min-w-0 whitespace-normal">{tab === 'co2' ? 'CO2' : tab === 'agua' ? 'Agua' : tab === 'ordenes' ? 'Órdenes' : tab === 'rendimiento-azucar' ? 'Rendimiento de azúcar' : tab === 'producto-no-conforme' ? 'Producto no conforme' : tab === 'mermas-botella-envasada' ? 'Mermas de Botella envasada' : tab === 'mermas-materiales-lineas' ? 'Mermas de materiales en Lineas' : 'Análisis de ventas'}</span>
+                                  {tab === 'consumo-materiales' && <Package className="h-3.5 w-3.5" />}
+                                  <span className="min-w-0 whitespace-normal">{tab === 'co2' ? 'CO2' : tab === 'agua' ? 'Agua' : tab === 'ordenes' ? 'Órdenes' : tab === 'rendimiento-azucar' ? 'Rendimiento de azúcar' : tab === 'producto-no-conforme' ? 'Producto no conforme' : tab === 'mermas-botella-envasada' ? 'Mermas de Botella envasada' : tab === 'mermas-materiales-lineas' ? 'Mermas de materiales en Lineas' : tab === 'consumo-materiales' ? 'Consumo de materiales' : 'Análisis de ventas'}</span>
                                 </button>
                               ))}
                               </div>
@@ -650,7 +910,7 @@ export function ReportesModule({
                                  className="pointer-events-auto h-9 min-w-0 flex-1 rounded-full border-0 bg-white px-3 text-[10px] font-bold text-slate-700 shadow-sm outline-none sm:flex-none"
                                />
                              )}
-                             {insumosSubTab !== 'ordenes' && insumosSubTab !== 'rendimiento-azucar' && insumosSubTab !== 'producto-no-conforme' && insumosSubTab !== 'mermas-botella-envasada' && insumosSubTab !== 'mermas-materiales-lineas' && insumosSubTab !== 'analisis-ventas' && (
+                             {insumosSubTab !== 'ordenes' && insumosSubTab !== 'rendimiento-azucar' && insumosSubTab !== 'producto-no-conforme' && insumosSubTab !== 'mermas-botella-envasada' && insumosSubTab !== 'mermas-materiales-lineas' && insumosSubTab !== 'analisis-ventas' && insumosSubTab !== 'consumo-materiales' && (
                                <div className="min-w-0 flex-1 sm:flex-none">
                                  <Popover>
                                    <PopoverTrigger asChild>
@@ -667,6 +927,15 @@ export function ReportesModule({
                              )}
                            </div>
                          </div>
+                         {insumosSubTab === 'consumo-materiales' && (
+                           <nav aria-label="Subsecciones de consumo de materiales" className="mb-2 flex w-fit items-center rounded-full border border-slate-200 bg-slate-100/50 p-1">
+                             <button type="button" aria-current="page" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-full bg-white px-4 text-[10px] font-bold uppercase tracking-widest text-slate-900 shadow-sm">
+                               <Package className="h-3.5 w-3.5" />
+                               Adhesivo
+                             </button>
+                           </nav>
+                         )}
+                         {insumosSubTab === 'consumo-materiales' && <AdhesiveMonthlyReport reportMonthDate={reportMonthDate} />}
                          {insumosSubTab === 'co2' && (
                            <>
                            <div className="flex items-center gap-2 mb-2 no-print">

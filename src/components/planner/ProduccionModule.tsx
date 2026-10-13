@@ -884,15 +884,11 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
         if (consumoMaterialesPeriod === 'semanal') {
           const weekStart = consumoMaterialesWeekStart;
           const weekEnd = addDays(weekStart, 6);
-          const segments = [];
-          for (let segmentStart = weekStart; segmentStart <= weekEnd;) {
-            const segmentEnd = new Date(Math.min(
-              weekEnd.getTime(),
-              new Date(segmentStart.getFullYear(), segmentStart.getMonth() + 1, 0).getTime(),
-            ));
-            segments.push({ start: segmentStart, end: segmentEnd });
-            segmentStart = addDays(segmentEnd, 1);
-          }
+          const selectedMonthStart = new Date(`${consumoMaterialesMonthKey}-01T00:00:00`);
+          const selectedMonthEnd = new Date(selectedMonthStart.getFullYear(), selectedMonthStart.getMonth() + 1, 0);
+          const segmentStart = weekStart < selectedMonthStart ? selectedMonthStart : weekStart;
+          const segmentEnd = weekEnd > selectedMonthEnd ? selectedMonthEnd : weekEnd;
+          const segments = segmentStart <= segmentEnd ? [{ start: segmentStart, end: segmentEnd }] : [];
           const monthlyInventoryKeys = Array.from(new Set(segments.flatMap(({ start, end }) => [
             ...(start.getDate() === 1 ? [format(start, 'yyyy-MM')] : []),
             ...(end.getDate() === new Date(end.getFullYear(), end.getMonth() + 1, 0).getDate()
@@ -927,11 +923,6 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
           Object.entries(weeklyReception.diarias || {}).forEach(([dateKey, values]) => {
             if (isProductionValues(values)) dailyValuesByDate.set(dateKey, normalizeProductionValues(values));
           });
-          const receptionDays = Array.from({ length: 7 }, (_, index) => {
-            const dayKey = format(addDays(weekStart, index), 'yyyy-MM-dd');
-            return dailyValuesByDate.get(dayKey) || emptyProductionValues();
-          });
-          reception = summarizeReceptionDays(receptionDays);
           monthlySegments = segments.map(({ start, end }) => {
             const segmentReception = summarizeReceptionDays(
               Array.from({ length: end.getDate() - start.getDate() + 1 }, (_, index) => {
@@ -953,6 +944,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
               final: segmentFinal,
             };
           });
+          reception = monthlySegments[0]?.reception || emptyProductionValues();
           initialValue = monthlySegments[0]?.initial;
           finalValue = monthlySegments[monthlySegments.length - 1]?.final;
         } else {
