@@ -1150,19 +1150,49 @@ export default function PlannerPage() {
 
     const [sourceType, ...sourceIdParts] = String(row.sourcePrepKey || '').split(':');
     const sourceId = sourceIdParts.join(':');
-    const sourcePreparations = sourceType === 'glup' ? glupRows : justyRows;
-    const sourcePreparation = sourceId ? sourcePreparations.find((preparation) => preparation.id === sourceId) : undefined;
-    const sourceStore = sourceType === 'glup' ? glupStore : justyStore;
+    const sourceTypeIsValid = sourceType === 'glup' || sourceType === 'justy';
+    const linkedPreparation = sourceTypeIsValid
+      ? (sourceType === 'glup' ? glupRows : justyRows).find((preparation) => preparation.id === sourceId)
+      : undefined;
+    const inferredMatches = ([
+      { type: 'glup' as const, rows: glupRows },
+      { type: 'justy' as const, rows: justyRows },
+    ]).flatMap(({ type, rows }) => rows
+      .filter((preparation) => {
+        const litrosPrep = parseNumeroConsumo(preparation.litros);
+        const litrosLinea = parseNumeroConsumo(row.volInicialTanque);
+        const ubbPrep = parseNumeroConsumo(preparation.ubb);
+        const ubbLinea = parseNumeroConsumo(row.ubbInicial);
+        return preparation.enviarALinea === linea
+          && preparation.numeroTanques.trim() === row.tanque.trim()
+          && normalizarSaborConsumoUbb(preparation.sabor) === normalizarSaborConsumoUbb(row.sabor)
+          && litrosPrep !== null && litrosPrep === litrosLinea
+          && ubbPrep !== null && ubbPrep === ubbLinea
+          && (!row.fechaFiltro || preparation.fecha === row.fechaFiltro);
+      })
+      .map((preparation) => ({ type, preparation })));
+    const resolvedPreparation = linkedPreparation
+      ? { type: sourceType as 'glup' | 'justy', preparation: linkedPreparation }
+      : inferredMatches.length === 1 ? inferredMatches[0] : undefined;
+    const sourcePreparations = resolvedPreparation?.type === 'glup' ? glupRows : justyRows;
+    const sourceStore = resolvedPreparation?.type === 'glup' ? glupStore : justyStore;
     const nextRows = (consumoLineasDataPorLinea[linea] || []).filter((_, index) => index !== rowIndex);
     try {
-      if (sourcePreparation && (sourceType === 'glup' || sourceType === 'justy')) {
-        const restoredPreparations = sourcePreparations.map((preparation) => preparation.id === sourceId
+      if (resolvedPreparation) {
+        const correctedPreparations = sourcePreparations.map((preparation) => preparation.id === resolvedPreparation.preparation.id
           ? { ...preparation, estado: 'preparado' as const, enviarALinea: null }
           : preparation);
-        await sourceStore.savePatch(restoredPreparations);
+        await sourceStore.savePatch(correctedPreparations);
       }
       await consumoLineasStore.savePatch({ [linea]: nextRows });
-      toast({ title: 'Tanque eliminado y cambios guardados; preparación restaurada' });
+      toast({
+        title: resolvedPreparation
+          ? 'Tanque eliminado y cambios guardados; preparación disponible para Enviar'
+          : inferredMatches.length > 1
+            ? 'Tanque eliminado y cambios guardados; no se pudo asociar la preparación porque hay varias coincidencias'
+            : 'Tanque eliminado y cambios guardados; no se encontró una preparación asociada',
+        variant: resolvedPreparation ? 'default' : 'destructive',
+      });
     } catch (error) {
       console.error('[PROCESOS] Failed to delete syrup tank from line', { linea, rowIndex, error });
       toast({
@@ -6270,7 +6300,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                        <option value="">Ninguna</option>
                                                                        {[1,2,3,4,5,6,7].map(n => <option key={n} value={String(n)}>Linea {n}</option>)}
                                                                      </select>
-                                                                   ) : row.enviarALinea ? `Linea ${row.enviarALinea}` : (
+                                                                   ) : row.estado !== 'preparado' && row.enviarALinea ? `Linea ${row.enviarALinea}` : (
                                                                       <button onClick={() => { setSelectedLineaRow({ id: row.id, type: 'glup' }); setSelectedLinea(null); setLineaModalOpen(true); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Enviar</button>
                                                                    )}
                                                                  </td>
@@ -6414,7 +6444,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                  )}
                                                                </td>
                                                                 <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
-                                                                  {row.enviarALinea ? `Linea ${row.enviarALinea}` : (
+                                                                  {row.estado !== 'preparado' && row.enviarALinea ? `Linea ${row.enviarALinea}` : (
                                                                      <button onClick={() => { setSelectedLineaRow({ id: row.id, type: 'justy' }); setSelectedLinea(null); setLineaModalOpen(true); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Enviar</button>
                                       )}
                                                                 </td>

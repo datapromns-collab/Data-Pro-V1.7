@@ -110,6 +110,10 @@ function mergeCollection(existing: any, incoming: any, ns?: string): any[] {
         if (key === '_deletedIds') continue;
         const value = (item as any)[key];
         if (value === undefined || value === null) {
+          if (value === null && key === 'enviarALinea' && (ns === 'sala-jarabe-glup' || ns === 'sala-jarabe-justy')) {
+            merged[key] = null;
+            continue;
+          }
           if (!(key in merged)) merged[key] = value;
           continue;
         }
