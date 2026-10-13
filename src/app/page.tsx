@@ -1036,7 +1036,7 @@ export default function PlannerPage() {
 
     for (const [type, preparations] of [['glup', glupRows], ['justy', justyRows]] as const) {
       for (const preparation of preparations) {
-        if (!preparation.enviarALinea) continue;
+        if (preparation.estado !== 'enviado a linea' || !preparation.enviarALinea) continue;
         const sourcePrepKey = `${type}:${preparation.id}`;
         const preparationDate = parseFecha(preparation.fecha);
         if (!preparationDate) continue;
@@ -1152,23 +1152,19 @@ export default function PlannerPage() {
     const sourceId = sourceIdParts.join(':');
     const sourcePreparations = sourceType === 'glup' ? glupRows : justyRows;
     const sourcePreparation = sourceId ? sourcePreparations.find((preparation) => preparation.id === sourceId) : undefined;
-    const updatePreparations = sourceType === 'glup' ? setGlupRows : setJustyRows;
+    const sourceStore = sourceType === 'glup' ? glupStore : justyStore;
     const nextRows = (consumoLineasDataPorLinea[linea] || []).filter((_, index) => index !== rowIndex);
-    if (sourcePreparation && (sourceType === 'glup' || sourceType === 'justy')) {
-      updatePreparations((previous) => previous.map((preparation) => preparation.id === sourceId
-        ? { ...preparation, estado: 'preparado', enviarALinea: null }
-        : preparation));
-    }
     try {
+      if (sourcePreparation && (sourceType === 'glup' || sourceType === 'justy')) {
+        const restoredPreparations = sourcePreparations.map((preparation) => preparation.id === sourceId
+          ? { ...preparation, estado: 'preparado' as const, enviarALinea: null }
+          : preparation);
+        await sourceStore.savePatch(restoredPreparations);
+      }
       await consumoLineasStore.savePatch({ [linea]: nextRows });
       toast({ title: 'Tanque eliminado y cambios guardados; preparación restaurada' });
     } catch (error) {
       console.error('[PROCESOS] Failed to delete syrup tank from line', { linea, rowIndex, error });
-      if (sourcePreparation && (sourceType === 'glup' || sourceType === 'justy')) {
-        updatePreparations((previous) => previous.map((preparation) => preparation.id === sourceId
-          ? sourcePreparation
-          : preparation));
-      }
       toast({
         title: error instanceof Error ? `No se pudo guardar la eliminación: ${error.message}` : 'No se pudo guardar la eliminación del tanque',
         variant: 'destructive',

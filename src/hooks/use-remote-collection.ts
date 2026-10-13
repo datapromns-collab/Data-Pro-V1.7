@@ -319,7 +319,7 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
     [persistLocal, enqueue, flushQueue, namespace]
   );
 
-  const savePatch = useCallback(async (patch: Partial<T>) => {
+  const savePatch = useCallback(async (patch: T | Partial<T>) => {
     if (sendingRef.current) {
       throw new Error(`Ya hay una sincronización activa para "${namespace}". Espera a que termine y vuelve a intentar.`);
     }
