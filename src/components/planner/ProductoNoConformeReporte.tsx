@@ -7,13 +7,14 @@ import { Bar, CartesianGrid, ComposedChart, Legend, Line, ResponsiveContainer, T
 import { loadProductionNonConformingData } from '@/lib/json-db';
 import {
   normalizeNonConformingRows,
+  parseNonConformingQuantity,
   summarizeNonConformingRows,
   type NonConformingRow,
   type NonConformingSummaryType,
 } from '@/lib/non-conforming-utils';
 import { cn } from '@/lib/utils';
 
-type SummaryPeriod = 'semanal' | 'mensual';
+type SummaryPeriod = 'diario' | 'semanal' | 'mensual';
 
 interface ProductoNoConformeReporteProps {
   reportMonthDate: Date;
@@ -43,7 +44,7 @@ export function ProductoNoConformeReporte({ reportMonthDate }: ProductoNoConform
   const currentWeekIndex = weekStarts.findIndex((week) => format(week, 'yyyy-MM-dd') === format(weekStart, 'yyyy-MM-dd'));
   const weekEnd = endOfWeek(weekStart, { weekStartsOn: 1 });
   const summaryRows = useMemo(
-    () => summarizeNonConformingRows(
+    () => period === 'diario' ? [] : summarizeNonConformingRows(
       rowsByDate,
       period,
       summaryType,
@@ -55,6 +56,14 @@ export function ProductoNoConformeReporte({ reportMonthDate }: ProductoNoConform
   );
   const totalRecords = summaryRows.reduce((total, row) => total + row.records, 0);
   const totalQuantity = summaryRows.reduce((total, row) => total + row.quantity, 0);
+  const dailyRows = useMemo(() => {
+    const days = Array.from({ length: 7 }, (_, index) => addDays(weekStart, index))
+      .filter((day) => format(day, 'yyyy-MM') === format(monthStart, 'yyyy-MM'));
+    return days.map((day) => {
+      const dateKey = format(day, 'yyyy-MM-dd');
+      return { dateKey, date: day, rows: rowsByDate[dateKey] || [] };
+    });
+  }, [weekStart, monthStart, rowsByDate]);
 
   useEffect(() => {
     setWeekStart(startOfWeek(monthStart, { weekStartsOn: 1 }));
@@ -89,8 +98,9 @@ export function ProductoNoConformeReporte({ reportMonthDate }: ProductoNoConform
 
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-3">
-      <div className="mb-2 grid w-full grid-cols-2 gap-1 rounded-2xl border border-slate-200 bg-slate-100/50 p-1 no-print">
+      <div className="mb-2 grid w-full grid-cols-3 gap-1 rounded-2xl border border-slate-200 bg-slate-100/50 p-1 no-print">
         {([
+          { id: 'diario' as const, label: 'Diario' },
           { id: 'semanal' as const, label: 'Semanal' },
           { id: 'mensual' as const, label: 'Mensual' },
         ]).map(({ id, label }) => (
@@ -109,7 +119,7 @@ export function ProductoNoConformeReporte({ reportMonthDate }: ProductoNoConform
         ))}
       </div>
 
-      {period === 'semanal' && (
+      {(period === 'diario' || period === 'semanal') && (
         <div className="mb-2 flex flex-wrap items-center gap-2 no-print">
           <button
             type="button"
@@ -135,7 +145,7 @@ export function ProductoNoConformeReporte({ reportMonthDate }: ProductoNoConform
         </div>
       )}
 
-      <div className="mb-2 flex items-center gap-2 no-print">
+      {period !== 'diario' && <div className="mb-2 flex items-center gap-2 no-print">
         {([
           { id: 'por-lineas' as const, label: 'Por líneas' },
           { id: 'por-no-conformidad' as const, label: 'Por no conformidad' },
@@ -153,8 +163,64 @@ export function ProductoNoConformeReporte({ reportMonthDate }: ProductoNoConform
             {label}
           </button>
         ))}
-      </div>
+      </div>}
 
+      {period === 'diario' ? (
+        <div className="min-h-0 flex-1 overflow-auto rounded-[2rem] bg-white p-3 sm:p-5">
+          <div className="mb-4">
+            <h3 className="text-sm font-black uppercase tracking-widest text-slate-800">Productos no conformes · detalle diario</h3>
+            <p className="mt-1 text-xs capitalize text-slate-500">
+              Semana {getISOWeek(weekStart)} · {format(weekStart, 'dd/MM/yyyy')} al {format(weekEnd, 'dd/MM/yyyy')}
+            </p>
+          </div>
+          {loadError && (
+            <div role="alert" className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-800">
+              {loadError}
+            </div>
+          )}
+          {isLoading ? (
+            <div role="status" className="py-10 text-center text-sm text-slate-500">Cargando datos de Producción...</div>
+          ) : (
+            <div className="flex flex-col gap-4">
+              {dailyRows.map(({ dateKey, date, rows }) => (
+                <section key={dateKey} aria-label={`Productos no conformes del ${format(date, 'EEEE d/MM/yyyy', { locale: es })}`} className="overflow-x-auto rounded-2xl border border-slate-200">
+                  <h4 className="bg-slate-100 px-3 py-2 text-xs font-black uppercase tracking-widest text-slate-700">
+                    {format(date, 'EEEE d/MM/yyyy', { locale: es })}
+                  </h4>
+                  <table className="w-full min-w-[700px] border-collapse text-left text-xs">
+                    <thead>
+                      <tr className="bg-indigo-700 text-white">
+                        <th className="px-3 py-3 font-black uppercase tracking-widest">Línea</th>
+                        <th className="px-3 py-3 font-black uppercase tracking-widest">Código</th>
+                        <th className="px-3 py-3 font-black uppercase tracking-widest">Descripción</th>
+                        <th className="px-3 py-3 font-black uppercase tracking-widest">No conformidad</th>
+                        <th className="px-3 py-3 text-right font-black uppercase tracking-widest">Cantidad</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {rows.length > 0 ? rows.map((row) => (
+                        <tr key={row.id} className="border-b border-slate-200">
+                          <td className="px-3 py-2">{row.line || '—'}</td>
+                          <td className="px-3 py-2">{row.code || '—'}</td>
+                          <td className="px-3 py-2">{row.description || '—'}</td>
+                          <td className="px-3 py-2">{row.nonConformity || '—'}</td>
+                          <td className="px-3 py-2 text-right">{formatQuantity(parseNonConformingQuantity(row.quantity))}</td>
+                        </tr>
+                      )) : (
+                        <tr>
+                          <td colSpan={5} className="px-3 py-5 text-center text-slate-500">
+                            No hay productos no conformes registrados para este día.
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </section>
+              ))}
+            </div>
+          )}
+        </div>
+      ) : (
       <div className="min-h-0 flex-1 overflow-auto rounded-[2rem] bg-white p-3 sm:p-5">
         <div className="mb-4">
           <h3 className="text-sm font-black uppercase tracking-widest text-slate-800">
@@ -249,6 +315,7 @@ export function ProductoNoConformeReporte({ reportMonthDate }: ProductoNoConform
           </div>
         )}
       </div>
+      )}
     </div>
   );
 }
