@@ -18032,7 +18032,10 @@
             },
             "separadores": {},
             "preformas": {},
-            "plasticos": {},
+            "plasticos": {
+              "EMP_0019": "1020",
+              "EMP_0080-Plastven": "7217"
+            },
             "adhesivoCantidad": "112",
             "etiquetasCantidad": {},
             "azucarCantidad": {},
@@ -18046,7 +18049,9 @@
             "tapas": {},
             "separadores": {},
             "preformas": {},
-            "plasticos": {},
+            "plasticos": {
+              "EMP_0080-Plastven": "7357"
+            },
             "adhesivoCantidad": "84",
             "etiquetasCantidad": {},
             "azucarCantidad": {},
@@ -18060,7 +18065,12 @@
             "tapas": {},
             "separadores": {},
             "preformas": {},
-            "plasticos": {},
+            "plasticos": {
+              "EMP_0019": "3060",
+              "EMP_0080-Plastven": "7103",
+              "EMP_0080-plastico-empaque": "6888",
+              "EMP_0130": "3031,2"
+            },
             "adhesivoCantidad": "112",
             "etiquetasCantidad": {},
             "azucarCantidad": {},
@@ -18074,7 +18084,10 @@
             "tapas": {},
             "separadores": {},
             "preformas": {},
-            "plasticos": {},
+            "plasticos": {
+              "EMP_0019": "2040",
+              "EMP_0080-Plastven": "7778"
+            },
             "adhesivoCantidad": "140",
             "etiquetasCantidad": {},
             "azucarCantidad": {},
@@ -18088,7 +18101,12 @@
             "tapas": {},
             "separadores": {},
             "preformas": {},
-            "plasticos": {},
+            "plasticos": {
+              "EMP_0017": "5477",
+              "EMP_0019": "2040",
+              "EMP_0080-Plastven": "5904",
+              "EMP_0084": "1152"
+            },
             "adhesivoCantidad": "112",
             "etiquetasCantidad": {},
             "azucarCantidad": {},
@@ -18109,7 +18127,10 @@
             },
             "separadores": {},
             "preformas": {},
-            "plasticos": {},
+            "plasticos": {
+              "EMP_0019": "1020",
+              "EMP_0080-Plastven": "7217"
+            },
             "adhesivoCantidad": "112",
             "etiquetasCantidad": {},
             "azucarCantidad": {},
@@ -18123,7 +18144,12 @@
             "tapas": {},
             "separadores": {},
             "preformas": {},
-            "plasticos": {},
+            "plasticos": {
+              "EMP_0019": "3060",
+              "EMP_0080-Plastven": "14460",
+              "EMP_0080-plastico-empaque": "6888",
+              "EMP_0130": "3031.2"
+            },
             "adhesivoCantidad": "336",
             "etiquetasCantidad": {},
             "azucarCantidad": {},
@@ -18137,7 +18163,12 @@
             "tapas": {},
             "separadores": {},
             "preformas": {},
-            "plasticos": {},
+            "plasticos": {
+              "EMP_0017": "5477",
+              "EMP_0019": "2040",
+              "EMP_0080-Plastven": "5904",
+              "EMP_0084": "1152"
+            },
             "adhesivoCantidad": "112",
             "etiquetasCantidad": {},
             "azucarCantidad": {},
@@ -19465,7 +19496,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-14T13:12:37.344Z"
+    "updatedAt": "2026-10-14T13:48:09.364Z"
   },
   "ordenesSap": [
     {

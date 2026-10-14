@@ -20,7 +20,15 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from '@/lib/utils';
 import { loadProductionInventoryPeriod, loadProductionReceptions, loadProductionWasteRows } from '@/lib/json-db';
 import { parseCantidadCajas } from '@/lib/production-tracking-utils';
-import { ADHESIVE_FACTORS, ALL_LINES_SUMMARY, PRODUCT_LIST } from '@/lib/planner-utils';
+import {
+  ADHESIVE_FACTORS,
+  ALL_LINES_SUMMARY,
+  PLASTIC_FACTORS,
+  PRODUCT_LIST,
+  TERMO_0017_FACTORS,
+  TERMO_0080_FACTORS,
+  TERMO_0130_FACTORS,
+} from '@/lib/planner-utils';
 import { getBebidaTerminadaMultiplier } from '@/lib/seguimiento-utils';
 import { useOrdenesSap } from '@/hooks/use-ordenes-sap';
 import { MermasDesperdiciosReporte, type WasteReportMode, type WasteReportPeriod, type WasteReportRow } from '@/components/planner/MermasDesperdiciosReporte';
@@ -141,21 +149,97 @@ function WasteSummaryReport({ mode, reportMonthDate, onMonthChange }: WasteSumma
   );
 }
 
-interface AdhesiveMonthlyData {
+interface MaterialMonthlyData {
   week: string;
   physical: number | null;
   theoretical: number;
   yield: number | null;
 }
 
-const getAdhesiveInventoryValue = (value: unknown): number | null => {
+type MaterialPresentation = '2Lts' | '1Lt' | '0.4Lts' | '1.5Lts';
+type MaterialReport = {
+  title: string;
+  codes: string[];
+  factors: Partial<Record<MaterialPresentation, number>>;
+  field: 'adhesive' | 'plastics';
+};
+
+const ADHESIVE_REPORT: MaterialReport = {
+  title: 'Adhesivo',
+  codes: ['EMP_0078'],
+  factors: ADHESIVE_FACTORS,
+  field: 'adhesive',
+};
+
+const PLASTIC_REPORTS: Record<string, MaterialReport> = {
+  '43': {
+    title: 'Plástico 43 · EMP_0130',
+    codes: ['EMP_0130'],
+    factors: TERMO_0130_FACTORS,
+    field: 'plastics',
+  },
+  '48': {
+    title: 'Plástico 48 · EMP_0080',
+    codes: ['EMP_0080'],
+    factors: TERMO_0080_FACTORS,
+    field: 'plastics',
+  },
+  '55': {
+    title: 'Plástico 55 · EMP_0017',
+    codes: ['EMP_0017'],
+    factors: TERMO_0017_FACTORS,
+    field: 'plastics',
+  },
+  film: {
+    title: 'Film · EMP_0019 + EMP_0084',
+    codes: ['EMP_0019', 'EMP_0084'],
+    factors: PLASTIC_FACTORS,
+    field: 'plastics',
+  },
+};
+
+const getMaterialValues = (value: unknown, material: MaterialReport): Record<string, string> | null => {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
-  return parseCantidadCajas((value as Record<string, unknown>).adhesivoCantidad);
+  const record = value as Record<string, unknown>;
+  if (material.field === 'adhesive') {
+    return { EMP_0078: typeof record.adhesivoCantidad === 'string' || typeof record.adhesivoCantidad === 'number'
+      ? String(record.adhesivoCantidad)
+      : '' };
+  }
+  const plastics = record.plasticos;
+  if (!plastics || typeof plastics !== 'object' || Array.isArray(plastics)) return {};
+  return Object.fromEntries(
+    Object.entries(plastics as Record<string, unknown>)
+      .filter(([key]) => material.codes.some((code) => key === code || key.startsWith(`${code}-`)))
+      .map(([key, quantity]) => [key, typeof quantity === 'string' || typeof quantity === 'number' ? String(quantity) : '']),
+  );
+};
+
+const calculatePhysicalMaterialConsumption = (
+  initial: Record<string, string> | null,
+  reception: Record<string, string> | null,
+  final: Record<string, string> | null,
+): number | null => {
+  if (initial === null || final === null) return null;
+  const keys = new Set([...Object.keys(initial), ...Object.keys(reception || {}), ...Object.keys(final)]);
+  if (keys.size === 0) return null;
+  let total = 0;
+  for (const key of keys) {
+    const initialValue = parseCantidadCajas(initial[key]);
+    const finalValue = parseCantidadCajas(final[key]);
+    if (initialValue === null || finalValue === null) return null;
+    total += initialValue + (parseCantidadCajas(reception?.[key]) ?? 0) - finalValue;
+  }
+  return total;
 };
 
 function AdhesiveMonthlyReport({ reportMonthDate }: { reportMonthDate: Date }) {
+  return <MonthlyMaterialReport reportMonthDate={reportMonthDate} material={ADHESIVE_REPORT} />;
+}
+
+function MonthlyMaterialReport({ reportMonthDate, material }: { reportMonthDate: Date; material: MaterialReport }) {
   const { ordenes: ordenesSap } = useOrdenesSap();
-  const [monthlyData, setMonthlyData] = useState<AdhesiveMonthlyData[]>([]);
+  const [monthlyData, setMonthlyData] = useState<MaterialMonthlyData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const monthKey = format(reportMonthDate, 'yyyy-MM');
@@ -198,22 +282,31 @@ function AdhesiveMonthlyReport({ reportMonthDate }: { reportMonthDate: Date }) {
           receptions.some((week) => week === null) ||
           inventoryValues.some((week) => week === undefined)
         ) {
-          throw new Error('No se pudieron cargar los datos mensuales de adhesivo.');
+          throw new Error(`No se pudieron cargar los datos mensuales de ${material.title.toLowerCase()}.`);
         }
 
         const inventoryByWeek = new Map(inventoryWeekKeys.map((weekKey, index) => [
           weekKey,
-          getAdhesiveInventoryValue(inventoryValues[index]),
+          getMaterialValues(inventoryValues[index], material),
         ]));
-        const receptionByDate = new Map<string, number>();
+        const receptionByDate = new Map<string, Record<string, string>>();
         receptions.forEach((week) => {
           Object.entries(week?.diarias || {}).forEach(([dateKey, values]) => {
-            const quantity = getAdhesiveInventoryValue(values);
-            if (quantity !== null) receptionByDate.set(dateKey, (receptionByDate.get(dateKey) || 0) + quantity);
+            const receptionValues = getMaterialValues(values, material);
+            if (receptionValues) {
+              const current = receptionByDate.get(dateKey) || {};
+              Object.entries(receptionValues).forEach(([key, quantity]) => {
+                const value = parseCantidadCajas(quantity);
+                if (value !== null) {
+                  current[key] = String((parseCantidadCajas(current[key]) ?? 0) + value);
+                }
+              });
+              receptionByDate.set(dateKey, current);
+            }
           });
         });
-        const opening = getAdhesiveInventoryValue(openingInventory);
-        const closing = getAdhesiveInventoryValue(closingInventory);
+        const opening = getMaterialValues(openingInventory, material);
+        const closing = getMaterialValues(closingInventory, material);
         const data = weekStarts.map((weekStart, index) => {
           const weekEnd = addDays(weekStart, 6);
           const segmentStart = weekStart < monthStart ? monthStart : weekStart;
@@ -224,21 +317,23 @@ function AdhesiveMonthlyReport({ reportMonthDate }: { reportMonthDate: Date }) {
           const final = segmentEnd.getTime() === monthEnd.getTime()
             ? closing
             : inventoryByWeek.get(weekKeys[index]) ?? null;
-          let reception = 0;
+          const reception: Record<string, string> = {};
           for (let day = segmentStart; day <= segmentEnd; day = addDays(day, 1)) {
-            reception += receptionByDate.get(format(day, 'yyyy-MM-dd')) || 0;
+            Object.entries(receptionByDate.get(format(day, 'yyyy-MM-dd')) || {}).forEach(([key, quantity]) => {
+              reception[key] = String((parseCantidadCajas(reception[key]) ?? 0) + (parseCantidadCajas(quantity) ?? 0));
+            });
           }
-          const physical = initial !== null && final !== null ? initial + reception - final : null;
+          const physical = calculatePhysicalMaterialConsumption(
+            initial,
+            reception,
+            final,
+          );
           let theoretical = 0;
           ordenesSap.forEach((orden) => {
             if (!ALL_LINES_SUMMARY.includes(String(orden.linea)) || !PRODUCT_LIST.includes(orden.sabor)) return;
             const lineSize = getBebidaTerminadaMultiplier(`Línea ${orden.linea}`);
-            const presentationFactor = {
-              2: ADHESIVE_FACTORS['2Lts'],
-              1: ADHESIVE_FACTORS['1Lt'],
-              1.5: ADHESIVE_FACTORS['1.5Lts'],
-              0.4: ADHESIVE_FACTORS['0.4Lts'],
-            }[lineSize];
+            const presentation = ({ 2: '2Lts', 1: '1Lt', 1.5: '1.5Lts', 0.4: '0.4Lts' } as const)[lineSize];
+            const presentationFactor = presentation ? material.factors[presentation] : undefined;
             if (presentationFactor === undefined) return;
             orden.dias.forEach((day) => {
               if (day.fechaInicio < format(segmentStart, 'yyyy-MM-dd') || day.fechaInicio > format(segmentEnd, 'yyyy-MM-dd')) return;
@@ -256,10 +351,10 @@ function AdhesiveMonthlyReport({ reportMonthDate }: { reportMonthDate: Date }) {
         });
         if (!cancelled) setMonthlyData(data);
       } catch (error) {
-        console.error('[REPORTES] Failed to load monthly adhesive consumption', error);
+        console.error(`[REPORTES] Failed to load monthly ${material.title} consumption`, error);
         if (!cancelled) {
           setMonthlyData([]);
-          setLoadError('No se pudieron cargar los datos mensuales de adhesivo.');
+          setLoadError(`No se pudieron cargar los datos mensuales de ${material.title.toLowerCase()}.`);
         }
       } finally {
         if (!cancelled) setIsLoading(false);
@@ -267,7 +362,7 @@ function AdhesiveMonthlyReport({ reportMonthDate }: { reportMonthDate: Date }) {
     };
     void loadMonthlyData();
     return () => { cancelled = true; };
-  }, [monthKey, ordenesSap]);
+  }, [monthKey, material, ordenesSap]);
 
   const totalPhysical = monthlyData.some((week) => week.physical === null)
     ? null
@@ -281,16 +376,18 @@ function AdhesiveMonthlyReport({ reportMonthDate }: { reportMonthDate: Date }) {
   const rows = [
     { label: 'CONSUMO FÍSICO (KG)', key: 'physical' as const },
     { label: 'CONSUMO TEÓRICO (KG)', key: 'theoretical' as const },
-    { label: 'RENDIMIENTO DE ADHESIVO', key: 'yield' as const },
+    { label: `RENDIMIENTO DE ${material.title.toUpperCase()}`, key: 'yield' as const },
   ];
 
   return (
     <div className="flex min-h-0 flex-col gap-3">
-      {isLoading && <p role="status" className="text-[10px] font-bold text-slate-500">Cargando consumo mensual de adhesivo...</p>}
+      {isLoading && <p role="status" className="text-[10px] font-bold text-slate-500">Cargando consumo mensual de {material.title.toLowerCase()}...</p>}
       {loadError && <div role="alert" className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[10px] font-semibold text-amber-800">{loadError}</div>}
       <AdhesiveConsumptionView
+        materialName={material.title}
+        firstColumnLabel={material.field === 'adhesive' ? 'Adhesivo' : 'Plástico'}
         title={format(reportMonthDate, 'MMMM yyyy', { locale: es })}
-        chartTitle="Consumo de adhesivo - Gráfico mensual"
+        chartTitle={`Consumo de ${material.title.toLowerCase()} - Gráfico mensual`}
         data={monthlyData}
         rows={rows}
         totalPhysical={totalPhysical}
@@ -305,6 +402,8 @@ function AdhesiveMonthlyReport({ reportMonthDate }: { reportMonthDate: Date }) {
 }
 
 function AdhesiveConsumptionView({
+  materialName,
+  firstColumnLabel,
   title,
   chartTitle,
   data,
@@ -316,9 +415,11 @@ function AdhesiveConsumptionView({
   isLoading,
   emptyLabel,
 }: {
+  materialName: string;
+  firstColumnLabel: string;
   title: string;
   chartTitle: string;
-  data: AdhesiveMonthlyData[];
+  data: MaterialMonthlyData[];
   rows: { label: string; key: 'physical' | 'theoretical' | 'yield' }[];
   totalPhysical: number | null;
   totalTheoretical: number;
@@ -337,7 +438,7 @@ function AdhesiveConsumptionView({
           <table className="w-full min-w-[520px] border-collapse text-[11px]">
             <thead>
               <tr className="bg-[#002D82] text-white">
-                <th className="border border-white/10 px-2 py-2 text-left font-black uppercase tracking-wider">Adhesivo</th>
+                <th className="border border-white/10 px-2 py-2 text-left font-black uppercase tracking-wider">{firstColumnLabel}</th>
                 {data.map((week, index) => (
                   <th key={`${week.week}-${index}`} className="min-w-[90px] border border-white/10 px-2 py-2 text-center font-black uppercase tracking-wider">{week.week}</th>
                 ))}
@@ -380,8 +481,8 @@ function AdhesiveConsumptionView({
                 <YAxis yAxisId="right" orientation="right" />
                 <Tooltip />
                 <Legend />
-                <Bar yAxisId="left" dataKey="physical" fill="#0ea5e9" name="Consumo físico (kg)" />
-                <Bar yAxisId="left" dataKey="theoretical" fill="#10b981" name="Consumo teórico (kg)" />
+                <Bar yAxisId="left" dataKey="physical" fill="#0ea5e9" name={`Consumo físico ${materialName.toLowerCase()} (kg)`} />
+                <Bar yAxisId="left" dataKey="theoretical" fill="#10b981" name={`Consumo teórico ${materialName.toLowerCase()} (kg)`} />
                 <Line yAxisId="right" type="monotone" dataKey="yield" stroke="#f59e0b" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} name="Rendimiento" />
               </ComposedChart>
             </ResponsiveContainer>
@@ -796,6 +897,8 @@ export function ReportesModule({
 }: ReportesModuleProps) {
   const [co2ResumenSubTab, setCo2ResumenSubTab] = useState<'semanal' | 'mensual'>('semanal');
   const [aguaResumenSubTab, setAguaResumenSubTab] = useState<'semanal' | 'mensual'>('semanal');
+  const [consumoMaterialSubTab, setConsumoMaterialSubTab] = useState<'adhesivo' | 'plasticos'>('adhesivo');
+  const [plasticosSubTab, setPlasticosSubTab] = useState<keyof typeof PLASTIC_REPORTS>('43');
   const [reportMonthDate, setReportMonthDate] = useState(() => startOfMonth(insumosFecha ?? new Date()));
   const [reportMonthLoaded, setReportMonthLoaded] = useState(false);
 
@@ -929,13 +1032,55 @@ export function ReportesModule({
                          </div>
                          {insumosSubTab === 'consumo-materiales' && (
                            <nav aria-label="Subsecciones de consumo de materiales" className="mb-2 flex w-fit items-center rounded-full border border-slate-200 bg-slate-100/50 p-1">
-                             <button type="button" aria-current="page" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-full bg-white px-4 text-[10px] font-bold uppercase tracking-widest text-slate-900 shadow-sm">
-                               <Package className="h-3.5 w-3.5" />
-                               Adhesivo
-                             </button>
+                             {([
+                               { id: 'adhesivo', label: 'Adhesivo' },
+                               { id: 'plasticos', label: 'Plásticos' },
+                             ] as const).map(({ id, label }) => (
+                               <button
+                                 key={id}
+                                 type="button"
+                                 onClick={() => setConsumoMaterialSubTab(id)}
+                                 aria-pressed={consumoMaterialSubTab === id}
+                                 className={cn(
+                                   'inline-flex h-9 items-center justify-center gap-1.5 rounded-full px-4 text-[10px] font-bold uppercase tracking-widest',
+                                   consumoMaterialSubTab === id ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700',
+                                 )}
+                               >
+                                 <Package className="h-3.5 w-3.5" />
+                                 {label}
+                               </button>
+                             ))}
                            </nav>
                          )}
-                         {insumosSubTab === 'consumo-materiales' && <AdhesiveMonthlyReport reportMonthDate={reportMonthDate} />}
+                         {insumosSubTab === 'consumo-materiales' && consumoMaterialSubTab === 'adhesivo' && (
+                           <AdhesiveMonthlyReport reportMonthDate={reportMonthDate} />
+                         )}
+                         {insumosSubTab === 'consumo-materiales' && consumoMaterialSubTab === 'plasticos' && (
+                           <>
+                             <nav aria-label="Tipos de plásticos" className="mb-2 flex w-fit items-center rounded-full border border-slate-200 bg-slate-100/50 p-1">
+                               {([
+                                 { id: '43', label: '43' },
+                                 { id: '48', label: '48' },
+                                 { id: '55', label: '55' },
+                                 { id: 'film', label: 'Film' },
+                               ] as const).map(({ id, label }) => (
+                                 <button
+                                   key={id}
+                                   type="button"
+                                   onClick={() => setPlasticosSubTab(id)}
+                                   aria-pressed={plasticosSubTab === id}
+                                   className={cn(
+                                     'inline-flex h-9 items-center justify-center rounded-full px-4 text-[10px] font-bold uppercase tracking-widest',
+                                     plasticosSubTab === id ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700',
+                                   )}
+                                 >
+                                   {label}
+                                 </button>
+                               ))}
+                             </nav>
+                             <MonthlyMaterialReport reportMonthDate={reportMonthDate} material={PLASTIC_REPORTS[plasticosSubTab]} />
+                           </>
+                         )}
                          {insumosSubTab === 'co2' && (
                            <>
                            <div className="flex items-center gap-2 mb-2 no-print">
