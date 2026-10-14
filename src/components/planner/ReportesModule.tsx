@@ -364,11 +364,9 @@ function MonthlyMaterialReport({ reportMonthDate, material }: { reportMonthDate:
     return () => { cancelled = true; };
   }, [monthKey, material, ordenesSap]);
 
-  const totalPhysical = monthlyData.some((week) => week.physical === null)
-    ? null
-    : monthlyData.reduce((total, week) => total + (week.physical ?? 0), 0);
+  const totalPhysical = monthlyData.reduce((total, week) => total + (week.physical ?? 0), 0);
   const totalTheoretical = monthlyData.reduce((total, week) => total + week.theoretical, 0);
-  const totalYield = totalPhysical !== null && totalTheoretical > 0 ? totalPhysical / totalTheoretical : 0;
+  const totalYield = totalTheoretical > 0 ? totalPhysical / totalTheoretical : 0;
   const formatValue = (value: number) => value.toLocaleString('es-VE', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
@@ -421,9 +419,9 @@ function AdhesiveConsumptionView({
   chartTitle: string;
   data: MaterialMonthlyData[];
   rows: { label: string; key: 'physical' | 'theoretical' | 'yield' }[];
-  totalPhysical: number | null;
+  totalPhysical: number;
   totalTheoretical: number;
-  totalYield: number | null;
+  totalYield: number;
   formatValue: (value: number) => string;
   isLoading: boolean;
   emptyLabel: string;
@@ -458,9 +456,7 @@ function AdhesiveConsumptionView({
                   ))}
                   <td className="border border-slate-100 bg-slate-50 px-2 py-2 text-center">
                     <div className="flex h-8 min-w-[14ch] items-center justify-center rounded border border-slate-200 bg-slate-100 text-[11px] font-black text-slate-700">
-                      {(key === 'physical' && totalPhysical === null)
-                        ? '—'
-                        : formatValue(key === 'physical' ? totalPhysical ?? 0 : key === 'theoretical' ? totalTheoretical : totalYield ?? 0)}
+                      {formatValue(key === 'physical' ? totalPhysical : key === 'theoretical' ? totalTheoretical : totalYield)}
                     </div>
                   </td>
                 </tr>
