@@ -18672,7 +18672,8 @@
           "ordenes-sap",
           "procesos",
           "logistica",
-          "mtto"
+          "mtto",
+          "insumos"
         ],
         "alex.mds": [
           "jarabes",
@@ -18684,7 +18685,8 @@
           "procesos",
           "logistica",
           "produccion",
-          "mtto"
+          "mtto",
+          "insumos"
         ],
         "anto.mds": [
           "purchasing",
@@ -19121,10 +19123,12 @@
           "planning"
         ],
         "maria.mds": [
-          "planning"
+          "planning",
+          "insumos"
         ],
         "alex.mds": [
-          "planning"
+          "planning",
+          "insumos"
         ],
         "anto.mds": [
           "planning"
@@ -19496,7 +19500,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-14T21:46:00.151Z"
+    "updatedAt": "2026-10-14T22:25:54.150Z"
   },
   "ordenesSap": [
     {
