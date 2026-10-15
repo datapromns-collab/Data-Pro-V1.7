@@ -13829,6 +13829,41 @@
           "aditivosCantidad": {},
           "solidosCantidad": {},
           "quimicosInsumosCantidad": {}
+        },
+        "2026-10-15": {
+          "tapas": {
+            "EMP_0095-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0095-Importada": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaEW": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaTipo2": {
+              "totalCajas": "",
+              "total": ""
+            }
+          },
+          "separadores": {},
+          "preformas": {},
+          "plasticos": {},
+          "adhesivoCantidad": "",
+          "etiquetasCantidad": {},
+          "azucarCantidad": {},
+          "concentradosCantidad": {},
+          "concentradosJustyCantidad": {},
+          "aditivosCantidad": {},
+          "solidosCantidad": {},
+          "quimicosInsumosCantidad": {}
         }
       },
       "semanal": {
@@ -15681,6 +15716,71 @@
               "code": "ENV-00080",
               "material": "BOTELLA ENVASADA GLUP KOLITA 1.0 L (LINEA 7)",
               "quantity": "145",
+              "unit": "UND"
+            }
+          ],
+          "2026-10-14": [
+            {
+              "id": "6ba47041-b34c-415f-99ad-a32e950967a4",
+              "line": "Linea 1",
+              "flavor": "GLUP PIÑA",
+              "code": "ENV-00009",
+              "material": "BOTELLA ENVASADA GLUP PIÑA 2.0.LTS",
+              "quantity": "49",
+              "unit": "UND"
+            },
+            {
+              "id": "d003c96c-1f70-42c0-870a-7ae7b6b23633",
+              "line": "Linea 1",
+              "flavor": "GLUP FRESH",
+              "code": "ENV-00013",
+              "material": "BOTELLA ENVASADA GLUP FRESH 2.0.LTS",
+              "quantity": "55",
+              "unit": "UND"
+            },
+            {
+              "id": "2ead70cb-9cd9-4d0d-87fc-732a049f295f",
+              "line": "Linea 2",
+              "flavor": "GLUP KOLITA",
+              "code": "ENV-00040",
+              "material": "BOTELLA ENVASADA GLUP KOLITA 2.0.LTS  (EN LINEA 2)",
+              "quantity": "101",
+              "unit": "UND"
+            },
+            {
+              "id": "0df5c98c-4bfb-40ed-bf2b-d6e5e4575529",
+              "line": "Linea 3",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00063",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 2L (LINEA 3)",
+              "quantity": "320",
+              "unit": "UND"
+            },
+            {
+              "id": "480a339e-47f4-437e-9342-d01fd986f38e",
+              "line": "Linea 4",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00054",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 2.LTS (LINEA 4)",
+              "quantity": "48",
+              "unit": "UND"
+            },
+            {
+              "id": "afa13a62-744d-44b3-98d4-560189540eed",
+              "line": "Linea 5",
+              "flavor": "JUSTY NARANJA",
+              "code": "ENV-00027",
+              "material": "BOTELLA ENVASADA JUSTY NARANJA  1.5 LTS",
+              "quantity": "95",
+              "unit": "UND"
+            },
+            {
+              "id": "8959584e-e3fd-4d03-94ee-3f654314afe5",
+              "line": "Linea 7",
+              "flavor": "GLUP KOLITA",
+              "code": "ENV-00080",
+              "material": "BOTELLA ENVASADA GLUP KOLITA 1.0 L (LINEA 7)",
+              "quantity": "209",
               "unit": "UND"
             }
           ]
@@ -18018,6 +18118,151 @@
               "kind": "termo",
               "preformSize": ""
             }
+          ],
+          "2026-10-14": [
+            {
+              "id": "cfaccb61-1703-46fc-8c22-ca9260cbdecc",
+              "line": "Linea 1",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "2928",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "2bf1fd65-2df3-4d85-b759-9d8f8390a6a2",
+              "line": "Linea 1",
+              "flavor": "verde",
+              "code": "EMP_0103",
+              "material": "PREFORMA VERDE 42,64 GR-1881",
+              "quantity": "333",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "f421b7bf-8673-44ee-ae14-85a0aa7a0d26",
+              "line": "Linea 1",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "2,53",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "7cdbf784-db4a-4809-836f-ebca170bb359",
+              "line": "Linea 2",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "5738",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "c8834c3d-d04b-40d8-9f2c-b09f2840c9b0",
+              "line": "Linea 2",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "3,85",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "94155f36-e5e0-408b-930a-29f7502def99",
+              "line": "Linea 3",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "1952",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "3520d2b2-6667-46db-b815-520050e0a4cf",
+              "line": "Linea 3",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "2,27",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "d5229673-1d43-4835-ad4e-2fa1432b0d4a",
+              "line": "Linea 4",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "2500",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "3bcedced-d9d4-4e56-a991-6c5f7caa7420",
+              "line": "Linea 4",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "4,00",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "09cd0aae-d808-4e26-83d6-6ac72903e168",
+              "line": "Linea 5",
+              "flavor": "transparente",
+              "code": "EMP_0068",
+              "material": "PREFORMA TRANSPARENTE 36 GR-1881",
+              "quantity": "861",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "2365935e-e2e6-4c2c-b0e0-a98e0128412b",
+              "line": "Linea 5",
+              "flavor": "",
+              "code": "EMP_0017",
+              "material": "POLIETILENO TERMOENCOGIBLE 55 X 0.07",
+              "quantity": "3,49",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "4230d7e8-a8df-4f08-93cc-b126d397e148",
+              "line": "Linea 7",
+              "flavor": "transparente",
+              "code": "EMP_0166",
+              "material": "PREFORMA TRANSPARENTE 33 GR-1881",
+              "quantity": "1303",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": "33"
+            },
+            {
+              "id": "6a40d677-7170-4f0e-82c3-767bf2923ad1",
+              "line": "Linea 7",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "1,12",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            }
           ]
         }
       },
@@ -19500,7 +19745,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-14T22:25:54.150Z"
+    "updatedAt": "2026-10-15T12:36:13.718Z"
   },
   "ordenesSap": [
     {
@@ -30858,12 +31103,12 @@
           "fechaInicio": "2026-10-14",
           "ticket1": "15223",
           "cajas1": 2050,
-          "ticket2": "",
+          "ticket2": "15224",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 6578
         }
       ]
     },
@@ -30980,14 +31225,14 @@
         },
         {
           "fechaInicio": "2026-10-14",
-          "ticket1": "16356",
+          "ticket1": "16355",
           "cajas1": 14640,
-          "ticket2": "",
+          "ticket2": "16356",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2240,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 9480
         }
       ]
     },
@@ -31013,12 +31258,12 @@
           "fechaInicio": "2026-10-14",
           "ticket1": "16316",
           "cajas1": 18640,
-          "ticket2": "",
+          "ticket2": "16317",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2960,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 24000
         }
       ]
     },
@@ -31044,6 +31289,17 @@
           "fechaInicio": "2026-10-14",
           "ticket1": "16248",
           "cajas1": 357,
+          "ticket2": "16249",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 7410
+        },
+        {
+          "fechaInicio": "2026-10-15",
+          "ticket1": "",
+          "cajas1": 0,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -31062,14 +31318,54 @@
       "dias": [
         {
           "fechaInicio": "2026-10-14",
+          "ticket1": "16268",
+          "cajas1": 12640,
+          "ticket2": "16269",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 2880,
+          "ticket4": "",
+          "cajas4": 10080
+        }
+      ]
+    },
+    {
+      "id": "1-1792063763490",
+      "linea": 1,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "64265",
+      "semana": 42,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-14",
           "ticket1": "",
           "cajas1": 0,
-          "ticket2": "",
+          "ticket2": "16356",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 5040
+        }
+      ]
+    },
+    {
+      "id": "4-1792065004850",
+      "linea": 4,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "64271",
+      "semana": 42,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-14",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16403",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 19120
         }
       ]
     }
@@ -153884,6 +154180,82 @@
         "usuario": "Luis Blandin",
         "id": 1790362347092,
         "bloqueado": false
+      },
+      {
+        "fecha": "2026-10-01",
+        "semana": 40,
+        "turno": "DIURNO",
+        "operador": "DANIEL PARRA",
+        "linea": "Línea 1",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "16:56",
+        "finParada": "16:59",
+        "totalMin": "3",
+        "zona": "Llenado",
+        "falla": "SIN ESPESIFIAR ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792067221060,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-01",
+        "semana": 40,
+        "turno": "DIURNO",
+        "operador": "DANIEL PARRA",
+        "linea": "Línea 1",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "17:19",
+        "finParada": "17:23",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792067354890,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-01",
+        "semana": 40,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "07:20",
+        "finParada": "13:34",
+        "totalMin": "374",
+        "zona": "Llenado",
+        "falla": "FALLA DE ENERGIA ELCTRICA PAC ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792067504604,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-01",
+        "semana": 40,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "13:40",
+        "finParada": "14:00",
+        "totalMin": "20",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES, EMFRIAR Y MEZCLAR ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792067591239,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -162170,7 +162542,7 @@
         "turno": "DIURNO",
         "solicitante": "",
         "linea": "Línea 7",
-        "maquina": "OPERACIONAL",
+        "maquina": "PALETIZADORA",
         "aviso": "",
         "fechaParada": "2026-09-07",
         "inicioMtto": "",
@@ -164375,7 +164747,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1791395166044.791,
+        "id": 1790433303463,
         "fechaOrden": "2026-09-23",
         "orden": "9759",
         "fechaEmision": "2026-09-23",
@@ -164398,7 +164770,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
@@ -164483,7 +164855,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1791395166044.9924,
+        "id": 1790435481420,
         "fechaOrden": "2026-09-23",
         "orden": "9624",
         "fechaEmision": "2026-09-23",
@@ -164506,11 +164878,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1791395166044.0613,
+        "id": 1790435728219,
         "fechaOrden": "2026-09-23",
         "orden": "9710",
         "fechaEmision": "2026-09-23",
@@ -164533,7 +164905,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
@@ -164591,7 +164963,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1791395166044.3782,
+        "id": 1790437454875,
         "fechaOrden": "2026-09-24",
         "orden": "9665",
         "fechaEmision": "2026-09-24",
@@ -164614,7 +164986,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
@@ -164645,7 +165017,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1791395166044.5374,
+        "id": 1790444081108,
         "fechaOrden": "2026-09-23",
         "orden": "9658",
         "fechaEmision": "2026-09-23",
@@ -164668,11 +165040,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1791395166044.2708,
+        "id": 1790444247221,
         "fechaOrden": "2026-09-23",
         "orden": "9659",
         "fechaEmision": "2026-09-23",
@@ -164695,7 +165067,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
@@ -164753,7 +165125,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1791395166044.7773,
+        "id": 1790448917716,
         "fechaOrden": "2026-09-24",
         "orden": "9760",
         "fechaEmision": "2026-09-24",
@@ -164776,7 +165148,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
@@ -164807,7 +165179,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1791395166044.3572,
+        "id": 1790457931584,
         "fechaOrden": "2026-09-25",
         "orden": "9714",
         "fechaEmision": "2026-09-25",
@@ -164830,11 +165202,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1791395166044.6626,
+        "id": 1790458674293,
         "fechaOrden": "2026-09-25",
         "orden": "9627",
         "fechaEmision": "2026-09-25",
@@ -164857,11 +165229,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1791395166044.3499,
+        "id": 1790516549693,
         "fechaOrden": "2026-09-25",
         "orden": "9716",
         "fechaEmision": "2026-09-25",
@@ -164884,11 +165256,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1791395166044.2683,
+        "id": 1790517522323,
         "fechaOrden": "2026-09-25",
         "orden": "9596",
         "fechaEmision": "2026-09-25",
@@ -164911,11 +165283,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1791395166044.2727,
+        "id": 1790518237100,
         "fechaOrden": "2026-09-25",
         "orden": "9595",
         "fechaEmision": "2026-09-25",
@@ -164938,7 +165310,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
@@ -173251,7 +173623,12 @@
       "2026-10-13-suave": "365637",
       "2026-10-13-procesos": "3106065",
       "2026-10-13-filtrada": "4568254",
-      "2026-10-13-total": "3022310"
+      "2026-10-13-total": "3022310",
+      "2026-10-14-servicio": "23883",
+      "2026-10-14-suave": "366068",
+      "2026-10-14-procesos": "2498465,45",
+      "2026-10-14-filtrada": "3975685,78",
+      "2026-10-14-total": "3533760"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
@@ -174771,7 +175148,143 @@
       "2026-10-13-RO Cleaner-0": "213,7",
       "2026-10-13-Sanitizer-0": "200",
       "2026-10-12-LARK CLEAN 21C-6": "0",
-      "2026-10-13-LARK CLEAN 21C-0": "0"
+      "2026-10-13-LARK CLEAN 21C-0": "0",
+      "2026-10-13-LP20-2": "186,9",
+      "2026-10-13-LP20-4": "186,9",
+      "2026-10-13-Cloro-2": "658",
+      "2026-10-13-Cloro-4": "658",
+      "2026-10-13-AntiEscalante-2": "821,4",
+      "2026-10-13-AntiEscalante-4": "821,4",
+      "2026-10-13-Sal-2": "7000",
+      "2026-10-13-Sal-4": "7000",
+      "2026-10-13-Alcalino-2": "2441,7",
+      "2026-10-13-Alcalino-4": "2441,7",
+      "2026-10-13-Peracetico-2": "683,2",
+      "2026-10-13-Peracetico-4": "683,2",
+      "2026-10-13-Lark Foam Quat-2": "256,5",
+      "2026-10-13-Lark Foam Quat-4": "256,5",
+      "2026-10-13-Lark Foam IN-2": "399,5",
+      "2026-10-13-Lark Foam IN-4": "399,5",
+      "2026-10-13-Lark Desengrasante-2": "0",
+      "2026-10-13-Lark Desengrasante-4": "0",
+      "2026-10-13-Soda Caustica-2": "496,6",
+      "2026-10-13-Soda Caustica-4": "496,6",
+      "2026-10-13-GermiQuat-2": "225",
+      "2026-10-13-GermiQuat-4": "225",
+      "2026-10-13-Lark Inox-2": "38",
+      "2026-10-13-Lark Inox-4": "38",
+      "2026-10-13-TM Smart-2": "338,2",
+      "2026-10-13-TM Smart-4": "338,2",
+      "2026-10-13-Gamma Ro-432-2": "166,5",
+      "2026-10-13-Gamma Ro-432-4": "166,5",
+      "2026-10-13-RO Cleaner-2": "213,7",
+      "2026-10-13-RO Cleaner-4": "213,7",
+      "2026-10-13-Sanitizer-2": "200",
+      "2026-10-13-Sanitizer-4": "200",
+      "2026-10-13-LARK CLEAN 21C-2": "0",
+      "2026-10-13-LARK CLEAN 21C-4": "0",
+      "2026-10-13-LP20-6": "186,9",
+      "2026-10-13-Cloro-6": "658",
+      "2026-10-13-AntiEscalante-6": "821,4",
+      "2026-10-13-Sal-6": "7000",
+      "2026-10-13-Alcalino-6": "2441,7",
+      "2026-10-13-Peracetico-6": "683,2",
+      "2026-10-13-Lark Foam Quat-6": "256,5",
+      "2026-10-13-Lark Foam IN-6": "399,5",
+      "2026-10-13-Lark Desengrasante-6": "0",
+      "2026-10-13-Soda Caustica-6": "496,6",
+      "2026-10-13-GermiQuat-6": "225",
+      "2026-10-13-Lark Inox-6": "38",
+      "2026-10-13-TM Smart-6": "338,2",
+      "2026-10-13-Gamma Ro-432-6": "166,5",
+      "2026-10-13-RO Cleaner-6": "213,7",
+      "2026-10-13-Sanitizer-6": "200",
+      "2026-10-13-LARK CLEAN 21C-6": "0",
+      "2026-10-14-LP20-0": "186,9",
+      "2026-10-14-Cloro-0": "658",
+      "2026-10-14-AntiEscalante-0": "821,4",
+      "2026-10-14-Sal-0": "7000",
+      "2026-10-14-Alcalino-0": "2441,7",
+      "2026-10-14-Peracetico-0": "683,2",
+      "2026-10-14-Lark Foam Quat-0": "256,5",
+      "2026-10-14-Lark Foam IN-0": "399,5",
+      "2026-10-14-Lark Desengrasante-0": "0",
+      "2026-10-14-Soda Caustica-0": "496,6",
+      "2026-10-14-GermiQuat-0": "225",
+      "2026-10-14-Lark Inox-0": "38",
+      "2026-10-14-TM Smart-0": "338,2",
+      "2026-10-14-Gamma Ro-432-0": "166,5",
+      "2026-10-14-RO Cleaner-0": "213,7",
+      "2026-10-14-Sanitizer-0": "200",
+      "2026-10-14-LARK CLEAN 21C-0": "0",
+      "2026-10-14-LP20-2": "186,9",
+      "2026-10-14-LP20-4": "186,9",
+      "2026-10-14-Cloro-2": "627",
+      "2026-10-14-Cloro-4": "627",
+      "2026-10-14-AntiEscalante-2": "789,8",
+      "2026-10-14-AntiEscalante-4": "789,8",
+      "2026-10-14-Sal-2": "6020",
+      "2026-10-14-Sal-4": "6020",
+      "2026-10-14-Alcalino-2": "2314,0",
+      "2026-10-14-Alcalino-4": "2314,0",
+      "2026-10-14-Peracetico-2": "683,2",
+      "2026-10-14-Peracetico-4": "683,2",
+      "2026-10-14-Lark Foam Quat-2": "256,5",
+      "2026-10-14-Lark Foam Quat-4": "256,5",
+      "2026-10-14-Lark Foam IN-2": "399,5",
+      "2026-10-14-Lark Foam IN-4": "399,5",
+      "2026-10-14-Lark Desengrasante-2": "0",
+      "2026-10-14-Lark Desengrasante-4": "0",
+      "2026-10-14-Soda Caustica-2": "496,6",
+      "2026-10-14-Soda Caustica-4": "496,6",
+      "2026-10-14-GermiQuat-2": "225",
+      "2026-10-14-GermiQuat-4": "225",
+      "2026-10-14-Lark Inox-2": "38",
+      "2026-10-14-Lark Inox-4": "38",
+      "2026-10-14-TM Smart-2": "328",
+      "2026-10-14-TM Smart-4": "328",
+      "2026-10-14-Gamma Ro-432-2": "166,5",
+      "2026-10-14-Gamma Ro-432-4": "166,5",
+      "2026-10-14-RO Cleaner-2": "213,7",
+      "2026-10-14-RO Cleaner-4": "213,7",
+      "2026-10-14-Sanitizer-2": "200",
+      "2026-10-14-Sanitizer-4": "200",
+      "2026-10-14-LARK CLEAN 21C-2": "0",
+      "2026-10-14-LARK CLEAN 21C-4": "0",
+      "2026-10-14-LP20-6": "186,9",
+      "2026-10-14-Cloro-6": "593",
+      "2026-10-14-AntiEscalante-6": "765,5",
+      "2026-10-14-Sal-6": "5600",
+      "2026-10-14-Alcalino-6": "2312",
+      "2026-10-14-Peracetico-6": "683,2",
+      "2026-10-14-Lark Foam Quat-6": "256,5",
+      "2026-10-14-Lark Foam IN-6": "399,5",
+      "2026-10-14-Lark Desengrasante-6": "0",
+      "2026-10-14-Soda Caustica-6": "496,6",
+      "2026-10-14-GermiQuat-6": "225",
+      "2026-10-14-Lark Inox-6": "38",
+      "2026-10-14-TM Smart-6": "308,8",
+      "2026-10-14-Gamma Ro-432-6": "166,5",
+      "2026-10-14-RO Cleaner-6": "213,7",
+      "2026-10-14-Sanitizer-6": "200",
+      "2026-10-14-LARK CLEAN 21C-6": "0",
+      "2026-10-15-LP20-0": "186,9",
+      "2026-10-15-Cloro-0": "593",
+      "2026-10-15-AntiEscalante-0": "765,5",
+      "2026-10-15-Sal-0": "5600",
+      "2026-10-15-Alcalino-0": "2312",
+      "2026-10-15-Peracetico-0": "683,2",
+      "2026-10-15-Lark Foam Quat-0": "256,5",
+      "2026-10-15-Lark Foam IN-0": "399,5",
+      "2026-10-15-Lark Desengrasante-0": "0",
+      "2026-10-15-Soda Caustica-0": "496,6",
+      "2026-10-15-GermiQuat-0": "225",
+      "2026-10-15-Lark Inox-0": "38",
+      "2026-10-15-TM Smart-0": "308,8",
+      "2026-10-15-Gamma Ro-432-0": "166,5",
+      "2026-10-15-RO Cleaner-0": "213,7",
+      "2026-10-15-Sanitizer-0": "200",
+      "2026-10-15-LARK CLEAN 21C-0": "0"
     },
     "sala-jarabe-glup": [
       {
@@ -175824,6 +176337,33 @@
           "PRODT-0100": 19259,
           "PRODT-0115": 3143,
           "PRODT-0116": 7030
+        },
+        "2026-10-15": {
+          "PRODT-0007": 127083,
+          "PRODT-0008": 36155,
+          "PRODT-0009": 50078,
+          "PRODT-0010": 44655,
+          "PRODT-0011": 0,
+          "PRODT-0012": 5463,
+          "PRODT-0049": 6127,
+          "PRODT-0097": 13032,
+          "PRODT-0098": 5573,
+          "PRODT-0082": 13743,
+          "PRODT-0084": 128,
+          "PRODT-0086": 6484,
+          "PRODT-0088": 14050,
+          "PRODT-0104": 17834,
+          "PRODT-0105": 1,
+          "PRODT-0107": 2184,
+          "PRODT-0092": 17530,
+          "PRODT-0093": 4225,
+          "PRODT-0094": 10750,
+          "PRODT-0095": 2079,
+          "PRODT-0111": 5550,
+          "PRODT-0014": 32184,
+          "PRODT-0100": 12499,
+          "PRODT-0115": 571,
+          "PRODT-0116": 3540
         }
       },
       "openingOverrides": {
@@ -175863,6 +176403,9 @@
         "2026-10-12": {
           "PRODT-0115": 4200,
           "PRODT-0116": 12600
+        },
+        "2026-10-14": {
+          "PRODT-0107": 2184
         }
       }
     },
@@ -176278,8 +176821,8 @@
     "filename": "stock-producto-terminado.xlsx",
     "originalName": "Formato Inventario  Fisico Almacen PT DIARIO ACT  0888.xlsx",
     "tipo": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "tamano": 35094,
-    "uploadedAt": "2026-10-14T11:30:25.213Z",
+    "tamano": 35071,
+    "uploadedAt": "2026-10-15T11:56:18.696Z",
     "uploadedBy": "local-user"
   }
 }
