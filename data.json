@@ -157290,6 +157290,25 @@
         "usuario": "Luis Sanchez",
         "id": 1792091733732,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-31",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "ROBERT PEREZ",
+        "linea": "Línea 1",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "07:52",
+        "finParada": "07:57",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "TRANCAMIENTO DE PALETA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792091909838,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
