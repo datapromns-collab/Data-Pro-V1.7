@@ -7,6 +7,18 @@ const MAX_BACKUPS = 10;
 type DbData = any;
 
 let writeQueue: Promise<void> = Promise.resolve();
+let cachedDb: { signature: string; data: DbData } | null = null;
+
+function getDbSignature(): string | null {
+  try {
+    const stat = fs.statSync(DB_PATH, { bigint: true });
+    return `${stat.mtimeNs}:${stat.ctimeNs}:${stat.size}`;
+  } catch (error) {
+    const err = error as NodeJS.ErrnoException;
+    if (err.code === 'ENOENT') return null;
+    throw error;
+  }
+}
 
 function getBackupDir(): string {
   return DB_PATH + '.backups';
@@ -131,7 +143,13 @@ function sanitizeJson(raw: string): string | null {
 
 export function readDb(): DbData {
   if (!fs.existsSync(DB_PATH)) {
+    cachedDb = null;
     return readSync();
+  }
+
+  const currentSignature = getDbSignature();
+  if (currentSignature && cachedDb?.signature === currentSignature) {
+    return cachedDb.data;
   }
 
   const tryParse = (raw: string): DbData => {
@@ -142,8 +160,17 @@ export function readDb(): DbData {
   };
 
   const tryRead = (target: string): DbData => {
+    const signatureBeforeRead = target === DB_PATH ? getDbSignature() : null;
     const raw = fs.readFileSync(target, 'utf8');
-    return tryParse(raw);
+    const data = tryParse(raw);
+    if (target === DB_PATH) {
+      const signatureAfterRead = getDbSignature();
+      cachedDb =
+        signatureBeforeRead && signatureBeforeRead === signatureAfterRead
+          ? { signature: signatureAfterRead, data }
+          : null;
+    }
+    return data;
   };
 
   try {
@@ -164,7 +191,10 @@ export function readDb(): DbData {
       if (repaired) {
         fs.writeFileSync(DB_PATH, repaired, 'utf8');
         console.warn('[DB] Repaired corrupted data.json');
-        return JSON.parse(repaired);
+        const data = JSON.parse(repaired);
+        const signature = getDbSignature();
+        cachedDb = signature ? { signature, data } : null;
+        return data;
       }
     } catch (repairError) {
       console.error('[DB][REPAIR][ERROR]', repairError);
@@ -190,9 +220,16 @@ export function readDb(): DbData {
 export function writeDb(mutator: (current: DbData) => DbData): Promise<void> {
   const nextWrite = writeQueue.then(() => {
     try {
-      const current = readDb();
+      const current = structuredClone(readDb());
       const updated = mutator(current);
       retryWrite(updated, 6);
+      try {
+        const signature = getDbSignature();
+        cachedDb = signature ? { signature, data: updated } : null;
+      } catch (cacheError) {
+        cachedDb = null;
+        console.warn('[DB][CACHE][WARN] Unable to refresh database read cache', cacheError);
+      }
       try {
         createRotatingBackupSync();
       } catch (backupError) {

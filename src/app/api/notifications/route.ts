@@ -5,7 +5,7 @@ export async function GET(request: Request) {
     const db = readDb();
     const url = new URL(request.url);
     const userId = url.searchParams.get('userId') || undefined;
-    let notifications = db.notifications ?? [];
+    let notifications = [...(db.notifications ?? [])];
     if (userId) {
       notifications = notifications.filter((n: any) => n.userId === userId || n.userId === 'all');
     }
