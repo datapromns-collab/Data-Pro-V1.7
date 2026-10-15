@@ -19789,7 +19789,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-15T18:49:06.170Z"
+    "updatedAt": "2026-10-15T19:09:26.708Z"
   },
   "ordenesSap": [
     {
@@ -157251,6 +157251,44 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1792089908184,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-31",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "07:00",
+        "finParada": "07:25",
+        "totalMin": "25",
+        "zona": "Llenado",
+        "falla": "FALLA DE ENEGIA ELECTRICA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792090890464,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-31",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "DANIEL PARRA",
+        "linea": "Línea 1",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "07:43",
+        "finParada": "07:46",
+        "totalMin": "3",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792091733732,
         "bloqueado": true
       }
     ],

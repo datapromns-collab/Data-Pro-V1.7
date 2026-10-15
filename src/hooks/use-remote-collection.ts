@@ -40,8 +40,34 @@ function pruneQueue(queue: PendingOperation[]): PendingOperation[] {
   const raw = JSON.stringify(queue);
   if (raw.length <= MAX_QUEUE_BYTES && queue.length <= MAX_QUEUE_ITEMS) return queue;
   console.warn(`[RC] Pruning pending queue: ${queue.length} ops, ${raw.length} bytes`);
-  const kept = queue.slice(-MAX_QUEUE_ITEMS);
+  // Preserve the newest operation; array-state operations contain the full current collection.
+  let kept = queue;
+  while (kept.length > 1) {
+    const serialized = JSON.stringify(kept);
+    if (serialized.length <= MAX_QUEUE_BYTES && kept.length <= MAX_QUEUE_ITEMS) break;
+    kept = kept.slice(1);
+  }
   return kept;
+}
+
+function isQuotaExceeded(error: unknown): boolean {
+  if (error instanceof DOMException && (error.name === 'QuotaExceededError' || error.code === 22)) return true;
+  const message = error instanceof Error ? error.message : '';
+  return message.includes('QuotaExceededError') || message.includes('exceeded the quota');
+}
+
+function clearQueryCaches(): number {
+  const disposableKeys: string[] = [];
+  for (let index = 0; index < localStorage.length; index++) {
+    const key = localStorage.key(index);
+    if (key?.startsWith('rc_q_')) disposableKeys.push(key);
+  }
+
+  disposableKeys.forEach((key) => localStorage.removeItem(key));
+  if (disposableKeys.length > 0) {
+    console.warn(`[RC] Cleared ${disposableKeys.length} disposable query caches to free browser storage.`);
+  }
+  return disposableKeys.length;
 }
 
 function savePendingQueue(namespace: string, queue: PendingOperation[]): boolean {
@@ -49,18 +75,29 @@ function savePendingQueue(namespace: string, queue: PendingOperation[]): boolean
     localStorage.setItem(PENDING_KEY(namespace), JSON.stringify(queue));
     return true;
   } catch (error) {
-    const message = error instanceof Error ? error.message : '';
-    const isQuota = message.includes('QuotaExceededError') || message.includes('exceeded the quota');
-    if (!isQuota) {
+    if (!isQuotaExceeded(error)) {
       console.error(`[RC] Failed to persist pending queue for ${namespace}`, error);
       return false;
     }
+
+    let clearedCaches = 0;
+    try {
+      clearedCaches = clearQueryCaches();
+      localStorage.setItem(PENDING_KEY(namespace), JSON.stringify(queue));
+      return true;
+    } catch (cacheCleanupError) {
+      if (!isQuotaExceeded(cacheCleanupError)) {
+        console.error(`[RC] Failed to persist pending queue for ${namespace}`, cacheCleanupError);
+        return false;
+      }
+    }
+
     const trimmed = pruneQueue(queue);
     try {
       localStorage.setItem(PENDING_KEY(namespace), JSON.stringify(trimmed));
       return true;
     } catch (e) {
-      console.error(`[RC] Failed to persist pruned pending queue for ${namespace}`, e);
+      console.error(`[RC] Failed to persist pruned pending queue for ${namespace} after clearing ${clearedCaches} query caches`, e);
       return false;
     }
   }
