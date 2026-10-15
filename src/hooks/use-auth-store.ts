@@ -94,7 +94,32 @@ function readUsersFromStorage(): UserAccount[] {
 
 function writeUsersToStorage(users: UserAccount[]) {
   if (typeof window === 'undefined') return;
-  window.localStorage.setItem(AUTH_USERS_STORAGE_KEY, JSON.stringify(users));
+  try {
+    window.localStorage.setItem(AUTH_USERS_STORAGE_KEY, JSON.stringify(users));
+  } catch (error) {
+    const message = error instanceof Error ? error.message : '';
+    const isQuota = message.includes('QuotaExceededError') || message.includes('exceeded the quota');
+    if (!isQuota) {
+      console.error('Error writing users to storage', error);
+      return;
+    }
+    console.warn('[AuthStore] localStorage quota exceeded, skipping local save');
+  }
+}
+
+function writeSessionToStorage(session: UserSession) {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
+  } catch (error) {
+    const message = error instanceof Error ? error.message : '';
+    const isQuota = message.includes('QuotaExceededError') || message.includes('exceeded the quota');
+    if (!isQuota) {
+      console.error('Error writing session to storage', error);
+      return;
+    }
+    console.warn('[AuthStore] localStorage quota exceeded, skipping session save');
+  }
 }
 
 export let USERS_LIST: UserInfo[] = DEFAULT_USERS.map(({ id, name, role }) => ({ id, name, role }));
@@ -162,7 +187,7 @@ export function useAuthStore() {
               avatarUrl: refreshedAccount.avatarUrl,
             };
             setUser(refreshedSession);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(refreshedSession));
+            writeSessionToStorage(refreshedSession);
             window.dispatchEvent(new CustomEvent<UserSession>(AUTH_SESSION_UPDATED_EVENT, { detail: refreshedSession }));
           }
         }
@@ -288,7 +313,7 @@ export function useAuthStore() {
         avatarUrl: found.avatarUrl,
       };
       setUser(session);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
+      writeSessionToStorage(session);
       return true;
     }
     return false;
