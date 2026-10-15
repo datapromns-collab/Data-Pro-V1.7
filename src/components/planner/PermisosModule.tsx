@@ -11,8 +11,38 @@ import {
 } from '@/hooks/use-permissions-store';
 import { type UserRole, useAuthStore } from '@/hooks/use-auth-store';
 import { Button } from '@/components/ui/button';
-import { ShieldCheck, ChevronDown, ChevronRight, UserPlus, Trash2 } from 'lucide-react';
+import { ShieldCheck, ChevronDown, ChevronRight, UserPlus, Trash2, User as UserIcon, Upload, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+
+const MAX_PROFILE_IMAGE_SIZE = 10 * 1024 * 1024;
+const PROFILE_IMAGE_EDGE = 256;
+
+async function createProfileImageDataUrl(file: File): Promise<string> {
+  if (!file.type.startsWith('image/')) {
+    throw new Error('Selecciona un archivo de imagen.');
+  }
+  if (file.size > MAX_PROFILE_IMAGE_SIZE) {
+    throw new Error('La imagen debe pesar menos de 10 MB.');
+  }
+
+  const bitmap = await createImageBitmap(file);
+  try {
+    if (bitmap.width > 12000 || bitmap.height > 12000) {
+      throw new Error('La resolución de la imagen es demasiado grande.');
+    }
+    const scale = Math.min(1, PROFILE_IMAGE_EDGE / Math.max(bitmap.width, bitmap.height));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+    canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+    const context = canvas.getContext('2d');
+    if (!context) throw new Error('No se pudo procesar la imagen.');
+    context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    return canvas.toDataURL('image/jpeg', 0.82);
+  } finally {
+    bitmap.close();
+  }
+}
 
 const LEVEL_LABELS: Record<PermissionLevel, string> = {
   none: 'Sin acceso',
@@ -32,6 +62,7 @@ const DEFAULT_USER_FORM = {
   password: '',
   role: 'STANDARD' as UserRole,
   displayRole: '',
+  avatarUrl: '',
 };
 
 export function PermisosModule() {
@@ -53,6 +84,7 @@ export function PermisosModule() {
   const [selectedModule, setSelectedModule] = useState<ModuleId>(allModules[0]);
   const [form, setForm] = useState({ ...DEFAULT_USER_FORM });
   const [notice, setNotice] = useState<string | null>(null);
+  const [isSavingProfileImage, setIsSavingProfileImage] = useState(false);
 
   const resetFormToDefault = () => {
     setForm({ ...DEFAULT_USER_FORM });
@@ -80,6 +112,7 @@ export function PermisosModule() {
         password: selectedUser.password,
         role: selectedUser.role,
         displayRole: selectedUser.displayRole ?? '',
+        avatarUrl: selectedUser.avatarUrl ?? '',
       });
       return;
     }
@@ -145,6 +178,7 @@ export function PermisosModule() {
         password: nextPassword,
         role: form.role,
         displayRole: form.displayRole.trim() || form.role,
+        avatarUrl: form.avatarUrl || undefined,
         originalId: previousId,
       });
 
@@ -152,6 +186,42 @@ export function PermisosModule() {
       setNotice(previousId ? 'Usuario actualizado correctamente' : 'Usuario creado correctamente');
     } catch (error) {
       setNotice(error instanceof Error ? error.message : 'No se pudo guardar el usuario');
+    }
+  };
+
+  const handleProfileImageChange = async (file: File | undefined) => {
+    if (!file) return;
+    setIsSavingProfileImage(true);
+    setNotice('Procesando imagen...');
+    try {
+      const avatarUrl = await createProfileImageDataUrl(file);
+      setForm((current) => ({ ...current, avatarUrl }));
+      if (!selectedUser) {
+        setNotice('Imagen cargada. Guarda el usuario para aplicarla.');
+        return;
+      }
+      if (!form.id.trim() || !form.name.trim() || !form.password.trim()) {
+        throw new Error('Completa usuario, nombre y contraseña antes de guardar la foto.');
+      }
+
+      await upsertUser({
+        id: form.id,
+        name: form.name,
+        password: form.password,
+        role: form.role,
+        displayRole: form.displayRole.trim() || form.role,
+        avatarUrl,
+        originalId: selectedUser.id,
+      });
+      if (selectedUser.id !== form.id.trim()) {
+        renameUserAccess(selectedUser.id, form.id.trim());
+        setSelectedUserId(form.id.trim());
+      }
+      setNotice('Foto de perfil guardada correctamente.');
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : 'No se pudo cargar la imagen.');
+    } finally {
+      setIsSavingProfileImage(false);
     }
   };
 
@@ -231,6 +301,10 @@ export function PermisosModule() {
                   selectedUserId === user.id ? 'border-primary/30 bg-primary/5' : 'border-slate-200 hover:bg-slate-50',
                 )}
               >
+                <Avatar className="mr-2 h-9 w-9 shrink-0 rounded-full border border-slate-200">
+                  <AvatarImage src={user.avatarUrl} alt={`Foto de ${user.name}`} className="object-cover" />
+                  <AvatarFallback><UserIcon className="h-4 w-4 text-slate-400" /></AvatarFallback>
+                </Avatar>
                 <div className="min-w-0">
                   <div className="truncate text-[11px] font-black uppercase tracking-wide text-slate-800">{user.name}</div>
                   <div className="text-[9px] font-bold uppercase text-slate-500">{user.id}</div>
@@ -323,10 +397,51 @@ export function PermisosModule() {
                   placeholder="Ej: GERENTE DE PRODUCCIÓN"
                 />
               </label>
+              <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-3">
+                <Avatar className="h-14 w-14 shrink-0 rounded-full border border-slate-200">
+                  <AvatarImage src={form.avatarUrl || undefined} alt={form.name ? `Foto de ${form.name}` : 'Vista previa de foto'} className="object-cover" />
+                  <AvatarFallback><UserIcon className="h-6 w-6 text-slate-400" /></AvatarFallback>
+                </Avatar>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-600">Foto de perfil</p>
+                  <p className="mt-1 text-[10px] text-slate-400">Imagen hasta 10 MB. Se ajusta para el perfil.</p>
+                  <label className={cn(
+                    'mt-2 inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-2 text-[10px] font-black uppercase tracking-wide text-slate-700',
+                    isSavingProfileImage ? 'cursor-wait opacity-60' : 'cursor-pointer hover:bg-slate-200',
+                  )}>
+                    <Upload className="h-3.5 w-3.5" />
+                    {isSavingProfileImage ? 'Guardando foto...' : 'Cargar imagen'}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="sr-only"
+                      disabled={isSavingProfileImage}
+                      onChange={(event) => {
+                        void handleProfileImageChange(event.target.files?.[0]);
+                        event.currentTarget.value = '';
+                      }}
+                    />
+                  </label>
+                </div>
+                {form.avatarUrl && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    aria-label="Quitar foto de perfil"
+                    onClick={() => {
+                      setForm((current) => ({ ...current, avatarUrl: '' }));
+                      setNotice('Foto quitada. Guarda los cambios para aplicarlo.');
+                    }}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
             </div>
 
             <div className="mt-4 flex flex-wrap items-center gap-2">
-              <Button type="button" onClick={handleSaveUser} className="flex-1 font-black uppercase text-[10px] tracking-widest">
+              <Button type="button" onClick={handleSaveUser} disabled={isSavingProfileImage} className="flex-1 font-black uppercase text-[10px] tracking-widest">
                 {selectedUser ? 'Guardar cambios' : 'Crear usuario'}
               </Button>
               {selectedUser && (
@@ -338,7 +453,12 @@ export function PermisosModule() {
             </div>
 
             {notice && (
-              <p className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.12em] text-amber-700">
+              <p role="status" className={cn(
+                'mt-3 rounded-lg border px-3 py-2 text-[10px] font-bold uppercase tracking-[0.12em]',
+                notice.includes('No se pudo') || notice.includes('No se pudieron') || notice.includes('debe pesar') || notice.includes('Selecciona')
+                  ? 'border-red-200 bg-red-50 text-red-700'
+                  : 'border-amber-200 bg-amber-50 text-amber-700',
+              )}>
                 {notice}
               </p>
             )}

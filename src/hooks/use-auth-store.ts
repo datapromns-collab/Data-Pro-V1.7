@@ -9,6 +9,7 @@ export interface UserSession {
   name: string;
   role: UserRole;
   displayRole?: string;
+  avatarUrl?: string;
 }
 
 export interface UserAccount extends UserSession {
@@ -17,6 +18,7 @@ export interface UserAccount extends UserSession {
 
 const STORAGE_KEY = 'planner_auth_session';
 const AUTH_USERS_STORAGE_KEY = 'planner_auth_users';
+const AUTH_SESSION_UPDATED_EVENT = 'planner:auth-session-updated';
 
 const DEFAULT_USERS: UserAccount[] = [
   { id: 'jaime.r', password: 'ad.123.', name: 'Jaime Rangel', role: 'ADMIN', displayRole: 'GERENTE DE PLANTA' },
@@ -64,6 +66,9 @@ function normalizeUsers(users: unknown): UserAccount[] {
       password: String(user.password ?? '').trim(),
       role: (user.role ?? 'STANDARD') as UserRole,
       displayRole: String(user.displayRole ?? '').trim() || undefined,
+      avatarUrl: typeof user.avatarUrl === 'string' && user.avatarUrl.startsWith('data:image/jpeg;base64,')
+        ? user.avatarUrl
+        : undefined,
     }))
     .filter((user) => user.id && user.name && user.password);
 
@@ -108,6 +113,14 @@ export function useAuthStore() {
   }, []);
 
   useEffect(() => {
+    const handleSessionUpdated = (event: Event) => {
+      if (!(event instanceof CustomEvent)) return;
+      const session = event.detail as UserSession | null;
+      if (!session || typeof session.id !== 'string') return;
+      setUser(session);
+    };
+    window.addEventListener(AUTH_SESSION_UPDATED_EVENT, handleSessionUpdated);
+
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       try {
@@ -138,20 +151,24 @@ export function useAuthStore() {
 
     void refreshUsers();
     setIsLoaded(true);
+
+    return () => window.removeEventListener(AUTH_SESSION_UPDATED_EVENT, handleSessionUpdated);
   }, [syncUsersList]);
 
   const saveUsers = useCallback(async (nextUsers: UserAccount[]) => {
-    const normalized = syncUsersList(nextUsers);
+    const normalized = normalizeUsers(nextUsers);
     try {
-      await fetch('/api/data', {
+      const response = await fetch('/api/data', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ planner: { users: normalized } }),
       });
+      if (!response.ok) throw new Error(`Users API error: ${response.status}`);
     } catch (error) {
       console.error('Unable to sync users to remote data', error);
+      throw new Error('No se pudieron sincronizar los cambios del usuario con la base de datos compartida.');
     }
-    return normalized;
+    return syncUsersList(normalized);
   }, [syncUsersList]);
 
   const upsertUser = useCallback(async (payload: {
@@ -160,6 +177,7 @@ export function useAuthStore() {
     password: string;
     role: UserRole;
     displayRole?: string;
+    avatarUrl?: string;
     originalId?: string;
   }) => {
     const nextId = payload.id.trim();
@@ -182,6 +200,7 @@ export function useAuthStore() {
       password: nextPassword,
       role: payload.role,
       displayRole: payload.displayRole || payload.role,
+      avatarUrl: payload.avatarUrl,
     };
 
     const nextUsers = payload.originalId
@@ -189,8 +208,20 @@ export function useAuthStore() {
       : [...users, nextUser];
 
     await saveUsers(nextUsers);
+    if (user && (user.id === nextId || user.id === payload.originalId)) {
+      const session: UserSession = {
+        id: nextId,
+        name: nextName,
+        role: payload.role,
+        displayRole: payload.displayRole || payload.role,
+        avatarUrl: payload.avatarUrl,
+      };
+      setUser(session);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
+      window.dispatchEvent(new CustomEvent<UserSession>(AUTH_SESSION_UPDATED_EVENT, { detail: session }));
+    }
     return nextUser;
-  }, [saveUsers, users]);
+  }, [saveUsers, user, users]);
 
   const deleteUser = useCallback(async (userId: string) => {
     const nextUsers = users.filter((user) => user.id !== userId);
@@ -206,6 +237,7 @@ export function useAuthStore() {
         name: found.name,
         role: found.role,
         displayRole: found.displayRole || found.role,
+        avatarUrl: found.avatarUrl,
       };
       setUser(session);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
