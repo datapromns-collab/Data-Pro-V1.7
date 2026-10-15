@@ -11,9 +11,9 @@ import {
 } from '@/hooks/use-permissions-store';
 import { type UserRole, useAuthStore } from '@/hooks/use-auth-store';
 import { Button } from '@/components/ui/button';
-import { ShieldCheck, ChevronDown, ChevronRight, UserPlus, Trash2, User as UserIcon, Upload, X } from 'lucide-react';
+import { ShieldCheck, ChevronDown, ChevronRight, UserPlus, Trash2, Upload, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { ProfileImageViewer } from '@/components/planner/ProfileImageViewer';
 
 const MAX_PROFILE_IMAGE_SIZE = 10 * 1024 * 1024;
 const PROFILE_IMAGE_EDGE = 256;
@@ -319,27 +319,33 @@ function PermisosModuleContent() {
 
           <div className="space-y-2">
             {users.map((user) => (
-              <button
+              <div
                 key={user.id}
-                type="button"
-                onClick={() => setSelectedUserId(user.id)}
                 className={cn(
                   'flex w-full items-center justify-between rounded-xl border px-3 py-2 text-left transition-colors',
                   selectedUserId === user.id ? 'border-primary/30 bg-primary/5' : 'border-slate-200 hover:bg-slate-50',
                 )}
               >
-                <Avatar className="mr-2 h-9 w-9 shrink-0 rounded-full border border-slate-200">
-                  <AvatarImage src={user.avatarUrl} alt={`Foto de ${user.name}`} className="object-cover" />
-                  <AvatarFallback><UserIcon className="h-4 w-4 text-slate-400" /></AvatarFallback>
-                </Avatar>
-                <div className="min-w-0">
-                  <div className="truncate text-[11px] font-black uppercase tracking-wide text-slate-800">{user.name}</div>
-                  <div className="text-[9px] font-bold uppercase text-slate-500">{user.id}</div>
-                </div>
-                <span className="rounded-full bg-slate-100 px-2 py-1 text-[9px] font-black uppercase text-slate-600">
-                  {user.role}
-                </span>
-              </button>
+                <ProfileImageViewer
+                  imageUrl={user.avatarUrl}
+                  name={user.name}
+                  avatarClassName="mr-2 h-9 w-9"
+                />
+                <button
+                  type="button"
+                  onClick={() => setSelectedUserId(user.id)}
+                  aria-pressed={selectedUserId === user.id}
+                  className="flex min-w-0 flex-1 items-center justify-between gap-2 text-left"
+                >
+                  <span className="min-w-0">
+                    <span className="block truncate text-[11px] font-black uppercase tracking-wide text-slate-800">{user.name}</span>
+                    <span className="block text-[9px] font-bold uppercase text-slate-500">{user.id}</span>
+                  </span>
+                  <span className="shrink-0 rounded-full bg-slate-100 px-2 py-1 text-[9px] font-black uppercase text-slate-600">
+                    {user.role}
+                  </span>
+                </button>
+              </div>
             ))}
           </div>
 
@@ -425,10 +431,12 @@ function PermisosModuleContent() {
                 />
               </label>
               <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-3">
-                <Avatar className="h-14 w-14 shrink-0 rounded-full border border-slate-200">
-                  <AvatarImage src={form.avatarUrl || undefined} alt={form.name ? `Foto de ${form.name}` : 'Vista previa de foto'} className="object-cover" />
-                  <AvatarFallback><UserIcon className="h-6 w-6 text-slate-400" /></AvatarFallback>
-                </Avatar>
+                <ProfileImageViewer
+                  imageUrl={form.avatarUrl || undefined}
+                  name={form.name || 'Vista previa de foto'}
+                  avatarClassName="h-14 w-14"
+                  fallbackClassName="rounded-full"
+                />
                 <div className="min-w-0 flex-1">
                   <p className="text-[10px] font-black uppercase tracking-widest text-slate-600">Foto de perfil</p>
                   <p className="mt-1 text-[10px] text-slate-400">Imagen hasta 10 MB. Se ajusta para el perfil.</p>

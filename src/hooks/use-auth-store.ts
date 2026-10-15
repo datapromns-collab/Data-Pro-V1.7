@@ -124,7 +124,7 @@ export function useAuthStore() {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       try {
-        setUser(JSON.parse(saved));
+        setUser(JSON.parse(saved) as UserSession);
       } catch (e) {
         console.error('Error loading auth session', e);
       }
@@ -142,33 +142,81 @@ export function useAuthStore() {
             : null;
 
         if (remoteUsers?.length) {
-          syncUsersList(remoteUsers);
+          const normalizedUsers = syncUsersList(remoteUsers);
+          const savedSession = localStorage.getItem(STORAGE_KEY);
+          const currentSession = savedSession ? JSON.parse(savedSession) as UserSession : null;
+          const refreshedAccount = currentSession
+            ? normalizedUsers.find((account) => account.id === currentSession.id)
+            : undefined;
+          if (refreshedAccount && currentSession && (
+            currentSession.name !== refreshedAccount.name ||
+            currentSession.role !== refreshedAccount.role ||
+            currentSession.displayRole !== refreshedAccount.displayRole ||
+            currentSession.avatarUrl !== refreshedAccount.avatarUrl
+          )) {
+            const refreshedSession: UserSession = {
+              id: refreshedAccount.id,
+              name: refreshedAccount.name,
+              role: refreshedAccount.role,
+              displayRole: refreshedAccount.displayRole,
+              avatarUrl: refreshedAccount.avatarUrl,
+            };
+            setUser(refreshedSession);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(refreshedSession));
+            window.dispatchEvent(new CustomEvent<UserSession>(AUTH_SESSION_UPDATED_EVENT, { detail: refreshedSession }));
+          }
         }
       } catch (error) {
         console.error('Error loading remote users', error);
       }
     };
 
+    const refreshWhenVisible = () => {
+      if (document.visibilityState === 'visible') void refreshUsers();
+    };
+    const refreshInterval = window.setInterval(refreshWhenVisible, 60_000);
+    document.addEventListener('visibilitychange', refreshWhenVisible);
     void refreshUsers();
     setIsLoaded(true);
 
-    return () => window.removeEventListener(AUTH_SESSION_UPDATED_EVENT, handleSessionUpdated);
+    return () => {
+      window.clearInterval(refreshInterval);
+      document.removeEventListener('visibilitychange', refreshWhenVisible);
+      window.removeEventListener(AUTH_SESSION_UPDATED_EVENT, handleSessionUpdated);
+    };
   }, [syncUsersList]);
 
-  const saveUsers = useCallback(async (nextUsers: UserAccount[]) => {
+  const saveUsers = useCallback(async (nextUsers: UserAccount[], deletedUserIds: string[] = []) => {
     const normalized = normalizeUsers(nextUsers);
     try {
       const response = await fetch('/api/data', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ planner: { users: normalized } }),
+        body: JSON.stringify({ planner: { users: normalized, deletedUserIds } }),
       });
       if (!response.ok) throw new Error(`Users API error: ${response.status}`);
+
+      const verificationResponse = await fetch('/api/data?section=users', { cache: 'no-store' });
+      if (!verificationResponse.ok) throw new Error(`Users verification API error: ${verificationResponse.status}`);
+      const verificationPayload = await verificationResponse.json();
+      const persistedUsers = Array.isArray(verificationPayload?.planner?.users)
+        ? verificationPayload.planner.users
+        : Array.isArray(verificationPayload?.users)
+          ? verificationPayload.users
+          : null;
+      if (!persistedUsers) throw new Error('Users API returned an invalid verification response');
+
+      const persistedById = new Map(
+        normalizeUsers(persistedUsers).map((account) => [account.id, account]),
+      );
+      const isPersisted = persistedById.size === normalized.length &&
+        normalized.every((account) => persistedById.get(account.id)?.avatarUrl === account.avatarUrl);
+      if (!isPersisted) throw new Error('User profile image was not confirmed in shared storage');
+      return syncUsersList(persistedUsers);
     } catch (error) {
       console.error('Unable to sync users to remote data', error);
       throw new Error('No se pudieron sincronizar los cambios del usuario con la base de datos compartida.');
     }
-    return syncUsersList(normalized);
   }, [syncUsersList]);
 
   const upsertUser = useCallback(async (payload: {
@@ -225,7 +273,7 @@ export function useAuthStore() {
 
   const deleteUser = useCallback(async (userId: string) => {
     const nextUsers = users.filter((user) => user.id !== userId);
-    await saveUsers(nextUsers);
+    await saveUsers(nextUsers, [userId]);
     return nextUsers;
   }, [saveUsers, users]);
 

@@ -458,8 +458,15 @@ export async function POST(request: Request) {
           };
         }
       }
-      if (incomingPlanner.users && Array.isArray(incomingPlanner.users)) {
+      if (Array.isArray(incomingPlanner.users)) {
         merged.users = deepMerge(Array.isArray(merged.users) ? merged.users : [], incomingPlanner.users);
+      }
+      if (Array.isArray(incomingPlanner.deletedUserIds)) {
+        const deletedUserIds = new Set(
+          incomingPlanner.deletedUserIds.filter((id: unknown): id is string => typeof id === 'string'),
+        );
+        merged.users = (Array.isArray(merged.users) ? merged.users : [])
+          .filter((account: any) => !deletedUserIds.has(account?.id));
       }
       if (incomingPlanner.permissions && typeof incomingPlanner.permissions === 'object') {
         merged.permissions = incomingPlanner.permissions;

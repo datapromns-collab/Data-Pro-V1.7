@@ -76,6 +76,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { ProfileImageViewer } from '@/components/planner/ProfileImageViewer';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { WeeklyData } from '@/lib/json-db';
@@ -3692,12 +3693,13 @@ export default function PlannerPage() {
 
                 <div className="mt-auto pt-6 border-t border-slate-100 space-y-4 pb-6">
               <div className="flex items-center gap-3 px-2">
-                  <Avatar className="h-10 w-10 shrink-0 rounded-xl border border-slate-200 bg-slate-100">
-                    <AvatarImage src={user.avatarUrl} alt={`Foto de ${user.name}`} className="object-cover" />
-                    <AvatarFallback className="rounded-xl bg-slate-100 text-primary">
-                      <UserIcon className="h-5 w-5" />
-                    </AvatarFallback>
-                  </Avatar>
+                  <ProfileImageViewer
+                    imageUrl={user.avatarUrl}
+                    name={user.name}
+                    avatarClassName="h-10 w-10 rounded-xl bg-slate-100"
+                    fallbackClassName="rounded-xl bg-slate-100 text-primary"
+                    fallbackIconClassName="h-5 w-5 text-primary"
+                  />
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-black text-slate-900 truncate leading-none mb-1">{user.name}</p>
                   <div className="flex items-center gap-1">
