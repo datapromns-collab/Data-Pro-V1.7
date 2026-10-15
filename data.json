@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-10-14T00:00:00.000",
+      "weekStartDate": "2026-10-15T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -19745,7 +19745,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-15T13:20:48.689Z"
+    "updatedAt": "2026-10-15T14:21:42.511Z"
   },
   "ordenesSap": [
     {
@@ -44372,23 +44372,27 @@
         "2026-10-14": {
           "GLUP COLA": {
             "inicial": "59.43",
-            "preparado": "",
-            "final": ""
+            "preparado": "30",
+            "final": "58.34"
           },
           "JUSTY NARANJA": {
             "inicial": "14",
-            "preparado": "",
+            "preparado": "140",
             "final": ""
           },
           "GLUP PIÑA": {
             "inicial": "16.13",
-            "preparado": "",
+            "preparado": "20",
             "final": ""
           },
           "GLUP KOLITA": {
             "inicial": "54.92",
-            "preparado": "",
-            "final": ""
+            "preparado": "108",
+            "final": "53.32"
+          },
+          "GLUP FRESH": {
+            "preparado": "12",
+            "final": "8.26"
           }
         }
       },
@@ -45815,8 +45819,18 @@
         "2026-10-14": {
           "PORTUGUESA": {
             "invInicialSacos": "10080",
+            "recepcionSacos": "1600",
+            "invFinalSacos": "10600"
+          },
+          "MONTALBAN": {
+            "invInicialSacos": "",
             "recepcionSacos": "",
             "invFinalSacos": ""
+          },
+          "PASTORA": {
+            "invInicialSacos": "",
+            "recepcionSacos": "3000",
+            "invFinalSacos": "160"
           }
         }
       },
@@ -47096,11 +47110,11 @@
         "2026-10-14": {
           "JARABE SIMPLE": {
             "invInicialSacos": "248",
-            "invFinalSacos": ""
+            "invFinalSacos": "263"
           },
           "Sala 1": {
             "invInicialSacos": "942",
-            "invFinalSacos": ""
+            "invFinalSacos": "1133"
           }
         }
       },
@@ -47267,7 +47281,7 @@
         "2026-04-27|2026-04": 1059135.18,
         "2026-04-01|2026-04": 0,
         "2026-10-05|2026-10": 1226308.47,
-        "2026-10-12|2026-10": 498847.3
+        "2026-10-12|2026-10": 693623.19
       }
     },
     "seguimiento-etiquetadora": {
@@ -154371,6 +154385,177 @@
         "usuario": "Luis Sanchez",
         "id": 1792073160258,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-05",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "DANIEL PARRA",
+        "linea": "Línea 1",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "11:42",
+        "finParada": "11:45",
+        "totalMin": "3",
+        "zona": "Llenado",
+        "falla": "PREFORMA ATASCADA, MALA ENTREGA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792073429862,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-05",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "13:00",
+        "finParada": "13:23",
+        "totalMin": "23",
+        "zona": "Llenado",
+        "falla": "INTERRUPCION DE E/E EXTERNA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792073556058,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-05",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "15:26",
+        "finParada": "18:30",
+        "totalMin": "184",
+        "zona": "Llenado",
+        "falla": "INTERRUPCION DE E/E EXTERNA PAC",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792073633961,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-05",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "JUAN GIL",
+        "linea": "Línea 2",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "07:21",
+        "finParada": "07:33",
+        "totalMin": "12",
+        "zona": "Llenado",
+        "falla": "MOLDE #06 MANGUERA DE AIRE SUELTA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792074088658,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-05",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "LEYBERGLER SILVA",
+        "linea": "Línea 2",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "08:43",
+        "finParada": "08:49",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "SALTO DE BOTELLA EN DIENTES DE SEPARACION",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792074195873,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-05",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 2",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "10:04",
+        "finParada": "10:07",
+        "totalMin": "3",
+        "zona": "Llenado",
+        "falla": "CAIDA DE BOTELLA EN COMPACTACION",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792074290841,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-05",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "DARWIN MARTINEZ",
+        "linea": "Línea 2",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "12:15",
+        "finParada": "12:18",
+        "totalMin": "3",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792074418184,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-05",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "LEYBERGLER SILVA",
+        "linea": "Línea 2",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "12:37",
+        "finParada": "12:40",
+        "totalMin": "3",
+        "zona": "Llenado",
+        "falla": "SALTO DE BOTELLA EN DIENTES DE SEPARACION",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792074517688,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-05",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "JUAN GIL",
+        "linea": "Línea 2",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "12:41",
+        "finParada": "12:48",
+        "totalMin": "7",
+        "zona": "Llenado",
+        "falla": "TRANCAMIENTO EN RETORNO DE ELEVADOR DE PREFORMAS",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792074610232,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -162657,7 +162842,7 @@
         "turno": "DIURNO",
         "solicitante": "",
         "linea": "Línea 7",
-        "maquina": "PALETIZADORA",
+        "maquina": "OPERACIONAL",
         "aviso": "",
         "fechaParada": "2026-09-07",
         "inicioMtto": "",
