@@ -355,12 +355,29 @@ export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
       { id: 'diarias', label: 'Diarias' },
       { id: 'resumen-semanal', label: 'Resumen semanal' },
     ] },
-    { id: 'consumo-materiales', label: 'Consumo de materiales' },
+    { id: 'consumo-materiales', label: 'Consumo de materiales', children: [
+      { id: 'mensual', label: 'Mensual' },
+      { id: 'semanal', label: 'Semanal' },
+    ] },
     { id: 'mermas-desperdicios', label: 'Mermas y desperdicios', children: [
-      { id: 'mermas', label: 'Mermas' },
-      { id: 'desperdicios', label: 'Desperdicios' },
-      { id: 'resumen-semanal', label: 'Resumen semanal' },
+      { id: 'mermas', label: 'Mermas', children: [
+        { id: 'resumen-semanal-mermas', label: 'Resumen semanal' },
+        { id: 'resumen-mensual-mermas', label: 'Resumen mensual' },
+      ] },
+      { id: 'desperdicios', label: 'Desperdicios', children: [
+        { id: 'resumen-semanal-desperdicios', label: 'Resumen semanal' },
+        { id: 'resumen-mensual-desperdicios', label: 'Resumen mensual' },
+      ] },
+    ] },
+    { id: 'rechazos-devoluciones', label: 'Rechazos y devoluciones', children: [
+      { id: 'rechazos', label: 'Rechazos' },
+      { id: 'devoluciones', label: 'Devoluciones' },
       { id: 'resumen-mensual', label: 'Resumen mensual' },
+    ] },
+    { id: 'productos-no-conformes', label: 'Productos no conformes', children: [
+      { id: 'diarios', label: 'Diarios' },
+      { id: 'semanal', label: 'Semanal' },
+      { id: 'mensual', label: 'Mensual' },
     ] },
   ],
   'planta-admin': [{ id: 'administration', label: 'Administración de planta' }],
@@ -394,8 +411,8 @@ export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
         { id: 'mensual', label: 'Mensual' },
       ] },
       { id: 'resumen-mensual', label: 'Resumen mensual', children: [
-        { id: 'r-semanal', label: 'R Semanal' },
-        { id: 'r-mensual', label: 'R Mensual' },
+        { id: 'r-semanal', label: 'Semanal' },
+        { id: 'r-mensual', label: 'Mensual' },
       ] },
     ] },
     { id: 'agua', label: 'Agua', children: [
@@ -405,8 +422,8 @@ export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
         { id: 'mensual', label: 'Mensual' },
       ] },
       { id: 'resumen-mensual', label: 'Resumen mensual', children: [
-        { id: 'r-semanal', label: 'R Semanal' },
-        { id: 'r-mensual', label: 'R Mensual' },
+        { id: 'r-semanal', label: 'Semanal' },
+        { id: 'r-mensual', label: 'Mensual' },
       ] },
     ] },
     { id: 'ordenes', label: 'Órdenes', children: [
@@ -425,6 +442,7 @@ export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
       ] },
     ] },
     { id: 'producto-no-conforme', label: 'Producto no conforme', children: [
+      { id: 'diario', label: 'Diario' },
       { id: 'semanal', label: 'Semanal' },
       { id: 'mensual', label: 'Mensual' },
       { id: 'por-lineas', label: 'Por líneas' },
@@ -450,6 +468,15 @@ export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
       { id: 'promedio', label: 'Promedio de ventas' },
       { id: 'semana', label: 'Semana' },
       { id: 'mes', label: 'Mes' },
+    ] },
+    { id: 'consumo-materiales', label: 'Consumo de materiales', children: [
+      { id: 'adhesivo', label: 'Adhesivo' },
+      { id: 'plasticos', label: 'Plásticos', children: [
+        { id: '43', label: '43' },
+        { id: '48', label: '48' },
+        { id: '55', label: '55' },
+        { id: 'film', label: 'Film' },
+      ] },
     ] },
   ],
   logistica: [
