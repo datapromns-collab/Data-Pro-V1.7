@@ -19789,7 +19789,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-15T18:40:01.200Z"
+    "updatedAt": "2026-10-15T18:49:06.170Z"
   },
   "ordenesSap": [
     {
@@ -31394,7 +31394,7 @@
         {
           "fechaInicio": "2026-10-15",
           "ticket1": "16357",
-          "cajas1": 2960,
+          "cajas1": 7760,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -168472,7 +168472,7 @@
         "usuario": "Froilan Bolivar"
       },
       {
-        "id": 1792089729189,
+        "id": 1792090493989.4187,
         "fechaOrden": "2026-09-05",
         "orden": "10076",
         "fechaEmision": "2026-09-05",
@@ -168495,7 +168495,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Sanchez"
       }
     ],
@@ -179007,6 +179007,30 @@
     "sala-jarabe-consumo-lineas": {
       "5": [
         {
+          "sourcePrepKey": "justy:row_1791897872117_03vr9e",
+          "fechaFiltro": "2026-10-11",
+          "fecha": "",
+          "dia": "",
+          "turno": "",
+          "tanque": "5",
+          "sabor": "JUSTY NARANJA",
+          "horaInicio": "",
+          "ubbInicial": "20",
+          "volInicialTanque": "20000"
+        },
+        {
+          "sourcePrepKey": "justy:row_1791898073189_m3s8fe",
+          "fechaFiltro": "2026-10-11",
+          "fecha": "",
+          "dia": "",
+          "turno": "",
+          "tanque": "6",
+          "sabor": "JUSTY NARANJA",
+          "horaInicio": "",
+          "ubbInicial": "20",
+          "volInicialTanque": "20000"
+        },
+        {
           "sourcePrepKey": "justy:row_1791895130611_79p8g1",
           "fechaFiltro": "2026-10-12",
           "fecha": "",
@@ -179085,30 +179109,6 @@
           "dia": "",
           "turno": "",
           "tanque": "5",
-          "sabor": "JUSTY NARANJA",
-          "horaInicio": "",
-          "ubbInicial": "20",
-          "volInicialTanque": "20000"
-        },
-        {
-          "sourcePrepKey": "justy:row_1791897872117_03vr9e",
-          "fechaFiltro": "2026-10-11",
-          "fecha": "",
-          "dia": "",
-          "turno": "",
-          "tanque": "5",
-          "sabor": "JUSTY NARANJA",
-          "horaInicio": "",
-          "ubbInicial": "20",
-          "volInicialTanque": "20000"
-        },
-        {
-          "sourcePrepKey": "justy:row_1791898073189_m3s8fe",
-          "fechaFiltro": "2026-10-11",
-          "fecha": "",
-          "dia": "",
-          "turno": "",
-          "tanque": "6",
           "sabor": "JUSTY NARANJA",
           "horaInicio": "",
           "ubbInicial": "20",
