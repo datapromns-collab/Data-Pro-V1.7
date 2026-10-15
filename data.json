@@ -17112,144 +17112,144 @@
               "id": "eb7b8440-c8d8-42b0-a266-e0e8ce5f3633",
               "line": "Linea 1",
               "flavor": "verde",
+              "kind": "preformas",
+              "preformSize": "",
               "code": "EMP_0103",
               "material": "PREFORMA VERDE 42,64 GR-1881",
               "quantity": "2024",
-              "unit": "UND",
-              "kind": "preformas",
-              "preformSize": ""
+              "unit": "UND"
             },
             {
               "id": "df23cb37-9f95-461a-be06-d07a970d6f69",
               "line": "Linea 1",
               "flavor": "",
+              "kind": "termo",
+              "preformSize": "",
               "code": "EMP_0080",
               "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
               "quantity": "3,1",
-              "unit": "Kg",
-              "kind": "termo",
-              "preformSize": ""
+              "unit": "Kg"
             },
             {
               "id": "53a8d295-78eb-4124-ae8a-49ed82b29763",
               "line": "Linea 2",
               "flavor": "transparente",
+              "kind": "preformas",
+              "preformSize": "",
               "code": "EMP_0093",
               "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
               "quantity": "6309",
-              "unit": "UND",
-              "kind": "preformas",
-              "preformSize": ""
+              "unit": "UND"
             },
             {
               "id": "c6ce7c2c-99d3-4156-b70e-c5993aedf1f4",
               "line": "Linea 2",
               "flavor": "",
+              "kind": "termo",
+              "preformSize": "",
               "code": "EMP_0080",
               "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
               "quantity": "3,88",
-              "unit": "Kg",
-              "kind": "termo",
-              "preformSize": ""
+              "unit": "Kg"
             },
             {
               "id": "942409cd-9a64-43a1-8f6f-6505a1032d7d",
               "line": "Linea 3",
               "flavor": "transparente",
+              "kind": "preformas",
+              "preformSize": "",
               "code": "EMP_0093",
               "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
               "quantity": "2715",
-              "unit": "UND",
-              "kind": "preformas",
-              "preformSize": ""
+              "unit": "UND"
             },
             {
               "id": "6a6f3d03-bea9-41e2-8098-aac871e4ec83",
               "line": "Linea 3",
               "flavor": "",
+              "kind": "termo",
+              "preformSize": "",
               "code": "EMP_0080",
               "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
               "quantity": "4,9",
-              "unit": "Kg",
-              "kind": "termo",
-              "preformSize": ""
+              "unit": "Kg"
             },
             {
               "id": "6ec4f748-e83e-43bd-b7cc-1056f9376b45",
               "line": "Linea 4",
               "flavor": "transparente",
+              "kind": "preformas",
+              "preformSize": "",
               "code": "EMP_0093",
               "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
               "quantity": "3000",
-              "unit": "UND",
-              "kind": "preformas",
-              "preformSize": ""
+              "unit": "UND"
             },
             {
               "id": "3d5c4d46-2c2c-4aa8-8fa2-bf8dcfdef6e7",
               "line": "Linea 4",
               "flavor": "",
+              "kind": "termo",
+              "preformSize": "",
               "code": "EMP_0080",
               "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
               "quantity": "3,47",
-              "unit": "Kg",
-              "kind": "termo",
-              "preformSize": ""
+              "unit": "Kg"
             },
             {
               "id": "0eb9bb56-4b69-4a08-9e9a-9fc167eedb84",
               "line": "Linea 5",
               "flavor": "transparente",
+              "kind": "preformas",
+              "preformSize": "",
               "code": "EMP_0068",
               "material": "PREFORMA TRANSPARENTE 36 GR-1881",
               "quantity": "1223",
-              "unit": "UND",
-              "kind": "preformas",
-              "preformSize": ""
+              "unit": "UND"
             },
             {
               "id": "27e1c5ff-6560-4f15-8252-f5558c05dd4c",
               "line": "Linea 5",
               "flavor": "",
+              "kind": "termo",
+              "preformSize": "",
               "code": "EMP_0017",
               "material": "POLIETILENO TERMOENCOGIBLE 55 X 0.07",
               "quantity": "3,3",
-              "unit": "Kg",
-              "kind": "termo",
-              "preformSize": ""
+              "unit": "Kg"
             },
             {
               "id": "68f425ff-ff41-4697-a65e-e5c23bccfcf6",
               "line": "Linea 6",
               "flavor": "",
+              "kind": "termo",
+              "preformSize": "",
               "code": "EMP_0130",
               "material": "POLIETILENO TERMOENCOGIBLE 43 x 0.06",
               "quantity": "0,20",
-              "unit": "Kg",
-              "kind": "termo",
-              "preformSize": ""
+              "unit": "Kg"
             },
             {
               "id": "8187312b-d6e5-4866-97fa-7e30af324aee",
               "line": "Linea 7",
               "flavor": "verde",
+              "kind": "preformas",
+              "preformSize": "",
               "code": "EMP_0120",
               "material": "PREFORMA VERDE 29.6GR 1881",
               "quantity": "3241",
-              "unit": "UND",
-              "kind": "preformas",
-              "preformSize": ""
+              "unit": "UND"
             },
             {
               "id": "a3d6c81e-e1d5-41cf-b1dd-d0886eb437ca",
               "line": "Linea 7",
               "flavor": "",
+              "kind": "termo",
+              "preformSize": "",
               "code": "EMP_0080",
               "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
               "quantity": "2,2",
-              "unit": "Kg",
-              "kind": "termo",
-              "preformSize": ""
+              "unit": "Kg"
             }
           ],
           "2026-10-07": [
@@ -19807,7 +19807,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-15T21:40:27.297Z"
+    "updatedAt": "2026-10-15T21:42:38.595Z"
   },
   "ordenesSap": [
     {
@@ -158228,6 +158228,25 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1792100862412,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-31",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 4",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "16:00",
+        "finParada": "16:50",
+        "totalMin": "50",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES LUEGO DE LA INTERRUPCION E/E",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792100928436,
         "bloqueado": true
       }
     ],
