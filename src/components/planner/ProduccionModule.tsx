@@ -2667,7 +2667,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
           </div>
         </div>
       )}
-      <nav aria-label="Secciones principales de Producción" className="mb-3 w-full min-w-0 no-print">
+      <nav aria-label="Secciones principales de Producción" className="pointer-events-auto mb-3 w-full min-w-0 no-print">
         <div className="grid w-full grid-cols-2 gap-1 rounded-2xl border border-slate-200 bg-slate-100/50 p-1 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6">
           {([
             { id: 'inventarios', label: 'Inventarios', icon: Package },
@@ -2721,7 +2721,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
         )}
       </div>
       <div className="mb-2 overflow-x-auto no-print">
-        <div className="flex w-max min-w-full items-center gap-1 rounded-full border border-slate-200 bg-slate-100/50 p-1">
+        <div className="pointer-events-auto flex w-max min-w-full items-center gap-1 rounded-full border border-slate-200 bg-slate-100/50 p-1">
           {(weeklyOnly ? ['semanal'] : ['diarios', 'semanal', 'mensual']).map((subTab) => (
             <button
               key={subTab}
@@ -2816,7 +2816,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
             </select>
           </div>
           <div className="flex items-center gap-2 mb-2 no-print">
-            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+            <div className="pointer-events-auto flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
               {['empaque', 'materia-prima', 'insumos'].map((subTab) => (
                 <button
                   key={subTab}
@@ -3181,7 +3181,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
         activeProduccionSection === 'recepciones' ? (
           <div className="flex flex-col flex-1 min-h-0">
             <div className="flex items-center gap-2 mb-2 no-print">
-              <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+              <div className="pointer-events-auto flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
                 {([
                   { id: 'diarias', label: 'Diarias', icon: CalendarIcon },
                   { id: 'resumen-semanal', label: 'Resumen semanal', icon: CalendarRange },
@@ -3288,7 +3288,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
         ) : activeProduccionSection === 'mermas-desperdicios' || activeProduccionSection === 'rechazos-devoluciones' ? (
           <div className="flex flex-col flex-1 min-h-0">
             <div className="flex items-center gap-2 mb-2 no-print">
-              <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+              <div className="pointer-events-auto flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
                 {(activeProduccionSection === 'mermas-desperdicios'
                   ? [
                       { id: 'mermas' as const, label: 'Mermas', icon: Recycle },
@@ -3755,7 +3755,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
             )}
             {activeMermasSubSection === 'resumen-mensual' && activeProduccionSection === 'rechazos-devoluciones' && (
               <div className="flex flex-1 min-h-0 flex-col gap-2 overflow-auto">
-                <div className="flex items-center gap-2 no-print">
+                <div className="pointer-events-auto flex items-center gap-2 no-print">
                   {([
                     { id: 'rechazos', label: 'R Rechazos' },
                     { id: 'devoluciones', label: 'R Devoluciones' },
@@ -3831,7 +3831,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
           </div>
         ) : activeProduccionSection === 'productos-no-conformes' ? (
                             <div className="flex min-h-0 flex-1 flex-col">
-                              <div className="mb-2 grid w-full grid-cols-3 gap-1 rounded-2xl border border-slate-200 bg-slate-100/50 p-1 no-print">
+                              <div className="pointer-events-auto mb-2 grid w-full grid-cols-3 gap-1 rounded-2xl border border-slate-200 bg-slate-100/50 p-1 no-print">
                                 {([
                                   { id: 'diarios' as const, label: 'Diarios', icon: CalendarIcon },
                                   { id: 'semanal' as const, label: 'Semanal', icon: CalendarDays },
@@ -3854,7 +3854,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
 
                               {activeNonConformingPeriod === 'diarios' ? (
                                 <>
-                                  <div className="mb-2 flex flex-wrap items-center gap-2 no-print">
+                                  <div className="pointer-events-auto mb-2 flex flex-wrap items-center gap-2 no-print">
                                     <input
                                       type="date"
                                       value={nonConformingDateKey}
@@ -4111,7 +4111,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                       />
                                     )}
                                   </div>
-                                  <div className="mb-2 flex items-center gap-2 no-print">
+                                  <div className="pointer-events-auto mb-2 flex items-center gap-2 no-print">
                                     {([
                                       { id: 'por-lineas' as const, label: 'Por líneas' },
                                       { id: 'por-no-conformidad' as const, label: 'Por no conformidad' },
@@ -4233,8 +4233,8 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                     {' · Consumo: inicial + recepción − final'}
                                   </p>
                                 </div>
-                                <div className="flex flex-wrap items-center gap-2">
-                                  <div className="flex rounded-full border border-slate-200 bg-slate-100 p-1">
+                                <div className="pointer-events-auto flex flex-wrap items-center gap-2">
+                                  <div className="pointer-events-auto flex rounded-full border border-slate-200 bg-slate-100 p-1">
                                     {(['mensual', 'semanal'] as const).map((period) => (
                                       <button
                                         key={period}

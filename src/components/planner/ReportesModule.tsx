@@ -973,7 +973,7 @@ export function ReportesModule({
                            </div>
                          )}
                          <div className="mb-2 flex flex-col gap-2 no-print">
-                            <nav aria-label="Secciones principales de reportes" className="w-full min-w-0">
+                            <nav aria-label="Secciones principales de reportes" className="pointer-events-auto w-full min-w-0">
                               <div className="grid w-full grid-cols-2 gap-1 rounded-2xl border border-slate-200 bg-slate-100/50 p-1 sm:grid-cols-3 lg:grid-cols-4">
                               {(['co2', 'agua', 'ordenes', 'rendimiento-azucar', 'producto-no-conforme', 'mermas-botella-envasada', 'mermas-materiales-lineas', 'analisis-ventas', 'consumo-materiales'] as const).map((tab) => (
                                 <button
@@ -999,7 +999,7 @@ export function ReportesModule({
                               ))}
                               </div>
                             </nav>
-                           <div className="flex w-full min-w-0 items-center justify-end gap-2">
+                           <div className="pointer-events-auto flex w-full min-w-0 items-center justify-end gap-2">
                              {insumosSubTab !== 'mermas-botella-envasada' && insumosSubTab !== 'mermas-materiales-lineas' && (
                                <input
                                  type="month"
@@ -1027,7 +1027,7 @@ export function ReportesModule({
                            </div>
                          </div>
                          {insumosSubTab === 'consumo-materiales' && (
-                           <nav aria-label="Subsecciones de consumo de materiales" className="mb-2 flex w-fit items-center rounded-full border border-slate-200 bg-slate-100/50 p-1">
+                           <nav aria-label="Subsecciones de consumo de materiales" className="pointer-events-auto mb-2 flex w-fit items-center rounded-full border border-slate-200 bg-slate-100/50 p-1">
                              {([
                                { id: 'adhesivo', label: 'Adhesivo' },
                                { id: 'plasticos', label: 'Plásticos' },
@@ -1053,7 +1053,7 @@ export function ReportesModule({
                          )}
                          {insumosSubTab === 'consumo-materiales' && consumoMaterialSubTab === 'plasticos' && (
                            <>
-                             <nav aria-label="Tipos de plásticos" className="mb-2 flex w-fit items-center rounded-full border border-slate-200 bg-slate-100/50 p-1">
+                             <nav aria-label="Tipos de plásticos" className="pointer-events-auto mb-2 flex w-fit items-center rounded-full border border-slate-200 bg-slate-100/50 p-1">
                                {([
                                  { id: '43', label: '43' },
                                  { id: '48', label: '48' },
@@ -1080,7 +1080,7 @@ export function ReportesModule({
                          {insumosSubTab === 'co2' && (
                            <>
                            <div className="flex items-center gap-2 mb-2 no-print">
-                            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                            <div className="pointer-events-auto flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
                                 {(['diario', 'resumen-tablas', 'resumen-mensual'] as const).map((tab) => (
                                   <button
                                     key={tab}
@@ -1097,7 +1097,7 @@ export function ReportesModule({
                               </div>
                             </div>
                             {insumosPeriodoSubTab === 'resumen-tablas' && (
-                              <div className="mb-2 flex w-fit items-center rounded-full border border-slate-200 bg-slate-100/50 p-1">
+                              <div className="pointer-events-auto mb-2 flex w-fit items-center rounded-full border border-slate-200 bg-slate-100/50 p-1">
                                 {(['semanal', 'mensual'] as const).map((tab) => (
                                   <button
                                     key={tab}
@@ -1131,7 +1131,7 @@ export function ReportesModule({
                             {insumosSubTab === 'agua' && (
                               <>
                                 <div className="flex items-center gap-2 mb-2 no-print">
-                                  <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                                  <div className="pointer-events-auto flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
                                     {(['diario', 'resumen-tablas', 'resumen-mensual'] as const).map((tab) => (
                                       <button
                                         key={tab}
@@ -1148,7 +1148,7 @@ export function ReportesModule({
                                   </div>
                                 </div>
                                 {insumosPeriodoSubTab === 'resumen-tablas' && (
-                                  <div className="mb-2 flex w-fit items-center rounded-full border border-slate-200 bg-slate-100/50 p-1">
+                                  <div className="pointer-events-auto mb-2 flex w-fit items-center rounded-full border border-slate-200 bg-slate-100/50 p-1">
                                     {(['semanal', 'mensual'] as const).map((tab) => (
                                       <button
                                         key={tab}

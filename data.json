@@ -44361,12 +44361,34 @@
           "GLUP PIÑA": {
             "inicial": "20",
             "preparado": "30",
-            "final": "16.16"
+            "final": "16.13"
           },
           "GLUP KOLITA": {
             "inicial": "54",
             "preparado": "72",
             "final": "54.92"
+          }
+        },
+        "2026-10-14": {
+          "GLUP COLA": {
+            "inicial": "59.43",
+            "preparado": "",
+            "final": ""
+          },
+          "JUSTY NARANJA": {
+            "inicial": "14",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP PIÑA": {
+            "inicial": "16.13",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP KOLITA": {
+            "inicial": "54.92",
+            "preparado": "",
+            "final": ""
           }
         }
       },
@@ -45789,6 +45811,13 @@
             "recepcionSacos": "4320",
             "invFinalSacos": "10080"
           }
+        },
+        "2026-10-14": {
+          "PORTUGUESA": {
+            "invInicialSacos": "10080",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          }
         }
       },
       "tanques": {
@@ -47062,6 +47091,16 @@
           "Sala 1": {
             "invInicialSacos": "270",
             "invFinalSacos": "942"
+          }
+        },
+        "2026-10-14": {
+          "JARABE SIMPLE": {
+            "invInicialSacos": "248",
+            "invFinalSacos": ""
+          },
+          "Sala 1": {
+            "invInicialSacos": "942",
+            "invFinalSacos": ""
           }
         }
       },
@@ -154255,6 +154294,82 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1792067591239,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-05",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "DANIEL PARRA",
+        "linea": "Línea 1",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "08:53",
+        "finParada": "08:58",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792072559418,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-05",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "DANIEL PARRA",
+        "linea": "Línea 1",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "11:02",
+        "finParada": "11:07",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792072736329,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-05",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "DANIEL PARRA",
+        "linea": "Línea 1",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "09:46",
+        "finParada": "09:51",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792073005041,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-05",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "DANIEL PARRA",
+        "linea": "Línea 1",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "11:24",
+        "finParada": "11:27",
+        "totalMin": "3",
+        "zona": "Llenado",
+        "falla": "AVERIA EN SISTEMA DE ENGRASE CENTRALIZADO",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792073160258,
         "bloqueado": true
       }
     ],
