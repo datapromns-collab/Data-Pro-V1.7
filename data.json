@@ -44449,6 +44449,23 @@
             "preparado": "12",
             "final": "8.26"
           }
+        },
+        "2026-10-15": {
+          "GLUP COLA": {
+            "inicial": "58.34",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP KOLITA": {
+            "inicial": "53.32",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP FRESH": {
+            "inicial": "8.26",
+            "preparado": "",
+            "final": ""
+          }
         }
       },
       "sugar": {
@@ -45887,6 +45904,18 @@
             "recepcionSacos": "3000",
             "invFinalSacos": "160"
           }
+        },
+        "2026-10-15": {
+          "PORTUGUESA": {
+            "invInicialSacos": "10600",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          },
+          "PASTORA": {
+            "invInicialSacos": "160",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          }
         }
       },
       "tanques": {
@@ -47170,6 +47199,16 @@
           "Sala 1": {
             "invInicialSacos": "942",
             "invFinalSacos": "1133"
+          }
+        },
+        "2026-10-15": {
+          "JARABE SIMPLE": {
+            "invInicialSacos": "263",
+            "invFinalSacos": ""
+          },
+          "Sala 1": {
+            "invInicialSacos": "1133",
+            "invFinalSacos": ""
           }
         }
       },
@@ -156608,25 +156647,6 @@
         "bloqueado": true
       },
       {
-        "fecha": "2026-10-15",
-        "semana": 42,
-        "turno": "DIURNO",
-        "operador": "",
-        "linea": "Línea 7",
-        "equipo": "",
-        "tipoParada": "FALLA DE E/E",
-        "inicioParada": "15:30",
-        "finParada": "15:43",
-        "totalMin": "13",
-        "zona": "Llenado",
-        "falla": "ALTO VOLTAJE ",
-        "orden": "",
-        "observaciones": "",
-        "usuario": "Luis Sanchez",
-        "id": 1792082511178,
-        "bloqueado": true
-      },
-      {
         "fecha": "2026-10-01",
         "semana": 40,
         "turno": "DIURNO",
@@ -156643,25 +156663,6 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1792082556995,
-        "bloqueado": true
-      },
-      {
-        "fecha": "2026-10-15",
-        "semana": 42,
-        "turno": "DIURNO",
-        "operador": "",
-        "linea": "Línea 7",
-        "equipo": "SOPLADORA",
-        "tipoParada": "AVERÍA",
-        "inicioParada": "15:49",
-        "finParada": "15:59",
-        "totalMin": "10",
-        "zona": "Llenado",
-        "falla": "DESINCRONIZACION DE LA MAQUINA ",
-        "orden": "",
-        "observaciones": "",
-        "usuario": "Luis Sanchez",
-        "id": 1792082611811,
         "bloqueado": true
       },
       {
@@ -179885,65 +179886,8 @@
   "deletedIds": {
     "planta-informes-operacionales": {
       "*": [
-        "1790371816310",
-        "1784566101946",
-        "1784568143186",
-        "1785014920340",
-        "1785358753845",
-        "1785358876155",
-        "1785414190166",
-        "1785414573668",
-        "1785415183096",
-        "1785415259439",
-        "1785415351871",
-        "1785415572542",
-        "1785415633951",
-        "1785415689630",
-        "1785415811823",
-        "1785415847510",
-        "1785415957655",
-        "1785416031310",
-        "1785416298630",
-        "1785416369910",
-        "1785416608317",
-        "1785416736028",
-        "1785416910693",
-        "1785417138565",
-        "1785417183419",
-        "1785417331300",
-        "1785417417646",
-        "1785417479222",
-        "1785418190316",
-        "1785508515291",
-        "1785509131922",
-        "1786024306648",
-        "1786024932528",
-        "1786037074553",
-        "1786037361081",
-        "1786037547921",
-        "1786037695201",
-        "1786037731718",
-        "1786037990748",
-        "1786037996096",
-        "1786038155639",
-        "1786038321776",
-        "1786027053232",
-        "1786040712235",
-        "1786119936092",
-        "1786128206608",
-        "1786456646957",
-        "1786456705797",
-        "1786996948604",
-        "1787086190625",
-        "1787086273033",
-        "1787938439979",
-        "1787237062452",
-        "1787247465383",
-        "1787959521278",
-        "1788293882619",
-        "1788991023411",
-        "1788978219703",
-        "1790538581551"
+        "1792082511178",
+        "1792082611811"
       ]
     },
     "planta-ordenes-trabajo": {
