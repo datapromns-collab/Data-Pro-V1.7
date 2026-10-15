@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { Component, useEffect, useRef, useState, type ErrorInfo, type ReactNode } from 'react';
 import {
   ModuleId,
   PermissionLevel,
@@ -19,25 +19,31 @@ const MAX_PROFILE_IMAGE_SIZE = 10 * 1024 * 1024;
 const PROFILE_IMAGE_EDGE = 256;
 
 async function createProfileImageDataUrl(file: File): Promise<string> {
-  if (!file.type.startsWith('image/')) {
-    throw new Error('Selecciona un archivo de imagen.');
+  if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+    throw new Error('Selecciona una imagen JPG, PNG o WebP.');
   }
   if (file.size > MAX_PROFILE_IMAGE_SIZE) {
     throw new Error('La imagen debe pesar menos de 10 MB.');
   }
 
-  const bitmap = await createImageBitmap(file);
+  const bitmap = await createImageBitmap(file, {
+    resizeWidth: PROFILE_IMAGE_EDGE,
+    resizeQuality: 'high',
+  });
   try {
-    if (bitmap.width > 12000 || bitmap.height > 12000) {
-      throw new Error('La resolución de la imagen es demasiado grande.');
-    }
-    const scale = Math.min(1, PROFILE_IMAGE_EDGE / Math.max(bitmap.width, bitmap.height));
+    const scale = Math.min(
+      1,
+      PROFILE_IMAGE_EDGE / bitmap.width,
+      PROFILE_IMAGE_EDGE / bitmap.height,
+    );
+    const width = Math.max(1, Math.round(bitmap.width * scale));
+    const height = Math.max(1, Math.round(bitmap.height * scale));
     const canvas = document.createElement('canvas');
-    canvas.width = Math.max(1, Math.round(bitmap.width * scale));
-    canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+    canvas.width = width;
+    canvas.height = height;
     const context = canvas.getContext('2d');
     if (!context) throw new Error('No se pudo procesar la imagen.');
-    context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    context.drawImage(bitmap, 0, 0, width, height);
     return canvas.toDataURL('image/jpeg', 0.82);
   } finally {
     bitmap.close();
@@ -66,6 +72,47 @@ const DEFAULT_USER_FORM = {
 };
 
 export function PermisosModule() {
+  return (
+    <PermisosErrorBoundary>
+      <PermisosModuleContent />
+    </PermisosErrorBoundary>
+  );
+}
+
+class PermisosErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error('Permisos module rendering failed', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div role="alert" className="m-4 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
+          <p className="font-bold">No se pudo mostrar el módulo de permisos.</p>
+          <p className="mt-1">Reintenta el módulo. Si el problema continúa, actualiza la página.</p>
+          <Button
+            type="button"
+            variant="outline"
+            className="mt-3 border-red-300 bg-white"
+            onClick={() => this.setState({ hasError: false })}
+          >
+            Reintentar módulo
+          </Button>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
+function PermisosModuleContent() {
   const {
     isLoaded,
     syncError,
@@ -85,6 +132,7 @@ export function PermisosModule() {
   const [form, setForm] = useState({ ...DEFAULT_USER_FORM });
   const [notice, setNotice] = useState<string | null>(null);
   const [isSavingProfileImage, setIsSavingProfileImage] = useState(false);
+  const profileImageInputRef = useRef<HTMLInputElement>(null);
 
   const resetFormToDefault = () => {
     setForm({ ...DEFAULT_USER_FORM });
@@ -196,28 +244,7 @@ export function PermisosModule() {
     try {
       const avatarUrl = await createProfileImageDataUrl(file);
       setForm((current) => ({ ...current, avatarUrl }));
-      if (!selectedUser) {
-        setNotice('Imagen cargada. Guarda el usuario para aplicarla.');
-        return;
-      }
-      if (!form.id.trim() || !form.name.trim() || !form.password.trim()) {
-        throw new Error('Completa usuario, nombre y contraseña antes de guardar la foto.');
-      }
-
-      await upsertUser({
-        id: form.id,
-        name: form.name,
-        password: form.password,
-        role: form.role,
-        displayRole: form.displayRole.trim() || form.role,
-        avatarUrl,
-        originalId: selectedUser.id,
-      });
-      if (selectedUser.id !== form.id.trim()) {
-        renameUserAccess(selectedUser.id, form.id.trim());
-        setSelectedUserId(form.id.trim());
-      }
-      setNotice('Foto de perfil guardada correctamente.');
+      setNotice('Imagen cargada. Guarda los cambios para aplicarla.');
     } catch (error) {
       setNotice(error instanceof Error ? error.message : 'No se pudo cargar la imagen.');
     } finally {
@@ -405,23 +432,28 @@ export function PermisosModule() {
                 <div className="min-w-0 flex-1">
                   <p className="text-[10px] font-black uppercase tracking-widest text-slate-600">Foto de perfil</p>
                   <p className="mt-1 text-[10px] text-slate-400">Imagen hasta 10 MB. Se ajusta para el perfil.</p>
-                  <label className={cn(
+                  <button
+                    type="button"
+                    disabled={isSavingProfileImage}
+                    onClick={() => profileImageInputRef.current?.click()}
+                    className={cn(
                     'mt-2 inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-2 text-[10px] font-black uppercase tracking-wide text-slate-700',
                     isSavingProfileImage ? 'cursor-wait opacity-60' : 'cursor-pointer hover:bg-slate-200',
                   )}>
                     <Upload className="h-3.5 w-3.5" />
-                    {isSavingProfileImage ? 'Guardando foto...' : 'Cargar imagen'}
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="sr-only"
-                      disabled={isSavingProfileImage}
-                      onChange={(event) => {
-                        void handleProfileImageChange(event.target.files?.[0]);
-                        event.currentTarget.value = '';
-                      }}
-                    />
-                  </label>
+                    {isSavingProfileImage ? 'Procesando imagen...' : 'Cargar imagen'}
+                  </button>
+                  <input
+                    ref={profileImageInputRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    className="sr-only"
+                    disabled={isSavingProfileImage}
+                    onChange={(event) => {
+                      void handleProfileImageChange(event.target.files?.[0]);
+                      event.currentTarget.value = '';
+                    }}
+                  />
                 </div>
                 {form.avatarUrl && (
                   <Button
