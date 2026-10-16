@@ -454,7 +454,7 @@ const wasteProductForOperation = (
     if (flavor === 'transparente' && preformSize === '33') {
       return { code: 'EMP_0166', material: 'PREFORMA TRANSPARENTE 33 GR-1881' };
     }
-    if (flavor === 'verde') return { code: 'EMP_0120', material: 'PREFORMA VERDE 29.6GR 1881' };
+    if (flavor === 'verde') return { code: 'EMP_0171', material: 'PREFORMA VERDE 33 GR-1881' };
   }
   return undefined;
 };
@@ -562,6 +562,7 @@ const materialComparisonDescriptions: Record<string, string> = {
   EMP_0126: 'PREFORMA TRANSPARENTE 20,55GR-1881',
   EMP_0135: 'PREFORMA VERDE 20,5-1881',
   EMP_0166: 'PREFORMA TRANSPARENTE 33 GR-1881',
+  EMP_0171: 'PREFORMA VERDE 33 GR-1881',
   EMP_0078: 'ADHESIVO KRONES COLFIX HMI 1195 N',
   EMP_0017: 'POLIETILENO TERMOENCOGIBLE 55 X 0.07',
   EMP_0019: 'FILM POLIESTRECH 23 MIC',
@@ -2059,11 +2060,18 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
             <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPreformaInput('EMP_0135-Ultrapack', data, update, readOnly)}</td>
           </tr>
           <tr>
-            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-slate-200">EMP_0166</td>
-            <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-slate-200">PREFORMA TRANSPARENTE 33 GR-1881</td>
-            <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-slate-200 text-left">ultrapack 8600 und</td>
-            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-r border-slate-200">{renderPreformaInput('EMP_0166', data, update, readOnly)}</td>
-            <td className="px-2 py-1">{renderPreformasTotal('EMP_0166', data)}</td>
+            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-200">EMP_0166</td>
+            <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200">PREFORMA TRANSPARENTE 33 GR-1881</td>
+            <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200 text-left">ultrapack 8600 und</td>
+            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-r border-b border-slate-200">{renderPreformaInput('EMP_0166', data, update, readOnly)}</td>
+            <td className="px-2 py-1 border-b border-slate-200">{renderPreformasTotal('EMP_0166', data)}</td>
+          </tr>
+          <tr>
+            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-200">EMP_0171</td>
+            <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200">PREFORMA VERDE 33 GR-1881</td>
+            <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200 text-left"></td>
+            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-r border-b border-slate-200">{renderPreformaInput('EMP_0171', data, update, readOnly)}</td>
+            <td className="px-2 py-1 border-b border-slate-200">{renderPreformasTotal('EMP_0171', data)}</td>
           </tr>
         </tbody>
       </table>

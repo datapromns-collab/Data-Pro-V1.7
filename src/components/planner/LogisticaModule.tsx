@@ -152,6 +152,7 @@ export function LogisticaModule() {
         ['EMP_0126', 'PREFORMA TRANSPARENTE 20,55GR-1881', '16200 / 15360 und'],
         ['EMP_0135', 'PREFORMA VERDE 20,5-1881', '16200 / 15360 und'],
         ['EMP_0166', 'PREFORMA TRANSPARENTE 33 GR-1881', '8600 und'],
+        ['EMP_0171', 'PREFORMA VERDE 33 GR-1881', ''],
       ],
     },
     {

@@ -31,6 +31,7 @@ export const PREFORMS_DATA = [
   { code: 'EMP_0126', description: 'PREFORMA TRANSPARENTE 20,55GR-1881', unit: 'UND' },
   { code: 'EMP_0135', description: 'PREFORMA VERDE 20,5-1881', unit: 'UND' },
   { code: 'EMP_0166', description: 'PREFORMA TRANSPARENTE 33 GR-1881', unit: 'UND' },
+  { code: 'EMP_0171', description: 'PREFORMA VERDE 33 GR-1881', unit: 'UND' },
 ];
 
 export const CAPS_DATA = [
@@ -362,7 +363,7 @@ export const DEFAULT_PACKAGING_RECIPES: Record<string, Record<string, Record<str
   },
   "GLUP FRESH": {
     "2Lts": { "EMP_0103": 6, "EMP_0105_N": 6, "EMP_0038": 0.00495, "EMP_0019": 0.006981, "EMP_0080": 0.03221, "EMP_0078": 0.000258 },
-    "1Lt": { "EMP_0120": 12, "EMP_0105_N": 12, "EMP_0117": 0.006684, "EMP_0019": 0.00716, "EMP_0080": 0.03338, "EMP_0078": 0.000276 },
+    "1Lt": { "EMP_0171": 12, "EMP_0105_N": 12, "EMP_0117": 0.006684, "EMP_0019": 0.00716, "EMP_0080": 0.03338, "EMP_0078": 0.000276 },
     "0.4Lts": { "EMP_0135": 15, "EMP_0105_N": 15, "EMP_0116": 0.00465, "EMP_0019": 0.0034905, "EMP_0130": 0.02283, "EMP_0078": 0.00036 }
   },
   "GLUP UVA": {

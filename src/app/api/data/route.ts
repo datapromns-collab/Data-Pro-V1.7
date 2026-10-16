@@ -367,6 +367,10 @@ export async function POST(request: Request) {
       }
       if (incomingPlanner.customPackagingRecipes) {
         merged.customPackagingRecipes = deepMerge(merged.customPackagingRecipes, incomingPlanner.customPackagingRecipes);
+        const freshOneLiterUpdate = incomingPlanner.customPackagingRecipes['GLUP FRESH']?.['1Lt'];
+        if (freshOneLiterUpdate && Object.prototype.hasOwnProperty.call(freshOneLiterUpdate, 'EMP_0171')) {
+          delete merged.customPackagingRecipes['GLUP FRESH']?.['1Lt']?.EMP_0120;
+        }
       }
       if (incomingPlanner.productionInventory) {
         merged.productionInventory = deepMerge(merged.productionInventory, incomingPlanner.productionInventory);

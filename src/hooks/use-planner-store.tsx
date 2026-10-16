@@ -536,7 +536,18 @@ function usePlannerStoreInner() {
       setLineSpeeds((prev) => ({ ...prev, ...(remote.config.lineSpeeds ?? {}) }));
     }
     setCustomRecipes((prev) => ({ ...prev, ...(remote.customRecipes ?? {}) }));
-    setCustomPackagingRecipes((prev) => ({ ...prev, ...(remote.customPackagingRecipes ?? {}) }));
+    const remotePackagingRecipes = remote.customPackagingRecipes ?? {};
+    const freshOneLiterRecipe = remotePackagingRecipes['GLUP FRESH']?.['1Lt'];
+    if (freshOneLiterRecipe && Object.prototype.hasOwnProperty.call(freshOneLiterRecipe, 'EMP_0120')) {
+      const migratedFreshRecipe = { ...freshOneLiterRecipe };
+      migratedFreshRecipe.EMP_0171 = migratedFreshRecipe.EMP_0171 ?? migratedFreshRecipe.EMP_0120;
+      delete migratedFreshRecipe.EMP_0120;
+      remotePackagingRecipes['GLUP FRESH'] = {
+        ...remotePackagingRecipes['GLUP FRESH'],
+        '1Lt': migratedFreshRecipe,
+      };
+    }
+    setCustomPackagingRecipes((prev) => ({ ...prev, ...remotePackagingRecipes }));
   }, [weekKey]);
 
   const refreshFromServer = useCallback(async () => {
