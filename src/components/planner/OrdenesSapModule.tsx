@@ -403,6 +403,8 @@ export default function OrdenesSapModule({
 
   const [internalActiveLinea, setInternalActiveLinea] = useState<number | null>(1);
   const [cargaProdDatePickerOpen, setCargaProdDatePickerOpen] = useState(false);
+  const [seguimientoDatePickerOpen, setSeguimientoDatePickerOpen] = useState(false);
+  const [prodtSemanalDatePickerOpen, setProdtSemanalDatePickerOpen] = useState(false);
 
   const activeLinea = externalActiveLinea ?? internalActiveLinea;
   const setActiveLinea = (linea: number | null) => {
@@ -432,6 +434,7 @@ export default function OrdenesSapModule({
   const [seguimientoResumenAnio, setSeguimientoResumenAnio] = useState<number>(() => selectedFecha ? selectedFecha.getFullYear() : new Date().getFullYear());
   const [ordenComponentes, setOrdenComponentes] = useState<Record<string, { codigo: string; descripcion: string }>>({
     'Jarabe T': { codigo: '', descripcion: '' },
+    'Jarabe 10%': { codigo: '', descripcion: '' },
     'Bebida': { codigo: '', descripcion: '' },
     'Env': { codigo: '', descripcion: '' },
     'Etq': { codigo: '', descripcion: '' },
@@ -478,6 +481,12 @@ export default function OrdenesSapModule({
     'GLUP MANZANA': { codigo: 'JARA-00010', descripcion: 'JARABE TERMINADO GLUP MANZANA VERDE' },
     'GLUP MANZANA ROJA': { codigo: 'JARA-00011', descripcion: 'JARABE TERMINADO GLUP MANZANA ROJA' },
     'GLUP PIÑA PARCHITA': { codigo: 'JARA-00012', descripcion: 'JARABE TERMINADO GLUP PIÑA PARCHITA' },
+  };
+
+  const JARABE_10_POR_SABOR: Record<string, { codigo: string; descripcion: string }> = {
+    'GLUP PIÑA': { codigo: 'JARA-00013', descripcion: 'JARABE TERMINADO GLUP PIÑA 10%' },
+    'GLUP MANZANA ROJA': { codigo: 'JARA-00014', descripcion: 'JARABE TERMINADO GLUP MANZANA ROJA 10%' },
+    'GLUP UVA': { codigo: 'JARA-00015', descripcion: 'JARABE TERMINADO GLUP UVA 10%' },
   };
 
   // Datos de la fila "Bebida" (segunda tabla). Depende solo del sabor (igual para todas las líneas).
@@ -808,6 +817,7 @@ export default function OrdenesSapModule({
     const datosJarabe = ordenLineaSeleccionada === '5'
       ? { codigo: '', descripcion: '' }
       : (JARABE_T_POR_SABOR[saborResuelto] || { codigo: '', descripcion: '' });
+    const datosJarabe10 = JARABE_10_POR_SABOR[saborResuelto] || { codigo: '', descripcion: '' };
     const datosBebida = (ordenLineaSeleccionada === '5' && !(saborResuelto.startsWith('JUSTY') || saborResuelto.startsWith('VITA TEA')))
       ? { codigo: '', descripcion: '' }
       : (BEBIDA_POR_SABOR[saborResuelto] || { codigo: '', descripcion: '' });
@@ -818,6 +828,7 @@ export default function OrdenesSapModule({
     setOrdenComponentes(prev => ({
       ...prev,
       'Jarabe T': { codigo: datosJarabe.codigo, descripcion: datosJarabe.descripcion },
+      'Jarabe 10%': { codigo: datosJarabe10.codigo, descripcion: datosJarabe10.descripcion },
       'Bebida': { codigo: datosBebida.codigo, descripcion: datosBebida.descripcion },
       'Env': { codigo: datosEnv.codigo, descripcion: datosEnv.descripcion },
       'Etq': { codigo: datosEtq.codigo, descripcion: datosEtq.descripcion },
@@ -2352,24 +2363,57 @@ const exportarPDFdia = async () => {
              </Popover>
            )}
             {isSectionAllowed('prodt-semanal') && isSectionAllowed('prodt-semanal') && activeSection === 'prodt-semanal' && (
-             <Popover>
+             <Popover open={prodtSemanalDatePickerOpen} onOpenChange={setProdtSemanalDatePickerOpen}>
                <PopoverTrigger asChild>
                  <Button
                    variant="outline"
-                   className="h-9 w-[240px] justify-start rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                   className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[11px] whitespace-nowrap border-0 bg-white text-slate-700 shadow-sm cursor-pointer"
                  >
-                   <CalendarIcon className="h-3.5 w-3.5 mr-2" />
-                   {selectedFechaProdtSemanal ? format(selectedFechaProdtSemanal, "d 'de' MMM, yyyy", { locale: es }) : "Seleccionar semana"}
+                   <CalendarIcon className="h-3.5 w-3.5 text-primary" />
+                   {selectedFechaProdtSemanal ? format(selectedFechaProdtSemanal, "dd 'de' MMM, yyyy", { locale: es }) : "Seleccionar fecha"}
                  </Button>
                </PopoverTrigger>
-               <PopoverContent className="p-0 rounded-2xl" align="start">
+               <PopoverContent className="w-auto rounded-lg border border-slate-200 bg-white p-2 shadow-lg" align="start">
                  <Calendar
                    mode="single"
                    selected={selectedFechaProdtSemanal}
-                   onSelect={setSelectedFechaProdtSemanal}
+                   onSelect={(date) => {
+                     if (!date) return;
+                     setSelectedFechaProdtSemanal(date);
+                     setProdtSemanalDatePickerOpen(false);
+                   }}
                    locale={es}
-                   className="rounded-md"
+                   className="p-1"
+                   classNames={{
+                     month: "space-y-3",
+                     caption: "flex items-center justify-between px-1 pt-1 relative",
+                     caption_label: "text-xs font-semibold text-slate-800 capitalize",
+                     nav: "flex items-center gap-1",
+                     nav_button: "h-7 w-7 rounded-md border-0 bg-transparent p-0 text-slate-500 opacity-100 hover:bg-slate-100 hover:text-slate-900",
+                     nav_button_previous: "static",
+                     nav_button_next: "static",
+                     head_row: "flex",
+                     head_cell: "w-8 rounded-none text-center text-[10px] font-medium text-slate-600",
+                     row: "mt-1 flex w-full",
+                     cell: "relative h-8 w-8 p-0 text-center text-xs focus-within:z-20",
+                     day: "h-8 w-8 rounded-md p-0 text-xs font-normal text-slate-700 hover:bg-slate-100",
+                     day_selected: "bg-blue-600 text-white font-semibold hover:bg-blue-700 hover:text-white focus:bg-blue-700 focus:text-white",
+                     day_today: "bg-slate-100 font-semibold text-slate-900",
+                     day_outside: "text-slate-400 opacity-70",
+                   }}
                  />
+                 <div className="flex justify-end border-t border-slate-100 px-1 pt-2">
+                   <button
+                     type="button"
+                     className="text-xs font-medium text-blue-600 hover:text-blue-800"
+                     onClick={() => {
+                       setSelectedFechaProdtSemanal(new Date());
+                       setProdtSemanalDatePickerOpen(false);
+                     }}
+                   >
+                     Hoy
+                   </button>
+                 </div>
                </PopoverContent>
              </Popover>
            )}
@@ -2818,24 +2862,57 @@ const exportarPDFdia = async () => {
                        </Select>
                      </div>
                    ) : (
-                     <Popover>
+                     <Popover open={seguimientoDatePickerOpen} onOpenChange={setSeguimientoDatePickerOpen}>
                        <PopoverTrigger asChild>
                          <Button
                            variant="outline"
-                           className="h-11 w-[240px] justify-start rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                           className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[11px] whitespace-nowrap border-0 bg-white text-slate-700 shadow-sm cursor-pointer"
                          >
-                           <CalendarIcon className="h-3.5 w-3.5 mr-2" />
-                           {selectedFechaSeguimiento ? `Semana ${getISOWeek(selectedFechaSeguimiento)} · ${format(selectedFechaSeguimiento, "d 'de' MMM, yyyy", { locale: es })}` : "Seleccionar semana"}
+                           <CalendarIcon className="h-3.5 w-3.5 text-primary" />
+                           {selectedFechaSeguimiento ? format(selectedFechaSeguimiento, "dd 'de' MMM, yyyy", { locale: es }) : "Seleccionar fecha"}
                          </Button>
                        </PopoverTrigger>
-                       <PopoverContent className="p-0 rounded-2xl" align="end">
+                       <PopoverContent className="w-auto rounded-lg border border-slate-200 bg-white p-2 shadow-lg" align="start">
                          <Calendar
                            mode="single"
                            selected={selectedFechaSeguimiento}
-                           onSelect={setSelectedFechaSeguimiento}
+                           onSelect={(date) => {
+                             if (!date) return;
+                             setSelectedFechaSeguimiento(date);
+                             setSeguimientoDatePickerOpen(false);
+                           }}
                            locale={es}
-                           className="rounded-md"
+                           className="p-1"
+                           classNames={{
+                             month: "space-y-3",
+                             caption: "flex items-center justify-between px-1 pt-1 relative",
+                             caption_label: "text-xs font-semibold text-slate-800 capitalize",
+                             nav: "flex items-center gap-1",
+                             nav_button: "h-7 w-7 rounded-md border-0 bg-transparent p-0 text-slate-500 opacity-100 hover:bg-slate-100 hover:text-slate-900",
+                             nav_button_previous: "static",
+                             nav_button_next: "static",
+                             head_row: "flex",
+                             head_cell: "w-8 rounded-none text-center text-[10px] font-medium text-slate-600",
+                             row: "mt-1 flex w-full",
+                             cell: "relative h-8 w-8 p-0 text-center text-xs focus-within:z-20",
+                             day: "h-8 w-8 rounded-md p-0 text-xs font-normal text-slate-700 hover:bg-slate-100",
+                             day_selected: "bg-blue-600 text-white font-semibold hover:bg-blue-700 hover:text-white focus:bg-blue-700 focus:text-white",
+                             day_today: "bg-slate-100 font-semibold text-slate-900",
+                             day_outside: "text-slate-400 opacity-70",
+                           }}
                          />
+                         <div className="flex justify-end border-t border-slate-100 px-1 pt-2">
+                           <button
+                             type="button"
+                             className="text-xs font-medium text-blue-600 hover:text-blue-800"
+                             onClick={() => {
+                               setSelectedFechaSeguimiento(new Date());
+                               setSeguimientoDatePickerOpen(false);
+                             }}
+                           >
+                             Hoy
+                           </button>
+                         </div>
                        </PopoverContent>
                      </Popover>
                    )}

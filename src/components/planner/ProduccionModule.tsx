@@ -2060,11 +2060,11 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
             <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPreformaInput('EMP_0135-Ultrapack', data, update, readOnly)}</td>
           </tr>
           <tr>
-            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-200">EMP_0166</td>
-            <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200">PREFORMA TRANSPARENTE 33 GR-1881</td>
-            <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200 text-left">ultrapack 8600 und</td>
-            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-r border-b border-slate-200">{renderPreformaInput('EMP_0166', data, update, readOnly)}</td>
-            <td className="px-2 py-1 border-b border-slate-200">{renderPreformasTotal('EMP_0166', data)}</td>
+            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b-2 border-slate-400">EMP_0166</td>
+            <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b-2 border-slate-400">PREFORMA TRANSPARENTE 33 GR-1881</td>
+            <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b-2 border-slate-400 text-left">ultrapack 8600 und</td>
+            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-r border-b-2 border-slate-400">{renderPreformaInput('EMP_0166', data, update, readOnly)}</td>
+            <td className="px-2 py-1 border-b-2 border-slate-400">{renderPreformasTotal('EMP_0166', data)}</td>
           </tr>
           <tr>
             <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-200">EMP_0171</td>

@@ -1,6 +1,127 @@
 {
   "messages": [
     {
+      "id": "2026-10-16T14:59:37.126Z-4iznhxi",
+      "title": "Aviso",
+      "message": "Maria cargado a data pro el código EMP_0171",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": false,
+      "createdAt": "2026-10-16T14:59:37.126Z"
+    },
+    {
+      "id": "2026-10-16T14:58:35.653Z-b5ng75a",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": false,
+      "createdAt": "2026-10-16T14:58:35.653Z"
+    },
+    {
+      "id": "2026-10-16T14:54:14.951Z-esjp8vt",
+      "title": "Aviso",
+      "message": "Se subirá una actualización que puede hacer que el sistema pase por distintas recargas",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": false,
+      "createdAt": "2026-10-16T14:54:14.951Z"
+    },
+    {
+      "id": "2026-10-12T20:40:46.104Z-mzau1u0",
+      "title": "PDP S42",
+      "message": "se realizo modificación en el pdp S42 para las líneas 6 y 7",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": true,
+      "createdAt": "2026-10-12T20:40:46.104Z"
+    },
+    {
+      "id": "2026-09-30T14:43:02.341Z-trzbo7i",
+      "title": "Modificación PDP S40",
+      "message": "Se realizo modificación en el PDP S40 para la linea 6",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": true,
+      "createdAt": "2026-09-30T14:43:02.341Z"
+    },
+    {
+      "id": "2026-09-28T18:44:23.982Z-dt18cg6",
+      "title": "Aviso",
+      "message": "Actualizaciones cargadas",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": true,
+      "createdAt": "2026-09-28T18:44:23.982Z"
+    },
+    {
+      "id": "2026-09-28T18:39:27.728Z-hjkvph2",
+      "title": "aviso",
+      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": true,
+      "createdAt": "2026-09-28T18:39:27.728Z"
+    },
+    {
+      "id": "2026-09-25T20:15:10.226Z-ypnn9mr",
+      "title": "PSP S40",
+      "message": "Ya disponible los arranques del PDP S40",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": true,
+      "createdAt": "2026-09-25T20:15:10.226Z"
+    },
+    {
+      "id": "2026-09-25T20:11:27.814Z-hmm4wb6",
+      "title": "Modificación PDP S39",
+      "message": "modificación del PDP S39 para trabajos de fin de semana",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": true,
+      "createdAt": "2026-09-25T20:11:27.814Z"
+    },
+    {
+      "id": "2026-09-22T14:24:55.843Z-kxuxmj8",
+      "title": "Modificación PDP S39",
+      "message": "Se realizó Modificación en PDP S39 en Línea 2 y 3",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": true,
+      "createdAt": "2026-09-22T14:24:55.843Z"
+    },
+    {
+      "id": "2026-10-16T14:58:35.653Z-s61v12g",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "jaime.r",
+      "read": false,
+      "createdAt": "2026-10-16T14:58:35.653Z"
+    },
+    {
       "id": "2026-10-16T14:54:14.951Z-cbl2kz9",
       "title": "Aviso",
       "message": "Se subirá una actualización que puede hacer que el sistema pase por distintas recargas",
@@ -100,15 +221,15 @@
       "createdAt": "2026-09-18T19:01:16.821Z"
     },
     {
-      "id": "2026-09-17T15:58:42.904Z-kfqvkot",
-      "title": "PDP S39",
-      "message": "Ya se encuentra disponible los arranques de PDP S39",
-      "type": "success",
+      "id": "2026-10-16T14:58:35.653Z-xt9yey8",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "jaime.r",
+      "recipient": "demon2",
       "read": true,
-      "createdAt": "2026-09-17T15:58:42.904Z"
+      "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
       "id": "2026-10-16T14:54:14.951Z-7uion1s",
@@ -118,7 +239,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "demon2",
-      "read": false,
+      "read": true,
       "createdAt": "2026-10-16T14:54:14.951Z"
     },
     {
@@ -210,125 +331,15 @@
       "createdAt": "2026-09-18T19:01:16.821Z"
     },
     {
-      "id": "2026-09-17T15:58:42.904Z-z6rsn8g",
-      "title": "PDP S39",
-      "message": "Ya se encuentra disponible los arranques de PDP S39",
-      "type": "success",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "demon2",
-      "read": true,
-      "createdAt": "2026-09-17T15:58:42.904Z"
-    },
-    {
-      "id": "2026-10-16T14:54:14.951Z-esjp8vt",
+      "id": "2026-10-16T14:58:35.653Z-pve08t9",
       "title": "Aviso",
-      "message": "Se subirá una actualización que puede hacer que el sistema pase por distintas recargas",
+      "message": "Actualización Terminada",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
+      "recipient": "alex.mds",
       "read": false,
-      "createdAt": "2026-10-16T14:54:14.951Z"
-    },
-    {
-      "id": "2026-10-12T20:40:46.104Z-mzau1u0",
-      "title": "PDP S42",
-      "message": "se realizo modificación en el pdp S42 para las líneas 6 y 7",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-10-12T20:40:46.104Z"
-    },
-    {
-      "id": "2026-09-30T14:43:02.341Z-trzbo7i",
-      "title": "Modificación PDP S40",
-      "message": "Se realizo modificación en el PDP S40 para la linea 6",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-09-30T14:43:02.341Z"
-    },
-    {
-      "id": "2026-09-28T18:44:23.982Z-dt18cg6",
-      "title": "Aviso",
-      "message": "Actualizaciones cargadas",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-09-28T18:44:23.982Z"
-    },
-    {
-      "id": "2026-09-28T18:39:27.728Z-hjkvph2",
-      "title": "aviso",
-      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-09-28T18:39:27.728Z"
-    },
-    {
-      "id": "2026-09-25T20:15:10.226Z-ypnn9mr",
-      "title": "PSP S40",
-      "message": "Ya disponible los arranques del PDP S40",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-09-25T20:15:10.226Z"
-    },
-    {
-      "id": "2026-09-25T20:11:27.814Z-hmm4wb6",
-      "title": "Modificación PDP S39",
-      "message": "modificación del PDP S39 para trabajos de fin de semana",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-09-25T20:11:27.814Z"
-    },
-    {
-      "id": "2026-09-22T14:24:55.843Z-kxuxmj8",
-      "title": "Modificación PDP S39",
-      "message": "Se realizó Modificación en PDP S39 en Línea 2 y 3",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-09-22T14:24:55.843Z"
-    },
-    {
-      "id": "2026-09-18T19:01:16.821Z-ci28nx8",
-      "title": "PDP S39",
-      "message": "Ya se encuentra disponible el PDP S39",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-09-18T19:01:16.821Z"
-    },
-    {
-      "id": "2026-09-17T15:58:42.904Z-qj6f6h6",
-      "title": "PDP S39",
-      "message": "Ya se encuentra disponible los arranques de PDP S39",
-      "type": "success",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-09-17T15:58:42.904Z"
+      "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
       "id": "2026-10-16T14:54:14.951Z-a3ewtz1",
@@ -430,15 +441,15 @@
       "createdAt": "2026-09-18T19:01:16.821Z"
     },
     {
-      "id": "2026-09-17T15:58:42.904Z-1ij6ddm",
-      "title": "PDP S39",
-      "message": "Ya se encuentra disponible los arranques de PDP S39",
-      "type": "success",
+      "id": "2026-10-16T14:58:35.653Z-gj7l5a9",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-09-17T15:58:42.904Z"
+      "recipient": "anto.mds",
+      "read": false,
+      "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
       "id": "2026-10-16T14:54:14.951Z-zoaz2il",
@@ -540,15 +551,15 @@
       "createdAt": "2026-09-18T19:01:16.821Z"
     },
     {
-      "id": "2026-09-17T15:58:42.904Z-k3x2ezr",
-      "title": "PDP S39",
-      "message": "Ya se encuentra disponible los arranques de PDP S39",
-      "type": "success",
+      "id": "2026-10-16T14:58:35.653Z-hsk8h44",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "anto.mds",
+      "recipient": "prodtj.mds",
       "read": false,
-      "createdAt": "2026-09-17T15:58:42.904Z"
+      "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
       "id": "2026-10-16T14:54:14.951Z-1yitffa",
@@ -650,15 +661,15 @@
       "createdAt": "2026-09-18T19:01:16.821Z"
     },
     {
-      "id": "2026-09-17T15:58:42.904Z-e8u7t35",
-      "title": "PDP S39",
-      "message": "Ya se encuentra disponible los arranques de PDP S39",
-      "type": "success",
+      "id": "2026-10-16T14:58:35.653Z-bs0o9pf",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtj.mds",
-      "read": true,
-      "createdAt": "2026-09-17T15:58:42.904Z"
+      "recipient": "prodtg.mds",
+      "read": false,
+      "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
       "id": "2026-10-16T14:54:14.951Z-aeg6361",
@@ -760,15 +771,15 @@
       "createdAt": "2026-09-18T19:01:16.821Z"
     },
     {
-      "id": "2026-09-17T15:58:42.904Z-afnp8iq",
-      "title": "PDP S39",
-      "message": "Ya se encuentra disponible los arranques de PDP S39",
-      "type": "success",
+      "id": "2026-10-16T14:58:35.653Z-n15xiwg",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtg.mds",
+      "recipient": "prodts.mds",
       "read": false,
-      "createdAt": "2026-09-17T15:58:42.904Z"
+      "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
       "id": "2026-10-16T14:54:14.951Z-kvb3dd7",
@@ -870,15 +881,15 @@
       "createdAt": "2026-09-18T19:01:16.821Z"
     },
     {
-      "id": "2026-09-17T15:58:42.904Z-9tak3of",
-      "title": "PDP S39",
-      "message": "Ya se encuentra disponible los arranques de PDP S39",
-      "type": "success",
+      "id": "2026-10-16T14:58:35.653Z-c3mni1q",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodts.mds",
+      "recipient": "procj.mds",
       "read": true,
-      "createdAt": "2026-09-17T15:58:42.904Z"
+      "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
       "id": "2026-10-16T14:54:14.951Z-rbio9fp",
@@ -888,7 +899,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "procj.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-10-16T14:54:14.951Z"
     },
     {
@@ -980,15 +991,15 @@
       "createdAt": "2026-09-18T19:01:16.821Z"
     },
     {
-      "id": "2026-09-17T15:58:42.904Z-nmifcjq",
-      "title": "PDP S39",
-      "message": "Ya se encuentra disponible los arranques de PDP S39",
-      "type": "success",
+      "id": "2026-10-16T14:58:35.653Z-jpukwhh",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procj.mds",
-      "read": true,
-      "createdAt": "2026-09-17T15:58:42.904Z"
+      "recipient": "cald.mds",
+      "read": false,
+      "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
       "id": "2026-10-16T14:54:14.951Z-elr3y3j",
@@ -1090,15 +1101,15 @@
       "createdAt": "2026-09-18T19:01:16.821Z"
     },
     {
-      "id": "2026-09-17T15:58:42.904Z-8gfgcul",
-      "title": "PDP S39",
-      "message": "Ya se encuentra disponible los arranques de PDP S39",
-      "type": "success",
+      "id": "2026-10-16T14:58:35.653Z-gtorabe",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "cald.mds",
+      "recipient": "prodt.mds",
       "read": false,
-      "createdAt": "2026-09-17T15:58:42.904Z"
+      "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
       "id": "2026-10-16T14:54:14.951Z-cxrrmji",
@@ -1200,15 +1211,15 @@
       "createdAt": "2026-09-18T19:01:16.821Z"
     },
     {
-      "id": "2026-09-17T15:58:42.904Z-uxk46kz",
-      "title": "PDP S39",
-      "message": "Ya se encuentra disponible los arranques de PDP S39",
-      "type": "success",
+      "id": "2026-10-16T14:58:35.653Z-5xo1ad3",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt.mds",
+      "recipient": "prodt1.mds",
       "read": false,
-      "createdAt": "2026-09-17T15:58:42.904Z"
+      "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
       "id": "2026-10-16T14:54:14.951Z-ns0rsa1",
@@ -1310,15 +1321,15 @@
       "createdAt": "2026-09-18T19:01:16.821Z"
     },
     {
-      "id": "2026-09-17T15:58:42.904Z-iod0hjj",
-      "title": "PDP S39",
-      "message": "Ya se encuentra disponible los arranques de PDP S39",
-      "type": "success",
+      "id": "2026-10-16T14:58:35.653Z-jlpnj0e",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt1.mds",
-      "read": true,
-      "createdAt": "2026-09-17T15:58:42.904Z"
+      "recipient": "prodt2.mds",
+      "read": false,
+      "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
       "id": "2026-10-16T14:54:14.951Z-hqv7cwi",
@@ -1420,15 +1431,15 @@
       "createdAt": "2026-09-18T19:01:16.821Z"
     },
     {
-      "id": "2026-09-17T15:58:42.904Z-j6a5ruc",
-      "title": "PDP S39",
-      "message": "Ya se encuentra disponible los arranques de PDP S39",
-      "type": "success",
+      "id": "2026-10-16T14:58:35.653Z-3rlgjue",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt2.mds",
-      "read": true,
-      "createdAt": "2026-09-17T15:58:42.904Z"
+      "recipient": "proc.mds",
+      "read": false,
+      "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
       "id": "2026-10-16T14:54:14.951Z-p1dv9c7",
@@ -1530,15 +1541,15 @@
       "createdAt": "2026-09-18T19:01:16.821Z"
     },
     {
-      "id": "2026-09-17T15:58:42.904Z-9ig5ffo",
-      "title": "PDP S39",
-      "message": "Ya se encuentra disponible los arranques de PDP S39",
-      "type": "success",
+      "id": "2026-10-16T14:58:35.653Z-741qeew",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc.mds",
-      "read": true,
-      "createdAt": "2026-09-17T15:58:42.904Z"
+      "recipient": "proc1.mds",
+      "read": false,
+      "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
       "id": "2026-10-16T14:54:14.951Z-cfk4bpr",
@@ -1640,15 +1651,15 @@
       "createdAt": "2026-09-18T19:01:16.821Z"
     },
     {
-      "id": "2026-09-17T15:58:42.904Z-5j7y6wc",
-      "title": "PDP S39",
-      "message": "Ya se encuentra disponible los arranques de PDP S39",
-      "type": "success",
+      "id": "2026-10-16T14:58:35.653Z-ee7jjj4",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc1.mds",
+      "recipient": "proc2.mds",
       "read": false,
-      "createdAt": "2026-09-17T15:58:42.904Z"
+      "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
       "id": "2026-10-16T14:54:14.951Z-air6d1m",
@@ -1750,15 +1761,15 @@
       "createdAt": "2026-09-18T19:01:16.821Z"
     },
     {
-      "id": "2026-09-17T15:58:42.904Z-d58izld",
-      "title": "PDP S39",
-      "message": "Ya se encuentra disponible los arranques de PDP S39",
-      "type": "success",
+      "id": "2026-10-16T14:58:35.653Z-mid4q2x",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc2.mds",
+      "recipient": "procs1.mds",
       "read": false,
-      "createdAt": "2026-09-17T15:58:42.904Z"
+      "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
       "id": "2026-10-16T14:54:14.951Z-psx25lx",
@@ -1860,15 +1871,15 @@
       "createdAt": "2026-09-18T19:01:16.821Z"
     },
     {
-      "id": "2026-09-17T15:58:42.904Z-4vqoyec",
-      "title": "PDP S39",
-      "message": "Ya se encuentra disponible los arranques de PDP S39",
-      "type": "success",
+      "id": "2026-10-16T14:58:35.653Z-v94q1zq",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procs1.mds",
+      "recipient": "procs2.mds",
       "read": false,
-      "createdAt": "2026-09-17T15:58:42.904Z"
+      "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
       "id": "2026-10-16T14:54:14.951Z-hrzt01l",
@@ -1970,15 +1981,15 @@
       "createdAt": "2026-09-18T19:01:16.821Z"
     },
     {
-      "id": "2026-09-17T15:58:42.904Z-uh1hwoe",
-      "title": "PDP S39",
-      "message": "Ya se encuentra disponible los arranques de PDP S39",
-      "type": "success",
+      "id": "2026-10-16T14:58:35.653Z-e5rlym8",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procs2.mds",
-      "read": true,
-      "createdAt": "2026-09-17T15:58:42.904Z"
+      "recipient": "finan.mds",
+      "read": false,
+      "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
       "id": "2026-10-16T14:54:14.951Z-j5y3ke5",
@@ -2080,15 +2091,15 @@
       "createdAt": "2026-09-18T19:01:16.821Z"
     },
     {
-      "id": "2026-09-17T15:58:42.904Z-p6qs2j8",
-      "title": "PDP S39",
-      "message": "Ya se encuentra disponible los arranques de PDP S39",
-      "type": "success",
+      "id": "2026-10-16T14:58:35.653Z-nt8j9h8",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "finan.mds",
+      "recipient": "g.tec.mds",
       "read": false,
-      "createdAt": "2026-09-17T15:58:42.904Z"
+      "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
       "id": "2026-10-16T14:54:14.951Z-bcfqr5v",
@@ -2190,15 +2201,15 @@
       "createdAt": "2026-09-18T19:01:16.821Z"
     },
     {
-      "id": "2026-09-17T15:58:42.904Z-qohtclf",
-      "title": "PDP S39",
-      "message": "Ya se encuentra disponible los arranques de PDP S39",
-      "type": "success",
+      "id": "2026-10-16T14:58:35.653Z-udw9lgy",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "g.tec.mds",
-      "read": true,
-      "createdAt": "2026-09-17T15:58:42.904Z"
+      "recipient": "enf.mds",
+      "read": false,
+      "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
       "id": "2026-10-16T14:54:14.951Z-xrz21zq",
@@ -2300,15 +2311,15 @@
       "createdAt": "2026-09-18T19:01:16.821Z"
     },
     {
-      "id": "2026-09-17T15:58:42.904Z-tt7apc4",
-      "title": "PDP S39",
-      "message": "Ya se encuentra disponible los arranques de PDP S39",
-      "type": "success",
+      "id": "2026-10-16T14:58:35.653Z-2qyt51d",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "enf.mds",
+      "recipient": "etq.mds",
       "read": false,
-      "createdAt": "2026-09-17T15:58:42.904Z"
+      "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
       "id": "2026-10-16T14:54:14.951Z-6ppk858",
@@ -2410,15 +2421,15 @@
       "createdAt": "2026-09-18T19:01:16.821Z"
     },
     {
-      "id": "2026-09-17T15:58:42.904Z-ckec4jt",
-      "title": "PDP S39",
-      "message": "Ya se encuentra disponible los arranques de PDP S39",
-      "type": "success",
+      "id": "2026-10-16T14:58:35.653Z-372erp4",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "etq.mds",
+      "recipient": "logg.mds",
       "read": false,
-      "createdAt": "2026-09-17T15:58:42.904Z"
+      "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
       "id": "2026-10-16T14:54:14.951Z-g4b3se4",
@@ -2520,15 +2531,15 @@
       "createdAt": "2026-09-18T19:01:16.821Z"
     },
     {
-      "id": "2026-09-17T15:58:42.904Z-io083nq",
-      "title": "PDP S39",
-      "message": "Ya se encuentra disponible los arranques de PDP S39",
-      "type": "success",
+      "id": "2026-10-16T14:58:35.653Z-mscqny6",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "logg.mds",
+      "recipient": "mtto.mds",
       "read": false,
-      "createdAt": "2026-09-17T15:58:42.904Z"
+      "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
       "id": "2026-10-16T14:54:14.951Z-mljdyxw",
@@ -2630,15 +2641,15 @@
       "createdAt": "2026-09-18T19:01:16.821Z"
     },
     {
-      "id": "2026-09-17T15:58:42.904Z-6eoll14",
-      "title": "PDP S39",
-      "message": "Ya se encuentra disponible los arranques de PDP S39",
-      "type": "success",
+      "id": "2026-10-16T14:58:35.653Z-cvuw7z0",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto.mds",
+      "recipient": "cal.mds",
       "read": false,
-      "createdAt": "2026-09-17T15:58:42.904Z"
+      "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
       "id": "2026-10-16T14:54:14.951Z-l227c2y",
@@ -2740,15 +2751,15 @@
       "createdAt": "2026-09-18T19:01:16.821Z"
     },
     {
-      "id": "2026-09-17T15:58:42.904Z-hqjgxvx",
-      "title": "PDP S39",
-      "message": "Ya se encuentra disponible los arranques de PDP S39",
-      "type": "success",
+      "id": "2026-10-16T14:58:35.653Z-3s3uq8w",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "cal.mds",
+      "recipient": "MDS",
       "read": false,
-      "createdAt": "2026-09-17T15:58:42.904Z"
+      "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
       "id": "2026-10-16T14:54:14.951Z-3ytxm2i",
@@ -2850,15 +2861,15 @@
       "createdAt": "2026-09-18T19:01:16.821Z"
     },
     {
-      "id": "2026-09-17T15:58:42.904Z-t5abp0m",
-      "title": "PDP S39",
-      "message": "Ya se encuentra disponible los arranques de PDP S39",
-      "type": "success",
+      "id": "2026-10-16T14:58:35.653Z-sbltoz4",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "MDS",
+      "recipient": "mtto1.mds",
       "read": false,
-      "createdAt": "2026-09-17T15:58:42.904Z"
+      "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
       "id": "2026-10-16T14:54:14.951Z-7fytudc",
@@ -2894,6 +2905,17 @@
       "createdAt": "2026-09-30T14:43:02.341Z"
     },
     {
+      "id": "2026-10-16T14:58:35.653Z-0rx4z9b",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "stf",
+      "read": false,
+      "createdAt": "2026-10-16T14:58:35.653Z"
+    },
+    {
       "id": "2026-10-16T14:54:14.951Z-3lwg4ab",
       "title": "Aviso",
       "message": "Se subirá una actualización que puede hacer que el sistema pase por distintas recargas",
@@ -2916,6 +2938,17 @@
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {
+      "id": "2026-10-16T14:58:35.653Z-sfrwvxf",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodt3.mds",
+      "read": false,
+      "createdAt": "2026-10-16T14:58:35.653Z"
+    },
+    {
       "id": "2026-10-16T14:54:14.951Z-48a81d4",
       "title": "Aviso",
       "message": "Se subirá una actualización que puede hacer que el sistema pase por distintas recargas",
@@ -2925,6 +2958,17 @@
       "recipient": "prodt3.mds",
       "read": false,
       "createdAt": "2026-10-16T14:54:14.951Z"
+    },
+    {
+      "id": "2026-10-16T14:58:35.653Z-xz4eirf",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodt4.mds",
+      "read": false,
+      "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
       "id": "2026-10-16T14:54:14.951Z-s96qm2y",
