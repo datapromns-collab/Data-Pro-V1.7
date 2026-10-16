@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-10-19T00:00:00.000",
+      "weekStartDate": "2026-09-28T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -13049,6 +13049,106 @@
           "3vzgz33zm",
           "t90pnppg9"
         ]
+      },
+      "2026-10-19": {
+        "tasks": [
+          {
+            "name": "GLUP MANZANA ROJA",
+            "lineId": "1",
+            "loadPerHour": 1500,
+            "quantity": 36000,
+            "durationHours": 24,
+            "presentation": "2Lts",
+            "tanks": 4.47,
+            "startTime": "2026-10-19T11:00:00.000Z",
+            "endTime": "2026-10-20T11:00:00.000Z",
+            "id": "skdf9glpi",
+            "color": "#ec4899"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "3",
+            "loadPerHour": 2800,
+            "quantity": 67200,
+            "durationHours": 24,
+            "presentation": "1Lt",
+            "tanks": 7.79,
+            "startTime": "2026-10-19T11:00:00.000Z",
+            "endTime": "2026-10-20T11:00:00.000Z",
+            "id": "8q2oajf7n",
+            "color": "#ef4444"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "4",
+            "loadPerHour": 2800,
+            "quantity": 67200,
+            "durationHours": 24,
+            "presentation": "2Lts",
+            "tanks": 7.79,
+            "startTime": "2026-10-19T11:00:00.000Z",
+            "endTime": "2026-10-20T11:00:00.000Z",
+            "id": "ra14lhbqj",
+            "color": "#10b981"
+          },
+          {
+            "name": "JUSTY DURAZNO",
+            "lineId": "5",
+            "loadPerHour": 1210,
+            "quantity": 29040,
+            "durationHours": 24,
+            "presentation": "1.5Lts",
+            "tanks": 26.14,
+            "startTime": "2026-10-19T11:00:00.000Z",
+            "endTime": "2026-10-20T11:00:00.000Z",
+            "id": "o01xauqp6",
+            "color": "#f59e0b"
+          },
+          {
+            "name": "GLUP FRESH",
+            "lineId": "6",
+            "loadPerHour": 1200,
+            "quantity": 17250,
+            "durationHours": 14.375,
+            "presentation": "0.4Lts",
+            "tanks": 1,
+            "startTime": "2026-10-19T11:00:00.000Z",
+            "endTime": "2026-10-20T01:22:30.000Z",
+            "id": "it8k0tuet",
+            "color": "#6366f1"
+          },
+          {
+            "name": "GLUP FRESH",
+            "lineId": "7",
+            "loadPerHour": 2500,
+            "quantity": 43125,
+            "durationHours": 17.25,
+            "presentation": "1Lt",
+            "tanks": 5,
+            "startTime": "2026-10-19T11:00:00.000Z",
+            "endTime": "2026-10-20T04:15:00.000Z",
+            "id": "9omw16lne",
+            "color": "#f59e0b"
+          }
+        ],
+        "realProduction": {},
+        "rawMaterialStock": {},
+        "manualUBB": {},
+        "initialUBBTanks": {},
+        "finalUBBTanks": {},
+        "initialUBBTanksDaily": {},
+        "finalUBBTanksDaily": {},
+        "salesProjection": {},
+        "finishedProductInventory": {},
+        "productionPlan": {},
+        "logisticsInventory": {},
+        "plantInventory": {},
+        "salesProjectionAW": {},
+        "finishedProductInventoryAW": {},
+        "productionPlanAW": {},
+        "logisticsInventoryAW": {},
+        "plantInventoryAW": {},
+        "deletedTaskIds": []
       }
     },
     "productionInventory": {
@@ -19971,7 +20071,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-16T21:59:54.079Z"
+    "updatedAt": "2026-10-16T22:24:19.332Z"
   },
   "ordenesSap": [
     {
@@ -159941,8 +160041,8 @@
         "bloqueado": true
       },
       {
-        "fecha": "2026-09-12",
-        "semana": 37,
+        "fecha": "2026-10-12",
+        "semana": 42,
         "turno": "NOCTURNO",
         "operador": "ERNESTO SALCEDO",
         "linea": "Línea 3",
@@ -162009,6 +162109,25 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1792189123303,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-15",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 2",
+        "equipo": "",
+        "tipoParada": "SALA DE MÁQUINAS",
+        "inicioParada": "08:26",
+        "finParada": "08:36",
+        "totalMin": "10",
+        "zona": "Llenado",
+        "falla": "FALLA DE AIRE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792189165022,
         "bloqueado": true
       }
     ],
