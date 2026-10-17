@@ -403,7 +403,10 @@ export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
       ] },
     ] },
   ],
-  calidad: [{ id: 'quality', label: 'Módulo de Calidad en Desarrollo' }],
+  calidad: [
+    { id: 'seguimiento-tanques', label: 'Seguimiento en tanques' },
+    { id: 'seguimiento-lineas', label: 'Seguimiento en Lineas' },
+  ],
   mtto: [{ id: 'co2', label: 'CO2', children: [
     { id: 'daily', label: 'Consumo diario' },
     { id: 'weekly', label: 'Resumen semanal' },

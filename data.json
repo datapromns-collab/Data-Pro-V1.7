@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-10-19T00:00:00.000",
+      "weekStartDate": "2026-10-20T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -19604,7 +19604,8 @@
           "procesos",
           "logistica",
           "mtto",
-          "insumos"
+          "insumos",
+          "calidad"
         ],
         "alex.mds": [
           "jarabes",
@@ -20510,7 +20511,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-17T17:42:09.799Z"
+    "updatedAt": "2026-10-17T20:49:47.508Z"
   },
   "ordenesSap": [
     {
@@ -160522,8 +160523,8 @@
         "bloqueado": true
       },
       {
-        "fecha": "2026-10-12",
-        "semana": 42,
+        "fecha": "2026-09-12",
+        "semana": 37,
         "turno": "NOCTURNO",
         "operador": "ERNESTO SALCEDO",
         "linea": "Línea 3",
@@ -160538,7 +160539,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1792161949209,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-09-12",
@@ -165972,6 +165973,253 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1792265588938,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-17",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 4",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "15:04",
+        "finParada": "15:24",
+        "totalMin": "20",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES PARA EL ARRANQUE ENFRIAMIENTO Y MEZCLA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792269192130,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-17",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "BRUNO VALLES",
+        "linea": "Línea 4",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "15:40",
+        "finParada": "15:45",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792269239209,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-17",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "ATAGUALPA BASTIDAS ",
+        "linea": "Línea 4",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "16:42",
+        "finParada": "16:49",
+        "totalMin": "7",
+        "zona": "Llenado",
+        "falla": "BOTELLAS CAIDAS EN LA SALIDA DEL HORNO",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792269490234,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-17",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "ATAGUALPA BASTIDAS ",
+        "linea": "Línea 4",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "16:34",
+        "finParada": "16:41",
+        "totalMin": "7",
+        "zona": "Llenado",
+        "falla": "BOTELLAS CAIDAS PERDIDA DE FASE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792269565290,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-17",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "NESTOR TORO",
+        "linea": "Línea 4",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "17:40",
+        "finParada": "17:45",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "FALLA DE COMUNICACION",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792269712949,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-18",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 4",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "07:00",
+        "finParada": "16:30",
+        "totalMin": "570",
+        "zona": "Llenado",
+        "falla": "MANTENIMIENTO PROGRAMADO DURANTE TODO EL TURNO, SE EXTIENDE POR FALLA DE ENERGIA ELECTRICA PAC",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792269832113,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-19",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "JOSE NAVARRO",
+        "linea": "Línea 4",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "07:04",
+        "finParada": "07:10",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792269977682,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-19",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "DAVID REYES ",
+        "linea": "Línea 4",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "07:45",
+        "finParada": "07:51",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "ATASCAMIENTO DE BOTELLAS",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792270548010,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-19",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 4",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "08:34",
+        "finParada": "14:58",
+        "totalMin": "384",
+        "zona": "Llenado",
+        "falla": "FALLA DE E/E EXTERNA PAC",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792270611201,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-19",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 4",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "14:58",
+        "finParada": "15:43",
+        "totalMin": "45",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES DE ARRANQUE LUEGO DE LA FALLA DE E/E PASE DE AGUA CALIENTE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792270680410,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-19",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "HECTOR LORCA",
+        "linea": "Línea 4",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "15:50",
+        "finParada": "15:55",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "LIMPIEZA DE CET, POR CONTAMINACION DE PEGA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792270733985,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-19",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "NESTOR TORO",
+        "linea": "Línea 4",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "17:54",
+        "finParada": "18:04",
+        "totalMin": "10",
+        "zona": "Llenado",
+        "falla": "FALLA DE COMINICACION",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792270801017,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-19",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 4",
+        "equipo": "",
+        "tipoParada": "SALA DE MÁQUINAS",
+        "inicioParada": "16:26",
+        "finParada": "16:31",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "FALLA DE AIRE DE ALTA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792270858618,
         "bloqueado": true
       }
     ],
@@ -189565,42 +189813,42 @@
             "MATP_0002": {
               "initial": 232,
               "reception": null,
-              "final": null,
+              "final": 202,
               "initialOverride": true
             },
             "MATP_0009": {
               "initial": 246,
               "reception": null,
-              "final": null,
+              "final": 216,
               "initialOverride": true
             },
             "MATP_0003": {
               "initial": 104,
-              "reception": null,
-              "final": null,
+              "reception": 288,
+              "final": 380,
               "initialOverride": true
             },
             "MATP_0007": {
               "initial": 280,
-              "reception": null,
+              "reception": 316,
               "final": null,
               "initialOverride": true
             },
             "MATP_0005": {
               "initial": 125,
-              "reception": null,
+              "reception": 301,
               "final": null,
               "initialOverride": true
             },
             "MATP_0039": {
               "initial": 152,
-              "reception": null,
+              "reception": 144,
               "final": null,
               "initialOverride": true
             },
             "MATP_0006": {
               "initial": 135,
-              "reception": null,
+              "reception": 48,
               "final": null,
               "initialOverride": true
             },
@@ -189649,7 +189897,7 @@
             "MATP_0010": {
               "initial": 330.6,
               "reception": null,
-              "final": null,
+              "final": 302.1,
               "initialOverride": true
             },
             "MATP_0041": {
@@ -189697,7 +189945,7 @@
             "MATP_0017": {
               "initial": 6803.3,
               "reception": 3750,
-              "final": null,
+              "final": 10245.5,
               "initialOverride": true
             },
             "MATP_0018": {
@@ -189709,7 +189957,7 @@
             "MATP_0019": {
               "initial": 1731.75,
               "reception": 2000,
-              "final": null,
+              "final": 3677.15,
               "initialOverride": true
             },
             "MATP_0020": {
@@ -189721,11 +189969,11 @@
             "MATP_0021": {
               "initial": 1443.4,
               "reception": 1250,
-              "final": null,
+              "final": 2638.8,
               "initialOverride": true
             },
             "MATP_0031": {
-              "initial": 86.1,
+              "initial": 85.1,
               "reception": null,
               "final": null,
               "initialOverride": true
@@ -189753,6 +190001,140 @@
               "reception": null,
               "final": null,
               "initialOverride": true
+            }
+          }
+        }
+      }
+    },
+    "calidad-seguimiento-tanques": {
+      "weeks": {
+        "2026-10-12": {
+          "GLUP COLA": {
+            "rows": {
+              "9a8506c6-14ab-4dd1-bb6d-f6d6b164d99c": {
+                "tastingDate": "",
+                "tastingTank": "",
+                "tastingTime": "",
+                "tastingTechnician": "",
+                "ubb": "",
+                "transferTime": "",
+                "finishedTankRoom": "",
+                "simpleSyrupTransferTime": "",
+                "simpleSyrupBrix": "",
+                "simpleSyrupTransferredVolume": "",
+                "finishedSyrupBrix": "",
+                "finishedSyrupAt": "",
+                "finishedSyrupPh": "",
+                "finishedSyrupTankVolume": "",
+                "finishedSyrupColorOdorFlavor": "",
+                "finishedSyrupTechnician": "",
+                "maturationStartDate": "",
+                "maturationStartTime": "",
+                "maturationEndTime": "",
+                "maturationDate": "",
+                "maturedSyrupAnalysisTime": "",
+                "maturedSyrupBrix": "",
+                "maturedSyrupAt": "",
+                "maturedSyrupPh": "",
+                "maturedSyrupColorOdorFlavor": "",
+                "beverageSyrupBrix": "",
+                "beveragePatternBrix": "",
+                "beveragePh": "",
+                "beverageAt": "",
+                "beverageFlavor": "",
+                "beverageColor": "",
+                "beverageOdor": "",
+                "beverageAnalyst": "",
+                "packagingDate": "",
+                "lineDispatchTime": "",
+                "lineConnectedMaturationHours": "",
+                "packagingLine": "",
+                "observations": "",
+                "justyPreparationTime": "",
+                "justyTankNumber": "",
+                "justySimpleSyrupVolume": "",
+                "justySimpleSyrupBrix": "",
+                "justyPreparedProductVolume": "",
+                "justyPreparedUbb": "",
+                "justyConcentrateLot": "",
+                "justyConcentrateExpiry": "",
+                "justyPreparationEndTime": "",
+                "justyFinalBeverageBrix": "",
+                "justyTitratableAcidity": "",
+                "justyBeveragePh": "",
+                "justyBeverageColor": "",
+                "justyBeverageOdor": "",
+                "justyBeverageFlavor": "",
+                "justyLineDispatchTime": "",
+                "justyPreparationTechnician": "",
+                "justyQualityAnalyst": "",
+                "createdAt": "2026-10-17T20:21:58.177Z"
+              }
+            }
+          }
+        },
+        "2026-10-26": {
+          "GLUP COLA": {
+            "rows": {
+              "ddcba851-41f6-47d7-b739-613a07b1bf71": {
+                "tastingDate": "",
+                "tastingTank": "",
+                "tastingTime": "",
+                "tastingTechnician": "",
+                "ubb": "",
+                "transferTime": "",
+                "finishedTankRoom": "",
+                "simpleSyrupTransferTime": "",
+                "simpleSyrupBrix": "",
+                "simpleSyrupTransferredVolume": "",
+                "finishedSyrupBrix": "",
+                "finishedSyrupAt": "",
+                "finishedSyrupPh": "",
+                "finishedSyrupTankVolume": "",
+                "finishedSyrupColorOdorFlavor": "",
+                "finishedSyrupTechnician": "",
+                "maturationStartDate": "",
+                "maturationStartTime": "",
+                "maturationEndTime": "",
+                "maturationDate": "",
+                "maturedSyrupAnalysisTime": "",
+                "maturedSyrupBrix": "",
+                "maturedSyrupAt": "",
+                "maturedSyrupPh": "",
+                "maturedSyrupColorOdorFlavor": "",
+                "beverageSyrupBrix": "",
+                "beveragePatternBrix": "",
+                "beveragePh": "",
+                "beverageAt": "",
+                "beverageFlavor": "",
+                "beverageColor": "",
+                "beverageOdor": "",
+                "beverageAnalyst": "",
+                "packagingDate": "",
+                "lineDispatchTime": "",
+                "lineConnectedMaturationHours": "",
+                "packagingLine": "",
+                "observations": "",
+                "justyPreparationTime": "",
+                "justyTankNumber": "",
+                "justySimpleSyrupVolume": "",
+                "justySimpleSyrupBrix": "",
+                "justyPreparedProductVolume": "",
+                "justyPreparedUbb": "",
+                "justyConcentrateLot": "",
+                "justyConcentrateExpiry": "",
+                "justyPreparationEndTime": "",
+                "justyFinalBeverageBrix": "",
+                "justyTitratableAcidity": "",
+                "justyBeveragePh": "",
+                "justyBeverageColor": "",
+                "justyBeverageOdor": "",
+                "justyBeverageFlavor": "",
+                "justyLineDispatchTime": "",
+                "justyPreparationTechnician": "",
+                "justyQualityAnalyst": "",
+                "createdAt": "2026-10-17T20:22:38.250Z"
+              }
             }
           }
         }
@@ -189812,7 +190194,8 @@
     "sala-jarabe-justy": {
       "*": []
     },
-    "procesos-inventario-materia-prima": {}
+    "procesos-inventario-materia-prima": {},
+    "calidad-seguimiento-tanques": {}
   },
   "_deletedOrdenesSapIds": [
     "1-1785349102112",

@@ -3449,7 +3449,7 @@ export default function PlannerPage() {
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full bg-[#f8fafc]">
+      <div className="fixed inset-0 flex h-screen w-full overflow-hidden bg-[#f8fafc]">
         <Sidebar className="border-r border-slate-200 bg-white no-print">
           <div className="p-6">
             <div className="flex items-center gap-3">
@@ -6830,7 +6830,12 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                            )}
                       </div>
                     )}
-                    {activeModule === 'calidad' && isDemon && <CalidadModule />}
+                    {activeModule === 'calidad' && hasAccess(user.id, 'calidad') && (
+                      <CalidadModule
+                        canViewTanques={getPermissionLevel(user.id, 'calidad', 'seguimiento-tanques') !== 'none'}
+                        canViewLineas={getPermissionLevel(user.id, 'calidad', 'seguimiento-lineas') !== 'none'}
+                      />
+                    )}
                     {activeModule === 'mtto' && (
                      <MttoModule
                        getCo2TheoreticalForDate={calcularKgCo2ParaFecha}
