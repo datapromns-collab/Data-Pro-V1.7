@@ -252,7 +252,7 @@ export function SeguimientoLineaTable({
                           type="number"
                           value={ov.ubb || ''}
                           onChange={(e) => updateAutoOverride(row.id, { ubb: Number(e.target.value) || 0 })}
-                          className="h-7 w-20 text-center text-[11px] font-semibold rounded-md border-transparent bg-white/70 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
+                          className="h-7 w-24 text-center text-[11px] font-semibold rounded-md border-transparent bg-white/70 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
                         />
                      </TableCell>
                      <TableCell className="py-2 border-b border-slate-100">
@@ -320,7 +320,7 @@ export function SeguimientoLineaTable({
                          type="number"
                          value={row.ubb || ''}
                          onChange={(e) => handleUpdate(row.id, { ubb: Number(e.target.value) || 0 })}
-                         className="h-7 w-20 text-center text-[11px] font-semibold rounded-md border-transparent bg-slate-50 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
+                         className="h-7 w-24 text-center text-[11px] font-semibold rounded-md border-transparent bg-slate-50 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
                        />
                      </TableCell>
                      <TableCell className="py-2 border-b border-slate-100">

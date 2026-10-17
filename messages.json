@@ -1,6 +1,17 @@
 {
   "messages": [
     {
+      "id": "2026-10-17T17:30:53.208Z-dhupqge",
+      "title": "maria",
+      "message": "revisa la sección de inventario de procesos",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": false,
+      "createdAt": "2026-10-17T17:30:53.208Z"
+    },
+    {
       "id": "2026-10-16T14:59:37.126Z-4iznhxi",
       "title": "Aviso",
       "message": "Maria cargado a data pro el código EMP_0171",
@@ -8,7 +19,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "maria.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-10-16T14:59:37.126Z"
     },
     {
@@ -19,7 +30,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "maria.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
@@ -30,7 +41,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "maria.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-10-16T14:54:14.951Z"
     },
     {
@@ -98,17 +109,6 @@
       "recipient": "maria.mds",
       "read": true,
       "createdAt": "2026-09-25T20:11:27.814Z"
-    },
-    {
-      "id": "2026-09-22T14:24:55.843Z-kxuxmj8",
-      "title": "Modificación PDP S39",
-      "message": "Se realizó Modificación en PDP S39 en Línea 2 y 3",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-09-22T14:24:55.843Z"
     },
     {
       "id": "2026-10-16T14:58:35.653Z-s61v12g",
@@ -2538,7 +2538,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "mtto.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
@@ -2549,7 +2549,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "mtto.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-10-16T14:54:14.951Z"
     },
     {
@@ -2560,7 +2560,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "mtto.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {
@@ -2571,7 +2571,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "mtto.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-09-30T14:43:02.341Z"
     },
     {
@@ -2582,7 +2582,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "mtto.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-09-28T18:44:23.982Z"
     },
     {
@@ -2593,7 +2593,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "mtto.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-09-28T18:39:27.728Z"
     },
     {
@@ -2604,7 +2604,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "mtto.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-09-25T20:15:10.226Z"
     },
     {
@@ -2615,7 +2615,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "mtto.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-09-25T20:11:27.814Z"
     },
     {
@@ -2626,7 +2626,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "mtto.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-09-22T14:24:55.843Z"
     },
     {
@@ -2637,7 +2637,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "mtto.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-09-18T19:01:16.821Z"
     },
     {

@@ -26,9 +26,10 @@ export type MttoCo2ConsumptionStore = ReturnType<
 interface MttoModuleProps {
   getCo2TheoreticalForDate: (date: string) => number;
   co2Consumption: MttoCo2ConsumptionStore;
+  readOnly: boolean;
 }
 
-export default function MttoModule({ getCo2TheoreticalForDate, co2Consumption }: MttoModuleProps) {
+export default function MttoModule({ getCo2TheoreticalForDate, co2Consumption, readOnly }: MttoModuleProps) {
   const [activeSection, setActiveSection] = useState<'daily' | 'weekly' | 'monthly'>('daily');
   const [weekStart, setWeekStart] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }));
   const [weeklySelectedMonth, setWeeklySelectedMonth] = useState(() => new Date().getMonth());
@@ -219,7 +220,7 @@ export default function MttoModule({ getCo2TheoreticalForDate, co2Consumption }:
                             type="number"
                             min="0"
                             step="any"
-                            disabled={!co2Consumption.isLoaded}
+                            disabled={!co2Consumption.isLoaded || readOnly}
                             aria-label={`Tanque ${tank}, ${format(day, 'EEEE d/M/yyyy', { locale: es })}`}
                             value={getCellValue(day, tank)}
                             onChange={(event) => {

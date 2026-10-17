@@ -14563,6 +14563,50 @@
           "aditivosCantidad": {},
           "solidosCantidad": {},
           "quimicosInsumosCantidad": {}
+        },
+        "2026-10-19": {
+          "tapas": {
+            "EMP_0095-Alpla": {
+              "totalCajas": "924000",
+              "total": ""
+            },
+            "EMP_0095-Importada": {
+              "totalCajas": "1464000",
+              "total": ""
+            },
+            "EMP_0105-Alpla": {
+              "totalCajas": "1183000",
+              "total": ""
+            },
+            "EMP_0105-ImportadaEW": {
+              "totalCajas": "2592000",
+              "total": ""
+            },
+            "EMP_0105-ImportadaTipo2": {
+              "totalCajas": "1435200",
+              "total": ""
+            }
+          },
+          "separadores": {},
+          "preformas": {
+            "EMP_0009": "232200",
+            "EMP_0068": "706500",
+            "EMP_0093-Ultrapack": "781886",
+            "EMP_0103-Ultrapack": "484320",
+            "EMP_0120-Ultrapack": "455800",
+            "EMP_0126-Ultrapack": "751080",
+            "EMP_0135-Alpla": "450360",
+            "EMP_0166": "911600"
+          },
+          "plasticos": {},
+          "adhesivoCantidad": "",
+          "etiquetasCantidad": {},
+          "azucarCantidad": {},
+          "concentradosCantidad": {},
+          "concentradosJustyCantidad": {},
+          "aditivosCantidad": {},
+          "solidosCantidad": {},
+          "quimicosInsumosCantidad": {}
         }
       },
       "mensual": {
@@ -18826,9 +18870,25 @@
             "quimicosInsumosCantidad": {}
           },
           "2026-10-12": {
-            "tapas": {},
+            "tapas": {
+              "EMP_0105-Alpla": {
+                "totalCajas": "2100000",
+                "total": ""
+              },
+              "EMP_0095-Importada": {
+                "totalCajas": "960000",
+                "total": ""
+              }
+            },
             "separadores": {},
-            "preformas": {},
+            "preformas": {
+              "EMP_0103-Ultrapack": "442368",
+              "EMP_0093-Ultrapack": "663552",
+              "EMP_0068": "122400",
+              "EMP_0166": "275200",
+              "EMP_0126-Alpla": "453600",
+              "EMP_0135-Ultrapack": "491520"
+            },
             "plasticos": {
               "EMP_0017": "5477",
               "EMP_0019": "2040",
@@ -18836,7 +18896,11 @@
               "EMP_0084": "1152"
             },
             "adhesivoCantidad": "112",
-            "etiquetasCantidad": {},
+            "etiquetasCantidad": {
+              "EMP_0042": "811,50",
+              "EMP_0111": "272,67",
+              "EMP_0034": "612,12"
+            },
             "azucarCantidad": {},
             "concentradosCantidad": {},
             "concentradosJustyCantidad": {},
@@ -18845,7 +18909,24 @@
             "quimicosInsumosCantidad": {}
           },
           "2026-10-14": {
-            "tapas": {},
+            "tapas": {
+              "EMP_0105-ImportadaTipo2": {
+                "totalCajas": "460000",
+                "total": ""
+              },
+              "EMP_0105-ImportadaEW": {
+                "totalCajas": "48000",
+                "total": ""
+              },
+              "EMP_0105-Alpla": {
+                "totalCajas": "672000",
+                "total": ""
+              },
+              "EMP_0095-Importada": {
+                "totalCajas": "480000",
+                "total": ""
+              }
+            },
             "separadores": {},
             "preformas": {
               "EMP_0103-Ultrapack": "",
@@ -18855,9 +18936,33 @@
             },
             "plasticos": {
               "EMP_0017": "13740,50",
-              "EMP_0080-Plastven": ""
+              "EMP_0080-Plastven": "",
+              "EMP_0019": "2040"
             },
             "adhesivoCantidad": "112",
+            "etiquetasCantidad": {
+              "EMP_0042": "806,50"
+            },
+            "azucarCantidad": {},
+            "concentradosCantidad": {},
+            "concentradosJustyCantidad": {},
+            "aditivosCantidad": {},
+            "solidosCantidad": {},
+            "quimicosInsumosCantidad": {}
+          },
+          "2026-10-13": {
+            "tapas": {
+              "EMP_0095-Importada": {
+                "totalCajas": "768000",
+                "total": ""
+              }
+            },
+            "separadores": {},
+            "preformas": {
+              "EMP_0093-Ultrapack": "193536"
+            },
+            "plasticos": {},
+            "adhesivoCantidad": "",
             "etiquetasCantidad": {},
             "azucarCantidad": {},
             "concentradosCantidad": {},
@@ -18910,22 +19015,45 @@
             "quimicosInsumosCantidad": {}
           },
           "2026-10-12": {
-            "tapas": {},
+            "tapas": {
+              "EMP_0105-ImportadaTipo2": {
+                "totalCajas": "460000",
+                "total": ""
+              },
+              "EMP_0105-ImportadaEW": {
+                "totalCajas": "48000",
+                "total": ""
+              },
+              "EMP_0105-Alpla": {
+                "totalCajas": "2772000",
+                "total": ""
+              },
+              "EMP_0095-Importada": {
+                "totalCajas": "2208000",
+                "total": ""
+              }
+            },
             "separadores": {},
             "preformas": {
-              "EMP_0103-Ultrapack": "",
-              "EMP_0166": "197800",
-              "EMP_0093-Ultrapack": "1354752",
-              "EMP_0068": "313650"
+              "EMP_0103-Ultrapack": "442368",
+              "EMP_0166": "473000",
+              "EMP_0093-Ultrapack": "2211840",
+              "EMP_0068": "436050",
+              "EMP_0126-Alpla": "453600",
+              "EMP_0135-Ultrapack": "491520"
             },
             "plasticos": {
               "EMP_0017": "19217.5",
-              "EMP_0019": "2040",
+              "EMP_0019": "4080",
               "EMP_0080-Plastven": "5904",
               "EMP_0084": "1152"
             },
             "adhesivoCantidad": "224",
-            "etiquetasCantidad": {},
+            "etiquetasCantidad": {
+              "EMP_0042": "1618",
+              "EMP_0111": "272.67",
+              "EMP_0034": "612.12"
+            },
             "azucarCantidad": {},
             "concentradosCantidad": {},
             "concentradosJustyCantidad": {},
@@ -19370,7 +19498,54 @@
               "preformSize": ""
             }
           ],
-          "2026-10-05": []
+          "2026-10-05": [],
+          "2026-10-15": [
+            {
+              "id": "959d2e43-ce86-41d7-99e5-5fcacab400fc",
+              "line": "Linea 2",
+              "flavor": "",
+              "code": "EMP_0022",
+              "material": "ETIQUETA UVA 2000ML",
+              "quantity": "92,5",
+              "unit": "kg",
+              "preformSize": ""
+            },
+            {
+              "id": "83f4412f-c334-445a-bdad-fe0d7d2c45c1",
+              "line": "Linea 5",
+              "flavor": "",
+              "code": "EMP_0017",
+              "material": "POLIETILENO TERMOENCOGIBLE 55 X 0.07",
+              "quantity": "1419",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "38ab363b-838d-4473-a3e1-3c936a816485",
+              "line": "",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "104832",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            }
+          ],
+          "2026-10-12": [
+            {
+              "id": "a1d272d4-7014-46ff-8c97-96fbf6afaa4e",
+              "line": "Linea 1",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "20",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            }
+          ]
         }
       }
     },
@@ -19475,7 +19650,8 @@
           "management"
         ],
         "cald.mds": [
-          "planning"
+          "planning",
+          "management"
         ],
         "prodt.mds": [
           "planning",
@@ -19541,11 +19717,11 @@
         ],
         "mtto.mds": [
           "planning",
-          "mtto"
+          "mtto",
+          "management"
         ],
         "cal.mds": [
-          "planning",
-          "management"
+          "planning"
         ],
         "mtto1.mds": [
           "planning",
@@ -19907,10 +20083,12 @@
           "planning"
         ],
         "procj.mds": [
-          "planning"
+          "planning",
+          "management"
         ],
         "cald.mds": [
-          "planning"
+          "planning",
+          "management"
         ],
         "prodt.mds": [
           "planning"
@@ -19955,7 +20133,8 @@
         ],
         "mtto.mds": [
           "planning",
-          "mtto"
+          "mtto",
+          "management"
         ],
         "cal.mds": [
           "planning"
@@ -20056,7 +20235,9 @@
           "planning.requirement": "read"
         },
         "procj.mds": {
-          "planning.requirement": "read"
+          "planning.requirement": "read",
+          "management.weekly-summary": "read",
+          "management.monthly-summary": "read"
         },
         "stf": {
           "planning.gantt": "read",
@@ -20073,6 +20254,31 @@
           "planning.gantt": "read",
           "planning.daily": "read",
           "planning.requirement": "read"
+        },
+        "proc.mds": {
+          "procesos.ptab": "none",
+          "procesos.miteco": "none"
+        },
+        "proc1.mds": {
+          "procesos.miteco": "none",
+          "procesos.sala-jarabe": "none",
+          "procesos.inv-materia-prima": "none"
+        },
+        "proc2.mds": {
+          "procesos.ptab": "none",
+          "procesos.sala-jarabe": "none",
+          "procesos.inv-materia-prima": "write"
+        },
+        "cald.mds": {
+          "management.production": "none",
+          "management.control": "none",
+          "management.compliance": "none"
+        },
+        "mtto.mds": {
+          "management.production": "none",
+          "management.control": "none",
+          "management.weekly-summary": "none",
+          "management.compliance": "none"
         }
       }
     },
@@ -20156,10 +20362,10 @@
       },
       {
         "id": "cald.mds",
-        "name": "Jefa de Calidad",
+        "name": "Mallitzi Ceballos",
         "password": "ad.146.",
         "role": "STANDARD",
-        "displayRole": "CALIDAD"
+        "displayRole": "Jefa De Calidad"
       },
       {
         "id": "prodt.mds",
@@ -20304,7 +20510,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-17T12:55:51.393Z"
+    "updatedAt": "2026-10-17T17:42:09.799Z"
   },
   "ordenesSap": [
     {
@@ -45171,19 +45377,27 @@
         },
         "2026-10-16": {
           "GLUP COLA": {
-            "inicial": "58.34",
-            "preparado": "",
-            "final": "58.34"
+            "inicial": "51.81",
+            "preparado": "66",
+            "final": "63.57"
           },
           "GLUP KOLITA": {
-            "inicial": "53.32",
+            "inicial": "5.16",
             "preparado": "",
-            "final": "53.32"
+            "final": ""
           },
           "GLUP FRESH": {
-            "inicial": "8.26",
-            "preparado": "",
-            "final": "8.26"
+            "inicial": "8.85",
+            "preparado": "18",
+            "final": "6.69"
+          },
+          "GLUP UVA": {
+            "inicial": "11",
+            "preparado": "33",
+            "final": "12.16"
+          },
+          "GLUP MANZANA ROJA": {
+            "inicial": "10.88"
           }
         },
         "2026-10-17": {
@@ -46677,14 +46891,14 @@
         },
         "2026-10-16": {
           "PORTUGUESA": {
-            "invInicialSacos": "10600",
-            "recepcionSacos": "",
-            "invFinalSacos": "10600"
+            "invInicialSacos": "11560",
+            "recepcionSacos": "3720",
+            "invFinalSacos": "11680"
           },
           "PASTORA": {
-            "invInicialSacos": "160",
+            "invInicialSacos": "960",
             "recepcionSacos": "",
-            "invFinalSacos": "160"
+            "invFinalSacos": "920"
           }
         },
         "2026-10-17": {
@@ -48007,12 +48221,12 @@
         },
         "2026-10-16": {
           "JARABE SIMPLE": {
-            "invInicialSacos": "263",
+            "invInicialSacos": "183",
             "invFinalSacos": "263"
           },
           "Sala 1": {
-            "invInicialSacos": "1133",
-            "invFinalSacos": "1133"
+            "invInicialSacos": "714",
+            "invFinalSacos": "478"
           }
         },
         "2026-10-17": {
@@ -48180,7 +48394,8 @@
         "2026-10-09": "1.02",
         "2026-10-13": "1.02",
         "2026-10-14": "1.02",
-        "2026-10-15": "1.02"
+        "2026-10-15": "1.02",
+        "2026-10-16": "1.02"
       },
       "_deletedIds": {},
       "weeklyFisico": {
@@ -48203,7 +48418,7 @@
         "2026-04-27|2026-04": 1059135.18,
         "2026-04-01|2026-04": 0,
         "2026-10-05|2026-10": 1226308.47,
-        "2026-10-12|2026-10": 822131.25,
+        "2026-10-12|2026-10": 1010367.01,
         "2026-10-19|2026-10": 0
       }
     },
@@ -163250,6 +163465,1260 @@
         "usuario": "Luis Sanchez",
         "id": 1792242138656,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-19",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 2",
+        "equipo": "",
+        "tipoParada": "SALA DE MÁQUINAS",
+        "inicioParada": "07:27",
+        "finParada": "07:30",
+        "totalMin": "3",
+        "zona": "Llenado",
+        "falla": "FALLA DE AIRE DE BAJA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792242204816,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-14",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "JOSE GUDIÑO",
+        "linea": "Línea 3",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "07:00",
+        "finParada": "07:30",
+        "totalMin": "30",
+        "zona": "Llenado",
+        "falla": "AJUSTE DE RASGADOR DE PEGA POR DEFICIT DE PEGAMENTO",
+        "orden": "9543",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792242619306,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-14",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "JOSE CORDERO",
+        "linea": "Línea 3",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "07:54",
+        "finParada": "07:59",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792242718327,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-14",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "JOSE GUDIÑO",
+        "linea": "Línea 3",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "09:24",
+        "finParada": "09:29",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "ETIQUETA ENRROLLADA EN EL CILINDRO PRINCIPAL, CONTAMINACION CON PEGAMENTO",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792242804432,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-14",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "JOSE CORDERO ",
+        "linea": "Línea 3",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "09:31",
+        "finParada": "09:36",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792242856087,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-14",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "09:51",
+        "finParada": "15:31",
+        "totalMin": "340",
+        "zona": "Llenado",
+        "falla": "FALLA DE ENERGIA ELECTRICA PAC",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792242908982,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-14",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "15:31",
+        "finParada": "16:30",
+        "totalMin": "59",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES POSTERIORES A LA FALLA ELECTRICA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792242962704,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-14",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "JOSE CORDERO",
+        "linea": "Línea 3",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "17:30",
+        "finParada": "17:34",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792243029256,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-14",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "SOPLADORA",
+        "tipoParada": "INSUMOS",
+        "inicioParada": "17:57",
+        "finParada": "18:03",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "PREFORMAS FUERA DE ESPECIFICACIONES",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792246045785,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-15",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "SALA DE MÁQUINAS",
+        "inicioParada": "07:19",
+        "finParada": "07:22",
+        "totalMin": "3",
+        "zona": "Llenado",
+        "falla": "FALLA DE AIRE DE ALTA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792246392536,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-15",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "CARLOS GALINDO",
+        "linea": "Línea 3",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "08:12",
+        "finParada": "08:19",
+        "totalMin": "7",
+        "zona": "Llenado",
+        "falla": "SE RETIRA CARETA DE RODILLO DE ENCOLADO, CAUSANTE DE CONTAMINACION DEL TAMBOR DE TRANSFERENCIA POR ACUMULACION DE PEGAMENTO DEBIDO A QUE TENIA PRECENCIA DE ETIQUETAS.",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792246522248,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-15",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "JUAN GIL",
+        "linea": "Línea 3",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "08:26",
+        "finParada": "08:39",
+        "totalMin": "13",
+        "zona": "Llenado",
+        "falla": "AJUSTE DE RECETA POR VARIACION DE VOLTAJE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792246675440,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-15",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "08:39",
+        "finParada": "14:00",
+        "totalMin": "321",
+        "zona": "Llenado",
+        "falla": "FALLA DE ENERGIA ELECTRICA PAC",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792246756383,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-15",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "SALA DE MÁQUINAS",
+        "inicioParada": "14:00",
+        "finParada": "14:27",
+        "totalMin": "27",
+        "zona": "Llenado",
+        "falla": "ESPERA DE SERVICIOS",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792246812752,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-15",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "14:27",
+        "finParada": "14:38",
+        "totalMin": "11",
+        "zona": "Llenado",
+        "falla": "PASE DE AGUA CALIENTE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792246863351,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-15",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "14:40",
+        "finParada": "15:14",
+        "totalMin": "34",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES POSTERIOR A LA FALLA ELECTRICA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792246911888,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-15",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "15:18",
+        "finParada": "15:32",
+        "totalMin": "14",
+        "zona": "Llenado",
+        "falla": "AJUSTE DE RECETA POR VARIACION DE VOLTAJE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792246971577,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-15",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "LUIS MORALES",
+        "linea": "Línea 3",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "15:55",
+        "finParada": "16:10",
+        "totalMin": "15",
+        "zona": "Llenado",
+        "falla": "AJUSTE DE GUIA DE ENTRADA POR MULTIPLES FALLAS DE COMPACTACION ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792247109615,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-15",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "JUAN GIL",
+        "linea": "Línea 3",
+        "equipo": "SOPLADORA",
+        "tipoParada": "INSUMOS",
+        "inicioParada": "17:02",
+        "finParada": "17:09",
+        "totalMin": "7",
+        "zona": "Llenado",
+        "falla": "PREFORMA FUERA DE ESPECIFICACIONES",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792247175336,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-15",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "JOSE CORDERO ",
+        "linea": "Línea 3",
+        "equipo": "LLENADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "17:21",
+        "finParada": "17:28",
+        "totalMin": "7",
+        "zona": "Llenado",
+        "falla": "CAMBIO DE PIN Y ORQUILLA #46 DE PINZA DE RINSER",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792247252848,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-15",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "JOSE CORDERO",
+        "linea": "Línea 3",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "17:58",
+        "finParada": "18:04",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792247296632,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-15",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "ERNESTO SALCEDO",
+        "linea": "Línea 3",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "15:45",
+        "finParada": "15:47",
+        "totalMin": "2",
+        "zona": "Llenado",
+        "falla": "PELICULA ATASCADA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792247406432,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-15",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "SALA DE MÁQUINAS",
+        "inicioParada": "16:39",
+        "finParada": "16:45",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "FALLA DE AIRE DE ALTA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792247451238,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-15",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "SALA DE MÁQUINAS",
+        "inicioParada": "16:49",
+        "finParada": "16:55",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "FALLA DE AIRE DE ALTA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792247493768,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-16",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "JOSE CORDERO",
+        "linea": "Línea 3",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "07:01",
+        "finParada": "07:06",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792247925752,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-16",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "07:28",
+        "finParada": "07:38",
+        "totalMin": "10",
+        "zona": "Llenado",
+        "falla": "VARIACION DE VOLTAJE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792247977784,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-16",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "07:45",
+        "finParada": "08:00",
+        "totalMin": "15",
+        "zona": "Llenado",
+        "falla": "VARIACION DE VOLTAJE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792248019024,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-16",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "JOSE CORDERO",
+        "linea": "Línea 3",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "08:30",
+        "finParada": "08:33",
+        "totalMin": "3",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792248064144,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-16",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "ERNESTO SALCEDO",
+        "linea": "Línea 3",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "08:33",
+        "finParada": "08:37",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "PAQUETE DESARMADOS POR TRANCAMIENTO DE TRASPORTE DE SALIDA DE HORNO",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792248259248,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-16",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "09:27",
+        "finParada": "16:40",
+        "totalMin": "433",
+        "zona": "Llenado",
+        "falla": "FALLA DE E/E EXTERNA PAC",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792248314303,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-16",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "16:40",
+        "finParada": "16:51",
+        "totalMin": "11",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES Y PASE DE AGUA CALIENTE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792248405064,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-17",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "LUIS MORALES ",
+        "linea": "Línea 3",
+        "equipo": "TRANSPORTADOR DE CAJAS",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "07:24",
+        "finParada": "07:35",
+        "totalMin": "11",
+        "zona": "Llenado",
+        "falla": "ROPTURA DE CINTA TRANSPORTADORA  DE CAJAS",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792248570632,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-17",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "LUIS MORALES ",
+        "linea": "Línea 3",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "07:49",
+        "finParada": "07:53",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "FALLA DE COMPACTACION",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792248648480,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-17",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "LUIS MORALES ",
+        "linea": "Línea 3",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "07:57",
+        "finParada": "08:03",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "FALLA DE COMPACTACION Y CAIDAS DE CAJAS POR FLACIDEZ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792248712273,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-17",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "BENJAMIN CORDERO",
+        "linea": "Línea 3",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "08:05",
+        "finParada": "08:13",
+        "totalMin": "8",
+        "zona": "Llenado",
+        "falla": "CAIDAS DE BOTELLAS ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792248852913,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-17",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "SALA DE MÁQUINAS",
+        "inicioParada": "08:20",
+        "finParada": "08:25",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "TEMPERATURA DE MEZCLA ELEVADA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792248929176,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-17",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "08:40",
+        "finParada": "14:28",
+        "totalMin": "348",
+        "zona": "Llenado",
+        "falla": "FALLA DE E/E ECTERNA PAC",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792249002288,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-17",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "SALA DE MÁQUINAS",
+        "inicioParada": "15:39",
+        "finParada": "15:47",
+        "totalMin": "8",
+        "zona": "Llenado",
+        "falla": "FALLA DE AIRE DE ALTA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792249061978,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-17",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "SALA DE JARABE",
+        "inicioParada": "14:28",
+        "finParada": "14:43",
+        "totalMin": "15",
+        "zona": "Llenado",
+        "falla": "ESPERA POR AGUA CALIENTE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792249119992,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-17",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "14:43",
+        "finParada": "15:04",
+        "totalMin": "21",
+        "zona": "Llenado",
+        "falla": "PASE DE AGUA CALIENTE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792249164271,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-17",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "15:04",
+        "finParada": "15:32",
+        "totalMin": "28",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES PARA EL ARRANQUE ENFRIAMIENTO Y MEZCLA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792249249697,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-17",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "BENJAMIN ",
+        "linea": "Línea 3",
+        "equipo": "LLENADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "15:55",
+        "finParada": "16:03",
+        "totalMin": "8",
+        "zona": "Llenado",
+        "falla": "CAMBIO DE HORQUILLA DE PIN Y RESORTE DE PINZA DE RINSER #10",
+        "orden": "",
+        "observaciones": "CONSTANTE CAIDA DE BOTELLAS EN EL RINSER",
+        "usuario": "Luis Sanchez",
+        "id": 1792257676674,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-17",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "BENJAMIN  CORDERO",
+        "linea": "Línea 3",
+        "equipo": "LLENADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "16:17",
+        "finParada": "16:25",
+        "totalMin": "8",
+        "zona": "Llenado",
+        "falla": "CAMBIO DE HORQUILLA DE PIN  Y RESORTE DE PINSA DE RINSER #09",
+        "orden": "",
+        "observaciones": "CAIDA CONSTANTE DE BOTELLAS EN EL RINSER",
+        "usuario": "Luis Sanchez",
+        "id": 1792257780369,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-17",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "ERNESTO SALCEDO",
+        "linea": "Línea 3",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "15:49",
+        "finParada": "15:52",
+        "totalMin": "3",
+        "zona": "Llenado",
+        "falla": "PERDIDA DE FASE EN EL EMPLAYADO",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792257878425,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-18",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "07:40",
+        "finParada": "13:18",
+        "totalMin": "338",
+        "zona": "Llenado",
+        "falla": "FALLA DE E/E EXTERNA PAC",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792258413873,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-18",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "13:18",
+        "finParada": "13:23",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "EN ESPERA DE SERVICIOS",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792258465857,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-18",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "13:23",
+        "finParada": "13:36",
+        "totalMin": "13",
+        "zona": "Llenado",
+        "falla": "PASE DE AGUA CALIENTE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792258524169,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-18",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "13:36",
+        "finParada": "14:10",
+        "totalMin": "34",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES LUEGO DE LA INTERRUPCION E/E",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792258650825,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-18",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "BENJAMIN CORDERO",
+        "linea": "Línea 3",
+        "equipo": "TRANSPORTADOR DE BOTELLAS",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "14:10",
+        "finParada": "14:30",
+        "totalMin": "20",
+        "zona": "Llenado",
+        "falla": "FALLA EN EL SENSOR DE ACUMULACION DE BOTELLAS",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792258725225,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-18",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "DENILSON CARRASCO",
+        "linea": "Línea 3",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "14:50",
+        "finParada": "14:58",
+        "totalMin": "8",
+        "zona": "Llenado",
+        "falla": "AJUSTE DE RECETA",
+        "orden": "",
+        "observaciones": "VARIACION CONSTANTE DE VOLTAJE DURANTE EL TURNO AFECTA TEMP DEL HORNO",
+        "usuario": "Luis Sanchez",
+        "id": 1792258989018,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-18",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "DENILSON CADRASCO ",
+        "linea": "Línea 3",
+        "equipo": "SOPLADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "15:00",
+        "finParada": "15:43",
+        "totalMin": "43",
+        "zona": "Llenado",
+        "falla": "CAMBIO DE SENSOR ACTIVADOR DE TOLVA HACIA EL ELAVADOR",
+        "orden": "9583",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792259084353,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-18",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "15:50",
+        "finParada": "16:14",
+        "totalMin": "24",
+        "zona": "Llenado",
+        "falla": "VARIACION DE VOLTAJE ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792259132009,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-18",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "BENJAMIN CORDERO ",
+        "linea": "Línea 3",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "16:15",
+        "finParada": "16:20",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR",
+        "orden": "",
+        "observaciones": "VARIACION CONSTANTE DE VOLTAJE DURANTE EL TURNO AFECTA TEMP DEL HORNO",
+        "usuario": "Luis Sanchez",
+        "id": 1792259248129,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-18",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "18:01",
+        "finParada": "18:30",
+        "totalMin": "29",
+        "zona": "Llenado",
+        "falla": "INTERRUPCION DE E/E",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792259294321,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-19",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "CALIDAD",
+        "inicioParada": "07:00",
+        "finParada": "07:13",
+        "totalMin": "13",
+        "zona": "Llenado",
+        "falla": "ESPUMADO DEBIDO A TRABAJOS REALIZADOS EN EL TECHO DEL GALPON SOBRE LA LLENADORA ",
+        "orden": "",
+        "observaciones": "CAEN BOTELLAS DEL RINSER CONSTANTEMENTE AL IGUAL QUE EN LA TRANSFERENCIA DE ESTRELLA DE SALIDA DEL CALDERIN HACIA TAPONADORA. VALVULAS #4,19,20 CON FUGA DE JARABE POR SNIF\n",
+        "usuario": "Luis Sanchez",
+        "id": 1792259514634,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-05",
+        "semana": 41,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 5",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "18:30",
+        "finParada": "23:55",
+        "totalMin": "325",
+        "zona": "Llenado",
+        "falla": "FALLA DE ENERGIA ELECTRICA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1792259185247,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-19",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "BENJAMIN CORDERO ",
+        "linea": "Línea 3",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "07:14",
+        "finParada": "07:21",
+        "totalMin": "7",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR ",
+        "orden": "",
+        "observaciones": "HORNO AMERITA CAMBIO DE REFLECTORES, Y REVISION DE TRANSDUCTORES DE PRESION\n",
+        "usuario": "Luis Sanchez",
+        "id": 1792259614097,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-05",
+        "semana": 41,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 5",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "23:59",
+        "finParada": "02:43",
+        "totalMin": "164",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES LUEGO DE LA  FALLA DE ENERGIA ELECTRICA / CIP 3 PASOS",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1792259417840,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-19",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "BENJAMIN CORDERO ",
+        "linea": "Línea 3",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "08:00",
+        "finParada": "08:10",
+        "totalMin": "10",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792259761008,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-19",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "08:35",
+        "finParada": "14:58",
+        "totalMin": "383",
+        "zona": "Llenado",
+        "falla": "FALLA DE E/E EXTERNA PAC",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792259802617,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-05",
+        "semana": 41,
+        "turno": "NOCTURNO",
+        "operador": "MARCELO RIVAS",
+        "linea": "Línea 5",
+        "equipo": "SOPLADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "02:16",
+        "finParada": "02:50",
+        "totalMin": "34",
+        "zona": "Llenado",
+        "falla": "FALLA VARIADOR",
+        "orden": "3434",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1792259555124,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-19",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "14:58",
+        "finParada": "15:32",
+        "totalMin": "34",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES DE ARRANQUE LUEGO DE LA FALLA E/E EN ESPERA Y REALIZACION DE PASE DE AGUA CALIENTE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792259908505,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-05",
+        "semana": 41,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 5",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "06:03",
+        "finParada": "06:09",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "FALLA DE ENERGIA ELECTRICA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1792259644486,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-19",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "15:32",
+        "finParada": "15:53",
+        "totalMin": "21",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES PARA EL ARRANQUE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792260017249,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-05",
+        "semana": 41,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 5",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "06:09",
+        "finParada": "06:16",
+        "totalMin": "7",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES LUEGO DE LA  FALLA DE ENERGIA ELECTRICA ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1792259830984,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-19",
+        "semana": 38,
+        "turno": "DIURNO",
+        "operador": "CARLOS GALINDO",
+        "linea": "Línea 3",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "17:07",
+        "finParada": "17:10",
+        "totalMin": "3",
+        "zona": "Llenado",
+        "falla": "PERDIDA DE MARCA DE CORTE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1792260223666,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -175035,6 +176504,87 @@
         "observaciones": "",
         "bloqueado": false,
         "usuario": "Richard Marín"
+      },
+      {
+        "id": 1792242619309,
+        "fechaOrden": "2026-09-14",
+        "orden": "9543",
+        "fechaEmision": "2026-09-14",
+        "semana": 38,
+        "turno": "DIURNO",
+        "solicitante": "",
+        "linea": "Línea 3",
+        "maquina": "ETIQUETADORA",
+        "aviso": "",
+        "fechaParada": "2026-09-14",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "07:00",
+        "finParada": "07:30",
+        "tMtto": "30",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "AJUSTE DE RASGADOR DE PEGA POR DEFICIT DE PEGAMENTO",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": false,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "id": 1792259084355,
+        "fechaOrden": "2026-09-18",
+        "orden": "9583",
+        "fechaEmision": "2026-09-18",
+        "semana": 38,
+        "turno": "DIURNO",
+        "solicitante": "",
+        "linea": "Línea 3",
+        "maquina": "SOPLADORA",
+        "aviso": "",
+        "fechaParada": "2026-09-18",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "15:00",
+        "finParada": "15:43",
+        "tMtto": "43",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "CAMBIO DE SENSOR ACTIVADOR DE TOLVA HACIA EL ELAVADOR",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": false,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "id": 1792259771553.631,
+        "fechaOrden": "2026-10-05",
+        "orden": "3434",
+        "fechaEmision": "2026-10-05",
+        "semana": 41,
+        "turno": "NOCTURNO",
+        "solicitante": "",
+        "linea": "Línea 5",
+        "maquina": "SOPLADORA",
+        "aviso": "",
+        "fechaParada": "2026-10-05",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "02:16",
+        "finParada": "02:50",
+        "tMtto": "34",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "FALLA VARIADOR",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": true,
+        "usuario": "Froilan Bolivar"
       }
     ],
     "seguimiento-ordenes": {
@@ -186594,7 +188144,25 @@
         "editando": false,
         "editandoPor": null
       }
-    ]
+    ],
+    "procesos-inventario-materia-prima": {
+      "days": {
+        "2026-10-17": {
+          "MATP_0002": {
+            "initial": null,
+            "reception": null,
+            "final": null
+          },
+          "nocturno": {
+            "MATP_0001": {
+              "initial": null,
+              "reception": null,
+              "final": null
+            }
+          }
+        }
+      }
+    }
   },
   "cacheVersion": 0,
   "deletedIds": {
@@ -186602,63 +188170,9 @@
       "*": [
         "1792082511178",
         "1792082611811",
-        "1784566101946",
-        "1784568143186",
-        "1785014920340",
-        "1785358753845",
-        "1785358876155",
-        "1785414190166",
-        "1785414573668",
-        "1785415183096",
-        "1785415259439",
-        "1785415351871",
-        "1785415572542",
-        "1785415633951",
-        "1785415689630",
-        "1785415811823",
-        "1785415847510",
-        "1785415957655",
-        "1785416031310",
-        "1785416298630",
-        "1785416369910",
-        "1785416608317",
-        "1785416736028",
-        "1785416910693",
-        "1785417138565",
-        "1785417183419",
-        "1785417331300",
-        "1785417417646",
-        "1785417479222",
-        "1785418190316",
-        "1785508515291",
-        "1785509131922",
-        "1786024306648",
-        "1786024932528",
-        "1786037074553",
-        "1786037361081",
-        "1786037547921",
-        "1786037695201",
-        "1786037731718",
-        "1786037990748",
-        "1786037996096",
-        "1786038155639",
-        "1786038321776",
-        "1786027053232",
-        "1786040712235",
-        "1786119936092",
-        "1786128206608",
-        "1786456646957",
-        "1786456705797",
-        "1786996948604",
-        "1787086190625",
-        "1787086273033",
-        "1787938439979",
-        "1787237062452",
-        "1787247465383",
-        "1787959521278",
-        "1788293882619",
         "1788991023411",
-        "1788978219703"
+        "1790538581551",
+        "1790371816310"
       ]
     },
     "planta-ordenes-trabajo": {
@@ -186702,7 +188216,8 @@
     "procesos-rechazos-desperdicios": {},
     "sala-jarabe-justy": {
       "*": []
-    }
+    },
+    "procesos-inventario-materia-prima": {}
   },
   "_deletedOrdenesSapIds": [
     "1-1785349102112",

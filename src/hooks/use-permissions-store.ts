@@ -396,6 +396,12 @@ export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
     ] },
     { id: 'miteco', label: 'MITECO' },
     { id: 'sala-jarabe', label: 'Sala de jarabe' },
+    { id: 'inv-materia-prima', label: 'Inv Materia prima', children: [
+      { id: 'diario', label: 'Diario', children: [
+        { id: 'diurno', label: 'Diurno' },
+        { id: 'nocturno', label: 'Nocturno' },
+      ] },
+    ] },
   ],
   calidad: [{ id: 'quality', label: 'Módulo de Calidad en Desarrollo' }],
   mtto: [{ id: 'co2', label: 'CO2', children: [
@@ -887,6 +893,15 @@ export function usePermissionsStore() {
   const getPermissionLevel = useCallback((userId: string, module: ModuleId, section?: string): PermissionLevel => {
     const moduleLevel = getModuleLevel(userId, module);
     if (moduleLevel === 'none') return 'none';
+
+    if (
+      module === 'mtto'
+      && moduleLevel === 'read'
+      && section
+      && ['co2.weekly', 'co2.monthly'].includes(section)
+    ) {
+      return 'read';
+    }
 
     const configured = sectionPermissions[userId] ?? {};
     if (section) {

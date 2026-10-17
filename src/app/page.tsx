@@ -98,6 +98,7 @@ const KeyboardShortcuts = lazyModule(() => import('@/components/planner/Keyboard
 const RequirementSection = lazyModule(() => import('@/components/planner/RequirementSection').then((module) => module.RequirementSection));
 const JarabesModule = lazyModule(() => import('@/components/planner/JarabesModule').then((module) => module.JarabesModule));
 const ProcesosRechazosDesperdicios = lazyModule(() => import('@/components/planner/ProcesosRechazosDesperdicios').then((module) => module.ProcesosRechazosDesperdicios));
+const ProcesosInventarioMateriaPrima = lazyModule(() => import('@/components/planner/ProcesosInventarioMateriaPrima').then((module) => module.ProcesosInventarioMateriaPrima));
 const RequirementReport = lazyModule(() => import('@/components/planner/RequirementReport').then((module) => module.RequirementReport));
 const CalculationReport = lazyModule(() => import('@/components/planner/CalculationReport').then((module) => module.CalculationReport));
 const SummaryReport = lazyModule(() => import('@/components/planner/SummaryReport').then((module) => module.SummaryReport));
@@ -3442,7 +3443,9 @@ export default function PlannerPage() {
     isActive ? "bg-white/20" : "bg-slate-100"
   );
 
-  const activeModuleReadOnly = activeModule !== 'permissions' && getModuleLevel(user.id, activeModule as any) === 'read';
+  const activeModuleReadOnly = activeModule !== 'permissions'
+    && activeModule !== 'mtto'
+    && getModuleLevel(user.id, activeModule as any) === 'read';
 
   return (
     <SidebarProvider>
@@ -5276,7 +5279,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                         <div className="flex flex-col h-full">
                           <div className="flex items-center gap-2 mb-2 no-print">
                             <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                                 {(isDemon || user.id === 'jaime.r' || user.id === 'maria.mds' || user.id === 'alex.mds' ? ['ptab', 'miteco', 'sala-jarabe', 'rechazos-desperdicios'] : user.id === 'procj.mds' ? ['ptab', 'sala-jarabe', 'rechazos-desperdicios'] : user.id === 'prodtg.mds' ? ['ptab'] : user.id === 'proc.mds' || user.id === 'procs1.mds' || user.id === 'proc2.mds' ? ['sala-jarabe', 'rechazos-desperdicios'] : ['ptab']).map((tab) => (
+                                 {(isDemon || user.id === 'jaime.r' || user.id === 'maria.mds' || user.id === 'alex.mds' ? ['ptab', 'miteco', 'sala-jarabe', 'rechazos-desperdicios', 'inv-materia-prima'] : user.id === 'procj.mds' ? ['ptab', 'sala-jarabe', 'rechazos-desperdicios', 'inv-materia-prima'] : user.id === 'prodtg.mds' ? ['ptab'] : user.id === 'proc.mds' || user.id === 'procs1.mds' || user.id === 'proc2.mds' ? ['sala-jarabe', 'rechazos-desperdicios', 'inv-materia-prima'] : ['ptab']).map((tab) => (
                                <button
                                  key={tab}
                                  onClick={() => setProcesosSubTab(tab)}
@@ -5289,7 +5292,8 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                  {tab === 'miteco' && <Gauge className="h-3.5 w-3.5" />}
                                  {tab === 'sala-jarabe' && <Droplets className="h-3.5 w-3.5" />}
                                  {tab === 'rechazos-desperdicios' && <Package className="h-3.5 w-3.5" />}
-                                 <span className="hidden sm:inline">{tab === 'ptab' ? 'PTAB' : tab === 'miteco' ? 'MITECO' : tab === 'sala-jarabe' ? 'Sala de jarabe' : 'Rechazos y desperdicios'}</span>
+                                 {tab === 'inv-materia-prima' && <Package className="h-3.5 w-3.5" />}
+                                 <span className="hidden sm:inline">{tab === 'ptab' ? 'PTAB' : tab === 'miteco' ? 'MITECO' : tab === 'sala-jarabe' ? 'Sala de jarabe' : tab === 'rechazos-desperdicios' ? 'Rechazos y desperdicios' : 'Inv Materia prima'}</span>
                                </button>
                              ))}
                            </div>
@@ -5903,6 +5907,22 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                         )}
                               {(isDemon || user.id === 'jaime.r' || user.id === 'proc.mds' || user.id === 'procs1.mds' || user.id === 'proc2.mds' || user.id === 'procj.mds' || user.id === 'maria.mds' || user.id === 'alex.mds') && procesosSubTab === 'rechazos-desperdicios' && (
                                 <ProcesosRechazosDesperdicios />
+                              )}
+                              {(isDemon || user.id === 'jaime.r' || user.id === 'proc.mds' || user.id === 'procs1.mds' || user.id === 'proc2.mds' || user.id === 'procj.mds' || user.id === 'maria.mds' || user.id === 'alex.mds') && procesosSubTab === 'inv-materia-prima' && (
+                                <div className="flex flex-col flex-1 min-h-0">
+                                  <div className="flex items-center gap-2 no-print mb-2">
+                                    <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                                      <button
+                                        type="button"
+                                        className="inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none bg-white text-slate-900 shadow-sm"
+                                      >
+                                        <CalendarRange className="h-3.5 w-3.5" />
+                                        <span className="hidden sm:inline">Diario</span>
+                                      </button>
+                                    </div>
+                                  </div>
+                                  <ProcesosInventarioMateriaPrima />
+                                </div>
                               )}
                               {(isDemon || user.id === 'jaime.r' || user.id === 'proc.mds' || user.id === 'procs1.mds' || user.id === 'proc2.mds' || user.id === 'procj.mds' || user.id === 'maria.mds' || user.id === 'alex.mds') && procesosSubTab === 'sala-jarabe' && (
                              <div className="flex flex-col h-full gap-3">
@@ -6815,6 +6835,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                      <MttoModule
                        getCo2TheoreticalForDate={calcularKgCo2ParaFecha}
                        co2Consumption={mttoCo2Consumption}
+                       readOnly={getModuleLevel(user.id, 'mtto') !== 'write'}
                      />
                     )}
                       {activeModule === 'insumos' && hasAccess(user.id, 'insumos') && (
