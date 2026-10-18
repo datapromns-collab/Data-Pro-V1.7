@@ -21050,7 +21050,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-18T21:35:23.856Z"
+    "updatedAt": "2026-10-18T21:43:30.969Z"
   },
   "ordenesSap": [
     {
@@ -161162,8 +161162,8 @@
         "bloqueado": true
       },
       {
-        "fecha": "2026-09-12",
-        "semana": 37,
+        "fecha": "2026-10-12",
+        "semana": 42,
         "turno": "NOCTURNO",
         "operador": "ERNESTO SALCEDO",
         "linea": "Línea 3",
@@ -161178,7 +161178,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1792161949209,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-09-12",
