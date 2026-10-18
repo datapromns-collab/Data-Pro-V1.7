@@ -124,6 +124,22 @@
     margin: 0 !important;
   }
 
+  .app-print-root {
+    display: block !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
+  .app-print-shell {
+    position: static !important;
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
   main {
     display: none !important;
   }
@@ -134,16 +150,27 @@
   }
   
   .page-break-section {
-    page-break-after: always !important;
-    break-after: page !important;
+    page-break-after: always;
+    break-after: page;
     display: flex;
     flex-direction: column;
     width: 100%;
     min-height: 100vh;
-    padding: 2mm; 
+    padding: 2mm;
     margin: 0;
     box-sizing: border-box;
     overflow: hidden;
+  }
+
+  .print-only > .page-break-section {
+    display: block !important;
+    min-height: 100vh !important;
+    height: 100vh !important;
+    overflow: visible !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid-page !important;
   }
 
   .monthly-report-print {

@@ -2995,7 +2995,6 @@ export default function PlannerPage() {
       document.getElementById('print-orientation-style')?.remove();
     }, 150);
   };
-
   const handlePrintMonthly = (month: string, year: string) => {
     setSelectedMonth(month);
     setSelectedYear(year);
@@ -3449,8 +3448,8 @@ export default function PlannerPage() {
     && getModuleLevel(user.id, activeModule as any) === 'read';
 
   return (
-    <SidebarProvider>
-      <div className="fixed inset-0 flex h-screen w-full overflow-hidden bg-[#f8fafc]">
+    <SidebarProvider className="app-print-root">
+      <div className="app-print-shell fixed inset-0 flex h-screen w-full overflow-hidden bg-[#f8fafc]">
         <Sidebar className="border-r border-slate-200 bg-white no-print">
           <div className="p-6">
             <div className="flex items-center gap-3">
