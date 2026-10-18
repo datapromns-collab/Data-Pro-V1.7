@@ -1814,6 +1814,94 @@ function JarabesResumenReporteInner({
   );
 }
 
+function UbbSemanaTable({ selectedFecha }: { selectedFecha?: Date }) {
+  const { data } = useJarabes();
+  const weeks = useMemo(() => {
+    if (!selectedFecha) return [];
+    return getWeeksInMonth(selectedFecha).map((week) => ({
+      weekStart: week[0],
+      days: week.filter((day) => isSameMonth(day, selectedFecha)),
+    }));
+  }, [selectedFecha]);
+
+  const rows = useMemo(() => SABORES_UBB.map((sabor) => {
+    const weeklyConsumption = weeks.map(({ days }) => days.reduce((total, day) => {
+      const row = data.ubb[dk(day)]?.[sabor];
+      const inicial = Number(row?.inicial) || 0;
+      const preparado = Number(row?.preparado) || 0;
+      const final = Number(row?.final) || 0;
+      return total + Math.max(0, inicial + preparado - final);
+    }, 0));
+
+    return {
+      sabor,
+      weeklyConsumption,
+      total: weeklyConsumption.reduce((sum, value) => sum + value, 0),
+    };
+  }), [weeks, data.ubb]);
+
+  const weekTotals = weeks.map((_, weekIndex) => rows.reduce(
+    (total, row) => total + row.weeklyConsumption[weekIndex],
+    0,
+  ));
+  const monthTotal = weekTotals.reduce((sum, value) => sum + value, 0);
+
+  return (
+    <section className="space-y-3">
+      <div>
+        <h2 className="text-sm font-black uppercase tracking-widest text-slate-800">Consumo UBB semanal por sabor</h2>
+        <p className="mt-1 text-[10px] font-bold uppercase text-slate-500">
+          {selectedFecha ? format(selectedFecha, 'MMMM yyyy', { locale: es }) : 'Seleccione un mes'}
+        </p>
+      </div>
+      <div className="overflow-x-auto rounded-xl border border-slate-300 bg-white">
+        <table className="w-full min-w-[760px] border-collapse text-center">
+          <thead>
+            <tr className="bg-blue-700 text-white">
+              <th className="border border-blue-600 px-2 py-1.5 text-left text-[10px] font-black uppercase tracking-widest">Sabor</th>
+              {weeks.map(({ weekStart, days }) => (
+                <th key={dk(weekStart)} className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest">
+                  <span className="block">Semana {format(weekStart, 'I', { locale: es })}</span>
+                  <span className="block text-[9px] font-semibold normal-case">{format(days[0], 'dd/MM')} - {format(days[days.length - 1], 'dd/MM')}</span>
+                </th>
+              ))}
+              <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest">Total mes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row, rowIndex) => (
+              <tr key={row.sabor} className={rowIndex % 2 === 0 ? 'bg-blue-50' : 'bg-white'}>
+                <td className="border border-slate-200 px-2 py-1 text-left text-[10px] font-bold text-slate-700">{row.sabor}</td>
+                {row.weeklyConsumption.map((value, weekIndex) => (
+                  <td key={weekIndex} className="border border-slate-200 px-2 py-1 text-[10px] font-semibold tabular-nums text-slate-700">
+                    {value.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  </td>
+                ))}
+                <td className="border border-slate-200 px-2 py-1 text-[10px] font-black tabular-nums text-slate-800">
+                  {row.total.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+          <tfoot>
+            <tr className="bg-blue-100 font-black text-slate-800">
+              <td className="border border-slate-300 px-2 py-1 text-left text-[10px] uppercase">Total semanal</td>
+              {weekTotals.map((total, index) => (
+                <td key={index} className="border border-slate-300 px-2 py-1 text-[10px] tabular-nums">
+                  {total.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </td>
+              ))}
+              <td className="border border-slate-300 px-2 py-1 text-[10px] tabular-nums">
+                {monthTotal.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+  );
+}
+
 function JarabesModuleInner({ onPrintStandard, onPrintPromedio, onPrintWeeklyStandard, onPrintWeeklyPromedio, onPrintMonthlyStandard, onPrintMonthlyPromedio, weekStartDate, onFisicoSemanal, getWeeklyFisico }: { onPrintStandard?: (html: string, filename?: string) => void; onPrintPromedio?: (html: string, filename?: string) => void; onPrintWeeklyStandard?: (html: string, filename?: string) => void; onPrintWeeklyPromedio?: (html: string, filename?: string) => void; onPrintMonthlyStandard?: (html: string, filename?: string) => void; onPrintMonthlyPromedio?: (html: string, filename?: string) => void; weekStartDate?: Date; onFisicoSemanal?: (weekStart: Date, monthRef: Date, fisico: number) => void; getWeeklyFisico?: (weekStart: Date, monthRef: Date) => number }) {
   const { data, setData } = useJarabes();
   const [activeInnerTab, setActiveInnerTab] = useState<string>('estandar');
@@ -1939,6 +2027,9 @@ function JarabesModuleInner({ onPrintStandard, onPrintPromedio, onPrintWeeklySta
                       <TabsTrigger value="resumen" className={tabsTriggerClass}>
                         <ScrollText className="h-3.5 w-3.5" /> Resumen
                       </TabsTrigger>
+                      <TabsTrigger value="ubb-semana" className={tabsTriggerClass}>
+                        <TrendingUp className="h-3.5 w-3.5" /> UBB Semana
+                      </TabsTrigger>
                     </TabsList>
                   </div>
                   <div className="flex items-center gap-2">
@@ -2046,6 +2137,10 @@ function JarabesModuleInner({ onPrintStandard, onPrintPromedio, onPrintWeeklySta
                       </Tabs>
                     </TabsContent>
                   </Tabs>
+                </TabsContent>
+
+                <TabsContent value="ubb-semana" className="m-0 animate-in fade-in-50 duration-500">
+                  <UbbSemanaTable selectedFecha={selectedFecha} />
                 </TabsContent>
               </Tabs>
             </TabsContent>

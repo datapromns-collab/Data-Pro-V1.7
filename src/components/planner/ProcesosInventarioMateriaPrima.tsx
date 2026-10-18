@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from 'react';
-import { addDays, format } from 'date-fns';
+import { addDays, eachDayOfInterval, endOfMonth, format, startOfMonth, startOfWeek } from 'date-fns';
 import { useRemoteCollection } from '@/hooks/use-remote-collection';
 
 type MaterialInventoryRow = {
@@ -20,6 +20,9 @@ type InventoryValues = {
 };
 
 type ShiftInventory = Record<string, InventoryValues>;
+type InventoryPeriod = 'diario' | 'semanal' | 'mensual';
+type InventoryShift = 'diurno' | 'nocturno';
+type InventoryView = 'diurno' | 'nocturno' | 'resumen';
 
 type InventoryData = {
   days: Record<string, Record<string, InventoryValues | ShiftInventory>>;
@@ -30,8 +33,12 @@ const INVENTORY_GROUPS: { title: string; detailHeading: string; rows: MaterialIn
     title: 'Azúcar',
     detailHeading: 'Estado',
       rows: [
-        { code: 'MATP_0001', description: 'AZUCAR REFINADA', detail: 'En Preparación', rowSpan: 2 },
-        { code: 'MATP_0001', valueKey: 'MATP_0001-sacos-50kg', description: 'AZUCAR REFINADA', detail: 'sacos x 50kg' },
+        { code: 'MATP_0001', description: 'AZUCAR REFINADA', detail: 'Jarabe Simple', rowSpan: 6 },
+        { code: 'MATP_0001', valueKey: 'MATP_0001-sacos-50kg', description: 'AZUCAR REFINADA', detail: 'PORTUGUESA' },
+        { code: 'MATP_0001', valueKey: 'MATP_0001-pastora', description: 'AZUCAR REFINADA', detail: 'PASTORA' },
+        { code: 'MATP_0001', valueKey: 'MATP_0001-montalban', description: 'AZUCAR REFINADA', detail: 'MONTALBAN' },
+        { code: 'MATP_0001', valueKey: 'MATP_0001-konfit', description: 'AZUCAR REFINADA', detail: 'KONFIT' },
+        { code: 'MATP_0001', valueKey: 'MATP_0001-importada', description: 'AZUCAR REFINADA', detail: 'IMPORTADA' },
       ],
   },
   {
@@ -110,7 +117,7 @@ function isShiftInventory(value: unknown): value is Record<string, InventoryValu
 
 function getShiftValues(
   dayRecord: Record<string, InventoryValues | ShiftInventory>,
-  shift: 'diurno' | 'nocturno'
+  shift: InventoryShift
 ): ShiftInventory {
   const shiftValues = isShiftInventory(dayRecord[shift]) ? dayRecord[shift] : {};
   const legacyDayValues = Object.fromEntries(
@@ -119,39 +126,119 @@ function getShiftValues(
   return shift === 'diurno' ? { ...legacyDayValues, ...shiftValues } : shiftValues;
 }
 
-export function ProcesosInventarioMateriaPrima() {
+function getEffectiveInventoryValues(data: InventoryData, date: string, code: string, shift: InventoryShift): InventoryValues | undefined {
+  const dayRecord = data.days?.[date] ?? {};
+  const diurno = getShiftValues(dayRecord, 'diurno');
+  const shiftValues = shift === 'diurno' ? diurno : getShiftValues(dayRecord, 'nocturno');
+  const value = shiftValues[code];
+  const previousDate = format(addDays(new Date(`${date}T12:00:00`), -1), 'yyyy-MM-dd');
+  const previousNocturno = getShiftValues(data.days?.[previousDate] ?? {}, 'nocturno');
+  const previousFinal = shift === 'nocturno' ? diurno[code]?.final : previousNocturno[code]?.final;
+  const initial = value?.initialOverride ? value.initial : value?.initial ?? previousFinal ?? null;
+
+  if (value && initial !== value.initial) return { ...value, initial };
+  if (!value && initial !== null) return { initial, reception: null, final: null };
+  return value;
+}
+
+function getDailySummaryValues(data: InventoryData, date: string, code: string): InventoryValues | undefined {
+  const diurno = getEffectiveInventoryValues(data, date, code, 'diurno');
+  const nocturno = getEffectiveInventoryValues(data, date, code, 'nocturno');
+  const initial = diurno?.initial ?? null;
+  const reception = (Number(diurno?.reception) || 0) + (Number(nocturno?.reception) || 0);
+  const final = nocturno?.final ?? null;
+
+  if ([initial, diurno?.reception, nocturno?.reception, final].every((value) => value == null)) return undefined;
+  return { initial, reception, final };
+}
+
+function getPeriodSummaryValues(data: InventoryData, dates: Date[], code: string): InventoryValues | undefined {
+  const dailyValues = dates.map((day) => getDailySummaryValues(data, format(day, 'yyyy-MM-dd'), code));
+  if (!dailyValues.some(Boolean)) return undefined;
+
+  const initial = dailyValues.find((values) => values?.initial != null)?.initial ?? null;
+  const reception = dailyValues.reduce((total, values) => total + (Number(values?.reception) || 0), 0);
+  const final = [...dailyValues].reverse().find((values) => values?.final != null)?.final ?? null;
+  return { initial, reception, final };
+}
+
+export function ProcesosInventarioMateriaPrima({ view = 'diario' }: { view?: InventoryPeriod }) {
   const store = useRemoteCollection<InventoryData>('procesos-inventario-materia-prima', EMPTY_INVENTORY);
   const [date, setDate] = useState(() => format(new Date(), 'yyyy-MM-dd'));
-  const [shift, setShift] = useState<'diurno' | 'nocturno'>('diurno');
+  const [shift, setShift] = useState<InventoryView>('diurno');
+  const [weeklyDate, setWeeklyDate] = useState(() => new Date());
+  const [weeklyMonth, setWeeklyMonth] = useState(() => format(new Date(), 'yyyy-MM'));
+  const [monthlyMonth, setMonthlyMonth] = useState(() => format(new Date(), 'yyyy-MM'));
   const dayRecord = store.data.days?.[date] ?? {};
-  const dayValues = getShiftValues(dayRecord, shift);
+  const dayValuesForDiurno = getShiftValues(dayRecord, 'diurno');
+  const dayValuesForNocturno = getShiftValues(dayRecord, 'nocturno');
+  const dayValues = shift === 'nocturno' ? dayValuesForNocturno : dayValuesForDiurno;
   const previousDate = format(addDays(new Date(`${date}T12:00:00`), -1), 'yyyy-MM-dd');
   const previousDayValues = getShiftValues(store.data.days?.[previousDate] ?? {}, 'nocturno');
-  const dayValuesForDiurno = getShiftValues(dayRecord, 'diurno');
 
-  const getInitialValue = (code: string, value: InventoryValues | undefined): number | null => {
+  const getInitialValue = (code: string, value: InventoryValues | undefined, turn: 'diurno' | 'nocturno' = shift === 'nocturno' ? 'nocturno' : 'diurno'): number | null => {
     if (value?.initialOverride) return value.initial;
     if (value?.initial != null) return value.initial;
-    const previousShiftFinal = shift === 'nocturno'
+    const previousShiftFinal = turn === 'nocturno'
       ? dayValuesForDiurno[code]?.final
       : previousDayValues[code]?.final;
     return previousShiftFinal ?? null;
   };
 
-  const getEffectiveValues = (code: string): InventoryValues | undefined => {
-    const value = dayValues[code];
-    const initial = getInitialValue(code, value);
+  const getEffectiveValues = (code: string, turn: 'diurno' | 'nocturno' = shift === 'nocturno' ? 'nocturno' : 'diurno'): InventoryValues | undefined => {
+    const shiftValues = turn === 'nocturno' ? dayValuesForNocturno : dayValuesForDiurno;
+    const value = shiftValues[code];
+    const initial = getInitialValue(code, value, turn);
     if (value && initial !== value.initial) return { ...value, initial };
     if (!value && initial !== null) return { initial, reception: null, final: null };
     return value;
   };
+
+  const getSummaryValues = (code: string): InventoryValues | undefined => {
+    const diurno = getEffectiveValues(code, 'diurno');
+    const nocturno = getEffectiveValues(code, 'nocturno');
+    const initial = diurno?.initial ?? null;
+    const reception = (Number(diurno?.reception) || 0) + (Number(nocturno?.reception) || 0);
+    const final = nocturno?.final ?? null;
+
+    if ([initial, diurno?.reception, nocturno?.reception, final].every((value) => value == null)) return undefined;
+    return { initial, reception, final };
+  };
+
+  const periodDates = useMemo(() => {
+    if (view === 'semanal') {
+      const weekStart = startOfWeek(weeklyDate, { weekStartsOn: 1 });
+      return eachDayOfInterval({ start: weekStart, end: addDays(weekStart, 6) })
+        .filter((day) => format(day, 'yyyy-MM') === weeklyMonth);
+    }
+    if (view === 'mensual') {
+      const [year, month] = monthlyMonth.split('-').map(Number);
+      const monthStart = startOfMonth(new Date(year, month - 1, 1));
+      return eachDayOfInterval({ start: monthStart, end: endOfMonth(monthStart) });
+    }
+    return [];
+  }, [view, weeklyDate, weeklyMonth, monthlyMonth]);
 
   const rows = useMemo(
     () => INVENTORY_GROUPS.flatMap((group) => group.rows.map((row) => ({ ...row, group: group.title, detailHeading: group.detailHeading }))),
     []
   );
 
+  const periodValues = useMemo(() => {
+    if (view === 'diario') return {};
+    return Object.fromEntries(rows.map((row) => {
+      const valueKey = row.valueKey ?? row.code;
+      return [valueKey, getPeriodSummaryValues(store.data, periodDates, valueKey)];
+    }));
+  }, [periodDates, rows, store.data, view]);
+
+  const getDisplayedValues = (code: string) => {
+    if (view !== 'diario') return periodValues[code];
+    return shift === 'resumen' ? getSummaryValues(code) : getEffectiveValues(code);
+  };
+
   const updateValue = (code: string, field: keyof InventoryValues, rawValue: string) => {
+    if (view !== 'diario' || shift === 'resumen') return;
     const value = rawValue.trim() === '' ? null : Number(rawValue);
     if (value !== null && !Number.isFinite(value)) return;
     const current = getEffectiveValues(code) ?? { initial: null, reception: null, final: null };
@@ -174,7 +261,7 @@ export function ProcesosInventarioMateriaPrima() {
     <>
     <div className="flex items-center gap-2 no-print mb-2">
       <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-        {(['diurno', 'nocturno'] as const).map((turn) => (
+        {view === 'diario' && (['diurno', 'nocturno', 'resumen'] as const).map((turn) => (
           <button
             key={turn}
             type="button"
@@ -192,18 +279,56 @@ export function ProcesosInventarioMateriaPrima() {
       <div className="mb-3 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
         <div>
           <h2 className="text-xs font-black uppercase tracking-widest text-slate-800">Inv Materia prima</h2>
-          <p className="mt-1 text-[9px] font-bold uppercase tracking-widest text-slate-400">Inventario diario por fecha</p>
+          <p className="mt-1 text-[9px] font-bold uppercase tracking-widest text-slate-400">
+            {view === 'diario' ? 'Inventario diario por fecha' : view === 'semanal' ? 'Inventario semanal por período' : 'Inventario mensual por período'}
+          </p>
         </div>
-        <input
-          type="date"
-          value={date}
-          onChange={(event) => {
-            if (!event.target.value) return;
-            setDate(event.target.value);
-          }}
-          aria-label="Fecha del inventario"
-          className="h-8 rounded-full border border-slate-200 bg-white px-3 text-left text-[10px] font-bold uppercase tracking-widest shadow-sm"
-        />
+        {view === 'diario' && (
+          <input
+            type="date"
+            value={date}
+            onChange={(event) => event.target.value && setDate(event.target.value)}
+            aria-label="Fecha del inventario"
+            className="h-8 rounded-full border border-slate-200 bg-white px-3 text-left text-[10px] font-bold uppercase tracking-widest shadow-sm"
+          />
+        )}
+        {view === 'semanal' && (
+          <div className="flex flex-wrap items-center gap-3">
+            <label className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-slate-500">
+              Fecha de semana
+              <input
+                type="date"
+                value={format(weeklyDate, 'yyyy-MM-dd')}
+                onChange={(event) => {
+                  if (!event.target.value) return;
+                  const [year, month, day] = event.target.value.split('-').map(Number);
+                  setWeeklyDate(new Date(year, month - 1, day));
+                }}
+                className="h-8 rounded-full border border-slate-200 bg-white px-3 text-left text-[10px] font-bold shadow-sm"
+              />
+            </label>
+            <label className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-slate-500">
+              Mes
+              <input
+                type="month"
+                value={weeklyMonth}
+                onChange={(event) => event.target.value && setWeeklyMonth(event.target.value)}
+                className="h-8 rounded-full border border-slate-200 bg-white px-3 text-left text-[10px] font-bold shadow-sm"
+              />
+            </label>
+          </div>
+        )}
+        {view === 'mensual' && (
+          <label className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-slate-500">
+            Mes y año
+            <input
+              type="month"
+              value={monthlyMonth}
+              onChange={(event) => event.target.value && setMonthlyMonth(event.target.value)}
+              className="h-8 rounded-full border border-slate-200 bg-white px-3 text-left text-[10px] font-bold shadow-sm"
+            />
+          </label>
+        )}
       </div>
 
       {store.loadError && <p role="alert" className="mb-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs font-bold text-red-600">{store.loadError}</p>}
@@ -238,14 +363,20 @@ export function ProcesosInventarioMateriaPrima() {
               <tbody>
                 {group.rows.map((row, rowIndex) => {
                   const valueKey = row.valueKey ?? row.code;
-                  const values = dayValues[valueKey];
-                  const effectiveValues = getEffectiveValues(valueKey);
-                  const initialValue = getInitialValue(valueKey, values);
-                  const hasEntry = [initialValue, values?.reception, values?.final].some((value) => value != null);
+                  const values = getDisplayedValues(valueKey);
                   const isSugarGroup = group.title === 'Azúcar';
                   const consumption = isSugarGroup
-                    ? group.rows.reduce((total, sugarRow) => total + getConsumption(getEffectiveValues(sugarRow.valueKey ?? sugarRow.code)), 0)
-                    : getConsumption(effectiveValues);
+                    ? group.rows.reduce((total, sugarRow) => {
+                      const sugarKey = sugarRow.valueKey ?? sugarRow.code;
+                      const sugarValues = getDisplayedValues(sugarKey);
+                      return total + getConsumption(sugarValues);
+                    }, 0)
+                    : getConsumption(values);
+                  const hasSugarEntry = group.rows.some((sugarRow) => {
+                    const sugarKey = sugarRow.valueKey ?? sugarRow.code;
+                    const sugarValues = getDisplayedValues(sugarKey);
+                    return [sugarValues?.initial, sugarValues?.reception, sugarValues?.final].some((value) => value != null);
+                  });
                   return (
                     <tr key={valueKey} className="odd:bg-white even:bg-slate-50/50 hover:bg-teal-50/40">
                       {rowIndex === 0 || !isSugarGroup ? (
@@ -261,17 +392,18 @@ export function ProcesosInventarioMateriaPrima() {
                             type="number"
                             min="0"
                             step="any"
-                            value={field === 'initial' ? initialValue ?? '' : values?.[field] ?? ''}
+                            value={values?.[field] ?? ''}
                             onChange={(event) => updateValue(valueKey, field, event.target.value)}
+                            readOnly={view !== 'diario' || shift === 'resumen'}
                             disabled={!store.isLoaded}
-                            aria-label={`${field} ${row.code}`}
-                            className="h-7 w-full min-w-0 rounded-md border border-slate-200 bg-white px-1 text-center text-[10px] font-bold text-slate-800 outline-none transition-colors focus:border-teal-500 focus:ring-2 focus:ring-teal-100 disabled:opacity-60"
+                            aria-label={`${field} ${row.code} ${row.detail}`}
+                            className={`h-7 w-full min-w-0 rounded-md border border-slate-200 px-1 text-center text-[10px] font-bold text-slate-800 outline-none transition-colors focus:border-teal-500 focus:ring-2 focus:ring-teal-100 disabled:opacity-60 ${view !== 'diario' || shift === 'resumen' ? 'bg-slate-50' : 'bg-white'}`}
                           />
                         </td>
                       ))}
                       {(rowIndex === 0 || !isSugarGroup) && (
                         <td rowSpan={row.rowSpan} className="border border-slate-200 bg-slate-50/60 px-2 py-1.5 text-center text-[10px] font-black text-slate-800">
-                          {group.rows.some((sugarRow) => [dayValues[sugarRow.valueKey ?? sugarRow.code]?.initial, dayValues[sugarRow.valueKey ?? sugarRow.code]?.reception, dayValues[sugarRow.valueKey ?? sugarRow.code]?.final].some((value) => value != null))
+                          {hasSugarEntry
                             ? consumption.toLocaleString('es-VE', { maximumFractionDigits: 3 })
                             : ''}
                         </td>

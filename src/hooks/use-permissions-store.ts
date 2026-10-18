@@ -290,6 +290,7 @@ export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
             { id: 'r-promedio-mes', label: 'R promedio mes' },
           ] },
         ] },
+        { id: 'ubb-semana', label: 'UBB Semana' },
       ] },
       { id: 'seguimiento-simple', label: 'Seguimiento de Jarabe Simple' },
     ] },
@@ -400,7 +401,10 @@ export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
       { id: 'diario', label: 'Diario', children: [
         { id: 'diurno', label: 'Diurno' },
         { id: 'nocturno', label: 'Nocturno' },
+        { id: 'resumen', label: 'Resumen' },
       ] },
+      { id: 'semanal', label: 'Semanal' },
+      { id: 'mensual', label: 'Mensual' },
     ] },
   ],
   calidad: [

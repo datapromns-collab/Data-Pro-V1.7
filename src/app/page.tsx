@@ -1236,6 +1236,7 @@ export default function PlannerPage() {
     return weeks;
   }, [salaJarabePrepWeekStart.getFullYear()]);
   const [procesosSubTab, setProcesosSubTab] = useState('ptab');
+  const [procesosInventarioView, setProcesosInventarioView] = useState<'diario' | 'semanal' | 'mensual'>('diario');
   const [ptabTab, setPtabTab] = useState<'agua' | 'insumos' | 'r-semanal' | 'r-mensual'>('agua');
   const [ptabWeekStartDate, setPtabWeekStartDate] = useState(new Date());
   const [ptabInsumosFecha, setPtabInsumosFecha] = useState(new Date());
@@ -5912,16 +5913,28 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                 <div className="flex flex-col flex-1 min-h-0">
                                   <div className="flex items-center gap-2 no-print mb-2">
                                     <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                                      <button
-                                        type="button"
-                                        className="inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none bg-white text-slate-900 shadow-sm"
-                                      >
-                                        <CalendarRange className="h-3.5 w-3.5" />
-                                        <span className="hidden sm:inline">Diario</span>
-                                      </button>
+                                      {([
+                                        { key: 'diario', label: 'Diario', Icon: CalendarRange },
+                                        { key: 'semanal', label: 'Semanal', Icon: TrendingUp },
+                                        { key: 'mensual', label: 'Mensual', Icon: BarChart3 },
+                                      ] as const).map(({ key, label, Icon }) => (
+                                        <button
+                                          key={key}
+                                          type="button"
+                                          onClick={() => setProcesosInventarioView(key)}
+                                          aria-pressed={procesosInventarioView === key}
+                                          className={cn(
+                                            "inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                            procesosInventarioView === key ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700",
+                                          )}
+                                        >
+                                          <Icon className="h-3.5 w-3.5" />
+                                          <span>{label}</span>
+                                        </button>
+                                      ))}
                                     </div>
                                   </div>
-                                  <ProcesosInventarioMateriaPrima />
+                                  <ProcesosInventarioMateriaPrima view={procesosInventarioView} />
                                 </div>
                               )}
                               {(isDemon || user.id === 'jaime.r' || user.id === 'proc.mds' || user.id === 'procs1.mds' || user.id === 'proc2.mds' || user.id === 'procj.mds' || user.id === 'maria.mds' || user.id === 'alex.mds') && procesosSubTab === 'sala-jarabe' && (
