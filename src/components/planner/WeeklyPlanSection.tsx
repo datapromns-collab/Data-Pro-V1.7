@@ -93,126 +93,72 @@ export function WeeklyPlanSection({ tasks, weekStartDate }: WeeklyPlanSectionPro
     const doc = new jsPDF({ orientation: 'landscape', format: 'a3' });
     const weekNumber = format(weekStartDate, 'I');
     const weekRange = `${format(weekDays[0], 'd MMM yyyy', { locale: es })} - ${format(weekDays[6], 'd MMM yyyy', { locale: es })}`;
-    const tableStartY = 24;
-    const tableBottomMargin = 12;
-    const headerMinHeight = 8;
-    const bodyRowMinHeight = (
-      doc.internal.pageSize.getHeight() -
-      tableStartY -
-      tableBottomMargin -
-      headerMinHeight
-    ) / LINES.length;
-    const headers = [
-      'Línea',
-      ...weekDays.map((day) => format(day, 'EEEE d/M', { locale: es })),
-    ];
-    const rows = LINES.map((lineId) => [
-      `Línea ${lineId}`,
-      ...weekDays.map((day) => {
-        const dayPlan = weeklyPlan[lineId][format(day, 'yyyy-MM-dd')];
-        const products = dayPlan.products.map((product) => {
-          const quantity = product.quantity > 0 ? ` · ${formatQuantity(product.quantity)} cjs` : '';
-          const presentation = product.presentation ? ` · ${product.presentation}` : '';
-          return `${product.name}${quantity}${presentation}`;
-        });
-        if (dayPlan.total > 0) products.push(`TOTAL: ${formatQuantity(dayPlan.total)} cjs`);
-        return products.length > 0 ? products.join('\n\n') : '-';
-      }),
-    ]);
-
-    doc.setFontSize(15);
-    doc.setFont('helvetica', 'bold');
-    doc.text('PLAN SEMANAL DE PRODUCCIÓN', 14, 13);
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.text(`Semana ${weekNumber} | ${weekRange}`, 14, 19);
-
-    autoTable(doc, {
-      startY: tableStartY,
-      head: [headers],
-      body: rows,
-      theme: 'grid',
-      margin: { left: 8, right: 8, top: tableStartY, bottom: tableBottomMargin },
-      styles: {
-        font: 'helvetica',
-        fontSize: 9,
-        cellPadding: { top: 1.5, right: 1.8, bottom: 1.5, left: 1.8 },
-        overflow: 'linebreak',
-        valign: 'top',
-        lineColor: [203, 213, 225],
-        lineWidth: 0.15,
-      },
-      bodyStyles: {
-        minCellHeight: bodyRowMinHeight,
-      },
-      headStyles: {
-        fillColor: [241, 245, 249],
-        textColor: [71, 85, 105],
-        fontStyle: 'bold',
-        fontSize: 10,
-        halign: 'center',
-        minCellHeight: headerMinHeight,
-      },
-      columnStyles: {
-        0: { cellWidth: 18, fontStyle: 'bold', halign: 'center' },
-      },
-      didDrawPage: (data) => {
-        const pageHeight = doc.internal.pageSize.getHeight();
-        doc.setFontSize(8);
-        doc.setTextColor(100, 116, 139);
-        doc.text(
-          `Generado ${format(new Date(), 'dd/MM/yyyy HH:mm')}  |  Página ${data.pageNumber}`,
-          doc.internal.pageSize.getWidth() - 8,
-          pageHeight - 5,
-          { align: 'right' },
-        );
-      },
-      didDrawCell: (data) => {
-        if (data.section !== 'body' || data.column.index === 0 || !Array.isArray(data.cell.text)) return;
-
-        const lines = data.cell.text;
-        const lineHeight = doc.getLineHeight() / doc.internal.scaleFactor;
-        const topPadding = 0.8;
-        const bottomPadding = 0.8;
-        const horizontalInset = 0.8;
-        const contentWidth = data.cell.width - data.cell.padding('left') - data.cell.padding('right');
-        const textTop = data.cell.getTextPos().y;
-        let lineIndex = 0;
-        let taskLines: string[] = [];
-        let taskStartLine = 0;
-
-        doc.setDrawColor(186, 230, 253);
-        doc.setLineWidth(0.25);
-
-        const drawTaskBorder = (linesForTask: string[], startLine: number) => {
-          if (linesForTask.length === 0 || linesForTask[0].trim().startsWith('TOTAL:')) return;
-          doc.roundedRect(
-            data.cell.x + data.cell.padding('left') - horizontalInset,
-            textTop + startLine * lineHeight - topPadding,
-            contentWidth + horizontalInset * 2,
-            linesForTask.length * lineHeight + topPadding + bottomPadding,
-            1,
-            1,
-            'S',
-          );
-        };
-
-        lines.forEach((line) => {
-          if (line.trim() === '') {
-            drawTaskBorder(taskLines, taskStartLine);
-            taskLines = [];
-            lineIndex += 1;
-            taskStartLine = lineIndex;
-            return;
-          }
-          if (taskLines.length === 0) taskStartLine = lineIndex;
-          taskLines.push(line);
-          lineIndex += 1;
-        });
-        drawTaskBorder(taskLines, taskStartLine);
-      },
+    const buildLineCell = (lineId: string) => weekDays.map((day) => {
+      const dayPlan = weeklyPlan[lineId][format(day, 'yyyy-MM-dd')];
+      const products = dayPlan.products.map((product) => {
+        const quantity = product.quantity > 0 ? ` · ${formatQuantity(product.quantity)} cjs` : '';
+        const presentation = product.presentation ? ` · ${product.presentation}` : '';
+        return `${product.name}${quantity}${presentation}`;
+      });
+      if (dayPlan.total > 0) products.push(`TOTAL: ${formatQuantity(dayPlan.total)} cjs`);
+      return products.length > 0 ? products.join('\n\n') : '-';
     });
 
+    const renderLinePage = (lineId: string, pageNumber: number) => {
+      if (pageNumber > 0) doc.addPage();
+
+      const tableStartY = 28;
+      const headers = ['Día', ...weekDays.map((day) => format(day, 'EEEE d/M', { locale: es }))];
+      const body = [[`Línea ${lineId}`, ...buildLineCell(lineId)]];
+
+      doc.setFontSize(15);
+      doc.setFont('helvetica', 'bold');
+      doc.text('PLAN SEMANAL DE PRODUCCIÓN', 14, 13);
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`Semana ${weekNumber} | ${weekRange}`, 14, 19);
+      doc.text(`Línea ${lineId}`, 14, 24);
+
+      autoTable(doc, {
+        startY: tableStartY,
+        head: [headers],
+        body,
+        theme: 'grid',
+        margin: { left: 8, right: 8, top: tableStartY, bottom: 12 },
+        styles: {
+          font: 'helvetica',
+          fontSize: 9,
+          cellPadding: { top: 1.5, right: 1.8, bottom: 1.5, left: 1.8 },
+          overflow: 'linebreak',
+          valign: 'top',
+          lineColor: [203, 213, 225],
+          lineWidth: 0.15,
+        },
+        headStyles: {
+          fillColor: [241, 245, 249],
+          textColor: [71, 85, 105],
+          fontStyle: 'bold',
+          fontSize: 10,
+          halign: 'center',
+        },
+        columnStyles: {
+          0: { cellWidth: 18, fontStyle: 'bold', halign: 'center' },
+        },
+        didDrawPage: (data) => {
+          const pageHeight = doc.internal.pageSize.getHeight();
+          doc.setFontSize(8);
+          doc.setTextColor(100, 116, 139);
+          doc.text(
+            `Generado ${format(new Date(), 'dd/MM/yyyy HH:mm')}  |  Página ${data.pageNumber}`,
+            doc.internal.pageSize.getWidth() - 8,
+            pageHeight - 5,
+            { align: 'right' },
+          );
+        },
+      });
+    };
+
+    LINES.forEach((lineId, index) => renderLinePage(lineId, index));
     doc.save(`Plan_Semana_${format(weekStartDate, 'I')}.pdf`);
   };
 
@@ -230,7 +176,13 @@ export function WeeklyPlanSection({ tasks, weekStartDate }: WeeklyPlanSectionPro
         </Button>
       </div>
       <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-x-auto">
-        <table className="w-full min-w-[1200px] border-collapse text-left">
+        <table className="w-full min-w-[1200px] table-fixed border-collapse text-left">
+          <colgroup>
+            <col className="w-28" />
+            {weekDays.map((day) => (
+              <col key={format(day, 'yyyy-MM-dd')} />
+            ))}
+          </colgroup>
           <thead>
             <tr className="bg-slate-100">
               <th className="sticky left-0 z-20 min-w-24 border-b border-r border-slate-200 bg-slate-100 px-4 py-3 text-[10px] font-black uppercase tracking-widest text-slate-600">
@@ -239,7 +191,7 @@ export function WeeklyPlanSection({ tasks, weekStartDate }: WeeklyPlanSectionPro
               {weekDays.map((day) => (
                 <th
                   key={format(day, 'yyyy-MM-dd')}
-                  className="min-w-40 border-b border-r border-slate-200 px-3 py-3 text-center text-[10px] font-black uppercase tracking-widest text-slate-600 last:border-r-0"
+                  className="border-b border-r border-slate-200 px-3 py-3 text-center text-[10px] font-black uppercase tracking-widest text-slate-600 last:border-r-0"
                 >
                   {format(day, 'EEEE d/M', { locale: es })}
                 </th>
@@ -258,7 +210,7 @@ export function WeeklyPlanSection({ tasks, weekStartDate }: WeeklyPlanSectionPro
                   return (
                     <td
                       key={format(day, 'yyyy-MM-dd')}
-                      className="min-w-40 border-b border-r border-slate-200 p-2 align-top last:border-r-0"
+                      className="border-b border-r border-slate-200 p-2 align-top last:border-r-0"
                     >
                       {dayPlan.products.length > 0 ? (
                         <div className="space-y-1.5">
