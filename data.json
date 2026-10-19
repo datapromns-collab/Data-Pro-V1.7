@@ -21297,7 +21297,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-19T15:17:01.325Z"
+    "updatedAt": "2026-10-19T15:19:17.079Z"
   },
   "ordenesSap": [
     {
@@ -33271,8 +33271,8 @@
       "dias": [
         {
           "fechaInicio": "2026-10-19",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16197",
+          "cajas1": 1440,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
