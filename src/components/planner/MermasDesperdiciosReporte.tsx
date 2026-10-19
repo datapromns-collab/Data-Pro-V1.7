@@ -192,9 +192,14 @@ export function MermasDesperdiciosReporte({
             ? `${row.code} · ${row.material}`
             : `${row.presentation} · ${row.flavor}`,
         quantity: row.quantity,
+        percentOfTotal: totalQuantity > 0 ? (row.quantity / totalQuantity) * 100 : 0,
         cumulativePercent: totalQuantity > 0 ? (cumulativeQuantity / totalQuantity) * 100 : 0,
       };
     });
+  const formatPercent = (value: number) => `${value.toLocaleString('es-VE', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}%`;
   const headers = isMermasByLine
     ? ['Línea', 'Registros', 'Cantidad']
     : isMermasByPresentation
@@ -377,7 +382,28 @@ export function MermasDesperdiciosReporte({
                     <XAxis dataKey="label" interval={0} angle={-35} textAnchor="end" height={96} tick={{ fontSize: 10 }} />
                     <YAxis yAxisId="quantity" allowDecimals />
                     <YAxis yAxisId="percent" orientation="right" domain={[0, 100]} unit="%" />
-                    <Tooltip /><Legend />
+                    <Tooltip
+                      content={({ active, payload, label }) => {
+                        if (!active || !payload?.length) return null;
+                        const data = payload[0].payload;
+
+                        return (
+                          <div className="rounded-lg border border-slate-200 bg-white px-3 py-2 shadow-lg">
+                            <p className="mb-1 font-semibold text-slate-900">{label}</p>
+                            <p className="text-blue-600">
+                              Cantidad: {Number(data.quantity).toLocaleString('es-VE')}
+                            </p>
+                            <p className="text-slate-700">
+                              % que representa: {formatPercent(Number(data.percentOfTotal))}
+                            </p>
+                            <p className="text-orange-600">
+                              % acumulado: {formatPercent(Number(data.cumulativePercent))}
+                            </p>
+                          </div>
+                        );
+                      }}
+                    />
+                    <Legend />
                     <Bar yAxisId="quantity" dataKey="quantity" name="Cantidad" fill={mode === 'mermas' ? '#2563eb' : '#15803d'} radius={[5, 5, 0, 0]} />
                     <Line yAxisId="percent" type="monotone" dataKey="cumulativePercent" name="% acumulado" stroke="#f97316" strokeWidth={2} dot={{ r: 3 }} />
                   </ComposedChart>

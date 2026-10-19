@@ -43,6 +43,10 @@ export const parseNonConformingQuantity = (value: string): number => {
   return Number.isFinite(number) ? number : 0;
 };
 
+export const formatNonConformingPercent = (value: number): string => (
+  `${value.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`
+);
+
 export function summarizeNonConformingRows(
   rowsByDate: Record<string, NonConformingRow[]>,
   period: 'semanal' | 'mensual',
