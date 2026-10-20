@@ -20758,9 +20758,6 @@
           "mtto",
           "management"
         ],
-        "cal.mds": [
-          "planning"
-        ],
         "mtto1.mds": [
           "planning",
           "mtto"
@@ -21092,9 +21089,6 @@
         "procj.mds": [
           "resumen-semanal"
         ],
-        "cal.mds": [
-          "resumen-semanal"
-        ],
         "prodtj.mds": [],
         "prodtg.mds": [],
         "logg.mds": [
@@ -21183,9 +21177,6 @@
           "planning",
           "mtto",
           "management"
-        ],
-        "cal.mds": [
-          "planning"
         ],
         "prodtg.mds": [],
         "MDS": [
@@ -21538,13 +21529,6 @@
         "displayRole": "SUP. MANTENIMIENTO"
       },
       {
-        "id": "cal.mds",
-        "name": "Calidad",
-        "password": "ad.322.",
-        "role": "STANDARD",
-        "displayRole": "ANALISTA DE CALIDAD"
-      },
-      {
         "id": "MDS",
         "name": "Multinacional de sabores",
         "password": "MDS1",
@@ -21596,7 +21580,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-20T17:39:48.051Z"
+    "updatedAt": "2026-10-20T19:23:35.052Z"
   },
   "ordenesSap": [
     {
@@ -228422,16 +228406,7 @@
               "unit": "kg"
             }
           ],
-          "2026-10-17": [
-            {
-              "id": "dc257e74-6e50-4370-a9d1-32739968589d",
-              "line": "T",
-              "code": "MATP_0001",
-              "material": "AZUCAR REFINADA",
-              "quantity": "0",
-              "unit": "kg"
-            }
-          ]
+          "2026-10-17": []
         },
         "devolucion": {
           "2026-10-09": []
@@ -229986,7 +229961,7 @@
                 "tastingTechnician": "GG",
                 "ubb": "6",
                 "transferTime": "00:03",
-                "finishedTankRoom": "10",
+                "finishedTankRoom": "10-2",
                 "simpleSyrupTransferTime": "14:04",
                 "simpleSyrupBrix": "61,60",
                 "simpleSyrupTransferredVolume": "14500",
