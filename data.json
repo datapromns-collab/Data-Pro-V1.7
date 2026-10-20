@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-08-03T00:00:00.000",
+      "weekStartDate": "2026-10-19T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -13121,12 +13121,12 @@
             "name": "GLUP FRESH",
             "lineId": "7",
             "loadPerHour": 2500,
-            "quantity": 47458,
-            "durationHours": 18.9832,
+            "quantity": 43125,
+            "durationHours": 17.25,
             "presentation": "1Lt",
-            "tanks": 5.5,
+            "tanks": 5,
             "startTime": "2026-10-19T11:00:00.000Z",
-            "endTime": "2026-10-20T05:58:59.520Z",
+            "endTime": "2026-10-20T04:15:00.000Z",
             "id": "9omw16lne",
             "color": "#f59e0b"
           },
@@ -13285,78 +13285,6 @@
             "endTime": "2026-10-24T08:00:00.000Z",
             "id": "yuqnlm6mo",
             "color": "#10b981"
-          },
-          {
-            "name": "CS",
-            "lineId": "7",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 0.5,
-            "startTime": "2026-10-20T05:59:00.000Z",
-            "endTime": "2026-10-20T06:29:00.000Z",
-            "id": "3ac98grd0",
-            "color": "#47CCB0"
-          },
-          {
-            "name": "GLUP COLA",
-            "lineId": "7",
-            "loadPerHour": 2500,
-            "quantity": 43125,
-            "durationHours": 17.25,
-            "presentation": "1Lt",
-            "tanks": 5,
-            "startTime": "2026-10-20T06:29:00.000Z",
-            "endTime": "2026-10-20T23:44:00.000Z",
-            "id": "au3tw4acj",
-            "color": "#10b981"
-          },
-          {
-            "name": "CS",
-            "lineId": "7",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 0.5,
-            "startTime": "2026-10-20T23:44:00.000Z",
-            "endTime": "2026-10-21T00:14:00.000Z",
-            "id": "tz08yhmb4",
-            "color": "#ef4444"
-          },
-          {
-            "name": "GLUP KOLITA",
-            "lineId": "7",
-            "loadPerHour": 2500,
-            "quantity": 44500,
-            "durationHours": 17.8,
-            "presentation": "1Lt",
-            "tanks": 5,
-            "startTime": "2026-10-21T00:14:00.000Z",
-            "endTime": "2026-10-21T18:02:00.000Z",
-            "id": "beyk2ak5m",
-            "color": "#ec4899"
-          },
-          {
-            "name": "CIP 3P ALCALINO",
-            "lineId": "7",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 2,
-            "startTime": "2026-10-21T18:02:00.000Z",
-            "endTime": "2026-10-21T20:02:00.000Z",
-            "id": "5eb6tc7b5",
-            "color": "#10b981"
-          },
-          {
-            "name": "GLUP COLA",
-            "lineId": "7",
-            "loadPerHour": 2500,
-            "quantity": 152425,
-            "durationHours": 60.97,
-            "presentation": "1Lt",
-            "tanks": 17.67,
-            "startTime": "2026-10-21T20:02:00.000Z",
-            "endTime": "2026-10-24T09:00:12.000Z",
-            "id": "mvflja87e",
-            "color": "#47CCB0"
           },
           {
             "name": "GLUP FRESH",
@@ -13610,6 +13538,78 @@
             "endTime": "2026-10-25T12:10:45.000Z",
             "id": "vd7blmaei",
             "color": "#6366f1"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "7",
+            "loadPerHour": 2500,
+            "quantity": 43125,
+            "durationHours": 17.25,
+            "presentation": "1Lt",
+            "tanks": 5,
+            "startTime": "2026-10-20T04:45:00.000Z",
+            "endTime": "2026-10-20T22:00:00.000Z",
+            "id": "zrmaoqnrd",
+            "color": "#10b981"
+          },
+          {
+            "name": "CS",
+            "lineId": "7",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-10-20T04:15:00.000Z",
+            "endTime": "2026-10-20T04:45:00.000Z",
+            "id": "g4938dr5n",
+            "color": "#47CCB0"
+          },
+          {
+            "name": "GLUP KOLITA",
+            "lineId": "7",
+            "loadPerHour": 2500,
+            "quantity": 44500,
+            "durationHours": 17.8,
+            "presentation": "1Lt",
+            "tanks": 5,
+            "startTime": "2026-10-20T22:30:00.000Z",
+            "endTime": "2026-10-21T16:18:00.000Z",
+            "id": "tn0vsc8ro",
+            "color": "#587593"
+          },
+          {
+            "name": "CS",
+            "lineId": "7",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-10-20T22:00:00.000Z",
+            "endTime": "2026-10-20T22:30:00.000Z",
+            "id": "kgpyxjp2i",
+            "color": "#47CCB0"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "7",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-10-21T16:18:00.000Z",
+            "endTime": "2026-10-21T18:18:00.000Z",
+            "id": "lnmtpm3md",
+            "color": "#47CCB0"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "7",
+            "loadPerHour": 2500,
+            "quantity": 156750,
+            "durationHours": 62.7,
+            "presentation": "1Lt",
+            "tanks": 18.17,
+            "startTime": "2026-10-21T18:18:00.000Z",
+            "endTime": "2026-10-24T09:00:00.000Z",
+            "id": "3y32yququ",
+            "color": "#ec4899"
           }
         ],
         "realProduction": {},
@@ -13663,7 +13663,13 @@
           "kfblfovii",
           "z9xr960ok",
           "k0kofzuqh",
-          "lla8cvmlp"
+          "lla8cvmlp",
+          "au3tw4acj",
+          "beyk2ak5m",
+          "3ac98grd0",
+          "tz08yhmb4",
+          "5eb6tc7b5",
+          "mvflja87e"
         ]
       }
     },
@@ -21590,7 +21596,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-20T17:13:52.736Z"
+    "updatedAt": "2026-10-20T17:39:48.051Z"
   },
   "ordenesSap": [
     {
@@ -46804,13 +46810,19 @@
         },
         "2026-10-19": {
           "GLUP COLA": {
-            "inicial": ""
+            "inicial": "48.67",
+            "preparado": "48",
+            "final": "49.16"
           },
           "GLUP FRESH": {
-            "inicial": ""
+            "inicial": "28.30",
+            "preparado": "36",
+            "final": "22.12"
           },
           "GLUP UVA": {
-            "inicial": ""
+            "inicial": "",
+            "preparado": "22",
+            "final": "17.98"
           },
           "GLUP PIÑA": {
             "inicial": ""
@@ -46828,13 +46840,17 @@
             "inicial": ""
           },
           "GLUP MANZANA ROJA": {
-            "inicial": ""
+            "inicial": "16",
+            "preparado": "16",
+            "final": "10.43"
           },
           "JUSTY NARANJA": {
             "inicial": ""
           },
           "JUSTY DURAZNO": {
-            "inicial": ""
+            "inicial": "20",
+            "preparado": "40",
+            "final": "33"
           },
           "JUSTY PERA": {
             "inicial": ""
@@ -48338,6 +48354,13 @@
             "recepcionSacos": "",
             "invFinalSacos": ""
           }
+        },
+        "2026-10-19": {
+          "PORTUGUESA": {
+            "invInicialSacos": "8680",
+            "recepcionSacos": "6720",
+            "invFinalSacos": "11720"
+          }
         }
       },
       "tanques": {
@@ -49662,6 +49685,16 @@
             "invInicialSacos": "1790",
             "invFinalSacos": "1107"
           }
+        },
+        "2026-10-19": {
+          "JARABE SIMPLE": {
+            "invInicialSacos": "412",
+            "invFinalSacos": "382"
+          },
+          "Sala 1": {
+            "invInicialSacos": "1107",
+            "invFinalSacos": "837"
+          }
         }
       },
       "realKgPerSack": {
@@ -49775,7 +49808,8 @@
         "2026-10-15": "50.41",
         "2026-10-16": "50.45",
         "2026-10-17": "50.30",
-        "2026-10-18": "50.37"
+        "2026-10-18": "50.37",
+        "2026-10-19": "50.45"
       },
       "costoAzucar": {
         "2026-07-28": "1.43",
@@ -49831,7 +49865,7 @@
         "2026-09-14|2026-09": 1174355.86,
         "2026-09-21|2026-09": 1009476.45,
         "2026-09-28|2026-09": 550986.53,
-        "2026-10-01|2026-10": 479385.1,
+        "2026-10-01|2026-10": 0,
         "2026-04-13|2026-04": 1316706.34,
         "2026-04-27|2026-04": 1059135.18,
         "2026-04-01|2026-04": 0,
@@ -194181,6 +194215,633 @@
         "usuario": "Luis Blandin",
         "id": 1792516599841,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-12",
+        "semana": 42,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "INSUMOS",
+        "inicioParada": "03:43",
+        "finParada": "03:49",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "FALLA DE IMPRESION DE ETIQUETAS ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1792516631233,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-12",
+        "semana": 42,
+        "turno": "NOCTURNO",
+        "operador": "RICARDO GOMEZ",
+        "linea": "Línea 5",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "02:05",
+        "finParada": "02:11",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "CORREA HUMEDA POR BOTELLAS SIN TAPAS ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1792516677376,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-12",
+        "semana": 42,
+        "turno": "NOCTURNO",
+        "operador": "JOSE BUSTAMANTE ",
+        "linea": "Línea 5",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "02:20",
+        "finParada": "02:24",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "PAQUETES MAL ENVUELTOS SE DESARMAN EN MESA ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1792516713479,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-12",
+        "semana": 42,
+        "turno": "NOCTURNO",
+        "operador": "JOSE LOPEZ",
+        "linea": "Línea 5",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "02:32",
+        "finParada": "02:38",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "FALLA DE CORTE ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1792516747567,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-12",
+        "semana": 42,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 5",
+        "equipo": "",
+        "tipoParada": "SALA DE JARABE",
+        "inicioParada": "04:30",
+        "finParada": "04:40",
+        "totalMin": "10",
+        "zona": "Llenado",
+        "falla": "TANQUE EN AJUSTE ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1792516780982,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-12",
+        "semana": 42,
+        "turno": "NOCTURNO",
+        "operador": "CRISTIAN CELIS",
+        "linea": "Línea 1",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "03:16",
+        "finParada": "03:22",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "FALLA DE ELEVADOR DE PREFORMAS ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1792516811292,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-12",
+        "semana": 42,
+        "turno": "NOCTURNO",
+        "operador": "PEDRO MORGADO",
+        "linea": "Línea 1",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "04:46",
+        "finParada": "04:57",
+        "totalMin": "11",
+        "zona": "Llenado",
+        "falla": "PERDIDA DE CONTEO ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1792516842196,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-12",
+        "semana": 42,
+        "turno": "NOCTURNO",
+        "operador": "WILDREDO MENDOZA",
+        "linea": "Línea 1",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "04:22",
+        "finParada": "04:27",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "BOTELLA CAIDA EN COMPACTACION ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1792516887737,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-12",
+        "semana": 42,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 2",
+        "equipo": "",
+        "tipoParada": "SALA DE JARABE",
+        "inicioParada": "04:08",
+        "finParada": "04:12",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "FALLA DE PRESION DE JARABE ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1792516927534,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-12",
+        "semana": 42,
+        "turno": "NOCTURNO",
+        "operador": "DAVIS MATHEUS",
+        "linea": "Línea 2",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "04:24",
+        "finParada": "04:31",
+        "totalMin": "7",
+        "zona": "Llenado",
+        "falla": "SALTO DE BOTELLA, PERDIDA DE FASE ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1792517021822,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-12",
+        "semana": 42,
+        "turno": "NOCTURNO",
+        "operador": "JONATHAN SALAZAR",
+        "linea": "Línea 2",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "04:39",
+        "finParada": "04:47",
+        "totalMin": "8",
+        "zona": "Llenado",
+        "falla": "ETIQUETA ON TRANSFERIDA, LIMPIEZA DE CONJUNTO ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1792517073482,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-12",
+        "semana": 42,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "INSUMOS",
+        "inicioParada": "03:49",
+        "finParada": "03:56",
+        "totalMin": "7",
+        "zona": "Llenado",
+        "falla": "FALLA DE IMPRESION DE ETIQUETAS ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1792517120452,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-12",
+        "semana": 42,
+        "turno": "NOCTURNO",
+        "operador": "ALBERTO TORO",
+        "linea": "Línea 4",
+        "equipo": "TRANSPORTADOR DE CAJAS",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "04:15",
+        "finParada": "04:30",
+        "totalMin": "15",
+        "zona": "Llenado",
+        "falla": "TRANCAMIENTO DE BANDA POR EXCESO DE JARABE ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1792517165434,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-12",
+        "semana": 42,
+        "turno": "NOCTURNO",
+        "operador": "ANTONIO BELLO ",
+        "linea": "Línea 7",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "03:57",
+        "finParada": "04:04",
+        "totalMin": "7",
+        "zona": "Llenado",
+        "falla": "ACUMULACION EN TRANSPORTADOR POR DIFERENCIA DE VELOCIDADES ENTRE ETIQUETADORA Y LLENADORA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1792517230433,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-12",
+        "semana": 42,
+        "turno": "NOCTURNO",
+        "operador": "ANTONIO BELLO",
+        "linea": "Línea 7",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "04:37",
+        "finParada": "04:42",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "ACUMULACION EN TRANSPORTADOR POR DIFERENCIA DE VELOCIDADES ENTRE ETIQUETADORA Y LLENADORA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1792517268664,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-12",
+        "semana": 42,
+        "turno": "NOCTURNO",
+        "operador": "ANTONIO BELLO",
+        "linea": "Línea 7",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "05:47",
+        "finParada": "05:55",
+        "totalMin": "8",
+        "zona": "Llenado",
+        "falla": "ACUMULACION EN TRANSPORTADOR POR DIFERENCIA DE VELOCIDADES ENTRE ETIQUETADORA Y LLENADORA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1792517307048,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-12",
+        "semana": 42,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 7",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "06:30",
+        "finParada": "07:00",
+        "totalMin": "30",
+        "zona": "Llenado",
+        "falla": "CAMBIO DE SABOR DE GLUP COLA A GLUP KOLITA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1792517350112,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-12",
+        "semana": 42,
+        "turno": "NOCTURNO",
+        "operador": "PEDRO MORGADO ",
+        "linea": "Línea 1",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "05:26",
+        "finParada": "05:35",
+        "totalMin": "9",
+        "zona": "Llenado",
+        "falla": "PERDIDA DE CONTEO ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1792517387369,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-12",
+        "semana": 42,
+        "turno": "NOCTURNO",
+        "operador": "BLASS PADRON",
+        "linea": "Línea 2",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "05:43",
+        "finParada": "06:03",
+        "totalMin": "20",
+        "zona": "Llenado",
+        "falla": "MALAENTREGA MOLDE #01",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1792517437542,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-12",
+        "semana": 42,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "SALA DE MÁQUINAS",
+        "inicioParada": "04:50",
+        "finParada": "05:00",
+        "totalMin": "10",
+        "zona": "Llenado",
+        "falla": "TEMPERATURA ELEVADA EN BEBIDA TERMINADA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1792517472078,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-12",
+        "semana": 42,
+        "turno": "NOCTURNO",
+        "operador": "ALBERTO TORO",
+        "linea": "Línea 4",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "05:07",
+        "finParada": "05:17",
+        "totalMin": "10",
+        "zona": "Llenado",
+        "falla": "FILM ATASCADO EN MESA DE ELEVACION ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1792517517774,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-12",
+        "semana": 42,
+        "turno": "NOCTURNO",
+        "operador": "JOSE CABALLERO",
+        "linea": "Línea 4",
+        "equipo": "TRANSPORTADOR AÉREO",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "05:30",
+        "finParada": "05:35",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "TRANCAMIENTO DE BOTELLAS EN TRANSPORTADOR ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1792518343452,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-12",
+        "semana": 42,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "SALA DE MÁQUINAS",
+        "inicioParada": "05:00",
+        "finParada": "05:15",
+        "totalMin": "15",
+        "zona": "Llenado",
+        "falla": "TEMPERATURA ELEVADA EN BEBIDA TERMINADA ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1792518392851,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-12",
+        "semana": 42,
+        "turno": "NOCTURNO",
+        "operador": "JOSE LAYA",
+        "linea": "Línea 3",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "05:36",
+        "finParada": "05:42",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "SALTO DE BOTELLAS, PERDIDA DE FASE ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1792518446419,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-26",
+        "semana": 39,
+        "turno": "DIURNO",
+        "operador": "MAXIMILIANS COTEZAO",
+        "linea": "Línea 7",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "07:00",
+        "finParada": "07:34",
+        "totalMin": "34",
+        "zona": "Llenado",
+        "falla": "LIMPIEZA DE CILINDROS TENSORES DE ENVOLVEDORA, GENERA PARADA CONSTANTES",
+        "orden": "9668",
+        "observaciones": "",
+        "usuario": "Richard Marín",
+        "id": 1792518955596,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-12",
+        "semana": 42,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 5",
+        "equipo": "",
+        "tipoParada": "SALA DE JARABE",
+        "inicioParada": "05:32",
+        "finParada": "05:40",
+        "totalMin": "8",
+        "zona": "Llenado",
+        "falla": "TANQUE EN AJUSTE ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1792518634209,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-26",
+        "semana": 39,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 7",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "08:33",
+        "finParada": "15:21",
+        "totalMin": "408",
+        "zona": "Llenado",
+        "falla": "FALLA DE E/E PAC",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Richard Marín",
+        "id": 1792518995050,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-12",
+        "semana": 42,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 5",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "06:07",
+        "finParada": "08:07",
+        "totalMin": "120",
+        "zona": "Llenado",
+        "falla": "SUSTITUCION DE CIP CADA 24 HRS, SE REALIZA PASE DE AGUA CALIENTE ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1792518689368,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-26",
+        "semana": 39,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 5",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "08:33",
+        "finParada": "15:21",
+        "totalMin": "408",
+        "zona": "Llenado",
+        "falla": "FALLA DE E/E PAC",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Richard Marín",
+        "id": 1792519088145,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-12",
+        "semana": 42,
+        "turno": "NOCTURNO",
+        "operador": "JONATHAN SALAZAR",
+        "linea": "Línea 2",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "06:04",
+        "finParada": "06:30",
+        "totalMin": "26",
+        "zona": "Llenado",
+        "falla": "ETIQUETA NO CORTADA LIMPIEZA DE SISTEMA DE CORTE Y LISTONES ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1792518733232,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-26",
+        "semana": 39,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 6",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "07:00",
+        "finParada": "18:30",
+        "totalMin": "690",
+        "zona": "Llenado",
+        "falla": "LINEA NO PROGRAMADA PARA FIN DE SEMANA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Richard Marín",
+        "id": 1792519207985,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-26",
+        "semana": 39,
+        "turno": "DIURNO",
+        "operador": "GABRIEL RAMIREZ",
+        "linea": "Línea 2",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "07:59",
+        "finParada": "08:05",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "PELICULA ATASCADA EN MESA DE ELEVACION",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Richard Marín",
+        "id": 1792519299344,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-26",
+        "semana": 39,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "15:21",
+        "finParada": "16:21",
+        "totalMin": "60",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES DE ARRANQUE LUEGO DE FALLA DE E/E",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Richard Marín",
+        "id": 1792519379625,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -204299,7 +204960,7 @@
         "orden": "9706",
         "fechaEmision": "2026-09-21",
         "semana": 39,
-        "turno": "DIURNO",
+        "turno": "NOCTURNO",
         "solicitante": "",
         "linea": "Línea 1",
         "maquina": "LLENADORA",
@@ -204312,7 +204973,7 @@
         "tMtto": "24",
         "tipoParada": "AVERÍA",
         "mtto": "",
-        "falla": "RUPTURA DE RIEL DE BOTELLA EN SALIDA DE LLENADORA",
+        "falla": "RUPTURA DE RIEL DE BOTELLA EN LA SALIDA DE LLENADORA",
         "mttoEsp": "",
         "descripcionFalla": "",
         "descripcionAccion": "",
@@ -204672,7 +205333,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1791395166044.791,
+        "id": 1790433303463,
         "fechaOrden": "2026-09-23",
         "orden": "9759",
         "fechaEmision": "2026-09-23",
@@ -204695,7 +205356,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
@@ -204780,7 +205441,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1791395166044.9924,
+        "id": 1790435481420,
         "fechaOrden": "2026-09-23",
         "orden": "9624",
         "fechaEmision": "2026-09-23",
@@ -204803,11 +205464,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1791395166044.0613,
+        "id": 1790435728219,
         "fechaOrden": "2026-09-23",
         "orden": "9710",
         "fechaEmision": "2026-09-23",
@@ -204830,7 +205491,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
@@ -204888,7 +205549,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1791395166044.3782,
+        "id": 1790437454875,
         "fechaOrden": "2026-09-24",
         "orden": "9665",
         "fechaEmision": "2026-09-24",
@@ -204911,7 +205572,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
@@ -204942,7 +205603,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1791395166044.5374,
+        "id": 1790444081108,
         "fechaOrden": "2026-09-23",
         "orden": "9658",
         "fechaEmision": "2026-09-23",
@@ -204965,11 +205626,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1791395166044.2708,
+        "id": 1790444247221,
         "fechaOrden": "2026-09-23",
         "orden": "9659",
         "fechaEmision": "2026-09-23",
@@ -204992,7 +205653,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
@@ -205050,7 +205711,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1791395166044.7773,
+        "id": 1790448917716,
         "fechaOrden": "2026-09-24",
         "orden": "9760",
         "fechaEmision": "2026-09-24",
@@ -205073,7 +205734,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
@@ -205104,7 +205765,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1791395166044.3572,
+        "id": 1790457931584,
         "fechaOrden": "2026-09-25",
         "orden": "9714",
         "fechaEmision": "2026-09-25",
@@ -205127,11 +205788,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1791395166044.6626,
+        "id": 1790458674293,
         "fechaOrden": "2026-09-25",
         "orden": "9627",
         "fechaEmision": "2026-09-25",
@@ -205154,11 +205815,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1791395166044.3499,
+        "id": 1790516549693,
         "fechaOrden": "2026-09-25",
         "orden": "9716",
         "fechaEmision": "2026-09-25",
@@ -205181,11 +205842,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1791395166044.2683,
+        "id": 1790517522323,
         "fechaOrden": "2026-09-25",
         "orden": "9596",
         "fechaEmision": "2026-09-25",
@@ -205208,11 +205869,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1791395166044.2727,
+        "id": 1790518237100,
         "fechaOrden": "2026-09-25",
         "orden": "9595",
         "fechaEmision": "2026-09-25",
@@ -205235,7 +205896,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
@@ -205244,7 +205905,7 @@
         "orden": "9666",
         "fechaEmision": "2026-09-25",
         "semana": 39,
-        "turno": "NOCTURNO",
+        "turno": "DIURNO",
         "solicitante": "",
         "linea": "Línea 7",
         "maquina": "LLENADORA",
@@ -205320,7 +205981,7 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1792082154054,
+        "id": 1792277416512.356,
         "fechaOrden": "2026-10-01",
         "orden": "9811",
         "fechaEmision": "2026-10-01",
@@ -205343,7 +206004,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Sanchez"
       },
       {
@@ -205914,7 +206575,7 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1792196280895,
+        "id": 1792277416512.792,
         "fechaOrden": "2026-10-01",
         "orden": "9680",
         "fechaEmision": "2026-10-01",
@@ -205937,11 +206598,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1792196390533,
+        "id": 1792277416512.5642,
         "fechaOrden": "2026-10-01",
         "orden": "9681",
         "fechaEmision": "2026-10-01",
@@ -205964,7 +206625,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
@@ -208425,7 +209086,7 @@
         "usuario": "Richard Marín"
       },
       {
-        "id": 1792445008900.3276,
+        "id": 1792311554772,
         "fechaOrden": "2026-10-14",
         "orden": "9886",
         "fechaEmision": "2026-10-14",
@@ -208448,11 +209109,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1792445008900.852,
+        "id": 1792311869870,
         "fechaOrden": "2026-10-14",
         "orden": "9790",
         "fechaEmision": "2026-10-14",
@@ -208475,11 +209136,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1792445008900.967,
+        "id": 1792311919199,
         "fechaOrden": "2026-10-14",
         "orden": "9791",
         "fechaEmision": "2026-10-14",
@@ -208502,11 +209163,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1792445008900.78,
+        "id": 1792311968822,
         "fechaOrden": "2026-10-14",
         "orden": "9792",
         "fechaEmision": "2026-10-14",
@@ -208529,7 +209190,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Richard Marín"
       },
       {
@@ -208857,7 +209518,7 @@
         "usuario": "Richard Marín"
       },
       {
-        "id": 1792316383938,
+        "id": 1792506916407.5752,
         "fechaOrden": "2026-10-10",
         "orden": "10103",
         "fechaEmision": "2026-10-10",
@@ -208880,7 +209541,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
@@ -208911,7 +209572,7 @@
         "usuario": "Richard Marín"
       },
       {
-        "id": 1792316468779,
+        "id": 1792506916407.5056,
         "fechaOrden": "2026-10-10",
         "orden": "9877",
         "fechaEmision": "2026-10-10",
@@ -208934,7 +209595,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
@@ -209019,7 +209680,7 @@
         "usuario": "Richard Marín"
       },
       {
-        "id": 1792318419651,
+        "id": 1792506916407.0894,
         "fechaOrden": "2026-10-10",
         "orden": "9786",
         "fechaEmision": "2026-10-10",
@@ -209042,11 +209703,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1792318668282,
+        "id": 1792506916407.7524,
         "fechaOrden": "2026-10-10",
         "orden": "10004",
         "fechaEmision": "2026-10-10",
@@ -209069,7 +209730,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
@@ -209667,7 +210328,7 @@
         "usuario": "Richard Marín"
       },
       {
-        "id": 1792507112455,
+        "id": 1792519050453.8574,
         "fechaOrden": "2026-10-06",
         "orden": "9497",
         "fechaEmision": "2026-10-06",
@@ -209690,6 +210351,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
@@ -210285,6 +210947,33 @@
         "observaciones": "",
         "bloqueado": false,
         "usuario": "Luis Blandin"
+      },
+      {
+        "id": 1792518955600,
+        "fechaOrden": "2026-09-26",
+        "orden": "9668",
+        "fechaEmision": "2026-09-26",
+        "semana": 39,
+        "turno": "DIURNO",
+        "solicitante": "",
+        "linea": "Línea 7",
+        "maquina": "PALETIZADORA",
+        "aviso": "",
+        "fechaParada": "2026-09-26",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "07:00",
+        "finParada": "07:34",
+        "tMtto": "34",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "LIMPIEZA DE CILINDROS TENSORES DE ENVOLVEDORA, GENERA PARADA CONSTANTES",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": false,
+        "usuario": "Richard Marín"
       }
     ],
     "seguimiento-ordenes": {
@@ -228947,8 +229636,8 @@
             },
             "MATP_0001": {
               "initial": 75950,
-              "reception": 63350,
-              "final": null,
+              "reception": null,
+              "final": 63350,
               "initialOverride": true
             }
           },
@@ -229144,6 +229833,11 @@
             "MATP_0001-sacos-50kg": {
               "initial": 586000,
               "reception": 140000,
+              "final": null
+            },
+            "MATP_0005": {
+              "initial": 404,
+              "reception": null,
               "final": null
             }
           }
@@ -229656,7 +230350,9 @@
         "1787959521278",
         "1788293882619",
         "1788991023411",
-        "1788978219703"
+        "1788978219703",
+        "1790538581551",
+        "1790371816310"
       ]
     },
     "planta-ordenes-trabajo": {

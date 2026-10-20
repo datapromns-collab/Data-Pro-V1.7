@@ -7,9 +7,10 @@ import { CalidadSeguimientoLineas } from '@/components/planner/CalidadSeguimient
 type CalidadModuleProps = {
   canViewTanques: boolean;
   canViewLineas: boolean;
+  canEditTanques: boolean;
 };
 
-export default function CalidadModule({ canViewTanques, canViewLineas }: CalidadModuleProps) {
+export default function CalidadModule({ canViewTanques, canViewLineas, canEditTanques }: CalidadModuleProps) {
   const [activeSection, setActiveSection] = useState<'tanques' | 'lineas'>('tanques');
   const sections = [
     { id: 'tanques', label: 'Seguimiento en tanques', canView: canViewTanques },
@@ -37,7 +38,7 @@ export default function CalidadModule({ canViewTanques, canViewLineas }: Calidad
           </button>
         ))}
       </div>
-      {displayedSection === 'tanques' && <CalidadSeguimientoTanques />}
+      {displayedSection === 'tanques' && <CalidadSeguimientoTanques canEdit={canEditTanques} />}
       {displayedSection === 'lineas' && <CalidadSeguimientoLineas />}
       {!displayedSection && (
         <p className="rounded-xl border border-slate-200 bg-white p-4 text-sm font-semibold text-slate-500">

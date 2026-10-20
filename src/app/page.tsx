@@ -4018,7 +4018,10 @@ export default function PlannerPage() {
                   </div>
                )}
 
-              <div className={cn("flex-1 min-w-0", activeModuleReadOnly && "pointer-events-none select-none")}>
+              <div className={cn(
+                "flex-1 min-w-0",
+                activeModuleReadOnly && activeModule !== 'calidad' && "pointer-events-none select-none",
+              )}>
                   {activeModule === 'planning' && (isAdmin || hasAccess(user.id, 'planning') || user?.id === 'cal.mds') && (
                    <div className="flex flex-col h-full">
                      <div className="flex-1 min-h-0 overflow-auto">
@@ -4029,7 +4032,7 @@ export default function PlannerPage() {
                           <DailyPlanSection tasks={tasks} weekStartDate={weekStartDate} onPrint={handlePrintDaily} />
                         )}
                         {activeTab === 'plan-semana' && getPermissionLevel(user.id, 'planning', 'plan-semana') !== 'none' && (
-                          <WeeklyPlanSection tasks={tasks} weekStartDate={weekStartDate} />
+                          <WeeklyPlanSection tasks={tasks} weekStartDate={weekStartDate} weeklyData={weeklyData} />
                         )}
                         {activeTab === 'seguimiento-prodt' && getPermissionLevel(user.id, 'planning', 'seguimiento-prodt') !== 'none' && (
                           <SeguimientoProdtSection weekStartDate={weekStartDate} />
@@ -6846,6 +6849,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                       <CalidadModule
                         canViewTanques={getPermissionLevel(user.id, 'calidad', 'seguimiento-tanques') !== 'none'}
                         canViewLineas={getPermissionLevel(user.id, 'calidad', 'seguimiento-lineas') !== 'none'}
+                        canEditTanques={getPermissionLevel(user.id, 'calidad', 'seguimiento-tanques') === 'write'}
                       />
                     )}
                     {activeModule === 'mtto' && (

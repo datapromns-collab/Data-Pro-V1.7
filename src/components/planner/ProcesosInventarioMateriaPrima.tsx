@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import { addDays, eachDayOfInterval, endOfMonth, format, startOfMonth, startOfWeek } from 'date-fns';
 import { useRemoteCollection } from '@/hooks/use-remote-collection';
 
@@ -100,6 +100,7 @@ const INVENTORY_GROUPS: { title: string; detailHeading: string; rows: MaterialIn
 ];
 
 const EMPTY_INVENTORY: InventoryData = { days: {} };
+const LITERS_PER_UBB = 18.93;
 
 function getConsumption(values: InventoryValues | undefined): number {
   return (Number(values?.initial) || 0) + (Number(values?.reception) || 0) - (Number(values?.final) || 0);
@@ -339,26 +340,61 @@ export function ProcesosInventarioMateriaPrima({ view = 'diario' }: { view?: Inv
       <div className="space-y-3">
         {INVENTORY_GROUPS.map((group) => (
           <div key={group.title} className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
-            <table className="w-full min-w-[680px] table-fixed border-collapse text-left text-[10px]">
+            <table className={`w-full ${group.title === 'Concentrados GLUP' ? 'min-w-[900px]' : 'min-w-[680px]'} table-fixed border-collapse text-left text-[10px]`}>
               <colgroup>
                 <col className="w-[8%]" />
                 <col className="w-[20%]" />
                 <col className="w-[12%]" />
-                <col className="w-[15%]" />
-                <col className="w-[15%]" />
-                <col className="w-[15%]" />
-                <col className="w-[15%]" />
+                {group.title === 'Concentrados GLUP' ? (
+                  <>
+                    <col className="w-[9%]" />
+                    <col className="w-[9%]" />
+                    <col className="w-[9%]" />
+                    <col className="w-[9%]" />
+                    <col className="w-[9%]" />
+                    <col className="w-[9%]" />
+                    <col className="w-[6%]" />
+                  </>
+                ) : (
+                  <>
+                    <col className="w-[15%]" />
+                    <col className="w-[15%]" />
+                    <col className="w-[15%]" />
+                    <col className="w-[15%]" />
+                  </>
+                )}
               </colgroup>
               <thead>
                 <tr className="bg-slate-100/90 text-slate-700">
-                  <th className="border border-slate-200 px-2 py-1.5 font-black uppercase tracking-wide">Código</th>
-                  <th className="border border-slate-200 px-2 py-1.5 font-black uppercase tracking-wide">Descripción</th>
-                  <th className="border border-slate-200 px-2 py-1.5 font-black uppercase tracking-wide">{group.detailHeading}</th>
-                  <th className="border border-slate-200 px-1 py-1.5 text-center font-black uppercase tracking-wide">Inv inicial</th>
-                  <th className="border border-slate-200 px-1 py-1.5 text-center font-black uppercase tracking-wide">Recepción</th>
-                  <th className="border border-slate-200 px-1 py-1.5 text-center font-black uppercase tracking-wide">Inv final</th>
-                  <th className="border border-slate-200 px-1 py-1.5 text-center font-black uppercase tracking-wide">Consumo</th>
+                  <th rowSpan={group.title === 'Concentrados GLUP' ? 2 : undefined} className="border border-slate-200 px-2 py-1.5 font-black uppercase tracking-wide">Código</th>
+                  <th rowSpan={group.title === 'Concentrados GLUP' ? 2 : undefined} className="border border-slate-200 px-2 py-1.5 font-black uppercase tracking-wide">Descripción</th>
+                  <th rowSpan={group.title === 'Concentrados GLUP' ? 2 : undefined} className="border border-slate-200 px-2 py-1.5 font-black uppercase tracking-wide">{group.detailHeading}</th>
+                  {group.title === 'Concentrados GLUP' ? (
+                    <>
+                      <th colSpan={2} className="border border-slate-200 px-1 py-1.5 text-center font-black uppercase tracking-wide">Inv inicial</th>
+                      <th colSpan={2} className="border border-slate-200 px-1 py-1.5 text-center font-black uppercase tracking-wide">Recepción</th>
+                      <th colSpan={2} className="border border-slate-200 px-1 py-1.5 text-center font-black uppercase tracking-wide">Inv final</th>
+                      <th rowSpan={2} className="border border-slate-200 px-1 py-1.5 text-center font-black uppercase tracking-wide">Consumo</th>
+                    </>
+                  ) : (
+                    <>
+                      <th className="border border-slate-200 px-1 py-1.5 text-center font-black uppercase tracking-wide">Inv inicial</th>
+                      <th className="border border-slate-200 px-1 py-1.5 text-center font-black uppercase tracking-wide">Recepción</th>
+                      <th className="border border-slate-200 px-1 py-1.5 text-center font-black uppercase tracking-wide">Inv final</th>
+                      <th className="border border-slate-200 px-1 py-1.5 text-center font-black uppercase tracking-wide">Consumo</th>
+                    </>
+                  )}
                 </tr>
+                {group.title === 'Concentrados GLUP' && (
+                  <tr className="bg-slate-100/90 text-slate-700">
+                    {(['Inv inicial', 'Recepción', 'Inv final'] as const).map((heading) => (
+                      <Fragment key={heading}>
+                        <th className="border border-slate-200 px-1 py-1 text-center font-black uppercase tracking-wide">UBB</th>
+                        <th className="border border-slate-200 px-1 py-1 text-center font-black uppercase tracking-wide">Litros</th>
+                      </Fragment>
+                    ))}
+                  </tr>
+                )}
               </thead>
               <tbody>
                 {group.rows.map((row, rowIndex) => {
@@ -387,19 +423,48 @@ export function ProcesosInventarioMateriaPrima({ view = 'diario' }: { view?: Inv
                       ) : null}
                       <td className="whitespace-pre-line border border-slate-200 px-2 py-1.5 text-[9px] text-slate-600">{row.detail}</td>
                       {(['initial', 'reception', 'final'] as const).map((field) => (
-                        <td key={field} className="border border-slate-200 px-1 py-0.5">
-                          <input
-                            type="number"
-                            min="0"
-                            step="any"
-                            value={values?.[field] ?? ''}
-                            onChange={(event) => updateValue(valueKey, field, event.target.value)}
-                            readOnly={view !== 'diario' || shift === 'resumen'}
-                            disabled={!store.isLoaded}
-                            aria-label={`${field} ${row.code} ${row.detail}`}
-                            className={`h-7 w-full min-w-0 rounded-md border border-slate-200 px-1 text-center text-[10px] font-bold text-slate-800 outline-none transition-colors focus:border-teal-500 focus:ring-2 focus:ring-teal-100 disabled:opacity-60 ${view !== 'diario' || shift === 'resumen' ? 'bg-slate-50' : 'bg-white'}`}
-                          />
-                        </td>
+                        group.title === 'Concentrados GLUP' ? (
+                          <Fragment key={field}>
+                            <td className="border border-slate-200 px-1 py-0.5">
+                              <input
+                                type="number"
+                                min="0"
+                                step="any"
+                                value={values?.[field] ?? ''}
+                                onChange={(event) => updateValue(valueKey, field, event.target.value)}
+                                readOnly={view !== 'diario' || shift === 'resumen'}
+                                disabled={!store.isLoaded}
+                                aria-label={`${field} UBB ${row.code} ${row.detail}`}
+                                className={`h-7 w-full min-w-0 rounded-md border border-slate-200 px-1 text-center text-[10px] font-bold text-slate-800 outline-none transition-colors focus:border-teal-500 focus:ring-2 focus:ring-teal-100 disabled:opacity-60 ${view !== 'diario' || shift === 'resumen' ? 'bg-slate-50' : 'bg-white'}`}
+                              />
+                            </td>
+                            <td
+                              aria-label={`${field} litros ${row.code} ${row.detail}`}
+                              className="border border-slate-200 bg-slate-50/60 px-1 py-1 text-center text-[10px] font-bold text-slate-700"
+                            >
+                              {values?.[field] == null
+                                ? ''
+                                : (Number(values[field]) * LITERS_PER_UBB).toLocaleString('es-VE', {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                })}
+                            </td>
+                          </Fragment>
+                        ) : (
+                          <td key={field} className="border border-slate-200 px-1 py-0.5">
+                            <input
+                              type="number"
+                              min="0"
+                              step="any"
+                              value={values?.[field] ?? ''}
+                              onChange={(event) => updateValue(valueKey, field, event.target.value)}
+                              readOnly={view !== 'diario' || shift === 'resumen'}
+                              disabled={!store.isLoaded}
+                              aria-label={`${field} ${row.code} ${row.detail}`}
+                              className={`h-7 w-full min-w-0 rounded-md border border-slate-200 px-1 text-center text-[10px] font-bold text-slate-800 outline-none transition-colors focus:border-teal-500 focus:ring-2 focus:ring-teal-100 disabled:opacity-60 ${view !== 'diario' || shift === 'resumen' ? 'bg-slate-50' : 'bg-white'}`}
+                            />
+                          </td>
+                        )
                       ))}
                       {(rowIndex === 0 || !isSugarGroup) && (
                         <td rowSpan={row.rowSpan} className="border border-slate-200 bg-slate-50/60 px-2 py-1.5 text-center text-[10px] font-black text-slate-800">

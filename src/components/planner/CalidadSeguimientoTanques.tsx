@@ -28,16 +28,16 @@ const FLAVORS = [
 const FLAVOR_COLORS: Record<string, string> = {
   'GLUP COLA': '#A6A6A6',
   'GLUP FRESH': '#A8CF91',
-  'GLUP UVA': '#9454C3',
-  'GLUP PIÑA': '#FFFF00',
+  'GLUP UVA': '#e1bee7',
+  'GLUP PIÑA': '#ffff99',
   'GLUP NARANJA': '#F4A183',
-  'GLUP KOLITA': '#FF0000',
+  'GLUP KOLITA': '#f27b92',
   'GLUP MANZANA VERDE': '#A8CF91',
   'GLUP PIÑA PARCHITA': '#F4A183',
   'GLUP MANZANA ROJA': '#C77B86',
-  'GLUP UVA 10%': '#9454C3',
+  'GLUP UVA 10%': '#e1bee7',
   'GLUP MANZANA ROJA 10%': '#C77B86',
-  'GLUP PIÑA 10%': '#FFFF00',
+  'GLUP PIÑA 10%': '#ffff99',
   'JUSTY NARANJA': '#F07828',
   'JUSTY DURAZNO': '#FFC000',
   'JUSTY MANZANA': '#8EAADB',
@@ -108,10 +108,14 @@ const BEVERAGE_FIELDS = [
   { id: 'beveragePatternBrix', label: 'Brix de la bebida patrón', type: 'text' },
   { id: 'beveragePh', label: 'pH', type: 'text' },
   { id: 'beverageAt', label: 'A.T', type: 'text' },
+  { id: 'beverageColorOdorFlavor', label: 'Color/olor/sabor', type: 'text' },
+  { id: 'beverageAnalyst', label: 'Analista', type: 'text' },
+] as const;
+
+const LEGACY_BEVERAGE_FIELDS = [
   { id: 'beverageFlavor', label: 'Sabor', type: 'text' },
   { id: 'beverageColor', label: 'Color', type: 'text' },
   { id: 'beverageOdor', label: 'Olor', type: 'text' },
-  { id: 'beverageAnalyst', label: 'Analista', type: 'text' },
 ] as const;
 
 const PACKAGING_FIELDS = [
@@ -156,6 +160,7 @@ const TRACKING_FIELDS = [
   ...MATURATION_FIELDS,
   ...MATURED_SYRUP_FIELDS,
   ...BEVERAGE_FIELDS,
+  ...LEGACY_BEVERAGE_FIELDS,
   ...PACKAGING_FIELDS,
   ...OBSERVATIONS_FIELDS,
   ...JUSTY_PREPARATION_FIELDS,
@@ -199,6 +204,7 @@ const EMPTY_PREPARATION_ROW: PreparationRow = {
   beveragePatternBrix: '',
   beveragePh: '',
   beverageAt: '',
+  beverageColorOdorFlavor: '',
   beverageFlavor: '',
   beverageColor: '',
   beverageOdor: '',
@@ -228,7 +234,7 @@ const EMPTY_PREPARATION_ROW: PreparationRow = {
   justyQualityAnalyst: '',
 };
 
-export function CalidadSeguimientoTanques() {
+export function CalidadSeguimientoTanques({ canEdit = true }: { canEdit?: boolean }) {
   const [selectedFlavor, setSelectedFlavor] = useState('');
   const [weekStart, setWeekStart] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }));
   const trackingStore = useRemoteCollection<TankTrackingData>(
@@ -261,7 +267,7 @@ export function CalidadSeguimientoTanques() {
       ];
   const activeTrackingFields = [...fieldGroups.flatMap(({ fields }) => fields), ...OBSERVATIONS_FIELDS];
   const addPreparationRow = () => {
-    if (!trackingStore.isLoaded) return;
+    if (!canEdit || !trackingStore.isLoaded) return;
     const rowId = crypto.randomUUID();
     trackingStore.patchData({
       weeks: {
@@ -280,6 +286,7 @@ export function CalidadSeguimientoTanques() {
   };
 
   const updatePreparationRow = (rowId: string, field: PreparationField, value: string) => {
+    if (!canEdit || !trackingStore.isLoaded) return;
     trackingStore.patchData({
       weeks: {
         [weekKey]: {
@@ -291,6 +298,20 @@ export function CalidadSeguimientoTanques() {
         },
       },
     });
+  };
+  const getPreparationFieldValue = (row: Partial<SavedPreparationRow>, field: PreparationField) => {
+    if (field === 'beverageColorOdorFlavor' && !row.beverageColorOdorFlavor) {
+      return [
+        ['Sabor', row.beverageFlavor],
+        ['Color', row.beverageColor],
+        ['Olor', row.beverageOdor],
+      ]
+        .filter((entry): entry is [string, string] => Boolean(entry[1]))
+        .map(([label, value]) => `${label}: ${value}`)
+        .join(' · ');
+    }
+
+    return row[field] ?? '';
   };
 
   return (
@@ -460,7 +481,7 @@ export function CalidadSeguimientoTanques() {
                               value={row[field.id] ?? ''}
                               aria-label={`${field.label}, fila ${rowIndex + 1}`}
                               rows={3}
-                              disabled={!trackingStore.isLoaded}
+                              disabled={!canEdit || !trackingStore.isLoaded}
                               onChange={(event) => {
                                 const value = event.target.value;
                                 updatePreparationRow(rowId, field.id, value);
@@ -470,9 +491,9 @@ export function CalidadSeguimientoTanques() {
                           ) : (
                             <input
                               type={field.type}
-                              value={row[field.id] ?? ''}
+                              value={getPreparationFieldValue(row, field.id)}
                               aria-label={`${field.label}, fila ${rowIndex + 1}`}
-                              disabled={!trackingStore.isLoaded}
+                              disabled={!canEdit || !trackingStore.isLoaded}
                               maxLength={field.id === 'finishedTankRoom' ? 4 : undefined}
                               pattern={field.id === 'finishedTankRoom' ? '[0-9]{2}-[0-9]' : undefined}
                               onChange={(event) => {
@@ -489,14 +510,14 @@ export function CalidadSeguimientoTanques() {
                   ))}
                   <tr>
                     <td colSpan={activeTrackingFields.length} className="border border-slate-200 bg-white p-2">
-                      <button
+                      {canEdit && <button
                         type="button"
                         onClick={addPreparationRow}
                         disabled={!trackingStore.isLoaded}
                         className="inline-flex h-8 items-center justify-center rounded-full bg-rose-700 px-5 text-[10px] font-black uppercase tracking-widest text-white shadow-sm hover:bg-rose-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         Cargar
-                      </button>
+                      </button>}
                     </td>
                   </tr>
                 </tbody>
