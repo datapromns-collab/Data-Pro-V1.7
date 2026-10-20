@@ -118,7 +118,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "demon2",
-      "read": false,
+      "read": true,
       "createdAt": "2026-10-20T17:14:08.396Z"
     },
     {
