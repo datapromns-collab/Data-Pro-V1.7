@@ -14598,6 +14598,41 @@
           "aditivosCantidad": {},
           "solidosCantidad": {},
           "quimicosInsumosCantidad": {}
+        },
+        "2026-10-20": {
+          "tapas": {
+            "EMP_0095-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0095-Importada": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaEW": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaTipo2": {
+              "totalCajas": "",
+              "total": ""
+            }
+          },
+          "separadores": {},
+          "preformas": {},
+          "plasticos": {},
+          "adhesivoCantidad": "",
+          "etiquetasCantidad": {},
+          "azucarCantidad": {},
+          "concentradosCantidad": {},
+          "concentradosJustyCantidad": {},
+          "aditivosCantidad": {},
+          "solidosCantidad": {},
+          "quimicosInsumosCantidad": {}
         }
       },
       "semanal": {
@@ -21297,7 +21332,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-19T22:15:32.493Z"
+    "updatedAt": "2026-10-20T12:28:14.265Z"
   },
   "ordenesSap": [
     {
@@ -33173,8 +33208,19 @@
           "fechaInicio": "2026-10-19",
           "ticket1": "16364",
           "cajas1": 3840,
-          "ticket2": "",
+          "ticket2": "16365",
           "cajas2": 1440,
+          "ticket3": "",
+          "cajas3": 880,
+          "ticket4": "",
+          "cajas4": 14960
+        },
+        {
+          "fechaInicio": "2026-10-20",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -33193,6 +33239,17 @@
           "fechaInicio": "2026-10-19",
           "ticket1": "16321",
           "cajas1": 5440,
+          "ticket2": "16322",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 2560,
+          "ticket4": "",
+          "cajas4": 15840
+        },
+        {
+          "fechaInicio": "2026-10-20",
+          "ticket1": "",
+          "cajas1": 0,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -33213,12 +33270,12 @@
           "fechaInicio": "2026-10-19",
           "ticket1": "16275",
           "cajas1": 4800,
-          "ticket2": "",
+          "ticket2": "16276",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 3360,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 25680
         }
       ]
     },
@@ -33233,6 +33290,17 @@
           "fechaInicio": "2026-10-19",
           "ticket1": "16410",
           "cajas1": 6240,
+          "ticket2": "16411",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 3360,
+          "ticket4": "",
+          "cajas4": 23360
+        },
+        {
+          "fechaInicio": "2026-10-20",
+          "ticket1": "",
+          "cajas1": 0,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -33253,12 +33321,12 @@
           "fechaInicio": "2026-10-19",
           "ticket1": "",
           "cajas1": 0,
-          "ticket2": "",
+          "ticket2": "15225",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1150,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 200
         }
       ]
     },
@@ -33273,8 +33341,19 @@
           "fechaInicio": "2026-10-19",
           "ticket1": "16197",
           "cajas1": 1440,
-          "ticket2": "",
+          "ticket2": "16198",
           "cajas2": 640,
+          "ticket3": "",
+          "cajas3": 960,
+          "ticket4": "",
+          "cajas4": 14720
+        },
+        {
+          "fechaInicio": "2026-10-20",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -33293,6 +33372,48 @@
           "fechaInicio": "2026-10-19",
           "ticket1": "16456",
           "cajas1": 2340,
+          "ticket2": "16457",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 2106,
+          "ticket4": "",
+          "cajas4": 20358
+        },
+        {
+          "fechaInicio": "2026-10-20",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "3-1792498748499",
+      "linea": 3,
+      "sabor": "GLUP UVA",
+      "ordenNumero": "64361",
+      "semana": 43,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-19",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16276",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 2320
+        },
+        {
+          "fechaInicio": "2026-10-20",
+          "ticket1": "",
+          "cajas1": 0,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -220030,7 +220151,12 @@
       "2026-10-18-suave": "255106",
       "2026-10-18-procesos": "1157214",
       "2026-10-18-filtrada": "2251216,98",
-      "2026-10-18-total": "2973900"
+      "2026-10-18-total": "2973900",
+      "2026-10-19-servicio": "46010",
+      "2026-10-19-suave": "384279",
+      "2026-10-19-procesos": "2491478,9",
+      "2026-10-19-filtrada": "4048009,4",
+      "2026-10-19-total": "2855172"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
@@ -221996,7 +222122,41 @@
       "2026-10-19-Sanitizer-2": "200",
       "2026-10-19-Sanitizer-4": "200",
       "2026-10-19-LARK CLEAN 21C-2": "0",
-      "2026-10-19-LARK CLEAN 21C-4": "0"
+      "2026-10-19-LARK CLEAN 21C-4": "0",
+      "2026-10-19-LP20-6": "180,9",
+      "2026-10-19-Cloro-6": "414",
+      "2026-10-19-AntiEscalante-6": "617,9",
+      "2026-10-19-Sal-6": "6200",
+      "2026-10-19-Alcalino-6": "2562,6",
+      "2026-10-19-Peracetico-6": "560,1",
+      "2026-10-19-Lark Foam Quat-6": "56,5",
+      "2026-10-19-Lark Foam IN-6": "199,5",
+      "2026-10-19-Lark Desengrasante-6": "0",
+      "2026-10-19-Soda Caustica-6": "496,6",
+      "2026-10-19-GermiQuat-6": "225",
+      "2026-10-19-Lark Inox-6": "32",
+      "2026-10-19-TM Smart-6": "405,92",
+      "2026-10-19-Gamma Ro-432-6": "166,5",
+      "2026-10-19-RO Cleaner-6": "213,7",
+      "2026-10-19-Sanitizer-6": "200",
+      "2026-10-19-LARK CLEAN 21C-6": "0",
+      "2026-10-20-LP20-0": "180,9",
+      "2026-10-20-Cloro-0": "414",
+      "2026-10-20-AntiEscalante-0": "617,9",
+      "2026-10-20-Sal-0": "6200",
+      "2026-10-20-Alcalino-0": "2562,6",
+      "2026-10-20-Peracetico-0": "560,1",
+      "2026-10-20-Lark Foam Quat-0": "56,5",
+      "2026-10-20-Lark Foam IN-0": "199,5",
+      "2026-10-20-Lark Desengrasante-0": "0",
+      "2026-10-20-Soda Caustica-0": "496,6",
+      "2026-10-20-GermiQuat-0": "225",
+      "2026-10-20-Lark Inox-0": "32",
+      "2026-10-20-TM Smart-0": "405,92",
+      "2026-10-20-Gamma Ro-432-0": "166,5",
+      "2026-10-20-RO Cleaner-0": "213,7",
+      "2026-10-20-Sanitizer-0": "200",
+      "2026-10-20-LARK CLEAN 21C-0": "0"
     },
     "sala-jarabe-glup": [
       {
@@ -223195,6 +223355,33 @@
           "PRODT-0010": 28273,
           "PRODT-0011": 0,
           "PRODT-0012": 48297,
+          "PRODT-0049": 4812,
+          "PRODT-0097": 112,
+          "PRODT-0098": 4995,
+          "PRODT-0082": 13456,
+          "PRODT-0084": 26422,
+          "PRODT-0086": 6557,
+          "PRODT-0088": 11855,
+          "PRODT-0104": 13419,
+          "PRODT-0105": 1,
+          "PRODT-0107": 16369,
+          "PRODT-0092": 1446,
+          "PRODT-0093": 2303,
+          "PRODT-0094": 2360,
+          "PRODT-0095": 2,
+          "PRODT-0111": 4125,
+          "PRODT-0014": 18251,
+          "PRODT-0100": 98,
+          "PRODT-0115": 11389,
+          "PRODT-0116": 28
+        },
+        "2026-10-19": {
+          "PRODT-0007": 179748,
+          "PRODT-0008": 9025,
+          "PRODT-0009": 32137,
+          "PRODT-0010": 28273,
+          "PRODT-0011": 0,
+          "PRODT-0012": 61507,
           "PRODT-0049": 4812,
           "PRODT-0097": 112,
           "PRODT-0098": 4995,
