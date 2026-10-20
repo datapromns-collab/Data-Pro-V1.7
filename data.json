@@ -222730,13 +222730,27 @@
           "fechaFiltro": "2026-10-19",
           "fecha": "2026-10-19",
           "dia": "lunes",
-          "turno": "",
+          "turno": "Nocturno",
           "tanque": "5",
           "sabor": "JUSTY DURAZNO",
           "horaInicio": "15:50",
           "ubbInicial": "20",
           "volInicialTanque": "20000",
-          "ubbFinal": "0"
+          "ubbFinal": "0",
+          "volFinalTanque": "0"
+        },
+        {
+          "sourcePrepKey": "justy:row_1792450793306_71mtis",
+          "fechaFiltro": "2026-10-19",
+          "fecha": "2026-10-19",
+          "dia": "lunes",
+          "turno": "Diurno",
+          "tanque": "6",
+          "sabor": "JUSTY DURAZNO",
+          "horaInicio": "18:00",
+          "ubbInicial": "20",
+          "volInicialTanque": "20000",
+          "volFinalTanque": "0"
         }
       ]
     },
@@ -223573,6 +223587,36 @@
         "enviarALinea": 5,
         "editando": false,
         "editandoPor": null
+      },
+      {
+        "id": "row_1792450793306_71mtis",
+        "fecha": "2026-10-19",
+        "hora": "16:00",
+        "numeroTanques": "6",
+        "sala": "1",
+        "sabor": "JUSTY DURAZNO",
+        "litros": "20000",
+        "ubb": "20",
+        "brix": "13.45",
+        "estado": "enviado a linea",
+        "enviarALinea": 5,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1792452657282_ob4ik9",
+        "fecha": "2026-10-19",
+        "hora": "18:45",
+        "numeroTanques": "5",
+        "sala": "1",
+        "sabor": "JUSTY DURAZNO",
+        "litros": "20000",
+        "ubb": "20",
+        "brix": "13.44",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
       }
     ],
     "procesos-inventario-materia-prima": {
@@ -223961,6 +224005,154 @@
               "initial": null,
               "reception": 0,
               "final": null
+            },
+            "MATP_0002": {
+              "initial": 184,
+              "reception": null,
+              "final": 184
+            },
+            "MATP_0003": {
+              "initial": 368,
+              "reception": null,
+              "final": 356
+            },
+            "MATP_0004": {
+              "initial": 4,
+              "reception": null,
+              "final": 4
+            },
+            "MATP_0005": {
+              "initial": 426,
+              "reception": null,
+              "final": 426
+            },
+            "MATP_0006": {
+              "initial": 183,
+              "reception": null,
+              "final": 183
+            },
+            "MATP_0007": {
+              "initial": 596,
+              "reception": null,
+              "final": 596
+            },
+            "MATP_0009": {
+              "initial": 198,
+              "reception": null,
+              "final": 198
+            },
+            "MATP_0032": {
+              "initial": 78,
+              "reception": null,
+              "final": 78
+            },
+            "MATP_0038": {
+              "initial": 90,
+              "reception": null,
+              "final": 90
+            },
+            "MATP_0039": {
+              "initial": 296,
+              "reception": null,
+              "final": 288,
+              "initialOverride": true
+            },
+            "MATP_0022": {
+              "initial": 80,
+              "reception": null,
+              "final": 80
+            },
+            "MATP_0043": {
+              "initial": 2640,
+              "reception": null,
+              "final": 2640
+            },
+            "MATP_0059": {
+              "initial": 20,
+              "reception": null,
+              "final": 20
+            },
+            "MATP_0060": {
+              "initial": 0,
+              "reception": null,
+              "final": 0,
+              "initialOverride": true
+            },
+            "MATP_0010": {
+              "initial": 285,
+              "reception": null,
+              "final": 285
+            },
+            "MATP_0041": {
+              "initial": 498.42,
+              "reception": null,
+              "final": 480.13
+            },
+            "MATP_0014": {
+              "initial": 139.6,
+              "reception": null,
+              "final": 139.6
+            },
+            "MATP_0015": {
+              "initial": 734.1,
+              "reception": null,
+              "final": 734.1
+            },
+            "MATP_0016": {
+              "initial": 130.83,
+              "reception": null,
+              "final": 129.478
+            },
+            "MATP_0017": {
+              "initial": 9937.7,
+              "reception": null,
+              "final": 9547.3
+            },
+            "MATP_0018": {
+              "initial": 1883.5,
+              "reception": null,
+              "final": 1883.5
+            },
+            "MATP_0019": {
+              "initial": 3622.55,
+              "reception": null,
+              "final": 3543.01
+            },
+            "MATP_0020": {
+              "initial": 1121.6,
+              "reception": null,
+              "final": 1121.6
+            },
+            "MATP_0021": {
+              "initial": 2638.8,
+              "reception": null,
+              "final": 2529.6,
+              "initialOverride": true
+            },
+            "MATP_0031": {
+              "initial": 85.1,
+              "reception": null,
+              "final": 85.1
+            },
+            "MATP_0036": {
+              "initial": 86.3,
+              "reception": null,
+              "final": 86.3
+            },
+            "MATP_0037": {
+              "initial": 88.87,
+              "reception": null,
+              "final": 87.638
+            },
+            "MATP_0040": {
+              "initial": 1145.37,
+              "reception": null,
+              "final": 979.87
+            },
+            "MATP_0042": {
+              "initial": 1708.6,
+              "reception": null,
+              "final": 1708.6
             }
           },
           "nocturno": {
@@ -223973,6 +224165,154 @@
               "initial": 494000,
               "reception": null,
               "final": 434000
+            },
+            "MATP_0002": {
+              "initial": 184,
+              "reception": null,
+              "final": 166
+            },
+            "MATP_0003": {
+              "initial": 356,
+              "reception": null,
+              "final": 338
+            },
+            "MATP_0004": {
+              "initial": 4,
+              "reception": null,
+              "final": 4
+            },
+            "MATP_0005": {
+              "initial": 426,
+              "reception": null,
+              "final": 426
+            },
+            "MATP_0006": {
+              "initial": 183,
+              "reception": null,
+              "final": 183
+            },
+            "MATP_0007": {
+              "initial": 596,
+              "reception": null,
+              "final": 596
+            },
+            "MATP_0009": {
+              "initial": 198,
+              "reception": null,
+              "final": 180
+            },
+            "MATP_0032": {
+              "initial": 78,
+              "reception": null,
+              "final": 78
+            },
+            "MATP_0038": {
+              "initial": 90,
+              "reception": null,
+              "final": 90
+            },
+            "MATP_0039": {
+              "initial": 288,
+              "reception": null,
+              "final": 280
+            },
+            "MATP_0022": {
+              "initial": 80,
+              "reception": null,
+              "final": 80
+            },
+            "MATP_0043": {
+              "initial": 2640,
+              "reception": null,
+              "final": 2500
+            },
+            "MATP_0059": {
+              "initial": 20,
+              "reception": null,
+              "final": 20
+            },
+            "MATP_0060": {
+              "initial": 0,
+              "reception": null,
+              "final": 0
+            },
+            "MATP_0010": {
+              "initial": 285,
+              "reception": null,
+              "final": 267.9
+            },
+            "MATP_0041": {
+              "initial": 480.13,
+              "reception": null,
+              "final": 461.84
+            },
+            "MATP_0014": {
+              "initial": 139.6,
+              "reception": null,
+              "final": 139.6
+            },
+            "MATP_0015": {
+              "initial": 734.1,
+              "reception": null,
+              "final": 734.1
+            },
+            "MATP_0016": {
+              "initial": 129.478,
+              "reception": null,
+              "final": 128.126,
+              "initialOverride": true
+            },
+            "MATP_0017": {
+              "initial": 9547.3,
+              "reception": null,
+              "final": 8947
+            },
+            "MATP_0018": {
+              "initial": 1883.5,
+              "reception": null,
+              "final": 1868.5
+            },
+            "MATP_0019": {
+              "initial": 3543.01,
+              "reception": null,
+              "final": 3430.16
+            },
+            "MATP_0020": {
+              "initial": 1121.6,
+              "reception": null,
+              "final": 1115.6,
+              "initialOverride": true
+            },
+            "MATP_0021": {
+              "initial": 2529.6,
+              "reception": null,
+              "final": 2435.7
+            },
+            "MATP_0031": {
+              "initial": 85.1,
+              "reception": null,
+              "final": 85.1
+            },
+            "MATP_0036": {
+              "initial": 86.3,
+              "reception": null,
+              "final": 86.3
+            },
+            "MATP_0037": {
+              "initial": 87.638,
+              "reception": null,
+              "final": 86.406,
+              "initialOverride": true
+            },
+            "MATP_0040": {
+              "initial": 979.87,
+              "reception": null,
+              "final": 814.38
+            },
+            "MATP_0042": {
+              "initial": 1708.6,
+              "reception": null,
+              "final": 1692.6
             }
           }
         },
@@ -224160,7 +224500,7 @@
             },
             "MATP_0001": {
               "initial": 75950,
-              "reception": null,
+              "reception": 63350,
               "final": null,
               "initialOverride": true
             }
@@ -224177,34 +224517,40 @@
               "final": 78
             },
             "MATP_0002": {
-              "initial": 184,
+              "initial": 358,
               "reception": null,
-              "final": 166
+              "final": 334,
+              "initialOverride": true
             },
             "MATP_0003": {
-              "initial": 356,
+              "initial": 332,
               "reception": null,
-              "final": 338
+              "final": 302,
+              "initialOverride": true
             },
             "MATP_0005": {
               "initial": 426,
               "reception": null,
-              "final": 426
+              "final": 404,
+              "initialOverride": true
             },
             "MATP_0006": {
               "initial": 183,
               "reception": null,
-              "final": 183
+              "final": 183,
+              "initialOverride": true
             },
             "MATP_0007": {
               "initial": 596,
               "reception": null,
-              "final": 596
+              "final": 596,
+              "initialOverride": true
             },
             "MATP_0009": {
-              "initial": 198,
+              "initial": 372,
               "reception": null,
-              "final": 180
+              "final": 348,
+              "initialOverride": true
             },
             "MATP_0038": {
               "initial": 90,
@@ -224212,9 +224558,10 @@
               "final": 90
             },
             "MATP_0039": {
-              "initial": 288,
+              "initial": 272,
               "reception": null,
-              "final": 280
+              "final": 264,
+              "initialOverride": true
             },
             "MATP_0022": {
               "initial": 80,
@@ -224232,74 +224579,88 @@
               "final": 0
             },
             "MATP_0010": {
-              "initial": 285,
+              "initial": 473.1,
               "reception": null,
-              "final": 267.9
+              "final": 450.3,
+              "initialOverride": true
             },
             "MATP_0041": {
-              "initial": 480.13,
+              "initial": 443.31,
               "reception": null,
-              "final": 461.84
+              "final": 425.02,
+              "initialOverride": true
             },
             "MATP_0040": {
-              "initial": 979.87,
+              "initial": 2910.04,
               "reception": null,
-              "final": 814.38
+              "final": 2744.55,
+              "initialOverride": true
             },
             "MATP_0037": {
-              "initial": 87.638,
+              "initial": 85.27,
               "reception": null,
-              "final": 86.406
+              "final": 81.222,
+              "initialOverride": true
             },
             "MATP_0036": {
-              "initial": 86.3,
+              "initial": 86.9,
               "reception": null,
-              "final": 86.3
+              "final": 86.9,
+              "initialOverride": true
             },
             "MATP_0031": {
-              "initial": 85.1,
+              "initial": 85,
               "reception": null,
-              "final": 85.1
+              "final": 85,
+              "initialOverride": true
             },
             "MATP_0016": {
-              "initial": 129.478,
+              "initial": 125.55,
               "reception": null,
-              "final": 128.126
+              "final": 121.118,
+              "initialOverride": true
             },
             "MATP_0042": {
-              "initial": 1708.6,
+              "initial": 1676.1,
               "reception": null,
-              "final": 1692.6
+              "final": 1660.7,
+              "initialOverride": true
             },
             "MATP_0021": {
-              "initial": 2529.6,
+              "initial": 2396.8,
               "reception": null,
-              "final": 2435.7
+              "final": 2248.3,
+              "initialOverride": true
             },
             "MATP_0020": {
-              "initial": 1121.6,
+              "initial": 2110.1,
               "reception": null,
-              "final": 1115.6
+              "final": 2104.1,
+              "initialOverride": true
             },
             "MATP_0019": {
-              "initial": 3543.01,
+              "initial": 3370.5,
               "reception": null,
-              "final": 3430.16
+              "final": 3153.55,
+              "initialOverride": true
             },
             "MATP_0018": {
-              "initial": 1883.5,
+              "initial": 1853,
               "reception": null,
-              "final": 1868.5
+              "final": 1838,
+              "initialOverride": true
             },
             "MATP_0017": {
-              "initial": 9547.3,
+              "initial": 18646,
               "reception": null,
-              "final": 8947
+              "final": 17620.2,
+              "initialOverride": true
             },
             "MATP_0015": {
-              "initial": 734.1,
+              "initial": 2734.4,
               "reception": null,
-              "final": 734.1
+              "final": 2593.6,
+              "initialOverride": true
             },
             "MATP_0014": {
               "initial": 139.6,
@@ -224307,21 +224668,27 @@
               "final": 139.6
             },
             "MATP_0043": {
-              "initial": 2640,
+              "initial": 4280,
               "reception": null,
-              "final": 2500
+              "final": 4140,
+              "initialOverride": true
             },
             "MATP_0001-sacos-50kg": {
-              "initial": null,
+              "initial": 716000,
               "reception": null,
-              "final": null,
+              "final": 586000,
               "initialOverride": true
             },
             "MATP_0001": {
+              "initial": 63350,
+              "reception": null,
+              "final": 60950,
+              "initialOverride": true
+            },
+            "MATP_0011": {
               "initial": null,
               "reception": null,
-              "final": null,
-              "initialOverride": true
+              "final": null
             }
           }
         }
