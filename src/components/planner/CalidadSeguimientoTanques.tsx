@@ -45,7 +45,7 @@ const FLAVOR_COLORS: Record<string, string> = {
 };
 
 const FLAVOR_TABLE_VALUES: Record<string, string[]> = {
-  'GLUP COLA': ['53,70 - 53,80', '1,50 - 1,70', '0,20 - 0,30', '53,90 - 54,20', '1,50 - 1,70', '0,20 - 0,30', '10,70 - 10,76', '2,30 - 2,50', '0,08 - 0,12'],
+  'GLUP COLA': ['53,70 - 53,80', '1,50 - 1,70', '0,20 - 0,30', '53,80 - 54,20', '1,50 - 1,70', '0,20 - 0,30', '10,70 - 10,76', '2,30 - 2,50', '0,08 - 0,12'],
   'GLUP FRESH': ['53,80 - 54,00', '3,00 - 3,20', '0,89 - 0,95', '54,00 - 54,20', '3,00 - 3,20', '0,89 - 0,95', '10,70 - 10,76', '3,10 - 3,30', '0,18 - 0,25'],
   'GLUP UVA': ['53,20 - 53,40', '2,40 - 2,60', '0,75 - 0,90', '53,40 - 53,60', '2,40 - 2,60', '0,75 - 0,90', '12,70 - 12,80 - 12,90', '2,80 - 3,00', '0,22 - 0,30'],
   'GLUP PIÑA': ['54,00 - 54,20', '2,40 - 2,60', '0,70 - 0,90', '54,20 - 54,40', '2,40 - 2,60', '0,70 - 0,90', '12,80 - 12,90 - 13,00', '2,80 - 2,90', '0,18 - 0,24'],
@@ -412,7 +412,7 @@ export function CalidadSeguimientoTanques({ canEdit = true }: { canEdit?: boolea
             </div>
             <div
               aria-label={`Segunda tabla de seguimiento para ${selectedFlavor}`}
-              className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm"
+              className="max-h-[70vh] overflow-auto rounded-xl border border-slate-200 bg-white shadow-sm"
             >
               {trackingStore.loadError && (
                 <p role="alert" className="border-b border-red-200 bg-red-50 px-3 py-2 text-xs font-semibold text-red-700">
@@ -448,22 +448,23 @@ export function CalidadSeguimientoTanques({ canEdit = true }: { canEdit?: boolea
                   ))}
                 </colgroup>
                 <thead>
-                  <tr style={{ backgroundColor: selectedFlavorColor }} className="text-slate-900">
+                  <tr style={{ backgroundColor: selectedFlavorColor }} className="h-8 text-slate-900">
                     {fieldGroups.map((group) => (
-                      <th key={group.title} colSpan={group.fields.length} className="border border-slate-200 px-2 py-2 font-black uppercase tracking-widest">
+                      <th key={group.title} colSpan={group.fields.length} style={{ backgroundColor: selectedFlavorColor }} className="sticky top-0 z-20 border border-slate-200 px-2 py-2 font-black uppercase tracking-widest">
                         {group.title}
                       </th>
                     ))}
                     <th
                       rowSpan={2}
-                      className="border border-slate-200 px-3 py-2 align-middle font-black uppercase tracking-widest"
+                      style={{ backgroundColor: selectedFlavorColor }}
+                      className="sticky top-0 z-20 border border-slate-200 px-3 py-2 align-middle font-black uppercase tracking-widest"
                     >
                       Observaciones
                     </th>
                   </tr>
                   <tr style={{ backgroundColor: selectedFlavorColor }} className="text-slate-900">
                     {fieldGroups.flatMap(({ fields }) => fields).map((field) => (
-                      <th key={field.id} scope="col" className="h-36 border border-slate-200 p-1 font-black uppercase tracking-wide">
+                      <th key={field.id} scope="col" style={{ backgroundColor: selectedFlavorColor }} className="sticky top-8 z-10 h-36 border border-slate-200 p-1 font-black uppercase tracking-wide">
                         <span className="mx-auto block whitespace-nowrap [writing-mode:vertical-rl] [transform:rotate(180deg)]">
                           {field.label}
                         </span>
@@ -490,15 +491,18 @@ export function CalidadSeguimientoTanques({ canEdit = true }: { canEdit?: boolea
                             />
                           ) : (
                             <input
-                              type={field.type}
+                              type={field.type === 'time' ? 'text' : field.type}
+                              inputMode={field.type === 'time' ? 'numeric' : undefined}
                               value={getPreparationFieldValue(row, field.id)}
                               aria-label={`${field.label}, fila ${rowIndex + 1}`}
                               disabled={!canEdit || !trackingStore.isLoaded}
-                              maxLength={field.id === 'finishedTankRoom' ? 4 : undefined}
-                              pattern={field.id === 'finishedTankRoom' ? '[0-9]{2}-[0-9]' : undefined}
+                              placeholder={field.type === 'time' ? 'HH:MM' : undefined}
+                              maxLength={field.type === 'time' ? 5 : field.id === 'finishedTankRoom' ? 4 : undefined}
+                              pattern={field.type === 'time' ? '(?:[01][0-9]|2[0-3]):[0-5][0-9]' : field.id === 'finishedTankRoom' ? '[0-9]{2}-[0-9]' : undefined}
                               onChange={(event) => {
                                 const value = event.target.value;
                                 if (field.id === 'finishedTankRoom' && !/^\d{0,2}(?:-\d?)?$/.test(value)) return;
+                                if (field.type === 'time' && !/^(?:(?:[01]\d?|2[0-3]?)(?::[0-5]?\d?)?)?$/.test(value)) return;
                                 updatePreparationRow(rowId, field.id, value);
                               }}
                               className="h-8 w-full min-w-0 rounded border border-slate-200 bg-white px-1 text-center text-[10px] text-slate-800 outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-200 disabled:opacity-60"

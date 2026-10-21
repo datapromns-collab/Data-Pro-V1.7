@@ -18,6 +18,7 @@ import { ChevronLeft, ChevronRight, CalendarDays, CalendarRange } from 'lucide-r
 import { useRemoteCollection } from '@/hooks/use-remote-collection';
 
 const TANKS = [1, 2, 3, 4, 5, 6] as const;
+const NITROGEN_TANKS = [1, 2] as const;
 
 export type MttoCo2ConsumptionStore = ReturnType<
   typeof useRemoteCollection<Record<string, string>>
@@ -30,11 +31,16 @@ interface MttoModuleProps {
 }
 
 export default function MttoModule({ getCo2TheoreticalForDate, co2Consumption, readOnly }: MttoModuleProps) {
+  const [activeGas, setActiveGas] = useState<'co2' | 'nitrogen'>('co2');
   const [activeSection, setActiveSection] = useState<'daily' | 'weekly' | 'monthly'>('daily');
   const [weekStart, setWeekStart] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }));
   const [weeklySelectedMonth, setWeeklySelectedMonth] = useState(() => new Date().getMonth());
   const [weeklySelectedYear, setWeeklySelectedYear] = useState(() => new Date().getFullYear());
   const [monthlyDate, setMonthlyDate] = useState(() => new Date());
+  const nitrogenConsumption = useRemoteCollection<Record<string, string>>('mtto-nitrogen-consumption', {});
+  const activeConsumption = activeGas === 'co2' ? co2Consumption : nitrogenConsumption;
+  const activeTanks = activeGas === 'co2' ? TANKS : NITROGEN_TANKS;
+  const gasLabel = activeGas === 'co2' ? 'CO2' : 'Nitrógeno';
   const sections = [
     { id: 'daily', label: 'Consumo diario', icon: CalendarDays },
     { id: 'weekly', label: 'Resumen semanal', icon: CalendarRange },
@@ -64,7 +70,7 @@ export default function MttoModule({ getCo2TheoreticalForDate, co2Consumption, r
     setWeekStart(startOfWeek(new Date(year, month, 1), { weekStartsOn: 1 }));
   };
   const getCellKey = (date: Date, tank: number) => `${format(date, 'yyyy-MM-dd')}-tank-${tank}`;
-  const getCellValue = (date: Date, tank: number) => co2Consumption.data[getCellKey(date, tank)] ?? '';
+  const getCellValue = (date: Date, tank: number) => activeConsumption.data[getCellKey(date, tank)] ?? '';
   const getNumericValue = (value: string) => {
     const parsed = Number(value.replace(',', '.'));
     return Number.isFinite(parsed) ? parsed : 0;
@@ -72,13 +78,13 @@ export default function MttoModule({ getCo2TheoreticalForDate, co2Consumption, r
   const formatTotal = (total: number) => total.toLocaleString('es-VE', {
     maximumFractionDigits: 2,
   });
-  const weeklyCo2Data = weeklyDays.map((day) => {
+  const weeklyConsumptionData = weeklyDays.map((day) => {
     const dateKey = format(day, 'yyyy-MM-dd');
-    const physical = TANKS.reduce(
+    const physical = activeTanks.reduce(
       (total, tank) => total + getNumericValue(getCellValue(day, tank)),
       0,
     );
-    const theoretical = getCo2TheoreticalForDate(dateKey);
+    const theoretical = activeGas === 'co2' ? getCo2TheoreticalForDate(dateKey) : 0;
 
     return {
       dateKey,
@@ -101,15 +107,17 @@ export default function MttoModule({ getCo2TheoreticalForDate, co2Consumption, r
       .filter((day) => day >= monthStart && day <= monthEnd);
     monthlyWeeks.push({ isoWeek: getISOWeek(currentWeek), days });
   }
-  const monthlyCo2Data = monthlyWeeks.map((week) => {
-    const physical = week.days.reduce((total, day) => TANKS.reduce(
+  const monthlyConsumptionData = monthlyWeeks.map((week) => {
+    const physical = week.days.reduce((total, day) => activeTanks.reduce(
       (dayTotal, tank) => dayTotal + getNumericValue(getCellValue(day, tank)),
       total,
     ), 0);
-    const theoretical = week.days.reduce(
-      (total, day) => total + getCo2TheoreticalForDate(format(day, 'yyyy-MM-dd')),
-      0,
-    );
+    const theoretical = activeGas === 'co2'
+      ? week.days.reduce(
+          (total, day) => total + getCo2TheoreticalForDate(format(day, 'yyyy-MM-dd')),
+          0,
+        )
+      : 0;
 
     return {
       week: `SEM ${week.isoWeek}`,
@@ -128,13 +136,33 @@ export default function MttoModule({ getCo2TheoreticalForDate, co2Consumption, r
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
+  const summaryRows: { label: string; key: 'physical' | 'theoretical' | 'yield' }[] = activeGas === 'co2'
+    ? [
+        { label: 'CONSUMO FÍSICO', key: 'physical' },
+        { label: 'CONSUMO TEÓRICO', key: 'theoretical' },
+        { label: 'RENDIMIENTO CO2', key: 'yield' },
+      ]
+    : [{ label: 'CONSUMO FÍSICO', key: 'physical' }];
 
   return (
     <div className="flex h-full min-h-[420px] flex-col">
       <nav aria-label="Secciones de MTTO" className="mb-4 flex w-fit items-center rounded-full border border-slate-200 bg-slate-100/50 p-1">
-        <span className="inline-flex h-8 items-center justify-center rounded-full bg-white px-4 text-[10px] font-bold uppercase tracking-widest text-slate-900 shadow-sm">
-          CO2
-        </span>
+        {([
+          { id: 'co2', label: 'CO2' },
+          { id: 'nitrogen', label: 'Nitrógeno' },
+        ] as const).map(({ id, label }) => (
+          <button
+            key={id}
+            type="button"
+            onClick={() => setActiveGas(id)}
+            aria-pressed={activeGas === id}
+            className={`inline-flex h-8 items-center justify-center rounded-full px-4 text-[10px] font-bold uppercase tracking-widest ${
+              activeGas === id ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+            }`}
+          >
+            {label}
+          </button>
+        ))}
       </nav>
       <div className="mb-4 flex w-fit items-center rounded-full border border-slate-200 bg-slate-100/50 p-1">
         {sections.map(({ id, label, icon: Icon }) => (
@@ -158,15 +186,15 @@ export default function MttoModule({ getCo2TheoreticalForDate, co2Consumption, r
       >
         {activeSection === 'daily' && (
           <div className="flex h-full min-h-0 flex-col gap-2">
-            {!co2Consumption.isLoaded && (
+            {!activeConsumption.isLoaded && (
               <p role="status" className="text-[10px] font-bold text-slate-500">
-                Cargando datos compartidos de consumo CO2...
+                Cargando datos compartidos de consumo {gasLabel}...
               </p>
             )}
-            {(co2Consumption.loadError || co2Consumption.syncError) && (
+            {(activeConsumption.loadError || activeConsumption.syncError) && (
               <div role="alert" className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[10px] font-semibold text-amber-800">
-                {co2Consumption.loadError && <p>{co2Consumption.loadError}</p>}
-                {co2Consumption.syncError && <p>{co2Consumption.syncError}</p>}
+                {activeConsumption.loadError && <p>{activeConsumption.loadError}</p>}
+                {activeConsumption.syncError && <p>{activeConsumption.syncError}</p>}
               </div>
             )}
             <div className="flex items-center justify-between">
@@ -211,7 +239,7 @@ export default function MttoModule({ getCo2TheoreticalForDate, co2Consumption, r
                   </tr>
                 </thead>
                 <tbody>
-                  {TANKS.map((tank) => (
+                  {activeTanks.map((tank) => (
                     <tr key={tank} className={tank % 2 === 0 ? 'bg-[#deebf7]' : 'bg-white'}>
                       <th scope="row" className="border border-slate-300 px-2 py-1 text-right font-bold text-slate-700">{tank}</th>
                       {weekDays.map((day) => (
@@ -220,11 +248,11 @@ export default function MttoModule({ getCo2TheoreticalForDate, co2Consumption, r
                             type="number"
                             min="0"
                             step="any"
-                            disabled={!co2Consumption.isLoaded || readOnly}
+                            disabled={!activeConsumption.isLoaded || readOnly}
                             aria-label={`Tanque ${tank}, ${format(day, 'EEEE d/M/yyyy', { locale: es })}`}
                             value={getCellValue(day, tank)}
                             onChange={(event) => {
-                              co2Consumption.patchData({
+                              activeConsumption.patchData({
                                 [getCellKey(day, tank)]: event.target.value,
                               });
                             }}
@@ -241,11 +269,11 @@ export default function MttoModule({ getCo2TheoreticalForDate, co2Consumption, r
                     <th scope="row" className="border border-slate-300 px-2 py-2 text-left">Total</th>
                     {weekDays.map((day) => (
                       <td key={format(day, 'yyyy-MM-dd')} className="border border-slate-300 px-2 py-2 text-right">
-                        {formatTotal(TANKS.reduce((total, tank) => total + getNumericValue(getCellValue(day, tank)), 0))}
+                        {formatTotal(activeTanks.reduce((total, tank) => total + getNumericValue(getCellValue(day, tank)), 0))}
                       </td>
                     ))}
                     <td className="border border-slate-300 px-2 py-2 text-right">
-                      {formatTotal(TANKS.reduce(
+                      {formatTotal(activeTanks.reduce(
                         (grandTotal, tank) => grandTotal + weekDays.reduce(
                           (total, day) => total + getNumericValue(getCellValue(day, tank)),
                           0,
@@ -261,15 +289,15 @@ export default function MttoModule({ getCo2TheoreticalForDate, co2Consumption, r
         )}
         {activeSection === 'weekly' && (
           <div className="flex h-full min-h-0 flex-col gap-3 overflow-auto">
-            {!co2Consumption.isLoaded && (
+            {!activeConsumption.isLoaded && (
               <p role="status" className="text-[10px] font-bold text-slate-500">
-                Cargando datos compartidos de consumo CO2...
+                Cargando datos compartidos de consumo {gasLabel}...
               </p>
             )}
-            {(co2Consumption.loadError || co2Consumption.syncError) && (
+            {(activeConsumption.loadError || activeConsumption.syncError) && (
               <div role="alert" className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[10px] font-semibold text-amber-800">
-                {co2Consumption.loadError && <p>{co2Consumption.loadError}</p>}
-                {co2Consumption.syncError && <p>{co2Consumption.syncError}</p>}
+                {activeConsumption.loadError && <p>{activeConsumption.loadError}</p>}
+                {activeConsumption.syncError && <p>{activeConsumption.syncError}</p>}
               </div>
             )}
             <div className="flex flex-wrap items-center justify-between gap-2">
@@ -335,8 +363,8 @@ export default function MttoModule({ getCo2TheoreticalForDate, co2Consumption, r
                 <table className="w-full min-w-[760px] border-collapse text-[11px]">
                   <thead>
                     <tr className="bg-[#002D82] text-white">
-                      <th className="border border-white/10 px-2 py-2 text-left font-black uppercase tracking-wider">Consumo CO2</th>
-                      {weeklyCo2Data.map((day) => (
+                      <th className="border border-white/10 px-2 py-2 text-left font-black uppercase tracking-wider">Consumo {gasLabel}</th>
+                      {weeklyConsumptionData.map((day) => (
                         <th key={day.dateKey} className="border border-white/10 px-2 py-2 text-center font-black uppercase tracking-wider">
                           {format(new Date(`${day.dateKey}T00:00:00`), 'EEEE d/M/yy', { locale: es })}
                         </th>
@@ -344,14 +372,10 @@ export default function MttoModule({ getCo2TheoreticalForDate, co2Consumption, r
                     </tr>
                   </thead>
                   <tbody>
-                    {([
-                      { label: 'CONSUMO FÍSICO', key: 'physical' },
-                      { label: 'CONSUMO TEÓRICO', key: 'theoretical' },
-                      { label: 'RENDIMIENTO CO2', key: 'yield' },
-                    ] as const).map(({ label, key }) => (
+                    {summaryRows.map(({ label, key }) => (
                       <tr key={key} className="border-b border-slate-100 hover:bg-slate-50/50">
                         <td className="whitespace-nowrap border border-slate-100 px-2 py-2 font-bold text-slate-700">{label}</td>
-                        {weeklyCo2Data.map((day) => (
+                        {weeklyConsumptionData.map((day) => (
                           <td key={day.dateKey} className="border border-slate-100 px-2 py-2 text-center">
                             <div className="flex h-8 min-w-[14ch] items-center justify-center rounded border border-slate-200 bg-slate-100 text-[11px] font-black text-slate-700">
                               {key === 'yield'
@@ -368,11 +392,11 @@ export default function MttoModule({ getCo2TheoreticalForDate, co2Consumption, r
             </div>
             <div className="rounded-2xl border border-slate-100 bg-white">
               <div className="px-4 pt-4 text-xs font-black uppercase tracking-widest text-slate-700">
-                Consumo de CO2 - Gráfico semanal
+                Consumo de {gasLabel} - Gráfico semanal
               </div>
               <div className="h-[420px] px-4 pb-4 pt-2">
                 <ResponsiveContainer width="100%" height="100%">
-                  <ComposedChart data={weeklyCo2Data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                  <ComposedChart data={weeklyConsumptionData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="day" />
                     <YAxis yAxisId="left" width={50} />
@@ -380,8 +404,12 @@ export default function MttoModule({ getCo2TheoreticalForDate, co2Consumption, r
                     <Tooltip />
                     <Legend />
                     <Bar yAxisId="left" dataKey="physical" fill="#0ea5e9" name="Consumo Físico (kg)" />
-                    <Bar yAxisId="left" dataKey="theoretical" fill="#10b981" name="Consumo Teórico (kg)" />
-                    <Line yAxisId="right" type="monotone" dataKey="yield" stroke="#f59e0b" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} name="Rendimiento" />
+                    {activeGas === 'co2' && (
+                      <>
+                        <Bar yAxisId="left" dataKey="theoretical" fill="#10b981" name="Consumo Teórico (kg)" />
+                        <Line yAxisId="right" type="monotone" dataKey="yield" stroke="#f59e0b" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} name="Rendimiento" />
+                      </>
+                    )}
                   </ComposedChart>
                 </ResponsiveContainer>
               </div>
@@ -390,19 +418,19 @@ export default function MttoModule({ getCo2TheoreticalForDate, co2Consumption, r
         )}
         {activeSection === 'monthly' && (
           <div className="flex h-full min-h-0 flex-col gap-3 overflow-auto">
-            {!co2Consumption.isLoaded && (
+            {!activeConsumption.isLoaded && (
               <p role="status" className="text-[10px] font-bold text-slate-500">
-                Cargando datos compartidos de consumo CO2...
+                Cargando datos compartidos de consumo {gasLabel}...
               </p>
             )}
-            {(co2Consumption.loadError || co2Consumption.syncError) && (
+            {(activeConsumption.loadError || activeConsumption.syncError) && (
               <div role="alert" className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[10px] font-semibold text-amber-800">
-                {co2Consumption.loadError && <p>{co2Consumption.loadError}</p>}
-                {co2Consumption.syncError && <p>{co2Consumption.syncError}</p>}
+                {activeConsumption.loadError && <p>{activeConsumption.loadError}</p>}
+                {activeConsumption.syncError && <p>{activeConsumption.syncError}</p>}
               </div>
             )}
             <div className="flex items-center justify-end gap-2">
-              <label htmlFor="mtto-co2-month" className="sr-only">Mes del resumen CO2</label>
+              <label htmlFor="mtto-co2-month" className="sr-only">Mes del resumen {gasLabel}</label>
               <select
                 id="mtto-co2-month"
                 value={monthlyDate.getMonth()}
@@ -413,7 +441,7 @@ export default function MttoModule({ getCo2TheoreticalForDate, co2Consumption, r
                   <option key={month.value} value={month.value}>{month.label}</option>
                 ))}
               </select>
-              <label htmlFor="mtto-co2-year" className="sr-only">Año del resumen CO2</label>
+              <label htmlFor="mtto-co2-year" className="sr-only">Año del resumen {gasLabel}</label>
               <select
                 id="mtto-co2-year"
                 value={monthlyDate.getFullYear()}
@@ -433,7 +461,7 @@ export default function MttoModule({ getCo2TheoreticalForDate, co2Consumption, r
                 <table className="w-full min-w-[520px] border-collapse text-[11px]">
                   <thead>
                     <tr className="bg-[#002D82] text-white">
-                      <th className="border border-white/10 px-2 py-2 text-left font-black uppercase tracking-wider">Consumo CO2</th>
+                      <th className="border border-white/10 px-2 py-2 text-left font-black uppercase tracking-wider">Consumo {gasLabel}</th>
                       {monthlyWeeks.map((week) => (
                         <th key={week.isoWeek} className="min-w-[70px] border border-white/10 px-2 py-2 text-center font-black uppercase tracking-wider">
                           SEM {week.isoWeek}
@@ -442,14 +470,10 @@ export default function MttoModule({ getCo2TheoreticalForDate, co2Consumption, r
                     </tr>
                   </thead>
                   <tbody>
-                    {([
-                      { label: 'CONSUMO FÍSICO', key: 'physical' },
-                      { label: 'CONSUMO TEÓRICO', key: 'theoretical' },
-                      { label: 'RENDIMIENTO CO2', key: 'yield' },
-                    ] as const).map(({ label, key }) => (
+                    {summaryRows.map(({ label, key }) => (
                       <tr key={key} className="border-b border-slate-100 hover:bg-slate-50/50">
                         <td className="whitespace-nowrap border border-slate-100 px-2 py-2 font-bold text-slate-700">{label}</td>
-                        {monthlyCo2Data.map((week) => (
+                        {monthlyConsumptionData.map((week) => (
                           <td key={week.week} className="border border-slate-100 px-2 py-2 text-center">
                             <div className="flex h-8 min-w-[14ch] items-center justify-center rounded border border-slate-200 bg-slate-100 text-[11px] font-black text-slate-700">
                               {key === 'yield'
@@ -466,12 +490,12 @@ export default function MttoModule({ getCo2TheoreticalForDate, co2Consumption, r
             </div>
             <div className="rounded-2xl border border-slate-100 bg-white p-4">
               <div className="mb-2 text-xs font-black uppercase tracking-widest text-slate-700">
-                Consumo de CO2 - Gráfico mensual
+                Consumo de {gasLabel} - Gráfico mensual
               </div>
               <div className="min-h-[320px]">
-                {monthlyCo2Data.length > 0 ? (
+                {monthlyConsumptionData.length > 0 ? (
                   <ResponsiveContainer width="100%" height={320}>
-                    <ComposedChart data={monthlyCo2Data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                    <ComposedChart data={monthlyConsumptionData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="week" />
                       <YAxis yAxisId="left" width={50} />
@@ -479,8 +503,12 @@ export default function MttoModule({ getCo2TheoreticalForDate, co2Consumption, r
                       <Tooltip />
                       <Legend />
                       <Bar yAxisId="left" dataKey="physical" fill="#0ea5e9" name="Consumo Físico (kg)" />
-                      <Bar yAxisId="left" dataKey="theoretical" fill="#10b981" name="Consumo Teórico (kg)" />
-                      <Line yAxisId="right" type="monotone" dataKey="yield" stroke="#f59e0b" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} name="Rendimiento" />
+                      {activeGas === 'co2' && (
+                        <>
+                          <Bar yAxisId="left" dataKey="theoretical" fill="#10b981" name="Consumo Teórico (kg)" />
+                          <Line yAxisId="right" type="monotone" dataKey="yield" stroke="#f59e0b" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} name="Rendimiento" />
+                        </>
+                      )}
                     </ComposedChart>
                   </ResponsiveContainer>
                 ) : (
