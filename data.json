@@ -22457,7 +22457,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-23T18:26:33.498Z"
+    "updatedAt": "2026-10-23T18:35:00.880Z"
   },
   "ordenesSap": [
     {
@@ -34835,6 +34835,17 @@
           "cajas3": 1600,
           "ticket4": "",
           "cajas4": 15280
+        },
+        {
+          "fechaInicio": "2026-10-23",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -34890,7 +34901,7 @@
           "ticket1": "16464",
           "cajas1": 1560,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 3900,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -240801,8 +240812,8 @@
         "litros": "17276",
         "ubb": "6",
         "brix": "23.77",
-        "estado": "preparado",
-        "enviarALinea": null,
+        "estado": "enviado a linea",
+        "enviarALinea": 4,
         "editando": false,
         "editandoPor": null
       },
@@ -241735,6 +241746,18 @@
           "horaInicio": "",
           "ubbInicial": "6",
           "volInicialTanque": "17274"
+        },
+        {
+          "sourcePrepKey": "glup:row_1792706825827_nlr8ol",
+          "fechaFiltro": "2026-10-22",
+          "fecha": "",
+          "dia": "",
+          "turno": "",
+          "tanque": "4",
+          "sabor": "GLUP COLA",
+          "horaInicio": "",
+          "ubbInicial": "6",
+          "volInicialTanque": "17276"
         }
       ],
       "5": [
