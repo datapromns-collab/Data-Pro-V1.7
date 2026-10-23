@@ -21588,7 +21588,8 @@
         ],
         "procs2.mds": [
           "planning",
-          "procesos"
+          "procesos",
+          "management"
         ],
         "g.tec.mds": [
           "planning",
@@ -22018,7 +22019,8 @@
           "planning"
         ],
         "procs2.mds": [
-          "planning"
+          "planning",
+          "management"
         ],
         "g.tec.mds": [
           "seguimiento",
@@ -22213,7 +22215,10 @@
           "procesos.inv-materia-prima": "none",
           "procesos.ptab.r-mensual": "write",
           "procesos.ptab.agua": "write",
-          "procesos.ptab.insumos": "write"
+          "procesos.ptab.insumos": "write",
+          "management.production": "none",
+          "management.control": "none",
+          "management.compliance": "none"
         }
       }
     },
@@ -22452,7 +22457,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-23T14:47:01.766Z"
+    "updatedAt": "2026-10-23T14:49:36.210Z"
   },
   "ordenesSap": [
     {

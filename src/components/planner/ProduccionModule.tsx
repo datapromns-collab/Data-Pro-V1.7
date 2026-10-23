@@ -215,6 +215,8 @@ const WASTE_PRODUCTS_BY_LINE: Record<string, Record<string, WasteProduct>> = {
 };
 
 const REJECT_EXTRA_MATERIALS: RejectMaterialOption[] = [
+  { code: 'EMP_0019', material: 'FILM POLIESTRECH 23 MIC', unit: 'KG' },
+  { code: 'EMP_0084', material: 'FILM POLIESTRECH 20 MIC', unit: 'KG' },
   { code: 'EMP_0022', material: 'ETIQUETA UVA 2000ML', unit: 'kg' },
   { code: 'EMP_0026', material: 'ETIQUETA PIÑA 2000ML', unit: 'Kg' },
   { code: 'EMP_0030', material: 'ETIQUETA NARANJA 2000 ML', unit: 'Kg' },
