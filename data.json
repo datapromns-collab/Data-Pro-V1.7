@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-08-24T00:00:00.000",
+      "weekStartDate": "2026-10-19T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -22457,7 +22457,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-23T14:49:36.210Z"
+    "updatedAt": "2026-10-23T14:56:39.829Z"
   },
   "ordenesSap": [
     {
