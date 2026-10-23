@@ -22457,7 +22457,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-23T14:56:39.829Z"
+    "updatedAt": "2026-10-23T17:43:28.506Z"
   },
   "ordenesSap": [
     {
@@ -34640,6 +34640,17 @@
           "cajas3": 1170,
           "ticket4": "",
           "cajas4": 4836
+        },
+        {
+          "fechaInicio": "2026-10-23",
+          "ticket1": "16464",
+          "cajas1": 1268,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -34864,6 +34875,26 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 480
+        }
+      ]
+    },
+    {
+      "id": "7-1792769479661",
+      "linea": 7,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "64433",
+      "semana": 43,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-23",
+          "ticket1": "16464",
+          "cajas1": 1560,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     }
@@ -240800,8 +240831,8 @@
         "litros": "17780",
         "ubb": "18",
         "brix": "53.34",
-        "estado": "preparado",
-        "enviarALinea": null,
+        "estado": "enviado a linea",
+        "enviarALinea": 2,
         "editando": false,
         "editandoPor": null
       },
@@ -241010,8 +241041,8 @@
         "litros": "17070",
         "ubb": "11",
         "brix": "49.40",
-        "estado": "preparado",
-        "enviarALinea": null,
+        "estado": "enviado a linea",
+        "enviarALinea": 2,
         "editando": false,
         "editandoPor": null
       },
@@ -241570,6 +241601,30 @@
           "horaInicio": "",
           "ubbInicial": "11",
           "volInicialTanque": "17100"
+        },
+        {
+          "sourcePrepKey": "glup:row_1792706948707_miwij9",
+          "fechaFiltro": "2026-10-22",
+          "fecha": "2026-10-23",
+          "dia": "viernes",
+          "turno": "",
+          "tanque": "4",
+          "sabor": "GLUP KOLITA",
+          "horaInicio": "",
+          "ubbInicial": "18",
+          "volInicialTanque": "17780"
+        },
+        {
+          "sourcePrepKey": "glup:row_1792739049343_uvu9h4",
+          "fechaFiltro": "2026-10-23",
+          "fecha": "2026-10-23",
+          "dia": "viernes",
+          "turno": "",
+          "tanque": "7",
+          "sabor": "GLUP UVA",
+          "horaInicio": "9:40",
+          "ubbInicial": "11",
+          "volInicialTanque": "17070"
         }
       ],
       "3": [
@@ -241583,7 +241638,9 @@
           "sabor": "GLUP PIÑA",
           "horaInicio": "",
           "ubbInicial": "10",
-          "volInicialTanque": "17390"
+          "volInicialTanque": "17390",
+          "ubbFinal": "0",
+          "volFinalTanque": "0"
         },
         {
           "sourcePrepKey": "glup:row_1792713957048_bmw50d",
@@ -241595,7 +241652,9 @@
           "sabor": "GLUP PIÑA",
           "horaInicio": "",
           "ubbInicial": "10",
-          "volInicialTanque": "17400"
+          "volInicialTanque": "17400",
+          "ubbFinal": "0",
+          "volFinalTanque": "0"
         },
         {
           "sourcePrepKey": "glup:row_1792724430130_re49hb",
@@ -241607,7 +241666,9 @@
           "sabor": "GLUP PIÑA",
           "horaInicio": "",
           "ubbInicial": "10",
-          "volInicialTanque": "17387"
+          "volInicialTanque": "17387",
+          "ubbFinal": "0",
+          "volFinalTanque": "0"
         },
         {
           "sourcePrepKey": "glup:row_1792747814183_aex3cy",
@@ -241619,7 +241680,23 @@
           "sabor": "GLUP COLA",
           "horaInicio": "",
           "ubbInicial": "6",
-          "volInicialTanque": "17260"
+          "volInicialTanque": "17260",
+          "ubbFinal": "0",
+          "volFinalTanque": "0"
+        },
+        {
+          "sourcePrepKey": "line-transfer:7:glup:row_1792738851491_87j47e:3:1792775990098",
+          "fechaFiltro": "2026-10-21",
+          "fecha": "",
+          "dia": "",
+          "turno": "",
+          "tanque": "7",
+          "sabor": "GLUP COLA",
+          "horaInicio": "",
+          "ubbInicial": "3.33",
+          "volInicialTanque": "9610",
+          "ubbFinal": "0",
+          "volFinalTanque": "0"
         }
       ],
       "4": [
@@ -241819,7 +241896,10 @@
           "sabor": "GLUP COLA",
           "horaInicio": "",
           "ubbInicial": "6",
-          "volInicialTanque": "17300"
+          "volInicialTanque": "17300",
+          "ubbFinal": "3.33",
+          "volFinalTanque": "9610",
+          "enviarALinea": 3
         }
       ]
     },
@@ -245160,6 +245240,121 @@
               "reception": null,
               "final": null,
               "initialOverride": true
+            },
+            "MATP_0002": {
+              "initial": 250,
+              "reception": 144,
+              "final": null
+            },
+            "MATP_0007": {
+              "initial": 344,
+              "reception": 192,
+              "final": null
+            },
+            "MATP_0009": {
+              "initial": 264,
+              "reception": 144,
+              "final": null
+            },
+            "MATP_0010": {
+              "initial": 370.5,
+              "reception": 152,
+              "final": null
+            },
+            "MATP_0016": {
+              "initial": 45.06,
+              "reception": 125,
+              "final": null
+            },
+            "MATP_0017": {
+              "initial": 15061.7,
+              "reception": 6500,
+              "final": null
+            },
+            "MATP_0021": {
+              "initial": 2057.2,
+              "reception": 2000,
+              "final": 4057.2
+            },
+            "MATP_0031": {
+              "initial": 85,
+              "reception": 100,
+              "final": 185
+            },
+            "MATP_0036": {
+              "initial": 86.9,
+              "reception": 100,
+              "final": 186.9
+            },
+            "MATP_0022": {
+              "initial": 80,
+              "reception": null,
+              "final": 80
+            },
+            "MATP_0043": {
+              "initial": 4140,
+              "reception": null,
+              "final": 4140
+            },
+            "MATP_0059": {
+              "initial": 20,
+              "reception": null,
+              "final": 20
+            },
+            "MATP_0041": {
+              "initial": 388.44,
+              "reception": null,
+              "final": 388.44
+            },
+            "MATP_0018": {
+              "initial": 1838,
+              "reception": null,
+              "final": 1838
+            },
+            "MATP_0020": {
+              "initial": 2104.1,
+              "reception": null,
+              "final": 2104.1
+            },
+            "MATP_0040": {
+              "initial": 2413.56,
+              "reception": null,
+              "final": 2413.56
+            },
+            "MATP_0042": {
+              "initial": 1660.7,
+              "reception": null,
+              "final": 1660.7
+            },
+            "MATP_0003": {
+              "initial": 260,
+              "reception": null,
+              "final": 260
+            },
+            "MATP_0004": {
+              "initial": 4,
+              "reception": null,
+              "final": 4
+            },
+            "MATP_0006": {
+              "initial": 133,
+              "reception": null,
+              "final": 133
+            },
+            "MATP_0032": {
+              "initial": 78,
+              "reception": null,
+              "final": 78
+            },
+            "MATP_0038": {
+              "initial": 90,
+              "reception": null,
+              "final": 90
+            },
+            "MATP_0039": {
+              "initial": 248,
+              "reception": null,
+              "final": 248
             }
           }
         }
