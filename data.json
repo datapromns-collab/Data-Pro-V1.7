@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-10-19T00:00:00.000",
+      "weekStartDate": "2026-10-26T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -13447,12 +13447,12 @@
             "name": "GLUP COLA",
             "lineId": "7",
             "loadPerHour": 2500,
-            "quantity": 34500,
-            "durationHours": 13.8,
+            "quantity": 150000,
+            "durationHours": 60,
             "presentation": "1Lt",
-            "tanks": 4,
+            "tanks": 17.39,
             "startTime": "2026-10-20T04:45:00.000Z",
-            "endTime": "2026-10-20T18:33:00.000Z",
+            "endTime": "2026-10-22T16:45:00.000Z",
             "id": "zrmaoqnrd",
             "color": "#10b981"
           },
@@ -13575,52 +13575,52 @@
             "color": "#6366f1"
           },
           {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "7",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-10-22T16:45:00.000Z",
+            "endTime": "2026-10-22T18:45:00.000Z",
+            "id": "pzmwk0pvt",
+            "color": "#10b981"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "7",
+            "loadPerHour": 2500,
+            "quantity": 45625,
+            "durationHours": 18.25,
+            "presentation": "1Lt",
+            "tanks": 5.29,
+            "startTime": "2026-10-22T18:45:00.000Z",
+            "endTime": "2026-10-23T13:00:00.000Z",
+            "id": "p6jwrx9ha",
+            "color": "#10b981"
+          },
+          {
             "name": "CS",
             "lineId": "7",
             "loadPerHour": 0,
             "quantity": 0,
             "durationHours": 0.5,
-            "startTime": "2026-10-20T18:33:00.000Z",
-            "endTime": "2026-10-20T19:03:00.000Z",
-            "id": "dlaqc8utm",
+            "startTime": "2026-10-23T13:00:00.000Z",
+            "endTime": "2026-10-23T13:30:00.000Z",
+            "id": "djtdmirrw",
             "color": "#10b981"
           },
           {
             "name": "GLUP KOLITA",
             "lineId": "7",
             "loadPerHour": 2500,
-            "quantity": 44475,
-            "durationHours": 17.79,
-            "presentation": "2Lts",
-            "tanks": 5,
-            "startTime": "2026-10-20T19:03:00.000Z",
-            "endTime": "2026-10-21T12:50:24.000Z",
-            "id": "tsuma0l43",
-            "color": "#ef4444"
-          },
-          {
-            "name": "CIP 3P ALCALINO",
-            "lineId": "7",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 2,
-            "startTime": "2026-10-21T12:51:00.000Z",
-            "endTime": "2026-10-21T14:51:00.000Z",
-            "id": "ugi73t3tk",
-            "color": "#ef4444"
-          },
-          {
-            "name": "GLUP COLA",
-            "lineId": "7",
-            "loadPerHour": 2500,
-            "quantity": 225375,
-            "durationHours": 90.15,
+            "quantity": 108750,
+            "durationHours": 43.5,
             "presentation": "1Lt",
-            "tanks": 26.13,
-            "startTime": "2026-10-21T14:51:00.000Z",
+            "tanks": 12.23,
+            "startTime": "2026-10-23T13:30:00.000Z",
             "endTime": "2026-10-25T09:00:00.000Z",
-            "id": "kmlya76dx",
-            "color": "#6366f1"
+            "id": "orjlx5r7j",
+            "color": "#f59e0b"
           }
         ],
         "realProduction": {},
@@ -13692,7 +13692,11 @@
           "lnmtpm3md",
           "tn0vsc8ro",
           "vd7blmaei",
-          "q46y44rqz"
+          "q46y44rqz",
+          "kmlya76dx",
+          "ugi73t3tk",
+          "tsuma0l43",
+          "dlaqc8utm"
         ]
       },
       "2026-10-26": {
@@ -21444,6 +21448,19 @@
               "kind": "termo",
               "preformSize": ""
             }
+          ],
+          "2026-10-23": [
+            {
+              "id": "5aaf9bb7-9368-4cba-9a26-73033b8e2e2d",
+              "line": "Linea 6",
+              "flavor": "transparente",
+              "code": "EMP_0126",
+              "material": "PREFORMA TRANSPARENTE 20,55GR-1881",
+              "quantity": "18550",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            }
           ]
         }
       }
@@ -21982,7 +21999,6 @@
           "planning"
         ],
         "prodtj.mds": [
-          "planning",
           "management"
         ],
         "prodts.mds": [
@@ -22096,7 +22112,9 @@
         },
         "prodtj.mds": {
           "management.control": "none",
-          "logistica.monthly-inventory": "none"
+          "logistica.monthly-inventory": "none",
+          "planning.plan-semana": "write",
+          "planning.speeds": "read"
         },
         "prodtg.mds": {
           "produccion.inventarios": "read",
@@ -22457,7 +22475,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-23T18:35:00.880Z"
+    "updatedAt": "2026-10-23T22:06:30.717Z"
   },
   "ordenesSap": [
     {
@@ -34815,6 +34833,17 @@
           "cajas3": 1920,
           "ticket4": "",
           "cajas4": 3840
+        },
+        {
+          "fechaInicio": "2026-10-23",
+          "ticket1": "16505",
+          "cajas1": 6400,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -34838,8 +34867,8 @@
         },
         {
           "fechaInicio": "2026-10-23",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16371",
+          "cajas1": 10800,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -34866,6 +34895,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 2000
+        },
+        {
+          "fechaInicio": "2026-10-23",
+          "ticket1": "16284",
+          "cajas1": 13680,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -34886,6 +34926,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 480
+        },
+        {
+          "fechaInicio": "2026-10-23",
+          "ticket1": "16329",
+          "cajas1": 12880,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -34899,9 +34950,29 @@
         {
           "fechaInicio": "2026-10-23",
           "ticket1": "16464",
-          "cajas1": 1560,
+          "cajas1": 5460,
           "ticket2": "",
-          "cajas2": 3900,
+          "cajas2": 156,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "4-1792791211899",
+      "linea": 4,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "64439",
+      "semana": 43,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-23",
+          "ticket1": "16418",
+          "cajas1": 9760,
+          "ticket2": "",
+          "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -241086,6 +241157,186 @@
         "enviarALinea": 3,
         "editando": false,
         "editandoPor": null
+      },
+      {
+        "id": "row_1792787970640_c0vstd",
+        "fecha": "2026-10-23",
+        "hora": "07:40",
+        "numeroTanques": "10",
+        "sala": "2",
+        "sabor": "GLUP KOLITA",
+        "litros": "17788",
+        "ubb": "18",
+        "brix": "54.45",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1792788018246_t8q294",
+        "fecha": "2026-10-23",
+        "hora": "09:10",
+        "numeroTanques": "1",
+        "sala": "2",
+        "sabor": "GLUP COLA",
+        "litros": "17290",
+        "ubb": "6",
+        "brix": "23.72",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1792788104205_14ql1n",
+        "fecha": "2026-10-23",
+        "hora": "10:00",
+        "numeroTanques": "19",
+        "sala": "2",
+        "sabor": "GLUP COLA",
+        "litros": "17260",
+        "ubb": "6",
+        "brix": "23.77",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1792788153015_315v34",
+        "fecha": "2026-10-23",
+        "hora": "10:50",
+        "numeroTanques": "14",
+        "sala": "2",
+        "sabor": "GLUP COLA",
+        "litros": "17250",
+        "ubb": "6",
+        "brix": "23.76",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1792788201662_7u15od",
+        "fecha": "2026-10-23",
+        "hora": "11:36",
+        "numeroTanques": "18",
+        "sala": "2",
+        "sabor": "GLUP COLA",
+        "litros": "17300",
+        "ubb": "6",
+        "brix": "23.79",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1792788255100_ehk744",
+        "fecha": "2026-10-23",
+        "hora": "12:10",
+        "numeroTanques": "11",
+        "sala": "2",
+        "sabor": "GLUP KOLITA",
+        "litros": "17740",
+        "ubb": "18",
+        "brix": "54.36",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1792788297713_j5cegm",
+        "fecha": "2026-10-23",
+        "hora": "12:45",
+        "numeroTanques": "2",
+        "sala": "2",
+        "sabor": "GLUP COLA",
+        "litros": "17240",
+        "ubb": "6",
+        "brix": "53.72",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1792788626578_oxv379",
+        "fecha": "2026-10-23",
+        "hora": "14:05",
+        "numeroTanques": "7",
+        "sala": "2",
+        "sabor": "GLUP COLA",
+        "litros": "17250",
+        "ubb": "6",
+        "brix": "23.9",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1792788674084_wsc766",
+        "fecha": "2026-10-23",
+        "hora": "07:55",
+        "numeroTanques": "4",
+        "sala": "1",
+        "sabor": "GLUP UVA",
+        "litros": "17120",
+        "ubb": "11",
+        "brix": "49.38",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1792788720141_367t46",
+        "fecha": "2026-10-23",
+        "hora": "20:51",
+        "numeroTanques": "3",
+        "sala": "1",
+        "sabor": "GLUP KOLITA",
+        "litros": "177444",
+        "ubb": "18",
+        "brix": "54.86",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1792788767847_xazjov",
+        "fecha": "2026-10-23",
+        "hora": "10:50",
+        "numeroTanques": "6",
+        "sala": "",
+        "sabor": "GLUP UVA",
+        "litros": "17080",
+        "ubb": "11",
+        "brix": "49.23",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1792788835436_0rpxfw",
+        "fecha": "2026-10-23",
+        "hora": "13:44",
+        "numeroTanques": "5",
+        "sala": "1",
+        "sabor": "GLUP UVA",
+        "litros": "17090",
+        "ubb": "11",
+        "brix": "49.34",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
       }
     ],
     "ventas-pronostico-mensual": {
@@ -245267,32 +245518,32 @@
             "MATP_0002": {
               "initial": 250,
               "reception": 144,
-              "final": null
+              "final": 358
             },
             "MATP_0007": {
               "initial": 344,
               "reception": 192,
-              "final": null
+              "final": 482
             },
             "MATP_0009": {
               "initial": 264,
               "reception": 144,
-              "final": null
+              "final": 372
             },
             "MATP_0010": {
               "initial": 370.5,
               "reception": 152,
-              "final": null
+              "final": 488.3
             },
             "MATP_0016": {
               "initial": 45.06,
               "reception": 125,
-              "final": null
+              "final": 153.29
             },
             "MATP_0017": {
               "initial": 15061.7,
               "reception": 6500,
-              "final": null
+              "final": 21306.85
             },
             "MATP_0021": {
               "initial": 2057.2,
@@ -245378,6 +245629,41 @@
               "initial": 248,
               "reception": null,
               "final": 248
+            },
+            "MATP_0005": {
+              "initial": 338,
+              "reception": null,
+              "final": 305
+            },
+            "MATP_0014": {
+              "initial": 139.6,
+              "reception": null,
+              "final": 139.6
+            },
+            "MATP_0015": {
+              "initial": 2171.2,
+              "reception": null,
+              "final": 1960
+            },
+            "MATP_0019": {
+              "initial": 2452.36,
+              "reception": null,
+              "final": 2332.21
+            },
+            "MATP_0037": {
+              "initial": 64.414,
+              "reception": null,
+              "final": 60.21
+            },
+            "MATP_0001-sacos-50kg": {
+              "initial": 544000,
+              "reception": 162000,
+              "final": null
+            },
+            "MATP_0001-montalban": {
+              "initial": 0,
+              "reception": 120000,
+              "final": null
             }
           }
         }
