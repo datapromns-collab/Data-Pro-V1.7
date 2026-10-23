@@ -14768,6 +14768,41 @@
           "aditivosCantidad": {},
           "solidosCantidad": {},
           "quimicosInsumosCantidad": {}
+        },
+        "2026-10-23": {
+          "tapas": {
+            "EMP_0095-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0095-Importada": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaEW": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaTipo2": {
+              "totalCajas": "",
+              "total": ""
+            }
+          },
+          "separadores": {},
+          "preformas": {},
+          "plasticos": {},
+          "adhesivoCantidad": "",
+          "etiquetasCantidad": {},
+          "azucarCantidad": {},
+          "concentradosCantidad": {},
+          "concentradosJustyCantidad": {},
+          "aditivosCantidad": {},
+          "solidosCantidad": {},
+          "quimicosInsumosCantidad": {}
         }
       },
       "semanal": {
@@ -22104,7 +22139,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-23T09:41:56.552Z"
+    "updatedAt": "2026-10-23T12:24:45.168Z"
   },
   "ordenesSap": [
     {
@@ -34281,12 +34316,12 @@
           "fechaInicio": "2026-10-22",
           "ticket1": "16462",
           "cajas1": 1560,
-          "ticket2": "",
+          "ticket2": "16463",
           "cajas2": 2340,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1170,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 4836
         }
       ]
     },
@@ -34332,12 +34367,12 @@
           "fechaInicio": "2026-10-22",
           "ticket1": "16282",
           "cajas1": 2160,
-          "ticket2": "",
+          "ticket2": "16283",
           "cajas2": 2400,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 4240,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 17413
         }
       ]
     },
@@ -34363,12 +34398,12 @@
           "fechaInicio": "2026-10-22",
           "ticket1": "16416",
           "cajas1": 2640,
-          "ticket2": "",
+          "ticket2": "16417",
           "cajas2": 3360,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 3680,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 26400
         }
       ]
     },
@@ -34414,12 +34449,12 @@
           "fechaInicio": "2026-10-22",
           "ticket1": "16327",
           "cajas1": 1680,
-          "ticket2": "",
+          "ticket2": "16328",
           "cajas2": 11680,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 3360,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 19100
         }
       ]
     },
@@ -34445,12 +34480,72 @@
           "fechaInicio": "2026-10-22",
           "ticket1": "16503",
           "cajas1": 1440,
-          "ticket2": "",
+          "ticket2": "16504",
           "cajas2": 2240,
+          "ticket3": "",
+          "cajas3": 1920,
+          "ticket4": "",
+          "cajas4": 3840
+        }
+      ]
+    },
+    {
+      "id": "1-1792754552911",
+      "linea": 1,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "64415",
+      "semana": 43,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-22",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16370",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 1600,
+          "ticket4": "",
+          "cajas4": 15280
+        }
+      ]
+    },
+    {
+      "id": "3-1792754566118",
+      "linea": 3,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "64421",
+      "semana": 43,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-22",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16283",
+          "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 2000
+        }
+      ]
+    },
+    {
+      "id": "2-1792754851556",
+      "linea": 2,
+      "sabor": "GLUP UVA",
+      "ordenNumero": "64427",
+      "semana": 43,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-22",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16328",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 480
         }
       ]
     }
@@ -223946,6 +224041,12 @@
           "producto": "147",
           "jarabeReal": 93062,
           "ubb": 32.39
+        },
+        "auto-1-1792422524455": {
+          "cajasPlanificadas": 71250
+        },
+        "auto-1-1792597381690": {
+          "cajasPlanificadas": 34500
         }
       },
       "linea-2": {
@@ -224239,6 +224340,15 @@
           "producto": "384",
           "jarabeReal": 215333,
           "ubb": 217.92
+        },
+        "auto-2-1792422536087": {
+          "cajasPlanificadas": 113750
+        },
+        "auto-2-1792615484747": {
+          "cajasPlanificadas": 57500
+        },
+        "auto-2-1792673510222": {
+          "cajasPlanificadas": 56250
         }
       },
       "linea-3": {
@@ -224481,6 +224591,15 @@
           "ubb": 63.18,
           "cajasPlanificadas": 128800,
           "producto": "515"
+        },
+        "auto-3-1792422545843": {
+          "cajasPlanificadas": 65800
+        },
+        "auto-3-1792498748499": {
+          "cajasPlanificadas": 65800
+        },
+        "auto-3-1792615505445": {
+          "cajasPlanificadas": 65800
         }
       },
       "linea-4": {
@@ -224681,6 +224800,9 @@
           "ubb": 61.59,
           "cajasPlanificadas": 128800,
           "producto": "395"
+        },
+        "auto-4-1792422554702": {
+          "cajasPlanificadas": 134400
         }
       },
       "linea-5": {
@@ -224847,6 +224969,9 @@
           "cajasPlanificadas": 41107,
           "producto": "546",
           "ubb": 740
+        },
+        "auto-5-1792422569998": {
+          "cajasPlanificadas": 55660
         }
       },
       "linea-6": {
@@ -225048,6 +225173,12 @@
           "producto": "291",
           "jarabeReal": 31601,
           "ubb": 10.96
+        },
+        "auto-6-1792422582885": {
+          "cajasPlanificadas": 34500
+        },
+        "auto-6-1792615707487": {
+          "cajasPlanificadas": 22560
         }
       },
       "linea-7": {
@@ -225338,6 +225469,9 @@
           "cajasPlanificadas": 54992,
           "producto": "225",
           "pnc": 546
+        },
+        "auto-7-1792422592150": {
+          "cajasPlanificadas": 43125
         }
       }
     },
@@ -237803,7 +237937,12 @@
       "2026-10-21-suave": "319529",
       "2026-10-21-procesos": "2135820,07",
       "2026-10-21-filtrada": "3463252,16",
-      "2026-10-21-total": "2704741,67"
+      "2026-10-21-total": "2704741,67",
+      "2026-10-22-servicio": "21212",
+      "2026-10-22-suave": "240203",
+      "2026-10-22-procesos": "2282913,62",
+      "2026-10-22-filtrada": "3574722,01",
+      "2026-10-22-total": "2894217"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
@@ -240986,26 +241125,24 @@
         {
           "sourcePrepKey": "glup:row_1792706875743_ks3nbo",
           "fechaFiltro": "2026-10-22",
-          "fecha": "2026-10-22",
-          "dia": "jueves",
-          "turno": "Diurno",
+          "fecha": "",
+          "dia": "",
+          "turno": "",
           "tanque": "1",
           "sabor": "GLUP KOLITA",
-          "horaInicio": "18:17",
+          "horaInicio": "",
           "ubbInicial": "18",
-          "volInicialTanque": "17795",
-          "ubbFinal": "0",
-          "volFinalTanque": "0"
+          "volInicialTanque": "17795"
         },
         {
           "sourcePrepKey": "glup:row_1792724252930_b770m6",
           "fechaFiltro": "2026-10-22",
-          "fecha": "2026-10-22",
-          "dia": "jueves",
-          "turno": "Nocturno",
+          "fecha": "",
+          "dia": "",
+          "turno": "",
           "tanque": "6",
           "sabor": "GLUP KOLITA",
-          "horaInicio": "23:16",
+          "horaInicio": "",
           "ubbInicial": "18",
           "volInicialTanque": "17780"
         }
@@ -241022,102 +241159,92 @@
           "horaInicio": "14:09",
           "ubbInicial": "6",
           "volInicialTanque": "17283",
-          "ubbFinal": "0",
-          "volFinalTanque": "0"
-        },
-        {
-          "sourcePrepKey": "glup:row_1792724955352_ewc5d8",
-          "fechaFiltro": "2026-10-22",
-          "fecha": "2026-10-22",
-          "dia": "jueves",
-          "turno": "Nocturno",
-          "tanque": "4",
-          "sabor": "GLUP KOLITA",
-          "horaInicio": "23:06",
-          "ubbInicial": "18",
-          "volInicialTanque": "17804",
-          "ubbFinal": "0",
-          "volFinalTanque": "0"
+          "ubbFinal": "2.08",
+          "volFinalTanque": "5990.4"
         },
         {
           "sourcePrepKey": "glup:row_1792724320929_3pxsxy",
           "fechaFiltro": "2026-10-22",
-          "fecha": "2026-10-23",
-          "dia": "viernes",
-          "turno": "Nocturno",
+          "fecha": "",
+          "dia": "",
+          "turno": "",
           "tanque": "2",
           "sabor": "GLUP KOLITA",
-          "horaInicio": "5:19",
+          "horaInicio": "",
           "ubbInicial": "18",
-          "volInicialTanque": "17780",
-          "ubbFinal": "16.08",
-          "volFinalTanque": "15890"
+          "volInicialTanque": "17780"
+        },
+        {
+          "sourcePrepKey": "glup:row_1792724955352_ewc5d8",
+          "fechaFiltro": "2026-10-22",
+          "fecha": "",
+          "dia": "",
+          "turno": "",
+          "tanque": "4",
+          "sabor": "GLUP KOLITA",
+          "horaInicio": "",
+          "ubbInicial": "18",
+          "volInicialTanque": "17804"
         },
         {
           "sourcePrepKey": "glup:row_1792736560747_d8p6wk",
           "fechaFiltro": "2026-10-23",
-          "fecha": "2026-10-23",
-          "dia": "viernes",
-          "turno": "Nocturno",
+          "fecha": "",
+          "dia": "",
+          "turno": "",
           "tanque": "5",
           "sabor": "GLUP UVA",
-          "horaInicio": "5:58",
+          "horaInicio": "",
           "ubbInicial": "11",
           "volInicialTanque": "17100"
         }
       ],
       "3": [
         {
+          "sourcePrepKey": "glup:row_1792618224014_vy02cm",
+          "fechaFiltro": "2026-10-21",
+          "fecha": "",
+          "dia": "",
+          "turno": "",
+          "tanque": "9",
+          "sabor": "GLUP PIÑA",
+          "horaInicio": "",
+          "ubbInicial": "10",
+          "volInicialTanque": "17390"
+        },
+        {
           "sourcePrepKey": "glup:row_1792713957048_bmw50d",
           "fechaFiltro": "2026-10-21",
-          "fecha": "2026-10-22",
-          "dia": "jueves",
-          "turno": "Nocturno",
+          "fecha": "",
+          "dia": "",
+          "turno": "",
           "tanque": "17",
           "sabor": "GLUP PIÑA",
-          "horaInicio": "19:40",
+          "horaInicio": "",
           "ubbInicial": "10",
-          "volInicialTanque": "17400",
-          "ubbFinal": "0",
-          "volFinalTanque": "0"
+          "volInicialTanque": "17400"
         },
         {
           "sourcePrepKey": "glup:row_1792724430130_re49hb",
           "fechaFiltro": "2026-10-22",
-          "fecha": "2026-10-22",
-          "dia": "jueves",
-          "turno": "Nocturno",
+          "fecha": "",
+          "dia": "",
+          "turno": "",
           "tanque": "15",
           "sabor": "GLUP PIÑA",
-          "horaInicio": "22:53",
+          "horaInicio": "",
           "ubbInicial": "10",
-          "volInicialTanque": "17387",
-          "ubbFinal": "0",
-          "volFinalTanque": "0"
-        },
-        {
-          "sourcePrepKey": "glup:row_1792618224014_vy02cm",
-          "fechaFiltro": "2026-10-21",
-          "fecha": "2026-10-22",
-          "dia": "jueves",
-          "turno": "Diurno",
-          "tanque": "9",
-          "sabor": "GLUP PIÑA",
-          "horaInicio": "9:27",
-          "ubbInicial": "10",
-          "volInicialTanque": "17390",
-          "ubbFinal": "0",
-          "volFinalTanque": "0"
+          "volInicialTanque": "17387"
         },
         {
           "sourcePrepKey": "glup:row_1792747814183_aex3cy",
           "fechaFiltro": "2026-10-21",
-          "fecha": "2026-10-23",
-          "dia": "viernes",
-          "turno": "Nocturno",
+          "fecha": "",
+          "dia": "",
+          "turno": "",
           "tanque": "18",
           "sabor": "GLUP COLA",
-          "horaInicio": "5:30",
+          "horaInicio": "",
           "ubbInicial": "6",
           "volInicialTanque": "17260"
         }
@@ -241126,40 +241253,36 @@
         {
           "sourcePrepKey": "glup:row_1792618160719_qi7njj",
           "fechaFiltro": "2026-10-21",
-          "fecha": "2026-10-22",
-          "dia": "jueves",
-          "turno": "Nocturno",
+          "fecha": "",
+          "dia": "",
+          "turno": "",
           "tanque": "5",
           "sabor": "GLUP COLA",
-          "horaInicio": "19:25",
+          "horaInicio": "",
           "ubbInicial": "6",
-          "volInicialTanque": "17283",
-          "ubbFinal": "0",
-          "volFinalTanque": "0"
+          "volInicialTanque": "17283"
         },
         {
           "sourcePrepKey": "glup:row_1792618276139_ykva8n",
           "fechaFiltro": "2026-10-21",
-          "fecha": "2026-10-22",
-          "dia": "jueves",
-          "turno": "Nocturno",
+          "fecha": "",
+          "dia": "",
+          "turno": "",
           "tanque": "1",
           "sabor": "GLUP COLA",
-          "horaInicio": "23:00",
+          "horaInicio": "",
           "ubbInicial": "6",
-          "volInicialTanque": "17286",
-          "ubbFinal": "0",
-          "volFinalTanque": "0"
+          "volInicialTanque": "17286"
         },
         {
           "sourcePrepKey": "glup:row_1792618341683_coikjc",
           "fechaFiltro": "2026-10-21",
-          "fecha": "2026-10-23",
-          "dia": "viernes",
-          "turno": "Nocturno",
+          "fecha": "",
+          "dia": "",
+          "turno": "",
           "tanque": "2",
           "sabor": "GLUP COLA",
-          "horaInicio": "03:36",
+          "horaInicio": "",
           "ubbInicial": "6",
           "volInicialTanque": "17274"
         }
@@ -241320,12 +241443,12 @@
         {
           "sourcePrepKey": "glup:row_1792738851491_87j47e",
           "fechaFiltro": "2026-10-21",
-          "fecha": "2026-10-22",
-          "dia": "jueves",
-          "turno": "Nocturno",
+          "fecha": "",
+          "dia": "",
+          "turno": "",
           "tanque": "7",
           "sabor": "GLUP COLA",
-          "horaInicio": "19:47",
+          "horaInicio": "",
           "ubbInicial": "6",
           "volInicialTanque": "17300"
         }
