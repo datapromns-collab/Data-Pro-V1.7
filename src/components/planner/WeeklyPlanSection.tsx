@@ -125,21 +125,41 @@ export function WeeklyPlanSection({ tasks, weekStartDate, weeklyData }: WeeklyPl
     setExportError(null);
 
     try {
-      const captureWidth = planTable.scrollWidth;
+      const doc = new jsPDF({ orientation: 'landscape', format: 'a3' });
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const margin = 4;
+      const availableWidth = pageWidth - margin * 2;
+      const availableHeight = pageHeight - margin * 2;
+      const targetCaptureWidth = Math.ceil(planTable.scrollHeight * availableWidth / availableHeight);
+      const captureWidth = Math.min(
+        planTable.scrollWidth * 2,
+        Math.max(planTable.scrollWidth, targetCaptureWidth),
+      );
       const captureHeight = planTable.scrollHeight;
       const canvas = await html2canvas(planTable, {
         backgroundColor: '#ffffff',
         scale: 2,
         useCORS: true,
         width: captureWidth,
-        height: captureHeight,
         windowWidth: Math.max(window.innerWidth, captureWidth),
         onclone: (clonedDocument) => {
           const clonedTable = clonedDocument.querySelector<HTMLElement>('[data-weekly-plan-capture]');
           if (clonedTable) {
             clonedTable.style.width = `${captureWidth}px`;
             clonedTable.style.minWidth = `${captureWidth}px`;
+            clonedTable.style.height = 'auto';
             clonedTable.style.overflow = 'visible';
+            const clonedPlanTable = clonedTable.querySelector('table');
+            if (clonedPlanTable) {
+              clonedPlanTable.style.height = `${clonedPlanTable.getBoundingClientRect().height * 1.08}px`;
+            }
+            clonedTable.querySelectorAll<HTMLElement>('th, td, p, span').forEach((element) => {
+              const fontSize = Number.parseFloat(clonedDocument.defaultView?.getComputedStyle(element).fontSize ?? '');
+              if (Number.isFinite(fontSize)) {
+                element.style.fontSize = `${fontSize * 1.08}px`;
+              }
+            });
           }
         },
       });
@@ -148,17 +168,11 @@ export function WeeklyPlanSection({ tasks, weekStartDate, weeklyData }: WeeklyPl
         throw new Error('La captura del plan no produjo una imagen válida.');
       }
 
-      const doc = new jsPDF({ orientation: 'portrait', format: 'a3' });
-      const pageWidth = doc.internal.pageSize.getWidth();
-      const pageHeight = doc.internal.pageSize.getHeight();
-      const margin = 6;
-      const availableWidth = pageWidth - margin * 2;
-      const availableHeight = pageHeight - margin * 2;
       const scale = Math.min(availableWidth / canvas.width, availableHeight / canvas.height);
       const imageWidth = canvas.width * scale;
       const imageHeight = canvas.height * scale;
       const x = (pageWidth - imageWidth) / 2;
-      const y = margin;
+      const y = (pageHeight - imageHeight) / 2;
 
       doc.addImage(canvas.toDataURL('image/png'), 'PNG', x, y, imageWidth, imageHeight);
       doc.save(`Plan_${isTankPlan ? 'Tanques' : 'Cajas'}_Semana_${format(selectedWeekStart, 'I')}.pdf`);
