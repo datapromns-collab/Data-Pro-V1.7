@@ -752,6 +752,7 @@ export default function PlannerPage() {
   const consumoLineasStore = useRemoteCollection<Record<number, ConsumoLineaRow[]>>('sala-jarabe-consumo-lineas', {});
   const consumoLineasDataPorLinea = consumoLineasStore.data;
   const setConsumoLineasDataPorLinea = (updater: typeof consumoLineasDataPorLinea | ((prev: typeof consumoLineasDataPorLinea) => typeof consumoLineasDataPorLinea)) => {
+    if (getProcesosLevel('sala-jarabe.consumo-lineas') !== 'write') return;
     consumoLineasStore.patchData((prev) => {
       const next = typeof updater === 'function' ? updater(prev) : updater;
       const changedLines: Partial<typeof next> = {};
@@ -775,6 +776,7 @@ export default function PlannerPage() {
   const [consumoUbbWeeklyMonth, setConsumoUbbWeeklyMonth] = useState(() => startOfMonth(new Date()));
   const [consumoUbbMonthlyDate, setConsumoUbbMonthlyDate] = useState(() => startOfMonth(new Date()));
   const updateConsumoLineaRow = (linea: number, rowIndex: number, field: keyof ConsumoLineaRow, value: string) => {
+    if (getProcesosLevel('sala-jarabe.consumo-lineas') !== 'write') return;
     setConsumoLineasDataPorLinea((prev) => {
       const rows = prev[linea] || [];
       return {
@@ -1003,12 +1005,25 @@ export default function PlannerPage() {
   const justyStore = useRemoteCollection<{ id: string; fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string; brix: string; estado: 'preparado' | 'enviado a linea' | 'retenido' | 'liberado'; enviarALinea: number | null; editando: boolean; editandoPor: string | null }[]>('sala-jarabe-justy', []);
   const glupRows = glupStore.data;
   const justyRows = justyStore.data;
-  const setGlupRows = glupStore.setData;
-  const setJustyRows = justyStore.setData;
-  const removeGlupRow = glupStore.removeItem;
-  const removeJustyRow = justyStore.removeItem;
+  const setGlupRows = (updater: typeof glupRows | ((previous: typeof glupRows) => typeof glupRows)) => {
+    if (getProcesosLevel(`sala-jarabe.${salaJarabeSubTab}`) !== 'write') return;
+    glupStore.setData(updater);
+  };
+  const setJustyRows = (updater: typeof justyRows | ((previous: typeof justyRows) => typeof justyRows)) => {
+    if (getProcesosLevel(`sala-jarabe.${salaJarabeSubTab}`) !== 'write') return;
+    justyStore.setData(updater);
+  };
+  const removeGlupRow = (id: string) => {
+    if (getProcesosLevel(`sala-jarabe.${salaJarabeSubTab}`) !== 'write') return;
+    glupStore.removeItem(id);
+  };
+  const removeJustyRow = (id: string) => {
+    if (getProcesosLevel(`sala-jarabe.${salaJarabeSubTab}`) !== 'write') return;
+    justyStore.removeItem(id);
+  };
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined' || !user?.id || !glupStore.isLoaded || !justyStore.isLoaded) return;
+    if (getProcesosLevel('sala-jarabe.preparacion') !== 'write') return;
     const legacyGlup = localStorage.getItem('salaJarabeGlupRows');
     const legacyJusty = localStorage.getItem('salaJarabeJustyRows');
     if (legacyGlup && glupRows.length === 0) {
@@ -1031,9 +1046,13 @@ export default function PlannerPage() {
       } catch {}
       localStorage.removeItem('salaJarabeJustyRows');
     }
-  }, []);
+  }, [user?.id, glupStore.isLoaded, justyStore.isLoaded, getPermissionLevel]);
   useEffect(() => {
     if (!glupStore.isLoaded || !justyStore.isLoaded || !consumoLineasStore.isLoaded) return;
+    if (
+      getProcesosLevel('sala-jarabe.preparacion') !== 'write'
+      || getProcesosLevel('sala-jarabe.consumo-lineas') !== 'write'
+    ) return;
 
     const preparationsToTransfer: { linea: number; row: ConsumoLineaRow }[] = [];
 
@@ -1101,6 +1120,8 @@ export default function PlannerPage() {
     consumoLineasDataPorLinea,
     consumoLineasStore.isLoaded,
     setConsumoLineasDataPorLinea,
+    user?.id,
+    getPermissionLevel,
   ]);
   const [lineaModalOpen, setLineaModalOpen] = useState(false);
   const [selectedLineaRow, setSelectedLineaRow] = useState<SelectedLineaRow | null>(null);
@@ -1111,15 +1132,25 @@ export default function PlannerPage() {
   const [revisionEditingRow, setRevisionEditingRow] = useState<{ id: string; type: 'glup' | 'justy'; scope: 'privileged' | 'public' } | null>(null);
   const [revisionEditForm, setRevisionEditForm] = useState<{ fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string; brix: string; estado: 'preparado' | 'enviado a linea' | 'retenido' | 'liberado'; enviarALinea: number | null } | null>(null);
   const isRevisionUser = user?.id === 'maria.mds' || user?.id === 'alex.mds' || user?.id === 'demon';
-  const canDeleteConsumoLinea = user?.id === 'demon' || user?.id === 'maria.mds';
+  const canDeleteConsumoLinea = (user?.id === 'demon' || user?.id === 'maria.mds')
+    && getPermissionLevel(user?.id ?? '', 'procesos', 'sala-jarabe.consumo-lineas') === 'write'
+    && getPermissionLevel(user?.id ?? '', 'procesos', 'sala-jarabe.preparacion') === 'write';
   const isProcjUser = user?.id === 'procj.mds';
-  const showRevisionColumn = isRevisionUser || glupRows.some((r) => r.editando) || justyRows.some((r) => r.editando);
+  const showRevisionColumn = getPermissionLevel(user?.id ?? '', 'procesos', `sala-jarabe.${salaJarabeSubTab}`) === 'write' && (
+    isRevisionUser || glupRows.some((r) => r.editando) || justyRows.some((r) => r.editando)
+  );
   const canEditRow = (row: { editando: boolean; editandoPor: string | null }) => {
+    if (salaJarabeReadOnly) return false;
     if (!row.editando) return false;
     if (!user?.id) return false;
     return true;
   };
   const updateRow = (type: 'glup' | 'justy', id: string, data: { fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string; brix: string; estado: 'preparado' | 'enviado a linea' | 'retenido' | 'liberado'; enviarALinea: number | null }) => {
+    if (salaJarabeReadOnly) return;
+    if (
+      data.estado === 'enviado a linea'
+      && getProcesosLevel('sala-jarabe.consumo-lineas') !== 'write'
+    ) return;
     if (type === 'glup') {
       setGlupRows((prev) => prev.map((row) => row.id === id ? { ...row, ...data } : row));
     } else {
@@ -1127,6 +1158,7 @@ export default function PlannerPage() {
     }
   };
   const deleteRow = (type: 'glup' | 'justy', id: string) => {
+    if (salaJarabeReadOnly) return;
     if (type === 'glup') {
       removeGlupRow(id);
     } else {
@@ -1139,7 +1171,11 @@ export default function PlannerPage() {
   };
   const [deletingConsumoLineaKey, setDeletingConsumoLineaKey] = useState<string | null>(null);
   const deleteConsumoLineaRow = async (linea: number, rowIndex: number) => {
-    if (!canDeleteConsumoLinea) return;
+    if (
+      !canDeleteConsumoLinea
+      || getProcesosLevel('sala-jarabe.consumo-lineas') !== 'write'
+      || getProcesosLevel('sala-jarabe.preparacion') !== 'write'
+    ) return;
     const row = (consumoLineasDataPorLinea[linea] || [])[rowIndex];
     if (!row) {
       toast({ title: 'No se encontró el tanque en la línea', variant: 'destructive' });
@@ -1244,6 +1280,33 @@ export default function PlannerPage() {
   const [rMensualSubTab, setRMensualSubTab] = useState<'m-agua' | 'm-insumos'>('m-agua');
   const [rMensualSelectedMonth, setRMensualSelectedMonth] = useState(new Date().getMonth() + 1);
   const [rMensualSelectedYear, setRMensualSelectedYear] = useState(new Date().getFullYear());
+  const getProcesosLevel = (section: string) =>
+    user ? getPermissionLevel(user.id, 'procesos', section) : 'none';
+  const procesosTabs = [
+    { id: 'ptab', label: 'PTAB' },
+    { id: 'miteco', label: 'MITECO' },
+    { id: 'sala-jarabe', label: 'Sala de jarabe' },
+    { id: 'rechazos-desperdicios', label: 'Rechazos y desperdicios' },
+    { id: 'inv-materia-prima', label: 'Inv Materia prima' },
+  ].filter(({ id }) => getProcesosLevel(id) !== 'none');
+  const ptabTabs = (['agua', 'insumos', 'r-semanal', 'r-mensual'] as const)
+    .filter((tab) => getProcesosLevel(`ptab.${tab}`) !== 'none');
+  const rSemanalTabs = (['s-agua', 's-insumos'] as const)
+    .filter((tab) => getProcesosLevel(`ptab.r-semanal.${tab}`) !== 'none');
+  const rMensualTabs = (['m-agua', 'm-insumos'] as const)
+    .filter((tab) => getProcesosLevel(`ptab.r-mensual.${tab}`) !== 'none');
+  const salaJarabeTabs = ([
+    'preparacion',
+    'consumo-lineas',
+    'consumo-litros',
+    'consumo-ubb',
+    'resumen',
+  ] as const).filter((tab) => getProcesosLevel(`sala-jarabe.${tab}`) !== 'none');
+  const procesosInventarioViews = (['diario', 'semanal', 'mensual'] as const)
+    .filter((view) => getProcesosLevel(`inv-materia-prima.${view}`) !== 'none');
+  const ptabAguaReadOnly = getProcesosLevel('ptab.agua') !== 'write';
+  const ptabInsumosReadOnly = getProcesosLevel('ptab.insumos') !== 'write';
+  const salaJarabeReadOnly = getProcesosLevel(`sala-jarabe.${salaJarabeSubTab}`) !== 'write';
   const ptabAguaStore = useRemoteCollection<Record<string, string>>('ptab-agua', {});
   const ptabInsumosStore = useRemoteCollection<Record<string, string>>('ptab-insumos', {});
   const insumosQuimicos = [
@@ -1271,6 +1334,7 @@ export default function PlannerPage() {
       ptabInsumosInitialMount.current = false;
       return;
     }
+    if (getProcesosLevel('ptab.insumos') !== 'write') return;
     if (!ptabInsumosFecha) return;
     if (!ptabInsumosStore.isLoaded) return;
     const ayer = new Date(ptabInsumosFecha);
@@ -1287,7 +1351,7 @@ export default function PlannerPage() {
     if (Object.keys(updates).length > 0) {
       ptabInsumosStore.patchData(updates);
     }
-  }, [ptabInsumosFecha]);
+  }, [ptabInsumosFecha, user?.id, getPermissionLevel]);
   const [rSemanalWeekStartDate, setRSemanalWeekStartDate] = useState(new Date());
   const rSemanalWeeksContainerRef = useRef<HTMLDivElement>(null);
   const rSemanalAguaStore = useRemoteCollection<Record<string, string>>('ptab-agua', {});
@@ -1353,16 +1417,40 @@ export default function PlannerPage() {
   });
 
   useEffect(() => {
-    if (activeModule === 'procesos' && user?.id !== 'jaime.r' && (user?.id === 'proc1.mds' || user?.id === 'procj.mds' || user?.id === 'procs2.mds' || user?.id === 'maria.mds' || user?.id === 'alex.mds' || user?.id === 'proc.mds' || user?.id === 'procs1.mds' || user?.id === 'proc2.mds' || user?.id === 'prodtg.mds')) {
-      setProcesosSubTab(user?.id === 'proc.mds' || user?.id === 'procs1.mds' || user?.id === 'proc2.mds' || user?.id === 'procj.mds' ? 'sala-jarabe' : 'ptab');
+    if (activeModule !== 'procesos') return;
+    if (!procesosTabs.some(({ id }) => id === procesosSubTab) && procesosTabs[0]) {
+      setProcesosSubTab(procesosTabs[0].id);
     }
-  }, [activeModule, user?.id]);
-
-  useEffect(() => {
-    if (activeModule === 'procesos' && user?.id === 'prodtg.mds' && procesosSubTab === 'ptab') {
-      setPtabTab('r-semanal');
+    if (procesosSubTab === 'ptab' && !ptabTabs.includes(ptabTab) && ptabTabs[0]) {
+      setPtabTab(ptabTabs[0]);
     }
-  }, [activeModule, user?.id, procesosSubTab]);
+    if (ptabTab === 'r-semanal' && !rSemanalTabs.includes(rSemanalSubTab) && rSemanalTabs[0]) {
+      setRSemanalSubTab(rSemanalTabs[0]);
+    }
+    if (ptabTab === 'r-mensual' && !rMensualTabs.includes(rMensualSubTab) && rMensualTabs[0]) {
+      setRMensualSubTab(rMensualTabs[0]);
+    }
+    if (procesosSubTab === 'sala-jarabe' && !salaJarabeTabs.includes(salaJarabeSubTab) && salaJarabeTabs[0]) {
+      setSalaJarabeSubTab(salaJarabeTabs[0]);
+    }
+    if (procesosSubTab === 'inv-materia-prima' && !procesosInventarioViews.includes(procesosInventarioView) && procesosInventarioViews[0]) {
+      setProcesosInventarioView(procesosInventarioViews[0]);
+    }
+  }, [
+    activeModule,
+    procesosTabs,
+    procesosSubTab,
+    ptabTabs,
+    ptabTab,
+    rSemanalTabs,
+    rSemanalSubTab,
+    rMensualTabs,
+    rMensualSubTab,
+    salaJarabeTabs,
+    salaJarabeSubTab,
+    procesosInventarioViews,
+    procesosInventarioView,
+  ]);
 
   useEffect(() => {
     if (!insumosFecha || typeof window === 'undefined' || isNaN(insumosFecha.getTime())) return;
@@ -2743,6 +2831,7 @@ export default function PlannerPage() {
   };
 
   const handlePtabAguaChange = (dateStr: string, rowKey: string, value: string) => {
+    if (getProcesosLevel('ptab.agua') !== 'write') return;
     ptabAguaStore.patchData({ [getPtabAguaCellKey(dateStr, rowKey)]: value });
   };
 
@@ -2830,6 +2919,7 @@ export default function PlannerPage() {
   };
 
   const handlePtabInsumosChange = (fecha: Date | undefined, quimico: string, idx: number, value: string) => {
+    if (getProcesosLevel('ptab.insumos') !== 'write') return;
     const dateStr = fecha ? format(fecha, 'yyyy-MM-dd') : '';
     const key = `${dateStr}-${quimico}-${idx}`;
     ptabInsumosStore.patchData({ [key]: value });
@@ -5278,11 +5368,11 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                       {activeModule === 'produccion' && hasAccess(user.id, 'produccion') && (
                         <ProduccionModule weeklyOnly={user.id === 'prodt.mds' || user.id === 'prodt1.mds' || user.id === 'prodt2.mds'} />
                       )}
-                       {activeModule === 'procesos' && (isDemon || user.id === 'jaime.r' || user.id === 'proc1.mds' || user.id === 'procj.mds' || user.id === 'procs2.mds' || user.id === 'maria.mds' || user.id === 'alex.mds' || user.id === 'proc.mds' || user.id === 'procs1.mds' || user.id === 'proc2.mds' || user.id === 'prodtg.mds') && (
+                       {activeModule === 'procesos' && hasAccess(user.id, 'procesos') && (
                         <div className="flex flex-col h-full">
                           <div className="flex items-center gap-2 mb-2 no-print">
                             <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                                 {(isDemon || user.id === 'jaime.r' || user.id === 'maria.mds' || user.id === 'alex.mds' ? ['ptab', 'miteco', 'sala-jarabe', 'rechazos-desperdicios', 'inv-materia-prima'] : user.id === 'procj.mds' ? ['ptab', 'sala-jarabe', 'rechazos-desperdicios', 'inv-materia-prima'] : user.id === 'prodtg.mds' ? ['ptab'] : user.id === 'proc.mds' || user.id === 'procs1.mds' || user.id === 'proc2.mds' ? ['sala-jarabe', 'rechazos-desperdicios', 'inv-materia-prima'] : ['ptab']).map((tab) => (
+                                 {procesosTabs.map(({ id: tab }) => (
                                <button
                                  key={tab}
                                  onClick={() => setProcesosSubTab(tab)}
@@ -5301,10 +5391,15 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                              ))}
                            </div>
                           </div>
-                          {procesosSubTab === 'ptab' && (
+                          {procesosTabs.length === 0 && (
+                            <p className="rounded-xl border border-slate-200 bg-white p-4 text-sm font-semibold text-slate-500">
+                              No tienes acceso a las secciones de Procesos.
+                            </p>
+                          )}
+                          {procesosSubTab === 'ptab' && getProcesosLevel('ptab') !== 'none' && (
                             <div className="flex items-center gap-2 no-print mb-2">
                               <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                                   {(isDemon || user.id === 'jaime.r' || user.id === 'procj.mds' || user.id === 'maria.mds' || user.id === 'alex.mds' ? ['agua', 'insumos', 'r-semanal', 'r-mensual'] : user.id === 'prodtg.mds' || user.id === 'procs2.mds' ? ['r-semanal', 'r-mensual'] : ['agua', 'insumos']).map((tab) => (
+                                   {ptabTabs.map((tab) => (
                                    <button
                                      key={tab}
                                      onClick={() => setPtabTab(tab as 'agua' | 'insumos' | 'r-semanal' | 'r-mensual')}
@@ -5323,7 +5418,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                               </div>
                             </div>
                           )}
-                          {procesosSubTab === 'ptab' && ptabTab === 'agua' && (
+                          {procesosSubTab === 'ptab' && ptabTab === 'agua' && getProcesosLevel('ptab.agua') !== 'none' && (
                             <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                               <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
                                 <div className="flex flex-col h-full gap-3">
@@ -5388,6 +5483,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                          type="text"
                                                          value={ptabAguaStore.data[cellKey] || ''}
                                                          onChange={(e) => handlePtabAguaChange(dateStr, rowKey, e.target.value)}
+                                                         disabled={ptabAguaReadOnly || !ptabAguaStore.isLoaded}
                                                          className="w-full min-w-[14ch] h-8 text-center text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary"
                                                        />
                                                      </td>
@@ -5407,6 +5503,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                      type="text"
                                                      value={ptabAguaStore.data[cellKey] || ''}
                                                      onChange={(e) => handlePtabAguaChange(dateStr, 'total', e.target.value)}
+                                                     disabled={ptabAguaReadOnly || !ptabAguaStore.isLoaded}
                                                      className="w-full min-w-[14ch] h-8 text-center text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary"
                                                    />
                                                  </td>
@@ -5420,7 +5517,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                </div>
                              </div>
                            )}
-                          {procesosSubTab === 'ptab' && ptabTab === 'insumos' && (
+                          {procesosSubTab === 'ptab' && ptabTab === 'insumos' && getProcesosLevel('ptab.insumos') !== 'none' && (
                             <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                               <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
                                 <div className="flex flex-col h-full gap-3">
@@ -5474,6 +5571,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                      type="text"
                                                      value={ptabInsumosStore.data[`${ptabInsumosFecha ? format(ptabInsumosFecha, 'yyyy-MM-dd') : ''}-${item.nombre}-${idx}`] || ''}
                                                      onChange={(e) => handlePtabInsumosChange(ptabInsumosFecha, item.nombre, idx, e.target.value)}
+                                                     disabled={ptabInsumosReadOnly || !ptabInsumosStore.isLoaded}
                                                      className="w-full min-w-[14ch] h-9 text-center text-[11px] font-bold text-slate-900 bg-white border border-slate-300 rounded focus:outline-none focus:border-primary"
                                                    />
                                                  </td>
@@ -5494,6 +5592,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                      type="text"
                                                      value={ptabInsumosStore.data[`${ptabInsumosFecha ? format(ptabInsumosFecha, 'yyyy-MM-dd') : ''}-${item.nombre}-${idx + 4}`] || ''}
                                                      onChange={(e) => handlePtabInsumosChange(ptabInsumosFecha, item.nombre, idx + 4, e.target.value)}
+                                                     disabled={ptabInsumosReadOnly || !ptabInsumosStore.isLoaded}
                                                      className="w-full min-w-[14ch] h-9 text-center text-[11px] font-bold text-slate-900 bg-white border border-slate-300 rounded focus:outline-none focus:border-primary"
                                                    />
                                                  </td>
@@ -5532,7 +5631,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                               </div>
                             </div>
                           )}
-                          {procesosSubTab === 'ptab' && ptabTab !== 'agua' && ptabTab !== 'insumos' && ptabTab !== 'r-semanal' && ptabTab !== 'r-mensual' && (
+                          {procesosSubTab === 'ptab' && getProcesosLevel('ptab') !== 'none' && ptabTab !== 'agua' && ptabTab !== 'insumos' && ptabTab !== 'r-semanal' && ptabTab !== 'r-mensual' && (
                             <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                               <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
                                 <div className="flex flex-col h-full gap-3">
@@ -5543,11 +5642,11 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                               </div>
                             </div>
                           )}
-                                {(isDemon || user.id === 'jaime.r' || user.id === 'procj.mds' || user.id === 'procs2.mds' || user.id === 'maria.mds' || user.id === 'alex.mds' || user.id === 'prodtg.mds') && procesosSubTab === 'ptab' && ptabTab === 'r-semanal' && (
+                                {procesosSubTab === 'ptab' && ptabTab === 'r-semanal' && getProcesosLevel('ptab.r-semanal') !== 'none' && (
                               <div className="flex flex-col h-full">
                                 <div className="flex items-center gap-2 mb-2 no-print">
                                   <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                                    {['s-agua', 's-insumos'].map((tab) => (
+                                    {rSemanalTabs.map((tab) => (
                                       <button
                                         key={tab}
                                         onClick={() => setRSemanalSubTab(tab as 's-agua' | 's-insumos')}
@@ -5566,7 +5665,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                 <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                                   <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
                                      <div className="flex flex-col h-full gap-3">
-                                       {rSemanalSubTab === 's-agua' && (
+                                       {rSemanalSubTab === 's-agua' && getProcesosLevel('ptab.r-semanal.s-agua') !== 'none' && (
                                          <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                                            <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
                                              <div className="flex flex-col h-full gap-3">
@@ -5742,7 +5841,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                             </div>
                                           </div>
                                         )}
-                                        {rSemanalSubTab === 's-insumos' && (
+                                        {rSemanalSubTab === 's-insumos' && getProcesosLevel('ptab.r-semanal.s-insumos') !== 'none' && (
                                          <div className="flex-1 rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-sm tracking-widest">
                                            S Insumos
                                          </div>
@@ -5752,11 +5851,11 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                 </div>
                               </div>
                             )}
-                                {(isDemon || user.id === 'jaime.r' || user.id === 'procj.mds' || user.id === 'maria.mds' || user.id === 'alex.mds' || user.id === 'prodtg.mds') && procesosSubTab === 'ptab' && ptabTab === 'r-mensual' && (
+                                {procesosSubTab === 'ptab' && ptabTab === 'r-mensual' && getProcesosLevel('ptab.r-mensual') !== 'none' && (
                              <div className="flex flex-col h-full">
                                <div className="flex items-center gap-2 mb-2 no-print">
                                  <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                                   {['m-agua', 'm-insumos'].map((tab) => (
+                                   {rMensualTabs.map((tab) => (
                                      <button
                                        key={tab}
                                        onClick={() => setRMensualSubTab(tab as 'm-agua' | 'm-insumos')}
@@ -5775,7 +5874,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                                  <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
                                    <div className="flex flex-col h-full gap-3">
-                                      {rMensualSubTab === 'm-agua' && (
+                                      {rMensualSubTab === 'm-agua' && getProcesosLevel('ptab.r-mensual.m-agua') !== 'none' && (
                                         <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                                           <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
                                             <div className="flex flex-col h-full gap-3">
@@ -5889,7 +5988,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                           </div>
                                         </div>
                                       )}
-                                     {rMensualSubTab === 'm-insumos' && (
+                                     {rMensualSubTab === 'm-insumos' && getProcesosLevel('ptab.r-mensual.m-insumos') !== 'none' && (
                                        <div className="flex-1 rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-sm tracking-widest">
                                          M Insumos
                                        </div>
@@ -5899,7 +5998,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                </div>
                              </div>
                            )}
-                           {(isDemon || user.id === 'jaime.r' || user.id === 'maria.mds' || user.id === 'alex.mds') && procesosSubTab === 'miteco' && (
+                           {procesosSubTab === 'miteco' && getProcesosLevel('miteco') !== 'none' && (
                           <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                             <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
                               <div className="flex flex-col h-full gap-3">
@@ -5908,10 +6007,17 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                             </div>
                           </div>
                         )}
-                              {(isDemon || user.id === 'jaime.r' || user.id === 'proc.mds' || user.id === 'procs1.mds' || user.id === 'proc2.mds' || user.id === 'procj.mds' || user.id === 'maria.mds' || user.id === 'alex.mds') && procesosSubTab === 'rechazos-desperdicios' && (
-                                <ProcesosRechazosDesperdicios />
+                              {procesosSubTab === 'rechazos-desperdicios' && getProcesosLevel('rechazos-desperdicios') !== 'none' && (
+                                <ProcesosRechazosDesperdicios
+                                  readOnly={getProcesosLevel('rechazos-desperdicios') !== 'write'}
+                                  sectionPermissions={{
+                                    rechazos: getProcesosLevel('rechazos-desperdicios.rechazos'),
+                                    desperdicios: getProcesosLevel('rechazos-desperdicios.desperdicios'),
+                                    devolucion: getProcesosLevel('rechazos-desperdicios.devolucion'),
+                                  }}
+                                />
                               )}
-                              {(isDemon || user.id === 'jaime.r' || user.id === 'proc.mds' || user.id === 'procs1.mds' || user.id === 'proc2.mds' || user.id === 'procj.mds' || user.id === 'maria.mds' || user.id === 'alex.mds') && procesosSubTab === 'inv-materia-prima' && (
+                              {procesosSubTab === 'inv-materia-prima' && getProcesosLevel('inv-materia-prima') !== 'none' && (
                                 <div className="flex flex-col flex-1 min-h-0">
                                   <div className="flex items-center gap-2 no-print mb-2">
                                     <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
@@ -5919,7 +6025,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                         { key: 'diario', label: 'Diario', Icon: CalendarRange },
                                         { key: 'semanal', label: 'Semanal', Icon: TrendingUp },
                                         { key: 'mensual', label: 'Mensual', Icon: BarChart3 },
-                                      ] as const).map(({ key, label, Icon }) => (
+                                      ] as const).filter(({ key }) => procesosInventarioViews.includes(key)).map(({ key, label, Icon }) => (
                                         <button
                                           key={key}
                                           type="button"
@@ -5936,24 +6042,32 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                       ))}
                                     </div>
                                   </div>
-                                  <ProcesosInventarioMateriaPrima view={procesosInventarioView} />
+                                  <ProcesosInventarioMateriaPrima
+                                    view={procesosInventarioView}
+                                    readOnly={getProcesosLevel(`inv-materia-prima.${procesosInventarioView}`) !== 'write'}
+                                    viewPermissions={{
+                                      diurno: getProcesosLevel('inv-materia-prima.diario.diurno'),
+                                      nocturno: getProcesosLevel('inv-materia-prima.diario.nocturno'),
+                                      resumen: getProcesosLevel('inv-materia-prima.diario.resumen'),
+                                    }}
+                                  />
                                 </div>
                               )}
-                              {(isDemon || user.id === 'jaime.r' || user.id === 'proc.mds' || user.id === 'procs1.mds' || user.id === 'proc2.mds' || user.id === 'procj.mds' || user.id === 'maria.mds' || user.id === 'alex.mds') && procesosSubTab === 'sala-jarabe' && (
+                              {procesosSubTab === 'sala-jarabe' && getProcesosLevel('sala-jarabe') !== 'none' && (
                              <div className="flex flex-col h-full gap-3">
                                <div className="flex flex-col gap-2 no-print">
                                  <div className="flex items-center gap-2">
                                    <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                                      {[
+                                      {([
                                         { key: 'preparacion', label: 'Preparacion', icon: FlaskConical },
                                         { key: 'consumo-lineas', label: 'Consumo en Lineas', icon: Activity },
                                         { key: 'consumo-litros', label: 'Consumo Litros', icon: Droplets },
                                         { key: 'consumo-ubb', label: 'Consumo Ubb', icon: BarChart3 },
                                         { key: 'resumen', label: 'Resumen', icon: FileText },
-                                      ].map((tab) => (
+                                      ] as const).filter(({ key }) => salaJarabeTabs.includes(key)).map((tab) => (
                                        <button
                                          key={tab.key}
-                                         onClick={() => setSalaJarabeSubTab(tab.key as any)}
+                                         onClick={() => setSalaJarabeSubTab(tab.key)}
                                          className={cn(
                                            "inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
                                            salaJarabeSubTab === tab.key ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
@@ -5995,6 +6109,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                     <div className="flex items-center gap-2">
                                       <button
                                         onClick={() => setSalaJarabeNuevaTareaOpen(true)}
+                                        disabled={salaJarabeReadOnly}
                                         className="inline-flex items-center gap-2 h-9 px-4 rounded-full bg-[#006DB2] text-white font-black uppercase text-[10px] tracking-widest hover:bg-[#005a94] transition-none shadow-sm active:scale-95"
                                       >
                                         Tanque Preparado
@@ -6136,6 +6251,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                    updateConsumoLineaRow(salaJarabeLinea, index, 'turno', turno);
                                                                  }
                                                                }}
+                                                               disabled={salaJarabeReadOnly}
                                                                className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary"
                                                              >
                                                                <option value="">Seleccionar</option>
@@ -6161,6 +6277,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                    setSelectedLinea(null);
                                                                    setLineaModalOpen(true);
                                                                  }}
+                                                                 disabled={salaJarabeReadOnly}
                                                                  className="h-8 rounded-full bg-blue-600 px-3 text-[10px] font-black uppercase tracking-widest text-white hover:bg-blue-700"
                                                                >
                                                                  Enviar
@@ -6174,6 +6291,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                step={field === 'ubbFinal' || field === 'volFinalTanque' ? 'any' : undefined}
                                                                value={row[field] || ''}
                                                                onChange={(e) => updateConsumoLineaRow(salaJarabeLinea, index, field, e.target.value)}
+                                                               disabled={salaJarabeReadOnly}
                                                                className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary"
                                                              />
                                                            )}
@@ -6184,7 +6302,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                            <button
                                                              type="button"
                                                              onClick={() => deleteConsumoLineaRow(salaJarabeLinea, index)}
-                                                             disabled={deletingConsumoLineaKey !== null}
+                                                             disabled={deletingConsumoLineaKey !== null || salaJarabeReadOnly}
                                                              aria-label={`Eliminar tanque ${row.tanque} de Línea ${salaJarabeLinea}`}
                                                              title={deletingConsumoLineaKey === `${salaJarabeLinea}:${index}` ? 'Guardando eliminación...' : 'Eliminar tanque y devolver la preparación a estado inicial'}
                                                              className="inline-flex h-8 items-center justify-center gap-1 rounded-full bg-red-600 px-3 text-[10px] font-black uppercase tracking-widest text-white hover:bg-red-700 disabled:cursor-wait disabled:opacity-60"
@@ -6255,7 +6373,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                     {filteredGlupRows.map((row, idx) => (
                                                       <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50">
                                                          {(() => {
-                                                            const isEditing = revisionEditingRow && revisionEditingRow.type === 'glup' && revisionEditingRow.id === row.id;
+                                                            const isEditing = !salaJarabeReadOnly && revisionEditingRow?.type === 'glup' && revisionEditingRow.id === row.id;
                                                             const form = isEditing ? revisionEditForm : null;
                                                              const editable = !isEditing && canEditRow(row);
                                                              const showInput = isEditing || editable;
@@ -6321,7 +6439,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                        <option value="retenido">Retenido</option>
                                                                        <option value="liberado">Liberado</option>
                                                                      </select>
-                                                                   ) : isProcjUser ? (
+                                                                   ) : isProcjUser && !salaJarabeReadOnly ? (
                                                                      <button onClick={() => { setSelectedEstadoRow({ id: row.id, type: 'glup' }); setEstadoModalOpen(true); }} className={`h-8 px-3 rounded-full font-black uppercase text-[10px] tracking-widest transition-none ${
                                                                        row.estado === 'preparado' ? 'bg-blue-600 text-white' :
                                                                        row.estado === 'retenido' ? 'bg-amber-500 text-white' :
@@ -6342,7 +6460,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                        {[1,2,3,4,5,6,7].map(n => <option key={n} value={String(n)}>Linea {n}</option>)}
                                                                      </select>
                                                                    ) : row.estado !== 'preparado' && row.enviarALinea ? `Linea ${row.enviarALinea}` : (
-                                                                      <button onClick={() => { setSelectedLineaRow({ id: row.id, type: 'glup' }); setSelectedLinea(null); setLineaModalOpen(true); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Enviar</button>
+                                                                      <button disabled={salaJarabeReadOnly} onClick={() => { setSelectedLineaRow({ id: row.id, type: 'glup' }); setSelectedLinea(null); setLineaModalOpen(true); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none disabled:opacity-50">Enviar</button>
                                                                    )}
                                                                  </td>
                                                                 {showRevisionColumn && (
@@ -6411,7 +6529,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                      {filteredJustyRows.map((row, idx) => (
                                                        <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50">
                                                           {(() => {
-                                                             const isEditing = revisionEditingRow && revisionEditingRow.type === 'justy' && revisionEditingRow.id === row.id;
+                                                             const isEditing = !salaJarabeReadOnly && revisionEditingRow?.type === 'justy' && revisionEditingRow.id === row.id;
                                                             const form = isEditing ? revisionEditForm : null;
                                                              const editable = !isEditing && canEditRow(row);
                                                              const showInput = isEditing || editable;
@@ -6470,7 +6588,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                    {showInput ? (<input value={cellValue('brix')} onChange={(e) => cellOnChange('brix', e.target.value)} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.brix}
                                                                 </td>
                                                                  <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
-                                                                 {isProcjUser ? (
+                                                                 {isProcjUser && !salaJarabeReadOnly ? (
                                                                    <button onClick={() => { setSelectedEstadoRow({ id: row.id, type: 'justy' }); setEstadoModalOpen(true); }} className={`h-8 px-3 rounded-full font-black uppercase text-[10px] tracking-widest transition-none ${
                                                                      row.estado === 'preparado' ? 'bg-blue-600 text-white' :
                                                                      row.estado === 'retenido' ? 'bg-amber-500 text-white' :
@@ -6486,7 +6604,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                </td>
                                                                 <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
                                                                   {row.estado !== 'preparado' && row.enviarALinea ? `Linea ${row.enviarALinea}` : (
-                                                                     <button onClick={() => { setSelectedLineaRow({ id: row.id, type: 'justy' }); setSelectedLinea(null); setLineaModalOpen(true); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Enviar</button>
+                                                                     <button disabled={salaJarabeReadOnly} onClick={() => { setSelectedLineaRow({ id: row.id, type: 'justy' }); setSelectedLinea(null); setLineaModalOpen(true); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none disabled:opacity-50">Enviar</button>
                                       )}
                                                                 </td>
                                                                 {showRevisionColumn && (
@@ -7603,6 +7721,13 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
               <Button variant="outline" onClick={() => setLineaModalOpen(false)} className="rounded-xl">Cancelar</Button>
               <Button disabled={selectedLinea === null} onClick={() => {
                 if (!selectedLineaRow || selectedLinea === null) return;
+                const sourceSection = selectedLineaRow.type === 'consumo'
+                  ? 'consumo-lineas'
+                  : 'preparacion';
+                if (
+                  getProcesosLevel(`sala-jarabe.${sourceSection}`) !== 'write'
+                  || getProcesosLevel('sala-jarabe.consumo-lineas') !== 'write'
+                ) return;
                 if (selectedLineaRow.type === 'consumo') {
                   const { linea, rowIndex } = selectedLineaRow;
                   const sourceRow = (consumoLineasDataPorLinea[linea] || [])[rowIndex];

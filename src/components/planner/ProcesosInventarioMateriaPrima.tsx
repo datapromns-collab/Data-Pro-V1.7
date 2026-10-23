@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { addDays, eachDayOfInterval, endOfMonth, format, startOfMonth, startOfWeek } from 'date-fns';
 import { useRemoteCollection } from '@/hooks/use-remote-collection';
 
@@ -23,6 +23,7 @@ type ShiftInventory = Record<string, InventoryValues>;
 type InventoryPeriod = 'diario' | 'semanal' | 'mensual';
 type InventoryShift = 'diurno' | 'nocturno';
 type InventoryView = 'diurno' | 'nocturno' | 'resumen';
+type InventoryViewPermissions = Record<InventoryView, 'none' | 'read' | 'write'>;
 
 type InventoryData = {
   days: Record<string, Record<string, InventoryValues | ShiftInventory>>;
@@ -163,13 +164,33 @@ function getPeriodSummaryValues(data: InventoryData, dates: Date[], code: string
   return { initial, reception, final };
 }
 
-export function ProcesosInventarioMateriaPrima({ view = 'diario' }: { view?: InventoryPeriod }) {
+export function ProcesosInventarioMateriaPrima({
+  view = 'diario',
+  readOnly = false,
+  viewPermissions,
+}: {
+  view?: InventoryPeriod;
+  readOnly?: boolean;
+  viewPermissions?: InventoryViewPermissions;
+}) {
   const store = useRemoteCollection<InventoryData>('procesos-inventario-materia-prima', EMPTY_INVENTORY);
   const [date, setDate] = useState(() => format(new Date(), 'yyyy-MM-dd'));
   const [shift, setShift] = useState<InventoryView>('diurno');
   const [weeklyDate, setWeeklyDate] = useState(() => new Date());
   const [weeklyMonth, setWeeklyMonth] = useState(() => format(new Date(), 'yyyy-MM'));
   const [monthlyMonth, setMonthlyMonth] = useState(() => format(new Date(), 'yyyy-MM'));
+  const visibleShifts = (['diurno', 'nocturno', 'resumen'] as const)
+    .filter((item) => viewPermissions?.[item] !== 'none');
+  const isReadOnly = readOnly || (
+    view === 'diario'
+    && viewPermissions !== undefined
+    && viewPermissions[shift] !== 'write'
+  );
+  useEffect(() => {
+    if (view === 'diario' && !visibleShifts.includes(shift) && visibleShifts[0]) {
+      setShift(visibleShifts[0]);
+    }
+  }, [view, visibleShifts, shift]);
   const dayRecord = store.data.days?.[date] ?? {};
   const dayValuesForDiurno = getShiftValues(dayRecord, 'diurno');
   const dayValuesForNocturno = getShiftValues(dayRecord, 'nocturno');
@@ -239,7 +260,7 @@ export function ProcesosInventarioMateriaPrima({ view = 'diario' }: { view?: Inv
   };
 
   const updateValue = (code: string, field: keyof InventoryValues, rawValue: string) => {
-    if (view !== 'diario' || shift === 'resumen') return;
+    if (isReadOnly || view !== 'diario' || shift === 'resumen') return;
     const value = rawValue.trim() === '' ? null : Number(rawValue);
     if (value !== null && !Number.isFinite(value)) return;
     const current = getEffectiveValues(code) ?? { initial: null, reception: null, final: null };
@@ -262,7 +283,7 @@ export function ProcesosInventarioMateriaPrima({ view = 'diario' }: { view?: Inv
     <>
     <div className="flex items-center gap-2 no-print mb-2">
       <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-        {view === 'diario' && (['diurno', 'nocturno', 'resumen'] as const).map((turn) => (
+        {view === 'diario' && visibleShifts.map((turn) => (
           <button
             key={turn}
             type="button"
@@ -276,6 +297,11 @@ export function ProcesosInventarioMateriaPrima({ view = 'diario' }: { view?: Inv
         ))}
       </div>
     </div>
+    {view === 'diario' && visibleShifts.length === 0 ? (
+      <p className="flex-1 rounded-xl border border-dashed border-slate-200 bg-white p-6 text-center text-xs font-semibold text-slate-500">
+        No tienes acceso a los turnos del inventario diario.
+      </p>
+    ) : (
     <section className="flex-1 min-h-0 overflow-auto rounded-2xl bg-slate-50/70 p-3">
       <div className="mb-3 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
         <div>
@@ -432,10 +458,10 @@ export function ProcesosInventarioMateriaPrima({ view = 'diario' }: { view?: Inv
                                 step="any"
                                 value={values?.[field] ?? ''}
                                 onChange={(event) => updateValue(valueKey, field, event.target.value)}
-                                readOnly={view !== 'diario' || shift === 'resumen'}
-                                disabled={!store.isLoaded}
+                                readOnly={isReadOnly || view !== 'diario' || shift === 'resumen'}
+                                disabled={!store.isLoaded || isReadOnly}
                                 aria-label={`${field} UBB ${row.code} ${row.detail}`}
-                                className={`h-7 w-full min-w-0 rounded-md border border-slate-200 px-1 text-center text-[10px] font-bold text-slate-800 outline-none transition-colors focus:border-teal-500 focus:ring-2 focus:ring-teal-100 disabled:opacity-60 ${view !== 'diario' || shift === 'resumen' ? 'bg-slate-50' : 'bg-white'}`}
+                                className={`h-7 w-full min-w-0 rounded-md border border-slate-200 px-1 text-center text-[10px] font-bold text-slate-800 outline-none transition-colors focus:border-teal-500 focus:ring-2 focus:ring-teal-100 disabled:opacity-60 ${isReadOnly || view !== 'diario' || shift === 'resumen' ? 'bg-slate-50' : 'bg-white'}`}
                               />
                             </td>
                             <td
@@ -458,10 +484,10 @@ export function ProcesosInventarioMateriaPrima({ view = 'diario' }: { view?: Inv
                               step="any"
                               value={values?.[field] ?? ''}
                               onChange={(event) => updateValue(valueKey, field, event.target.value)}
-                              readOnly={view !== 'diario' || shift === 'resumen'}
-                              disabled={!store.isLoaded}
+                              readOnly={isReadOnly || view !== 'diario' || shift === 'resumen'}
+                              disabled={!store.isLoaded || isReadOnly}
                               aria-label={`${field} ${row.code} ${row.detail}`}
-                              className={`h-7 w-full min-w-0 rounded-md border border-slate-200 px-1 text-center text-[10px] font-bold text-slate-800 outline-none transition-colors focus:border-teal-500 focus:ring-2 focus:ring-teal-100 disabled:opacity-60 ${view !== 'diario' || shift === 'resumen' ? 'bg-slate-50' : 'bg-white'}`}
+                              className={`h-7 w-full min-w-0 rounded-md border border-slate-200 px-1 text-center text-[10px] font-bold text-slate-800 outline-none transition-colors focus:border-teal-500 focus:ring-2 focus:ring-teal-100 disabled:opacity-60 ${isReadOnly || view !== 'diario' || shift === 'resumen' ? 'bg-slate-50' : 'bg-white'}`}
                             />
                           </td>
                         )
@@ -482,6 +508,7 @@ export function ProcesosInventarioMateriaPrima({ view = 'diario' }: { view?: Inv
         ))}
       </div>
     </section>
+    )}
     </>
   );
 }

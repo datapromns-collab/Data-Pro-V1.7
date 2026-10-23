@@ -1,6 +1,17 @@
 {
   "messages": [
     {
+      "id": "2026-10-23T14:30:52.494Z-k3cb7rg",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "jaime.r",
+      "read": false,
+      "createdAt": "2026-10-23T14:30:52.494Z"
+    },
+    {
       "id": "2026-10-20T17:14:08.396Z-c8im8sc",
       "title": "PDP S43",
       "message": "Se realiza ajuste en PDP L1 y L6",
@@ -100,15 +111,15 @@
       "createdAt": "2026-09-25T20:15:10.226Z"
     },
     {
-      "id": "2026-09-25T20:11:27.814Z-ob8pv6h",
-      "title": "Modificación PDP S39",
-      "message": "modificación del PDP S39 para trabajos de fin de semana",
+      "id": "2026-10-23T14:30:52.494Z-uq3z5ka",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "jaime.r",
+      "recipient": "demon2",
       "read": true,
-      "createdAt": "2026-09-25T20:11:27.814Z"
+      "createdAt": "2026-10-23T14:30:52.494Z"
     },
     {
       "id": "2026-10-20T17:14:08.396Z-ertnqpb",
@@ -210,15 +221,15 @@
       "createdAt": "2026-09-25T20:15:10.226Z"
     },
     {
-      "id": "2026-09-25T20:11:27.814Z-i60v165",
-      "title": "Modificación PDP S39",
-      "message": "modificación del PDP S39 para trabajos de fin de semana",
+      "id": "2026-10-23T14:30:52.494Z-alz9rx7",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "demon2",
-      "read": true,
-      "createdAt": "2026-09-25T20:11:27.814Z"
+      "recipient": "maria.mds",
+      "read": false,
+      "createdAt": "2026-10-23T14:30:52.494Z"
     },
     {
       "id": "2026-10-20T17:14:08.396Z-x2ovmt2",
@@ -320,15 +331,15 @@
       "createdAt": "2026-09-28T18:44:23.982Z"
     },
     {
-      "id": "2026-09-28T18:39:27.728Z-hjkvph2",
-      "title": "aviso",
-      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
+      "id": "2026-10-23T14:30:52.494Z-rjaq9u0",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-09-28T18:39:27.728Z"
+      "recipient": "alex.mds",
+      "read": false,
+      "createdAt": "2026-10-23T14:30:52.494Z"
     },
     {
       "id": "2026-10-20T17:14:08.396Z-b6z5ehw",
@@ -430,15 +441,15 @@
       "createdAt": "2026-09-25T20:15:10.226Z"
     },
     {
-      "id": "2026-09-25T20:11:27.814Z-880j1pz",
-      "title": "Modificación PDP S39",
-      "message": "modificación del PDP S39 para trabajos de fin de semana",
+      "id": "2026-10-23T14:30:52.494Z-bdj97pv",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-09-25T20:11:27.814Z"
+      "recipient": "anto.mds",
+      "read": false,
+      "createdAt": "2026-10-23T14:30:52.494Z"
     },
     {
       "id": "2026-10-20T17:14:08.396Z-q74bt5e",
@@ -540,15 +551,15 @@
       "createdAt": "2026-09-25T20:15:10.226Z"
     },
     {
-      "id": "2026-09-25T20:11:27.814Z-wgp0fve",
-      "title": "Modificación PDP S39",
-      "message": "modificación del PDP S39 para trabajos de fin de semana",
+      "id": "2026-10-23T14:30:52.494Z-gtpc4m2",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "anto.mds",
+      "recipient": "prodtj.mds",
       "read": false,
-      "createdAt": "2026-09-25T20:11:27.814Z"
+      "createdAt": "2026-10-23T14:30:52.494Z"
     },
     {
       "id": "2026-10-20T17:14:08.396Z-rcwlwos",
@@ -650,15 +661,15 @@
       "createdAt": "2026-09-25T20:15:10.226Z"
     },
     {
-      "id": "2026-09-25T20:11:27.814Z-4tmv7ft",
-      "title": "Modificación PDP S39",
-      "message": "modificación del PDP S39 para trabajos de fin de semana",
+      "id": "2026-10-23T14:30:52.494Z-hf9m5zt",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtj.mds",
-      "read": true,
-      "createdAt": "2026-09-25T20:11:27.814Z"
+      "recipient": "prodtg.mds",
+      "read": false,
+      "createdAt": "2026-10-23T14:30:52.494Z"
     },
     {
       "id": "2026-10-20T17:14:08.396Z-7e8yfy6",
@@ -760,15 +771,15 @@
       "createdAt": "2026-09-25T20:15:10.226Z"
     },
     {
-      "id": "2026-09-25T20:11:27.814Z-ihghdhq",
-      "title": "Modificación PDP S39",
-      "message": "modificación del PDP S39 para trabajos de fin de semana",
+      "id": "2026-10-23T14:30:52.494Z-r09njuw",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtg.mds",
+      "recipient": "prodts.mds",
       "read": false,
-      "createdAt": "2026-09-25T20:11:27.814Z"
+      "createdAt": "2026-10-23T14:30:52.494Z"
     },
     {
       "id": "2026-10-20T17:14:08.396Z-czmtaba",
@@ -870,15 +881,15 @@
       "createdAt": "2026-09-25T20:15:10.226Z"
     },
     {
-      "id": "2026-09-25T20:11:27.814Z-k1d6vms",
-      "title": "Modificación PDP S39",
-      "message": "modificación del PDP S39 para trabajos de fin de semana",
+      "id": "2026-10-23T14:30:52.494Z-b2rl2v2",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodts.mds",
-      "read": true,
-      "createdAt": "2026-09-25T20:11:27.814Z"
+      "recipient": "procj.mds",
+      "read": false,
+      "createdAt": "2026-10-23T14:30:52.494Z"
     },
     {
       "id": "2026-10-20T17:14:08.396Z-c18tqg6",
@@ -980,15 +991,15 @@
       "createdAt": "2026-09-25T20:15:10.226Z"
     },
     {
-      "id": "2026-09-25T20:11:27.814Z-o5dzqni",
-      "title": "Modificación PDP S39",
-      "message": "modificación del PDP S39 para trabajos de fin de semana",
+      "id": "2026-10-23T14:30:52.494Z-4m8mbzi",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procj.mds",
-      "read": true,
-      "createdAt": "2026-09-25T20:11:27.814Z"
+      "recipient": "cald.mds",
+      "read": false,
+      "createdAt": "2026-10-23T14:30:52.494Z"
     },
     {
       "id": "2026-10-20T17:14:08.396Z-a98fyz2",
@@ -1090,15 +1101,15 @@
       "createdAt": "2026-09-25T20:15:10.226Z"
     },
     {
-      "id": "2026-09-25T20:11:27.814Z-9tbx5dc",
-      "title": "Modificación PDP S39",
-      "message": "modificación del PDP S39 para trabajos de fin de semana",
+      "id": "2026-10-23T14:30:52.494Z-wn3m6kf",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "cald.mds",
+      "recipient": "prodt.mds",
       "read": false,
-      "createdAt": "2026-09-25T20:11:27.814Z"
+      "createdAt": "2026-10-23T14:30:52.494Z"
     },
     {
       "id": "2026-10-20T17:14:08.396Z-83az8jx",
@@ -1200,15 +1211,15 @@
       "createdAt": "2026-09-25T20:15:10.226Z"
     },
     {
-      "id": "2026-09-25T20:11:27.814Z-a45r19k",
-      "title": "Modificación PDP S39",
-      "message": "modificación del PDP S39 para trabajos de fin de semana",
+      "id": "2026-10-23T14:30:52.494Z-oqqvws5",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt.mds",
+      "recipient": "prodt1.mds",
       "read": false,
-      "createdAt": "2026-09-25T20:11:27.814Z"
+      "createdAt": "2026-10-23T14:30:52.494Z"
     },
     {
       "id": "2026-10-20T17:14:08.396Z-wulkrb3",
@@ -1310,15 +1321,15 @@
       "createdAt": "2026-09-25T20:15:10.226Z"
     },
     {
-      "id": "2026-09-25T20:11:27.814Z-jy088ql",
-      "title": "Modificación PDP S39",
-      "message": "modificación del PDP S39 para trabajos de fin de semana",
+      "id": "2026-10-23T14:30:52.494Z-qy3bt09",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt1.mds",
-      "read": true,
-      "createdAt": "2026-09-25T20:11:27.814Z"
+      "recipient": "prodt2.mds",
+      "read": false,
+      "createdAt": "2026-10-23T14:30:52.494Z"
     },
     {
       "id": "2026-10-20T17:14:08.396Z-ork6w7s",
@@ -1420,15 +1431,15 @@
       "createdAt": "2026-09-25T20:15:10.226Z"
     },
     {
-      "id": "2026-09-25T20:11:27.814Z-4kid92y",
-      "title": "Modificación PDP S39",
-      "message": "modificación del PDP S39 para trabajos de fin de semana",
+      "id": "2026-10-23T14:30:52.494Z-fjhxj7a",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt2.mds",
-      "read": true,
-      "createdAt": "2026-09-25T20:11:27.814Z"
+      "recipient": "proc.mds",
+      "read": false,
+      "createdAt": "2026-10-23T14:30:52.494Z"
     },
     {
       "id": "2026-10-20T17:14:08.396Z-mb5j5bw",
@@ -1530,15 +1541,15 @@
       "createdAt": "2026-09-25T20:15:10.226Z"
     },
     {
-      "id": "2026-09-25T20:11:27.814Z-1k3qqls",
-      "title": "Modificación PDP S39",
-      "message": "modificación del PDP S39 para trabajos de fin de semana",
+      "id": "2026-10-23T14:30:52.494Z-6m0iwsw",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc.mds",
-      "read": true,
-      "createdAt": "2026-09-25T20:11:27.814Z"
+      "recipient": "proc1.mds",
+      "read": false,
+      "createdAt": "2026-10-23T14:30:52.494Z"
     },
     {
       "id": "2026-10-20T17:14:08.396Z-njnd51v",
@@ -1640,15 +1651,15 @@
       "createdAt": "2026-09-25T20:15:10.226Z"
     },
     {
-      "id": "2026-09-25T20:11:27.814Z-fnhxc13",
-      "title": "Modificación PDP S39",
-      "message": "modificación del PDP S39 para trabajos de fin de semana",
+      "id": "2026-10-23T14:30:52.494Z-359k15f",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc1.mds",
+      "recipient": "proc2.mds",
       "read": false,
-      "createdAt": "2026-09-25T20:11:27.814Z"
+      "createdAt": "2026-10-23T14:30:52.494Z"
     },
     {
       "id": "2026-10-20T17:14:08.396Z-qmainzo",
@@ -1750,15 +1761,15 @@
       "createdAt": "2026-09-25T20:15:10.226Z"
     },
     {
-      "id": "2026-09-25T20:11:27.814Z-1flliep",
-      "title": "Modificación PDP S39",
-      "message": "modificación del PDP S39 para trabajos de fin de semana",
+      "id": "2026-10-23T14:30:52.494Z-snukvfk",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc2.mds",
+      "recipient": "procs1.mds",
       "read": false,
-      "createdAt": "2026-09-25T20:11:27.814Z"
+      "createdAt": "2026-10-23T14:30:52.494Z"
     },
     {
       "id": "2026-10-20T17:14:08.396Z-es433fp",
@@ -1860,15 +1871,15 @@
       "createdAt": "2026-09-25T20:15:10.226Z"
     },
     {
-      "id": "2026-09-25T20:11:27.814Z-n228oi5",
-      "title": "Modificación PDP S39",
-      "message": "modificación del PDP S39 para trabajos de fin de semana",
+      "id": "2026-10-23T14:30:52.494Z-71ev7hm",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procs1.mds",
-      "read": true,
-      "createdAt": "2026-09-25T20:11:27.814Z"
+      "recipient": "procs2.mds",
+      "read": false,
+      "createdAt": "2026-10-23T14:30:52.494Z"
     },
     {
       "id": "2026-10-20T17:14:08.396Z-1bmf6n2",
@@ -1970,15 +1981,15 @@
       "createdAt": "2026-09-25T20:15:10.226Z"
     },
     {
-      "id": "2026-09-25T20:11:27.814Z-109qr5t",
-      "title": "Modificación PDP S39",
-      "message": "modificación del PDP S39 para trabajos de fin de semana",
+      "id": "2026-10-23T14:30:52.494Z-avc1rkv",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procs2.mds",
+      "recipient": "finan.mds",
       "read": false,
-      "createdAt": "2026-09-25T20:11:27.814Z"
+      "createdAt": "2026-10-23T14:30:52.494Z"
     },
     {
       "id": "2026-10-20T17:14:08.396Z-1y8wkgb",
@@ -2080,15 +2091,15 @@
       "createdAt": "2026-09-25T20:15:10.226Z"
     },
     {
-      "id": "2026-09-25T20:11:27.814Z-t9lv6g2",
-      "title": "Modificación PDP S39",
-      "message": "modificación del PDP S39 para trabajos de fin de semana",
+      "id": "2026-10-23T14:30:52.494Z-1e12f7h",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "finan.mds",
+      "recipient": "g.tec.mds",
       "read": false,
-      "createdAt": "2026-09-25T20:11:27.814Z"
+      "createdAt": "2026-10-23T14:30:52.494Z"
     },
     {
       "id": "2026-10-20T17:14:08.396Z-kx2i3g6",
@@ -2190,15 +2201,15 @@
       "createdAt": "2026-09-25T20:15:10.226Z"
     },
     {
-      "id": "2026-09-25T20:11:27.814Z-pyltfdx",
-      "title": "Modificación PDP S39",
-      "message": "modificación del PDP S39 para trabajos de fin de semana",
+      "id": "2026-10-23T14:30:52.494Z-v9c3uuq",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "g.tec.mds",
-      "read": true,
-      "createdAt": "2026-09-25T20:11:27.814Z"
+      "recipient": "enf.mds",
+      "read": false,
+      "createdAt": "2026-10-23T14:30:52.494Z"
     },
     {
       "id": "2026-10-20T17:14:08.396Z-g6vdkza",
@@ -2300,15 +2311,15 @@
       "createdAt": "2026-09-25T20:15:10.226Z"
     },
     {
-      "id": "2026-09-25T20:11:27.814Z-5hm0psv",
-      "title": "Modificación PDP S39",
-      "message": "modificación del PDP S39 para trabajos de fin de semana",
+      "id": "2026-10-23T14:30:52.494Z-h84ospy",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "enf.mds",
+      "recipient": "etq.mds",
       "read": false,
-      "createdAt": "2026-09-25T20:11:27.814Z"
+      "createdAt": "2026-10-23T14:30:52.494Z"
     },
     {
       "id": "2026-10-20T17:14:08.396Z-foo3as9",
@@ -2410,15 +2421,15 @@
       "createdAt": "2026-09-25T20:15:10.226Z"
     },
     {
-      "id": "2026-09-25T20:11:27.814Z-vg11ywc",
-      "title": "Modificación PDP S39",
-      "message": "modificación del PDP S39 para trabajos de fin de semana",
+      "id": "2026-10-23T14:30:52.494Z-s586qx2",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "etq.mds",
+      "recipient": "logg.mds",
       "read": false,
-      "createdAt": "2026-09-25T20:11:27.814Z"
+      "createdAt": "2026-10-23T14:30:52.494Z"
     },
     {
       "id": "2026-10-20T17:14:08.396Z-aslh32n",
@@ -2520,15 +2531,15 @@
       "createdAt": "2026-09-25T20:15:10.226Z"
     },
     {
-      "id": "2026-09-25T20:11:27.814Z-xyprooe",
-      "title": "Modificación PDP S39",
-      "message": "modificación del PDP S39 para trabajos de fin de semana",
+      "id": "2026-10-23T14:30:52.494Z-1okao81",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "logg.mds",
+      "recipient": "mtto.mds",
       "read": false,
-      "createdAt": "2026-09-25T20:11:27.814Z"
+      "createdAt": "2026-10-23T14:30:52.494Z"
     },
     {
       "id": "2026-10-20T17:14:08.396Z-ynr3fwv",
@@ -2630,15 +2641,411 @@
       "createdAt": "2026-09-25T20:15:10.226Z"
     },
     {
-      "id": "2026-09-25T20:11:27.814Z-x59fkux",
-      "title": "Modificación PDP S39",
-      "message": "modificación del PDP S39 para trabajos de fin de semana",
+      "id": "2026-10-23T14:30:52.494Z-1b3m7fh",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto.mds",
+      "recipient": "MDS",
+      "read": false,
+      "createdAt": "2026-10-23T14:30:52.494Z"
+    },
+    {
+      "id": "2026-10-20T17:14:08.396Z-wsioivx",
+      "title": "PDP S43",
+      "message": "Se realiza ajuste en PDP L1 y L6",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "MDS",
+      "read": false,
+      "createdAt": "2026-10-20T17:14:08.396Z"
+    },
+    {
+      "id": "2026-10-19T14:55:51.418Z-9hqssea",
+      "title": "PDP",
+      "message": "Disponible PDP S43 en espera de mtto planificados",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "MDS",
+      "read": false,
+      "createdAt": "2026-10-19T14:55:51.418Z"
+    },
+    {
+      "id": "2026-10-16T14:58:35.653Z-3s3uq8w",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "MDS",
+      "read": false,
+      "createdAt": "2026-10-16T14:58:35.653Z"
+    },
+    {
+      "id": "2026-10-16T14:54:14.951Z-3ytxm2i",
+      "title": "Aviso",
+      "message": "Se subirá una actualización que puede hacer que el sistema pase por distintas recargas",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "MDS",
+      "read": false,
+      "createdAt": "2026-10-16T14:54:14.951Z"
+    },
+    {
+      "id": "2026-10-12T20:40:46.104Z-koqomi1",
+      "title": "PDP S42",
+      "message": "se realizo modificación en el pdp S42 para las líneas 6 y 7",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "MDS",
+      "read": false,
+      "createdAt": "2026-10-12T20:40:46.104Z"
+    },
+    {
+      "id": "2026-09-30T14:43:02.341Z-zbic1mg",
+      "title": "Modificación PDP S40",
+      "message": "Se realizo modificación en el PDP S40 para la linea 6",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "MDS",
+      "read": false,
+      "createdAt": "2026-09-30T14:43:02.341Z"
+    },
+    {
+      "id": "2026-09-28T18:44:23.982Z-wymeubp",
+      "title": "Aviso",
+      "message": "Actualizaciones cargadas",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "MDS",
+      "read": false,
+      "createdAt": "2026-09-28T18:44:23.982Z"
+    },
+    {
+      "id": "2026-09-28T18:39:27.728Z-l3xmbp8",
+      "title": "aviso",
+      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "MDS",
+      "read": false,
+      "createdAt": "2026-09-28T18:39:27.728Z"
+    },
+    {
+      "id": "2026-09-25T20:15:10.226Z-q5qzpzv",
+      "title": "PSP S40",
+      "message": "Ya disponible los arranques del PDP S40",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "MDS",
+      "read": false,
+      "createdAt": "2026-09-25T20:15:10.226Z"
+    },
+    {
+      "id": "2026-10-23T14:30:52.494Z-nv4zk6v",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto1.mds",
+      "read": false,
+      "createdAt": "2026-10-23T14:30:52.494Z"
+    },
+    {
+      "id": "2026-10-20T17:14:08.396Z-q4aa102",
+      "title": "PDP S43",
+      "message": "Se realiza ajuste en PDP L1 y L6",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto1.mds",
+      "read": false,
+      "createdAt": "2026-10-20T17:14:08.396Z"
+    },
+    {
+      "id": "2026-10-19T14:55:51.418Z-1cpoe14",
+      "title": "PDP",
+      "message": "Disponible PDP S43 en espera de mtto planificados",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto1.mds",
+      "read": false,
+      "createdAt": "2026-10-19T14:55:51.418Z"
+    },
+    {
+      "id": "2026-10-16T14:58:35.653Z-sbltoz4",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto1.mds",
+      "read": false,
+      "createdAt": "2026-10-16T14:58:35.653Z"
+    },
+    {
+      "id": "2026-10-16T14:54:14.951Z-7fytudc",
+      "title": "Aviso",
+      "message": "Se subirá una actualización que puede hacer que el sistema pase por distintas recargas",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto1.mds",
+      "read": false,
+      "createdAt": "2026-10-16T14:54:14.951Z"
+    },
+    {
+      "id": "2026-10-12T20:40:46.104Z-yigy4sh",
+      "title": "PDP S42",
+      "message": "se realizo modificación en el pdp S42 para las líneas 6 y 7",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto1.mds",
+      "read": false,
+      "createdAt": "2026-10-12T20:40:46.104Z"
+    },
+    {
+      "id": "2026-09-30T14:43:02.341Z-gurwdts",
+      "title": "Modificación PDP S40",
+      "message": "Se realizo modificación en el PDP S40 para la linea 6",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto1.mds",
+      "read": false,
+      "createdAt": "2026-09-30T14:43:02.341Z"
+    },
+    {
+      "id": "2026-10-23T14:30:52.494Z-mh0rm9z",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "stf",
+      "read": false,
+      "createdAt": "2026-10-23T14:30:52.494Z"
+    },
+    {
+      "id": "2026-10-20T17:14:08.396Z-1aj3oo2",
+      "title": "PDP S43",
+      "message": "Se realiza ajuste en PDP L1 y L6",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "stf",
+      "read": false,
+      "createdAt": "2026-10-20T17:14:08.396Z"
+    },
+    {
+      "id": "2026-10-19T14:55:51.418Z-e0hggag",
+      "title": "PDP",
+      "message": "Disponible PDP S43 en espera de mtto planificados",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "stf",
+      "read": false,
+      "createdAt": "2026-10-19T14:55:51.418Z"
+    },
+    {
+      "id": "2026-10-16T14:58:35.653Z-0rx4z9b",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "stf",
+      "read": false,
+      "createdAt": "2026-10-16T14:58:35.653Z"
+    },
+    {
+      "id": "2026-10-16T14:54:14.951Z-3lwg4ab",
+      "title": "Aviso",
+      "message": "Se subirá una actualización que puede hacer que el sistema pase por distintas recargas",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "stf",
+      "read": false,
+      "createdAt": "2026-10-16T14:54:14.951Z"
+    },
+    {
+      "id": "2026-10-12T20:40:46.104Z-1xiv381",
+      "title": "PDP S42",
+      "message": "se realizo modificación en el pdp S42 para las líneas 6 y 7",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "stf",
+      "read": false,
+      "createdAt": "2026-10-12T20:40:46.104Z"
+    },
+    {
+      "id": "2026-10-23T14:30:52.494Z-d9xyi5x",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodt3.mds",
+      "read": false,
+      "createdAt": "2026-10-23T14:30:52.494Z"
+    },
+    {
+      "id": "2026-10-20T17:14:08.396Z-m73xikr",
+      "title": "PDP S43",
+      "message": "Se realiza ajuste en PDP L1 y L6",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodt3.mds",
+      "read": false,
+      "createdAt": "2026-10-20T17:14:08.396Z"
+    },
+    {
+      "id": "2026-10-19T14:55:51.418Z-lf9wzg0",
+      "title": "PDP",
+      "message": "Disponible PDP S43 en espera de mtto planificados",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodt3.mds",
+      "read": false,
+      "createdAt": "2026-10-19T14:55:51.418Z"
+    },
+    {
+      "id": "2026-10-16T14:58:35.653Z-sfrwvxf",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodt3.mds",
+      "read": false,
+      "createdAt": "2026-10-16T14:58:35.653Z"
+    },
+    {
+      "id": "2026-10-16T14:54:14.951Z-48a81d4",
+      "title": "Aviso",
+      "message": "Se subirá una actualización que puede hacer que el sistema pase por distintas recargas",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodt3.mds",
+      "read": false,
+      "createdAt": "2026-10-16T14:54:14.951Z"
+    },
+    {
+      "id": "2026-10-23T14:30:52.494Z-r0eil9l",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodt4.mds",
+      "read": false,
+      "createdAt": "2026-10-23T14:30:52.494Z"
+    },
+    {
+      "id": "2026-10-20T17:14:08.396Z-hq4td0u",
+      "title": "PDP S43",
+      "message": "Se realiza ajuste en PDP L1 y L6",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodt4.mds",
       "read": true,
-      "createdAt": "2026-09-25T20:11:27.814Z"
+      "createdAt": "2026-10-20T17:14:08.396Z"
+    },
+    {
+      "id": "2026-10-19T14:55:51.418Z-r6mu55z",
+      "title": "PDP",
+      "message": "Disponible PDP S43 en espera de mtto planificados",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodt4.mds",
+      "read": true,
+      "createdAt": "2026-10-19T14:55:51.418Z"
+    },
+    {
+      "id": "2026-10-16T14:58:35.653Z-xz4eirf",
+      "title": "Aviso",
+      "message": "Actualización Terminada",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodt4.mds",
+      "read": true,
+      "createdAt": "2026-10-16T14:58:35.653Z"
+    },
+    {
+      "id": "2026-10-16T14:54:14.951Z-s96qm2y",
+      "title": "Aviso",
+      "message": "Se subirá una actualización que puede hacer que el sistema pase por distintas recargas",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodt4.mds",
+      "read": true,
+      "createdAt": "2026-10-16T14:54:14.951Z"
+    },
+    {
+      "id": "2026-10-23T14:30:52.494Z-u3mm0yf",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alc.mds",
+      "read": false,
+      "createdAt": "2026-10-23T14:30:52.494Z"
+    },
+    {
+      "id": "2026-10-20T17:14:08.396Z-tenbp18",
+      "title": "PDP S43",
+      "message": "Se realiza ajuste en PDP L1 y L6",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alc.mds",
+      "read": false,
+      "createdAt": "2026-10-20T17:14:08.396Z"
+    },
+    {
+      "id": "2026-10-23T14:30:52.494Z-tmzn04b",
+      "title": "Actualización",
+      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alc1.mds",
+      "read": false,
+      "createdAt": "2026-10-23T14:30:52.494Z"
+    },
+    {
+      "id": "2026-10-20T17:14:08.396Z-81jaxv0",
+      "title": "PDP S43",
+      "message": "Se realiza ajuste en PDP L1 y L6",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alc1.mds",
+      "read": false,
+      "createdAt": "2026-10-20T17:14:08.396Z"
     },
     {
       "id": "2026-10-20T17:14:08.396Z-qm55jui",
@@ -2749,347 +3156,6 @@
       "recipient": "cal.mds",
       "read": false,
       "createdAt": "2026-09-25T20:11:27.814Z"
-    },
-    {
-      "id": "2026-10-20T17:14:08.396Z-wsioivx",
-      "title": "PDP S43",
-      "message": "Se realiza ajuste en PDP L1 y L6",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "MDS",
-      "read": false,
-      "createdAt": "2026-10-20T17:14:08.396Z"
-    },
-    {
-      "id": "2026-10-19T14:55:51.418Z-9hqssea",
-      "title": "PDP",
-      "message": "Disponible PDP S43 en espera de mtto planificados",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "MDS",
-      "read": false,
-      "createdAt": "2026-10-19T14:55:51.418Z"
-    },
-    {
-      "id": "2026-10-16T14:58:35.653Z-3s3uq8w",
-      "title": "Aviso",
-      "message": "Actualización Terminada",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "MDS",
-      "read": false,
-      "createdAt": "2026-10-16T14:58:35.653Z"
-    },
-    {
-      "id": "2026-10-16T14:54:14.951Z-3ytxm2i",
-      "title": "Aviso",
-      "message": "Se subirá una actualización que puede hacer que el sistema pase por distintas recargas",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "MDS",
-      "read": false,
-      "createdAt": "2026-10-16T14:54:14.951Z"
-    },
-    {
-      "id": "2026-10-12T20:40:46.104Z-koqomi1",
-      "title": "PDP S42",
-      "message": "se realizo modificación en el pdp S42 para las líneas 6 y 7",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "MDS",
-      "read": false,
-      "createdAt": "2026-10-12T20:40:46.104Z"
-    },
-    {
-      "id": "2026-09-30T14:43:02.341Z-zbic1mg",
-      "title": "Modificación PDP S40",
-      "message": "Se realizo modificación en el PDP S40 para la linea 6",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "MDS",
-      "read": false,
-      "createdAt": "2026-09-30T14:43:02.341Z"
-    },
-    {
-      "id": "2026-09-28T18:44:23.982Z-wymeubp",
-      "title": "Aviso",
-      "message": "Actualizaciones cargadas",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "MDS",
-      "read": false,
-      "createdAt": "2026-09-28T18:44:23.982Z"
-    },
-    {
-      "id": "2026-09-28T18:39:27.728Z-l3xmbp8",
-      "title": "aviso",
-      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "MDS",
-      "read": false,
-      "createdAt": "2026-09-28T18:39:27.728Z"
-    },
-    {
-      "id": "2026-09-25T20:15:10.226Z-q5qzpzv",
-      "title": "PSP S40",
-      "message": "Ya disponible los arranques del PDP S40",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "MDS",
-      "read": false,
-      "createdAt": "2026-09-25T20:15:10.226Z"
-    },
-    {
-      "id": "2026-09-25T20:11:27.814Z-15m7lbv",
-      "title": "Modificación PDP S39",
-      "message": "modificación del PDP S39 para trabajos de fin de semana",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "MDS",
-      "read": false,
-      "createdAt": "2026-09-25T20:11:27.814Z"
-    },
-    {
-      "id": "2026-10-20T17:14:08.396Z-q4aa102",
-      "title": "PDP S43",
-      "message": "Se realiza ajuste en PDP L1 y L6",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "mtto1.mds",
-      "read": false,
-      "createdAt": "2026-10-20T17:14:08.396Z"
-    },
-    {
-      "id": "2026-10-19T14:55:51.418Z-1cpoe14",
-      "title": "PDP",
-      "message": "Disponible PDP S43 en espera de mtto planificados",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "mtto1.mds",
-      "read": false,
-      "createdAt": "2026-10-19T14:55:51.418Z"
-    },
-    {
-      "id": "2026-10-16T14:58:35.653Z-sbltoz4",
-      "title": "Aviso",
-      "message": "Actualización Terminada",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "mtto1.mds",
-      "read": false,
-      "createdAt": "2026-10-16T14:58:35.653Z"
-    },
-    {
-      "id": "2026-10-16T14:54:14.951Z-7fytudc",
-      "title": "Aviso",
-      "message": "Se subirá una actualización que puede hacer que el sistema pase por distintas recargas",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "mtto1.mds",
-      "read": false,
-      "createdAt": "2026-10-16T14:54:14.951Z"
-    },
-    {
-      "id": "2026-10-12T20:40:46.104Z-yigy4sh",
-      "title": "PDP S42",
-      "message": "se realizo modificación en el pdp S42 para las líneas 6 y 7",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "mtto1.mds",
-      "read": false,
-      "createdAt": "2026-10-12T20:40:46.104Z"
-    },
-    {
-      "id": "2026-09-30T14:43:02.341Z-gurwdts",
-      "title": "Modificación PDP S40",
-      "message": "Se realizo modificación en el PDP S40 para la linea 6",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "mtto1.mds",
-      "read": false,
-      "createdAt": "2026-09-30T14:43:02.341Z"
-    },
-    {
-      "id": "2026-10-20T17:14:08.396Z-1aj3oo2",
-      "title": "PDP S43",
-      "message": "Se realiza ajuste en PDP L1 y L6",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "stf",
-      "read": false,
-      "createdAt": "2026-10-20T17:14:08.396Z"
-    },
-    {
-      "id": "2026-10-19T14:55:51.418Z-e0hggag",
-      "title": "PDP",
-      "message": "Disponible PDP S43 en espera de mtto planificados",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "stf",
-      "read": false,
-      "createdAt": "2026-10-19T14:55:51.418Z"
-    },
-    {
-      "id": "2026-10-16T14:58:35.653Z-0rx4z9b",
-      "title": "Aviso",
-      "message": "Actualización Terminada",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "stf",
-      "read": false,
-      "createdAt": "2026-10-16T14:58:35.653Z"
-    },
-    {
-      "id": "2026-10-16T14:54:14.951Z-3lwg4ab",
-      "title": "Aviso",
-      "message": "Se subirá una actualización que puede hacer que el sistema pase por distintas recargas",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "stf",
-      "read": false,
-      "createdAt": "2026-10-16T14:54:14.951Z"
-    },
-    {
-      "id": "2026-10-12T20:40:46.104Z-1xiv381",
-      "title": "PDP S42",
-      "message": "se realizo modificación en el pdp S42 para las líneas 6 y 7",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "stf",
-      "read": false,
-      "createdAt": "2026-10-12T20:40:46.104Z"
-    },
-    {
-      "id": "2026-10-20T17:14:08.396Z-m73xikr",
-      "title": "PDP S43",
-      "message": "Se realiza ajuste en PDP L1 y L6",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "prodt3.mds",
-      "read": false,
-      "createdAt": "2026-10-20T17:14:08.396Z"
-    },
-    {
-      "id": "2026-10-19T14:55:51.418Z-lf9wzg0",
-      "title": "PDP",
-      "message": "Disponible PDP S43 en espera de mtto planificados",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "prodt3.mds",
-      "read": false,
-      "createdAt": "2026-10-19T14:55:51.418Z"
-    },
-    {
-      "id": "2026-10-16T14:58:35.653Z-sfrwvxf",
-      "title": "Aviso",
-      "message": "Actualización Terminada",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "prodt3.mds",
-      "read": false,
-      "createdAt": "2026-10-16T14:58:35.653Z"
-    },
-    {
-      "id": "2026-10-16T14:54:14.951Z-48a81d4",
-      "title": "Aviso",
-      "message": "Se subirá una actualización que puede hacer que el sistema pase por distintas recargas",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "prodt3.mds",
-      "read": false,
-      "createdAt": "2026-10-16T14:54:14.951Z"
-    },
-    {
-      "id": "2026-10-20T17:14:08.396Z-hq4td0u",
-      "title": "PDP S43",
-      "message": "Se realiza ajuste en PDP L1 y L6",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "prodt4.mds",
-      "read": true,
-      "createdAt": "2026-10-20T17:14:08.396Z"
-    },
-    {
-      "id": "2026-10-19T14:55:51.418Z-r6mu55z",
-      "title": "PDP",
-      "message": "Disponible PDP S43 en espera de mtto planificados",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "prodt4.mds",
-      "read": true,
-      "createdAt": "2026-10-19T14:55:51.418Z"
-    },
-    {
-      "id": "2026-10-16T14:58:35.653Z-xz4eirf",
-      "title": "Aviso",
-      "message": "Actualización Terminada",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "prodt4.mds",
-      "read": true,
-      "createdAt": "2026-10-16T14:58:35.653Z"
-    },
-    {
-      "id": "2026-10-16T14:54:14.951Z-s96qm2y",
-      "title": "Aviso",
-      "message": "Se subirá una actualización que puede hacer que el sistema pase por distintas recargas",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "prodt4.mds",
-      "read": true,
-      "createdAt": "2026-10-16T14:54:14.951Z"
-    },
-    {
-      "id": "2026-10-20T17:14:08.396Z-tenbp18",
-      "title": "PDP S43",
-      "message": "Se realiza ajuste en PDP L1 y L6",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "alc.mds",
-      "read": false,
-      "createdAt": "2026-10-20T17:14:08.396Z"
-    },
-    {
-      "id": "2026-10-20T17:14:08.396Z-81jaxv0",
-      "title": "PDP S43",
-      "message": "Se realiza ajuste en PDP L1 y L6",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "alc1.mds",
-      "read": false,
-      "createdAt": "2026-10-20T17:14:08.396Z"
     }
   ]
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { format } from 'date-fns';
 import { FileDown } from 'lucide-react';
 import jsPDF from 'jspdf';
@@ -86,7 +86,13 @@ const createEmptyRow = (): ProcessRow => ({
   unit: '',
 });
 
-export function ProcesosRechazosDesperdicios() {
+export function ProcesosRechazosDesperdicios({
+  readOnly = false,
+  sectionPermissions,
+}: {
+  readOnly?: boolean;
+  sectionPermissions?: Record<ProcessSection, 'none' | 'read' | 'write'>;
+}) {
   const store = useRemoteCollection<ProcessRecords>('procesos-rechazos-desperdicios', EMPTY_PROCESS_RECORDS);
   const [section, setSection] = useState<ProcessSection>('rechazos');
   const [date, setDate] = useState(() => format(new Date(), 'yyyy-MM-dd'));
@@ -95,6 +101,25 @@ export function ProcesosRechazosDesperdicios() {
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [saveError, setSaveError] = useState('');
   const [pdfStatus, setPdfStatus] = useState<'idle' | 'generating' | 'error'>('idle');
+  const visibleSections = ([
+    ['rechazos', 'Rechazos'],
+    ['desperdicios', 'Desperdicios'],
+    ['devolucion', 'Devolución'],
+  ] as const).filter(([key]) => sectionPermissions?.[key] !== 'none');
+  const firstVisibleSection = visibleSections[0]?.[0];
+  const isCurrentSectionVisible = visibleSections.some(([key]) => key === section);
+  const isReadOnly = readOnly || (
+    sectionPermissions !== undefined && sectionPermissions[section] !== 'write'
+  );
+
+  useEffect(() => {
+    if (firstVisibleSection && !isCurrentSectionVisible) {
+      setSection(firstVisibleSection);
+    }
+    if (!isReadOnly) return;
+    setEditing(false);
+    setDraftRows((current) => current.length > 0 ? [] : current);
+  }, [isReadOnly, firstVisibleSection, isCurrentSectionVisible]);
 
   const rows = useMemo(
     () => normalizeRows(store.data.records?.[section]?.[date]),
@@ -102,6 +127,7 @@ export function ProcesosRechazosDesperdicios() {
   );
 
   const beginEdit = () => {
+    if (isReadOnly) return;
     setDraftRows(rows.length ? rows.map((row) => ({ ...row })) : [createEmptyRow()]);
     setSaveStatus('idle');
     setSaveError('');
@@ -122,6 +148,7 @@ export function ProcesosRechazosDesperdicios() {
   };
 
   const saveRows = async () => {
+    if (isReadOnly) return;
     const cleanedRows = draftRows
       .filter((row) => row.code)
       .map((row) => {
@@ -352,11 +379,7 @@ export function ProcesosRechazosDesperdicios() {
       </div>
 
       <div className="mb-4 flex flex-wrap gap-2">
-        {([
-          ['rechazos', 'Rechazos'],
-          ['desperdicios', 'Desperdicios'],
-          ['devolucion', 'Devolución'],
-        ] as const).map(([key, label]) => (
+        {visibleSections.map(([key, label]) => (
           <button
             key={key}
             type="button"
@@ -381,6 +404,11 @@ export function ProcesosRechazosDesperdicios() {
           </button>
         ))}
       </div>
+      {visibleSections.length === 0 && (
+        <p className="mb-4 rounded-xl border border-slate-200 bg-slate-50 p-4 text-xs font-semibold text-slate-500">
+          No tienes acceso a las subsecciones de Rechazos y desperdicios.
+        </p>
+      )}
 
       {store.loadError && <p role="alert" className="mb-3 text-xs font-bold text-red-600">{store.loadError}</p>}
       {store.syncError && <p role="alert" className="mb-3 text-xs font-bold text-red-600">{store.syncError}</p>}
@@ -388,6 +416,7 @@ export function ProcesosRechazosDesperdicios() {
       {saveStatus === 'saved' && <p role="status" className="mb-3 text-xs font-bold text-emerald-700">Datos guardados en la base compartida.</p>}
       {pdfStatus === 'error' && <p role="alert" className="mb-3 text-xs font-bold text-red-600">No se pudo generar el PDF. Verifica que el logo esté disponible e inténtalo de nuevo.</p>}
 
+      {visibleSections.length > 0 && (
       <div className="overflow-x-auto rounded-2xl border border-slate-200">
         <div className="flex items-center justify-between gap-3 border-b border-slate-200 px-4 py-3">
           <h3 className="text-xs font-black uppercase tracking-widest text-slate-700">
@@ -405,7 +434,7 @@ export function ProcesosRechazosDesperdicios() {
                 {pdfStatus === 'generating' ? 'Generando PDF…' : 'Reporte PDF'}
               </button>
             )}
-            {editing ? (
+            {editing && !isReadOnly ? (
               <>
                 <button
                   type="button"
@@ -427,10 +456,10 @@ export function ProcesosRechazosDesperdicios() {
               <button
                 type="button"
                 onClick={beginEdit}
-                disabled={!store.isLoaded}
+                disabled={!store.isLoaded || isReadOnly}
                 className={`rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-widest ${sectionColor}`}
               >
-                {!store.isLoaded ? 'Cargando…' : rows.length ? 'Editar' : 'Cargar'}
+                {isReadOnly ? 'Solo lectura' : !store.isLoaded ? 'Cargando…' : rows.length ? 'Editar' : 'Cargar'}
               </button>
             )}
           </div>
@@ -513,6 +542,7 @@ export function ProcesosRechazosDesperdicios() {
         </table>
         {!store.isLoaded && <p className="px-4 py-2 text-[10px] font-bold text-slate-500">Cargando datos compartidos…</p>}
       </div>
+      )}
     </section>
   );
 }

@@ -396,7 +396,18 @@ export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
       ] },
     ] },
     { id: 'miteco', label: 'MITECO' },
-    { id: 'sala-jarabe', label: 'Sala de jarabe' },
+    { id: 'sala-jarabe', label: 'Sala de jarabe', children: [
+      { id: 'preparacion', label: 'Preparación' },
+      { id: 'consumo-lineas', label: 'Consumo en líneas' },
+      { id: 'consumo-litros', label: 'Consumo litros' },
+      { id: 'consumo-ubb', label: 'Consumo UBB' },
+      { id: 'resumen', label: 'Resumen' },
+    ] },
+    { id: 'rechazos-desperdicios', label: 'Rechazos y desperdicios', children: [
+      { id: 'rechazos', label: 'Rechazos' },
+      { id: 'desperdicios', label: 'Desperdicios' },
+      { id: 'devolucion', label: 'Devolución' },
+    ] },
     { id: 'inv-materia-prima', label: 'Inv Materia prima', children: [
       { id: 'diario', label: 'Diario', children: [
         { id: 'diurno', label: 'Diurno' },
@@ -563,6 +574,58 @@ export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
       { id: 'capacities', label: 'Capacidades Fijas' },
     ] },
   ],
+};
+
+const PROCESSES_ALL_SECTIONS = [
+  'ptab',
+  'ptab.agua',
+  'ptab.insumos',
+  'ptab.r-semanal',
+  'ptab.r-semanal.s-agua',
+  'ptab.r-semanal.s-insumos',
+  'ptab.r-mensual',
+  'ptab.r-mensual.m-agua',
+  'ptab.r-mensual.m-insumos',
+  'miteco',
+  'sala-jarabe',
+  'sala-jarabe.preparacion',
+  'sala-jarabe.consumo-lineas',
+  'sala-jarabe.consumo-litros',
+  'sala-jarabe.consumo-ubb',
+  'sala-jarabe.resumen',
+  'rechazos-desperdicios',
+  'rechazos-desperdicios.rechazos',
+  'rechazos-desperdicios.desperdicios',
+  'rechazos-desperdicios.devolucion',
+  'inv-materia-prima',
+  'inv-materia-prima.diario',
+  'inv-materia-prima.diario.diurno',
+  'inv-materia-prima.diario.nocturno',
+  'inv-materia-prima.diario.resumen',
+  'inv-materia-prima.semanal',
+  'inv-materia-prima.mensual',
+] as const;
+const PROCESSES_REPORT_SECTIONS = [
+  'ptab',
+  'ptab.r-semanal',
+  'ptab.r-semanal.s-agua',
+  'ptab.r-semanal.s-insumos',
+  'ptab.r-mensual',
+  'ptab.r-mensual.m-agua',
+  'ptab.r-mensual.m-insumos',
+] as const;
+const DEFAULT_PROCESSES_SECTIONS: Record<string, readonly string[]> = {
+  demon: PROCESSES_ALL_SECTIONS,
+  'jaime.r': PROCESSES_ALL_SECTIONS,
+  'maria.mds': PROCESSES_ALL_SECTIONS,
+  'alex.mds': PROCESSES_ALL_SECTIONS,
+  'procj.mds': PROCESSES_ALL_SECTIONS.filter((section) => section !== 'miteco'),
+  'proc.mds': PROCESSES_ALL_SECTIONS.filter((section) => section.startsWith('sala-jarabe') || section.startsWith('rechazos-desperdicios') || section.startsWith('inv-materia-prima')),
+  'procs1.mds': PROCESSES_ALL_SECTIONS.filter((section) => section.startsWith('sala-jarabe') || section.startsWith('rechazos-desperdicios') || section.startsWith('inv-materia-prima')),
+  'proc2.mds': PROCESSES_ALL_SECTIONS.filter((section) => section.startsWith('sala-jarabe') || section.startsWith('rechazos-desperdicios') || section.startsWith('inv-materia-prima')),
+  'proc1.mds': ['ptab', 'ptab.agua', 'ptab.insumos'],
+  'procs2.mds': PROCESSES_REPORT_SECTIONS,
+  'prodtg.mds': PROCESSES_REPORT_SECTIONS,
 };
 
 const DEFAULT_PERMISSIONS: UserPermissions = {
@@ -913,10 +976,25 @@ export function usePermissionsStore() {
     const configured = sectionPermissions[userId] ?? {};
     if (section) {
       const segments = section.split('.');
-      for (let end = segments.length; end > 0; end -= 1) {
+      let effectiveLevel = moduleLevel;
+      let hasExplicitLevel = false;
+      for (let end = 1; end <= segments.length; end += 1) {
         const key = `${module}.${segments.slice(0, end).join('.')}`;
-        if (configured[key]) return configured[key];
+        if (!(key in configured)) continue;
+        hasExplicitLevel = true;
+        const configuredLevel = configured[key];
+        if (configuredLevel === 'none') return 'none';
+        if (configuredLevel === 'read') effectiveLevel = 'read';
       }
+      if (
+        module === 'procesos'
+        && !hasExplicitLevel
+        && DEFAULT_PROCESSES_SECTIONS[userId]
+        && !DEFAULT_PROCESSES_SECTIONS[userId].includes(section)
+      ) {
+        return 'none';
+      }
+      if (hasExplicitLevel) return effectiveLevel;
     }
 
     if (module === 'planning' && section && ['gantt', 'daily', 'preparation', 'requirement'].includes(section.split('.').at(-1) ?? '')) {

@@ -22211,7 +22211,9 @@
           "procesos.miteco": "none",
           "procesos.sala-jarabe": "none",
           "procesos.inv-materia-prima": "none",
-          "procesos.ptab.r-mensual": "none"
+          "procesos.ptab.r-mensual": "write",
+          "procesos.ptab.agua": "write",
+          "procesos.ptab.insumos": "write"
         }
       }
     },
@@ -22450,7 +22452,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-23T14:17:06.682Z"
+    "updatedAt": "2026-10-23T14:47:01.766Z"
   },
   "ordenesSap": [
     {
@@ -241655,6 +241657,30 @@
       ],
       "5": [
         {
+          "sourcePrepKey": "justy:row_1791897872117_03vr9e",
+          "fechaFiltro": "2026-10-11",
+          "fecha": "",
+          "dia": "",
+          "turno": "",
+          "tanque": "5",
+          "sabor": "JUSTY NARANJA",
+          "horaInicio": "",
+          "ubbInicial": "20",
+          "volInicialTanque": "20000"
+        },
+        {
+          "sourcePrepKey": "justy:row_1791898073189_m3s8fe",
+          "fechaFiltro": "2026-10-11",
+          "fecha": "",
+          "dia": "",
+          "turno": "",
+          "tanque": "6",
+          "sabor": "JUSTY NARANJA",
+          "horaInicio": "",
+          "ubbInicial": "20",
+          "volInicialTanque": "20000"
+        },
+        {
           "sourcePrepKey": "justy:row_1791895130611_79p8g1",
           "fechaFiltro": "2026-10-12",
           "fecha": "",
@@ -241739,30 +241765,6 @@
           "volInicialTanque": "20000"
         },
         {
-          "sourcePrepKey": "justy:row_1791897872117_03vr9e",
-          "fechaFiltro": "2026-10-11",
-          "fecha": "",
-          "dia": "",
-          "turno": "",
-          "tanque": "5",
-          "sabor": "JUSTY NARANJA",
-          "horaInicio": "",
-          "ubbInicial": "20",
-          "volInicialTanque": "20000"
-        },
-        {
-          "sourcePrepKey": "justy:row_1791898073189_m3s8fe",
-          "fechaFiltro": "2026-10-11",
-          "fecha": "",
-          "dia": "",
-          "turno": "",
-          "tanque": "6",
-          "sabor": "JUSTY NARANJA",
-          "horaInicio": "",
-          "ubbInicial": "20",
-          "volInicialTanque": "20000"
-        },
-        {
           "sourcePrepKey": "justy:row_1792406559946_66bgv5",
           "fechaFiltro": "2026-10-19",
           "fecha": "",
@@ -241772,9 +241774,7 @@
           "sabor": "JUSTY DURAZNO",
           "horaInicio": "",
           "ubbInicial": "20",
-          "volInicialTanque": "20000",
-          "ubbFinal": "0",
-          "volFinalTanque": "0"
+          "volInicialTanque": "20000"
         },
         {
           "sourcePrepKey": "justy:row_1792450793306_71mtis",
@@ -241786,9 +241786,7 @@
           "sabor": "JUSTY DURAZNO",
           "horaInicio": "",
           "ubbInicial": "20",
-          "volInicialTanque": "20000",
-          "ubbFinal": "0",
-          "volFinalTanque": "0"
+          "volInicialTanque": "20000"
         }
       ],
       "6": [
