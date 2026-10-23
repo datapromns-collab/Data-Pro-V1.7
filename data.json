@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-10-12T00:00:00.000",
+      "weekStartDate": "2026-08-24T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -13434,12 +13434,12 @@
             "name": "GLUP COLA",
             "lineId": "6",
             "loadPerHour": 1200,
-            "quantity": 34500,
-            "durationHours": 28.75,
+            "quantity": 18576,
+            "durationHours": 15.48,
             "presentation": "0.4Lts",
-            "tanks": 2,
+            "tanks": 1.08,
             "startTime": "2026-10-23T17:31:00.000Z",
-            "endTime": "2026-10-24T22:16:00.000Z",
+            "endTime": "2026-10-24T08:59:48.000Z",
             "id": "aiqkdv6zb",
             "color": "#47CCB0"
           },
@@ -13735,19 +13735,6 @@
             "color": "#ec4899"
           },
           {
-            "name": "GLUP COLA",
-            "lineId": "3",
-            "loadPerHour": 2800,
-            "quantity": 67200,
-            "durationHours": 24,
-            "presentation": "2Lts",
-            "tanks": 7.79,
-            "startTime": "2026-10-26T11:00:00.000Z",
-            "endTime": "2026-10-27T11:00:00.000Z",
-            "id": "ifw6awqlh",
-            "color": "#47CCB0"
-          },
-          {
             "name": "GLUP FRESH",
             "lineId": "2",
             "loadPerHour": 2500,
@@ -13758,6 +13745,19 @@
             "startTime": "2026-10-26T11:00:00.000Z",
             "endTime": "2026-10-28T11:00:00.000Z",
             "id": "cauyrwkhh",
+            "color": "#47CCB0"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "3",
+            "loadPerHour": 2800,
+            "quantity": 67200,
+            "durationHours": 24,
+            "presentation": "2Lts",
+            "tanks": 7.79,
+            "startTime": "2026-10-26T11:00:00.000Z",
+            "endTime": "2026-10-27T11:00:00.000Z",
+            "id": "ifw6awqlh",
             "color": "#47CCB0"
           },
           {
@@ -22206,6 +22206,12 @@
           "planning.calculator": "none",
           "planning.gantt": "read",
           "calidad.seguimiento-lineas": "none"
+        },
+        "procs2.mds": {
+          "procesos.miteco": "none",
+          "procesos.sala-jarabe": "none",
+          "procesos.inv-materia-prima": "none",
+          "procesos.ptab.r-mensual": "none"
         }
       }
     },
@@ -22444,7 +22450,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-23T13:18:08.442Z"
+    "updatedAt": "2026-10-23T14:17:06.682Z"
   },
   "ordenesSap": [
     {
@@ -224348,10 +224354,17 @@
           "ubb": 32.39
         },
         "auto-1-1792422524455": {
-          "cajasPlanificadas": 71250
+          "cajasPlanificadas": 71250,
+          "producto": "509",
+          "jarabeReal": 99926,
+          "ubb": 48,
+          "pnc": 240
         },
         "auto-1-1792597381690": {
-          "cajasPlanificadas": 34500
+          "cajasPlanificadas": 34500,
+          "producto": "68",
+          "jarabeReal": 53361,
+          "ubb": 54
         }
       },
       "linea-2": {
@@ -224647,13 +224660,22 @@
           "ubb": 217.92
         },
         "auto-2-1792422536087": {
-          "cajasPlanificadas": 113750
+          "cajasPlanificadas": 113750,
+          "producto": "381",
+          "jarabeReal": 106415,
+          "ubb": 37.75
         },
         "auto-2-1792615484747": {
-          "cajasPlanificadas": 57500
+          "cajasPlanificadas": 57500,
+          "producto": "208",
+          "jarabeReal": 78306,
+          "ubb": 26.55
         },
         "auto-2-1792673510222": {
-          "cajasPlanificadas": 56250
+          "cajasPlanificadas": 56250,
+          "producto": "209",
+          "jarabeReal": 73006,
+          "ubb": 73.92
         }
       },
       "linea-3": {
@@ -224898,13 +224920,22 @@
           "producto": "515"
         },
         "auto-3-1792422545843": {
-          "cajasPlanificadas": 65800
+          "cajasPlanificadas": 65800,
+          "producto": "65",
+          "jarabeReal": 68544,
+          "ubb": 23.82
         },
         "auto-3-1792498748499": {
-          "cajasPlanificadas": 65800
+          "cajasPlanificadas": 65800,
+          "producto": "394",
+          "jarabeReal": 102544,
+          "ubb": 66
         },
         "auto-3-1792615505445": {
-          "cajasPlanificadas": 65800
+          "cajasPlanificadas": 65800,
+          "producto": "148",
+          "jarabeReal": 87000,
+          "ubb": 50
         }
       },
       "linea-4": {
@@ -225107,7 +225138,16 @@
           "producto": "395"
         },
         "auto-4-1792422554702": {
-          "cajasPlanificadas": 134400
+          "cajasPlanificadas": 134400,
+          "producto": "271",
+          "jarabeReal": 113362,
+          "ubb": 40.07
+        },
+        "auto-4-1792615556682": {
+          "cajasPlanificadas": 128800,
+          "producto": "245",
+          "jarabeReal": 133941,
+          "ubb": 45.8
         }
       },
       "linea-5": {
@@ -225276,7 +225316,10 @@
           "ubb": 740
         },
         "auto-5-1792422569998": {
-          "cajasPlanificadas": 55660
+          "cajasPlanificadas": 55660,
+          "producto": "219",
+          "jarabeReal": 27000,
+          "ubb": 27
         }
       },
       "linea-6": {
@@ -225480,10 +225523,16 @@
           "ubb": 10.96
         },
         "auto-6-1792422582885": {
-          "cajasPlanificadas": 34500
+          "cajasPlanificadas": 34500,
+          "producto": "471",
+          "jarabeReal": 34550,
+          "ubb": 12
         },
         "auto-6-1792615707487": {
-          "cajasPlanificadas": 22560
+          "cajasPlanificadas": 22560,
+          "producto": "96",
+          "jarabeReal": 9475,
+          "ubb": 3.29
         }
       },
       "linea-7": {
@@ -225776,7 +225825,10 @@
           "pnc": 546
         },
         "auto-7-1792422592150": {
-          "cajasPlanificadas": 43125
+          "cajasPlanificadas": 43125,
+          "producto": "307",
+          "jarabeReal": 86185,
+          "ubb": 30
         }
       }
     },
@@ -241443,7 +241495,9 @@
           "sabor": "GLUP KOLITA",
           "horaInicio": "",
           "ubbInicial": "18",
-          "volInicialTanque": "17795"
+          "volInicialTanque": "17795",
+          "ubbFinal": "0",
+          "volFinalTanque": "0"
         },
         {
           "sourcePrepKey": "glup:row_1792724252930_b770m6",
@@ -241455,7 +241509,8 @@
           "sabor": "GLUP KOLITA",
           "horaInicio": "",
           "ubbInicial": "18",
-          "volInicialTanque": "17780"
+          "volInicialTanque": "17780",
+          "ubbFinal": "1.17"
         }
       ],
       "2": [
@@ -241471,7 +241526,7 @@
           "ubbInicial": "6",
           "volInicialTanque": "17283",
           "ubbFinal": "2.08",
-          "volFinalTanque": "5990.4"
+          "volFinalTanque": "5991.44"
         },
         {
           "sourcePrepKey": "glup:row_1792724320929_3pxsxy",
@@ -245092,6 +245147,16 @@
               "initial": 28000,
               "reception": null,
               "final": 0
+            }
+          }
+        },
+        "2026-10-23": {
+          "diurno": {
+            "MATP_0001": {
+              "initial": 48750,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
             }
           }
         }
