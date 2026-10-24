@@ -22606,7 +22606,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-24T19:28:33.808Z"
+    "updatedAt": "2026-10-24T20:57:00.609Z"
   },
   "ordenesSap": [
     {
@@ -35009,8 +35009,8 @@
         },
         {
           "fechaInicio": "2026-10-24",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "1637",
+          "cajas1": 9840,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -35054,7 +35054,7 @@
           "ticket1": "16287",
           "cajas1": 12160,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 3360,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -35093,8 +35093,8 @@
         },
         {
           "fechaInicio": "2026-10-24",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16331",
+          "cajas1": 8000,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -35124,8 +35124,8 @@
         },
         {
           "fechaInicio": "2026-10-24",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16466",
+          "cajas1": 14040,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -35158,7 +35158,7 @@
           "ticket1": "16420",
           "cajas1": 11360,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 4800,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -252374,7 +252374,7 @@
             "MATP_0015": {
               "initial": 1960,
               "reception": null,
-              "final": 1960
+              "final": 1889.6
             },
             "MATP_0016": {
               "initial": 153.29,
@@ -252420,6 +252420,167 @@
               "initial": 60.21,
               "reception": null,
               "final": 58.8
+            },
+            "MATP_0040": {
+              "initial": 2413.56,
+              "reception": null,
+              "final": 2413.56
+            },
+            "MATP_0042": {
+              "initial": 1660.7,
+              "reception": null,
+              "final": 1660.7
+            }
+          }
+        },
+        "2026-10-24": {
+          "diurno": {
+            "MATP_0001-montalban": {
+              "initial": null,
+              "reception": 180000,
+              "final": 88000
+            },
+            "MATP_0001": {
+              "initial": 37150,
+              "reception": null,
+              "final": 78350
+            },
+            "MATP_0001-sacos-50kg": {
+              "initial": 634000,
+              "reception": null,
+              "final": 630000
+            },
+            "MATP_0002": {
+              "initial": 340,
+              "reception": null,
+              "final": 334
+            },
+            "MATP_0003": {
+              "initial": 260,
+              "reception": null,
+              "final": 260
+            },
+            "MATP_0004": {
+              "initial": 4,
+              "reception": null,
+              "final": 4
+            },
+            "MATP_0005": {
+              "initial": 294,
+              "reception": null,
+              "final": 272
+            },
+            "MATP_0006": {
+              "initial": 133,
+              "reception": null,
+              "final": 133
+            },
+            "MATP_0007": {
+              "initial": 446,
+              "reception": null,
+              "final": 410
+            },
+            "MATP_0009": {
+              "initial": 354,
+              "reception": null,
+              "final": 348
+            },
+            "MATP_0032": {
+              "initial": 78,
+              "reception": null,
+              "final": 78
+            },
+            "MATP_0038": {
+              "initial": 90,
+              "reception": null,
+              "final": 90
+            },
+            "MATP_0039": {
+              "initial": 248,
+              "reception": null,
+              "final": 248
+            },
+            "MATP_0022": {
+              "initial": 80,
+              "reception": null,
+              "final": 80
+            },
+            "MATP_0043": {
+              "initial": 4140,
+              "reception": null,
+              "final": 4140
+            },
+            "MATP_0059": {
+              "initial": 20,
+              "reception": null,
+              "final": 20
+            },
+            "MATP_0010": {
+              "initial": 471.2,
+              "reception": null,
+              "final": 465.5
+            },
+            "MATP_0041": {
+              "initial": 388.44,
+              "reception": null,
+              "final": 388.44
+            },
+            "MATP_0014": {
+              "initial": 139.6,
+              "reception": null,
+              "final": 139.6
+            },
+            "MATP_0015": {
+              "initial": 1889.6,
+              "reception": null,
+              "final": 1748.8,
+              "initialOverride": true
+            },
+            "MATP_0017": {
+              "initial": 21194.8,
+              "reception": null,
+              "final": 21025.9,
+              "initialOverride": true
+            },
+            "MATP_0016": {
+              "initial": 143.65,
+              "reception": null,
+              "final": 132.47
+            },
+            "MATP_0018": {
+              "initial": 1838,
+              "reception": null,
+              "final": 1838
+            },
+            "MATP_0019": {
+              "initial": 2276.86,
+              "reception": null,
+              "final": 2196.76
+            },
+            "MATP_0020": {
+              "initial": 2104.1,
+              "reception": null,
+              "final": 2104.1
+            },
+            "MATP_0021": {
+              "initial": 4057.2,
+              "reception": null,
+              "final": 4057.2
+            },
+            "MATP_0031": {
+              "initial": 185,
+              "reception": null,
+              "final": 185
+            },
+            "MATP_0036": {
+              "initial": 186.9,
+              "reception": null,
+              "final": 186.9
+            },
+            "MATP_0037": {
+              "initial": 58.8,
+              "reception": null,
+              "final": 56
             },
             "MATP_0040": {
               "initial": 2413.56,
