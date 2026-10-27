@@ -2,7 +2,15 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 
-export type PlanningSection = 'gantt' | 'daily' | 'preparation' | 'requirement';
+export type PlanningSection =
+  | 'gantt'
+  | 'daily'
+  | 'plan-semana'
+  | 'seguimiento-prodt'
+  | 'preparation'
+  | 'requirement'
+  | 'speeds'
+  | 'calculator';
 
 export type ManagementSection =
   | 'produccion-diaria'
@@ -263,6 +271,7 @@ export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
     { id: 'gantt', label: 'Programación' },
     { id: 'daily', label: 'Plan día a día' },
     { id: 'plan-semana', label: 'Plan Semana' },
+    { id: 'seguimiento-prodt', label: 'Seguimiento Prodt' },
     { id: 'preparation', label: 'Preparación' },
     { id: 'requirement', label: 'Requerimiento' },
     { id: 'speeds', label: 'Velocidades' },

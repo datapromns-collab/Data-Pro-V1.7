@@ -135,6 +135,16 @@ const PermisosModule = lazyModule(() => import('@/components/planner/PermisosMod
 const VentasModule = lazyModule(() => import('@/components/planner/VentasModule').then((module) => module.VentasModule));
 
 const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Línea 6", "Línea 7", "Línea 8"];
+const PLANNING_TABS = [
+  'gantt',
+  'daily',
+  'plan-semana',
+  'seguimiento-prodt',
+  'preparation',
+  'requirement',
+  'speeds',
+  'calculator',
+] as const;
 
 const CONSUMO_UBB_FLAVORS = [
   'GLUP COLA',
@@ -3034,6 +3044,16 @@ export default function PlannerPage() {
       }
     }
   }, [authLoaded, user, permissionsLoaded, activeModule, isDemon, hasAccess, allModules]);
+
+  useEffect(() => {
+    if (!user || !permissionsLoaded || activeModule !== 'planning') return;
+    if (getPermissionLevel(user.id, 'planning', activeTab) !== 'none') return;
+
+    const firstAllowedTab = PLANNING_TABS.find(
+      (tab) => getPermissionLevel(user.id, 'planning', tab) !== 'none',
+    );
+    if (firstAllowedTab) setActiveTab(firstAllowedTab);
+  }, [activeModule, activeTab, getPermissionLevel, permissionsLoaded, user]);
 
   const weekNumber = getISOWeek(weekStartDate);
 

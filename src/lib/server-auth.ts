@@ -253,7 +253,15 @@ export async function authorizeModuleWrite(
     ? permissions.planning?.[auth.user.id]
     : undefined;
   if (section && module === 'planning') {
-    if (!Array.isArray(planningSection?.write) || !planningSection.write.includes(section)) {
+    const sectionLevel = permissions.sections?.[auth.user.id]?.[`planning.${section}`];
+    if (sectionLevel === 'none' || sectionLevel === 'read') {
+      return Response.json({ error: 'Write permission denied' }, { status: 403 });
+    }
+    if (
+      sectionLevel !== 'write' &&
+      LEGACY_PLANNING_SECTIONS.has(section) &&
+      (!Array.isArray(planningSection?.write) || !planningSection.write.includes(section))
+    ) {
       return Response.json({ error: 'Write permission denied' }, { status: 403 });
     }
   }
@@ -290,9 +298,16 @@ export async function authorizeModuleRead(
 
   if (module === 'planning' && section) {
     const planning = permissions.planning?.[auth.user.id];
-    const canRead = Array.isArray(planning?.read) && planning.read.includes(section);
-    const canWrite = Array.isArray(planning?.write) && planning.write.includes(section);
-    if (!canRead && !canWrite) {
+    const sectionLevel = permissions.sections?.[auth.user.id]?.[`planning.${section}`];
+    if (sectionLevel === 'none') {
+      return Response.json({ error: 'Read permission denied' }, { status: 403 });
+    }
+    const hasExplicitSectionAccess = sectionLevel === 'read' || sectionLevel === 'write';
+    const canRead = hasExplicitSectionAccess ||
+      (Array.isArray(planning?.read) && planning.read.includes(section));
+    const canWrite = hasExplicitSectionAccess ||
+      (Array.isArray(planning?.write) && planning.write.includes(section));
+    if (LEGACY_PLANNING_SECTIONS.has(section) && !canRead && !canWrite) {
       return Response.json({ error: 'Read permission denied' }, { status: 403 });
     }
   }
@@ -339,7 +354,21 @@ export async function authorizeDataWrite(request: Request, body: unknown): Promi
 
   const checks: Array<[string, string?]> = [];
   if (payload.ordenesSap !== undefined) checks.push(['ordenes-sap']);
-  if (incomingPlanner.config !== undefined) checks.push(['planning', 'gantt']);
+  if (incomingPlanner.config && typeof incomingPlanner.config === 'object') {
+    const currentConfig = readDb().planner?.config ?? {};
+    if (
+      incomingPlanner.config.lineSpeeds !== undefined &&
+      JSON.stringify(incomingPlanner.config.lineSpeeds) !== JSON.stringify(currentConfig.lineSpeeds)
+    ) {
+      checks.push(['planning', 'speeds']);
+    }
+    if (
+      incomingPlanner.config.weekStartDate !== undefined &&
+      incomingPlanner.config.weekStartDate !== currentConfig.weekStartDate
+    ) {
+      checks.push(['planning', 'gantt']);
+    }
+  }
   if (incomingPlanner.customRecipes !== undefined) checks.push(['recipes', 'recipes-editor']);
   if (incomingPlanner.customPackagingRecipes !== undefined) checks.push(['recipes', 'packaging-recipes-editor']);
   if (incomingPlanner.productionInventory !== undefined) checks.push(['produccion']);
@@ -424,6 +453,8 @@ const COLLECTION_PERMISSION_MAP: Record<string, [string, string?]> = {
     'ventas-inventario-diario': ['ventas', 'analysis'],
     'logistica-inventario-mensual': ['logistica', 'monthly-inventory'],
 };
+
+const LEGACY_PLANNING_SECTIONS = new Set(['gantt', 'daily', 'preparation', 'requirement']);
 
 export async function authorizeCollectionRead(request: Request, namespace: string): Promise<Response | null> {
   const permission = COLLECTION_PERMISSION_MAP[namespace];
