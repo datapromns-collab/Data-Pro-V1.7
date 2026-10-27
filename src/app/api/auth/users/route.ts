@@ -29,8 +29,10 @@ export async function POST(request: Request) {
     const password = typeof payload.password === 'string' ? payload.password : '';
     const role = typeof payload.role === 'string' ? payload.role : '';
     const originalId = typeof payload.originalId === 'string' ? payload.originalId : id;
-    if (!id || !name || !VALID_ROLES.has(role) || (password && password.length < 8)) {
-      return Response.json({ error: 'Invalid account fields' }, { status: 400 });
+    if (!id || !name) return Response.json({ error: 'El usuario y el nombre son obligatorios.' }, { status: 400 });
+    if (!VALID_ROLES.has(role)) return Response.json({ error: 'Selecciona un rol válido.' }, { status: 400 });
+    if (password.length > 0 && password.length < 7) {
+      return Response.json({ error: 'La contraseña debe tener al menos 7 caracteres.' }, { status: 400 });
     }
     if (auth.user.id === originalId && id !== originalId) {
       return Response.json({ error: 'No puedes cambiar tu propio ID durante esta sesión.' }, { status: 400 });
@@ -46,7 +48,9 @@ export async function POST(request: Request) {
             ? [...current.users]
             : [];
         const existing = users.find((user: Record<string, unknown>) => user.id === originalId);
-        if (originalId !== id && users.some((user: Record<string, unknown>) => user.id === id)) {
+        if (originalId !== id && users.some((user: Record<string, unknown>) =>
+          typeof user.id === 'string' && user.id.toLowerCase() === id.toLowerCase()
+        )) {
           throw new Error('ACCOUNT_ID_TAKEN');
         }
         if (!existing && !password) throw new Error('PASSWORD_REQUIRED');

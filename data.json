@@ -23292,6 +23292,10 @@
         "alc1.mds": [
           "planning",
           "calidad"
+        ],
+        "proc3.mds": [
+          "planning",
+          "procesos"
         ]
       },
       "planning": {
@@ -23722,6 +23726,9 @@
         ],
         "alc1.mds": [
           "planning"
+        ],
+        "proc3.mds": [
+          "planning"
         ]
       },
       "sections": {
@@ -23871,6 +23878,18 @@
           "management.production": "none",
           "management.control": "none",
           "management.compliance": "none"
+        },
+        "proc3.mds": {
+          "planning.gantt": "read",
+          "planning.daily": "read",
+          "planning.seguimiento-prodt": "none",
+          "planning.preparation": "read",
+          "planning.requirement": "read",
+          "planning.speeds": "none",
+          "planning.calculator": "none",
+          "procesos.sala-jarabe": "write",
+          "procesos.ptab": "none",
+          "procesos.miteco": "none"
         }
       }
     },
@@ -24105,11 +24124,18 @@
         "password": "scrypt$8YihmPmjqKCBeObMkSDS6Q$jAFAcQPGCGuSpzyWn8xQU_ED4dQ4QahV8VXasG9r6HcwX5yYVwbzgzf1ML3xNc3AeSyo7-QWfZXSM8tPKXOFOQ",
         "role": "STANDARD",
         "displayRole": "Analista de Calidad"
+      },
+      {
+        "id": "proc3.mds",
+        "name": "Arnaldo Sanchez",
+        "role": "STANDARD",
+        "displayRole": "Técnico de procesos",
+        "password": "scrypt$pMn7o9erEuvkhgDys2CmFQ$XDgCpazxnd9qhPWE2bCK1l2NZvmIv_UXlQYhb0KWyu2Vgd6vMnLYP1r13GC0y8ycotfDtwWHQLd5VQcsRi25aA"
       }
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-27T22:01:10.587Z"
+    "updatedAt": "2026-10-27T22:23:33.534Z"
   },
   "ordenesSap": [
     {

@@ -377,7 +377,7 @@ function PermisosModuleContent() {
                   value={form.password}
                   onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))}
                   className="mt-1 h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm font-bold text-slate-800 outline-none focus:border-primary"
-                  placeholder={selectedUser ? 'Vacía = conservar actual' : 'Mínimo 8 caracteres'}
+                  placeholder={selectedUser ? 'Vacía = conservar actual' : 'Mínimo 7 caracteres'}
                 />
               </label>
               <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500">
@@ -467,7 +467,7 @@ function PermisosModuleContent() {
             {notice && (
               <p role="status" className={cn(
                 'mt-3 rounded-lg border px-3 py-2 text-[10px] font-bold uppercase tracking-[0.12em]',
-                notice.includes('No se pudo') || notice.includes('No se pudieron') || notice.includes('debe pesar') || notice.includes('Selecciona')
+                notice.includes('No se pudo') || notice.includes('No se pudieron') || notice.includes('debe pesar') || notice.includes('Selecciona') || notice.includes('contraseña') || notice.includes('Ya existe') || notice.includes('Tu sesión') || notice.includes('permisos de administrador')
                   ? 'border-red-200 bg-red-50 text-red-700'
                   : 'border-amber-200 bg-amber-50 text-amber-700',
               )}>

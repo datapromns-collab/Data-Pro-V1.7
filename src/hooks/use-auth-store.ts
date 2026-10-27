@@ -127,6 +127,12 @@ export function useAuthStore() {
       });
       if (!response.ok) {
         const payload = await response.json().catch(() => ({}));
+        if (response.status === 401) {
+          throw new Error('Tu sesión venció. Cierra sesión e inicia de nuevo antes de administrar usuarios.');
+        }
+        if (response.status === 403) {
+          throw new Error('La sesión actual no tiene permisos de administrador para crear o modificar usuarios.');
+        }
         throw new Error(payload.error || `Users API error: ${response.status}`);
       }
     }
@@ -138,11 +144,22 @@ export function useAuthStore() {
       });
       if (!response.ok) {
         const payload = await response.json().catch(() => ({}));
+        if (response.status === 401) {
+          throw new Error('Tu sesión venció. Cierra sesión e inicia de nuevo antes de administrar usuarios.');
+        }
+        if (response.status === 403) {
+          throw new Error('La sesión actual no tiene permisos de administrador para eliminar usuarios.');
+        }
         throw new Error(payload.error || `Users API error: ${response.status}`);
       }
     }
     const verificationResponse = await fetch('/api/auth/users', { cache: 'no-store' });
-    if (!verificationResponse.ok) throw new Error(`Users verification API error: ${verificationResponse.status}`);
+    if (!verificationResponse.ok) {
+      if (verificationResponse.status === 401 || verificationResponse.status === 403) {
+        throw new Error('La cuenta se guardó, pero no se pudo actualizar la lista de usuarios. Verifica tu sesión de administrador.');
+      }
+      throw new Error(`Users verification API error: ${verificationResponse.status}`);
+    }
     const verificationPayload = await verificationResponse.json();
     return syncUsersList(verificationPayload.users);
   }, [syncUsersList]);
@@ -162,6 +179,9 @@ export function useAuthStore() {
 
     if (!nextId || !nextName || (!nextPassword && !payload.originalId)) {
       throw new Error('Completa usuario, nombre y la contraseña para una cuenta nueva');
+    }
+    if (nextPassword && nextPassword.length < 7) {
+      throw new Error('La contraseña debe tener al menos 7 caracteres.');
     }
 
     const existing = users.filter((user) => user.id !== payload.originalId);
