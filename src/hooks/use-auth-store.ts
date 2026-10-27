@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 
 export type UserRole = 'ADMIN' | 'STANDARD' | 'INVENTORY' | 'PURCHASING';
+export const AUTH_SESSION_READY_EVENT = 'planner:auth-session-ready';
 
 export interface UserSession {
   id: string;
@@ -16,40 +17,6 @@ export interface UserAccount extends UserSession {
   password: string;
 }
 
-const STORAGE_KEY = 'planner_auth_session';
-const AUTH_USERS_STORAGE_KEY = 'planner_auth_users';
-const AUTH_SESSION_UPDATED_EVENT = 'planner:auth-session-updated';
-
-const DEFAULT_USERS: UserAccount[] = [
-  { id: 'jaime.r', password: 'ad.123.', name: 'Jaime Rangel', role: 'ADMIN', displayRole: 'GERENTE DE PLANTA' },
-  { id: 'demon', password: '2005', name: 'Yonny Hernández', role: 'ADMIN', displayRole: 'ADMINISTRADOR' },
-  { id: 'demon2', password: '2005', name: 'yonny .H', role: 'STANDARD', displayRole: 'Carga Sap' },
-  { id: 'maria.mds', password: 'ad.147.', name: 'Maria Reinoso', role: 'INVENTORY', displayRole: 'ANALISTA DE GERENCIA TÉCNICA' },
-  { id: 'alex.mds', password: 'ad.159.', name: 'Alexandra Arteaga', role: 'INVENTORY', displayRole: 'ANALISTA DE GERENCIA TÉCNICA' },
-  { id: 'anto.mds', password: '123.', name: 'Antonella Dos Santos', role: 'PURCHASING', displayRole: 'COMPRAS' },
-  { id: 'prodtj.mds', password: 'ad.144.', name: 'Jefes de Producción', role: 'STANDARD', displayRole: 'PRODUCCIÓN' },
-  { id: 'prodtg.mds', password: 'ad.521.', name: 'Carlos Barovich', role: 'STANDARD', displayRole: 'GERENTE DE PRODUCCIÓN' },
-  { id: 'prodts.mds', password: 'ad.222.', name: 'Supervisor de Produccion', role: 'STANDARD', displayRole: 'SUPERVISOR DE PRODUCCIÓN' },
-  { id: 'procj.mds', password: 'ad.145.', name: 'Abel Araujo', role: 'STANDARD', displayRole: 'Jefe de Procesos' },
-  { id: 'cald.mds', password: 'ad.146.', name: 'Jefa de Calidad', role: 'STANDARD', displayRole: 'CALIDAD' },
-  { id: 'prodt.mds', password: 'ad.160.', name: 'Ronald Valera', role: 'STANDARD', displayRole: 'ANALISTA DE PRODUCCIÓN' },
-  { id: 'prodt1.mds', password: 'ad.121.', name: 'Luis Blandin', role: 'STANDARD', displayRole: 'ANALISTA DE PRODUCCIÓN' },
-  { id: 'prodt2.mds', password: 'ad.128.', name: 'Luis Sanchez', role: 'STANDARD', displayRole: 'ANALISTA DE PRODUCCIÓN' },
-  { id: 'proc.mds', password: 'ad.166.', name: 'Tecnico de procesos', role: 'STANDARD', displayRole: 'SALA DE JARABE' },
-  { id: 'proc1.mds', password: 'ad.533.', name: 'tecnico de procesos', role: 'STANDARD', displayRole: 'PTAB' },
-  { id: 'proc2.mds', password: 'ad.530.', name: 'tecnico de procesos', role: 'STANDARD', displayRole: 'MITECO' },
-  { id: 'procs1.mds', password: 'ad.558.', name: 'Jose Vargas', role: 'STANDARD', displayRole: 'SUPERVISOR DE PROCESOS' },
-  { id: 'procs2.mds', password: 'ad.220.', name: 'jorge acosta', role: 'STANDARD', displayRole: 'SUPERVISOR DE PROCESOS' },
-  { id: 'finan.mds', password: 'ad.124.', name: 'Patricia Gamez', role: 'STANDARD', displayRole: 'FINANZAS' },
-  { id: 'g.tec.mds', password: 'ad.147.', name: 'Gerente Técnico', role: 'STANDARD', displayRole: 'GERENTE TÉCNICO' },
-  { id: 'enf.mds', password: 'ad.158.', name: 'Hector Pereira', role: 'STANDARD', displayRole: 'ESPECIALISTA ENFARDADORA' },
-  { id: 'etq.mds', password: 'ad.159.', name: 'Especialista Etiquetadora', role: 'STANDARD', displayRole: 'ETIQUETADORA' },
-  { id: 'logg.mds', password: 'ad.220.', name: 'Florencio Alvarez', role: 'STANDARD', displayRole: 'GERENTE DE LOGÍSTICA' },
-  { id: 'mtto.mds', password: 'ad.321.', name: 'Jose Mora', role: 'STANDARD', displayRole: 'SUP. MANTENIMIENTO' },
-  { id: 'cal.mds', password: 'ad.322.', name: 'Calidad', role: 'STANDARD', displayRole: 'ANALISTA DE CALIDAD' },
-  { id: 'MDS', password: 'MDS1', name: 'Multinacional de sabores', role: 'STANDARD', displayRole: 'VISITANTE' },
-];
-
 export interface UserInfo {
   id: string;
   name: string;
@@ -57,108 +24,45 @@ export interface UserInfo {
 }
 
 function normalizeUsers(users: unknown): UserAccount[] {
-  if (!Array.isArray(users)) return DEFAULT_USERS;
+  if (!Array.isArray(users)) return [];
   const sanitized = users
     .filter((user): user is Partial<UserAccount> => !!user && typeof user === 'object')
     .map((user) => ({
       id: String(user.id ?? '').trim(),
       name: String(user.name ?? '').trim(),
-      password: String(user.password ?? '').trim(),
+      password: '',
       role: (user.role ?? 'STANDARD') as UserRole,
       displayRole: String(user.displayRole ?? '').trim() || undefined,
       avatarUrl: typeof user.avatarUrl === 'string' && user.avatarUrl.startsWith('data:image/jpeg;base64,')
         ? user.avatarUrl
         : undefined,
     }))
-    .filter((user) => user.id && user.name && user.password);
+    .filter((user) => user.id && user.name);
 
   const unique = new Map<string, UserAccount>();
   sanitized.forEach((user) => unique.set(user.id, user));
   return Array.from(unique.values());
 }
 
-function readUsersFromStorage(): UserAccount[] {
-  if (typeof window === 'undefined') return DEFAULT_USERS;
-
-  const saved = window.localStorage.getItem(AUTH_USERS_STORAGE_KEY);
-  if (!saved) return DEFAULT_USERS;
-
-  try {
-    const parsed = JSON.parse(saved);
-    const normalized = normalizeUsers(parsed);
-    return normalized.length > 0 ? normalized : DEFAULT_USERS;
-  } catch {
-    return DEFAULT_USERS;
-  }
-}
-
-function writeUsersToStorage(users: UserAccount[]) {
-  if (typeof window === 'undefined') return;
-  try {
-    window.localStorage.setItem(AUTH_USERS_STORAGE_KEY, JSON.stringify(users));
-  } catch (error) {
-    const message = error instanceof Error ? error.message : '';
-    const isQuota = message.includes('QuotaExceededError') || message.includes('exceeded the quota');
-    if (!isQuota) {
-      console.error('Error writing users to storage', error);
-      return;
-    }
-    console.warn('[AuthStore] localStorage quota exceeded, skipping local save');
-  }
-}
-
-function writeSessionToStorage(session: UserSession) {
-  if (typeof window === 'undefined') return;
-  try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
-  } catch (error) {
-    const message = error instanceof Error ? error.message : '';
-    const isQuota = message.includes('QuotaExceededError') || message.includes('exceeded the quota');
-    if (!isQuota) {
-      console.error('Error writing session to storage', error);
-      return;
-    }
-    console.warn('[AuthStore] localStorage quota exceeded, skipping session save');
-  }
-}
-
-export let USERS_LIST: UserInfo[] = DEFAULT_USERS.map(({ id, name, role }) => ({ id, name, role }));
+export let USERS_LIST: UserInfo[] = [];
 
 export function useAuthStore() {
   const [user, setUser] = useState<UserSession | null>(null);
-  const [users, setUsers] = useState<UserAccount[]>(() => readUsersFromStorage());
+  const [users, setUsers] = useState<UserAccount[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const syncUsersList = useCallback((nextUsers: UserAccount[]) => {
+  const syncUsersList = useCallback((nextUsers: unknown) => {
     const normalized = normalizeUsers(nextUsers);
     setUsers(normalized);
     USERS_LIST = normalized.map(({ id, name, role }) => ({ id, name, role }));
-    writeUsersToStorage(normalized);
     return normalized;
   }, []);
 
   useEffect(() => {
-    const handleSessionUpdated = (event: Event) => {
-      if (!(event instanceof CustomEvent)) return;
-      const session = event.detail as UserSession | null;
-      if (!session || typeof session.id !== 'string') return;
-      setUser(session);
-    };
-    window.addEventListener(AUTH_SESSION_UPDATED_EVENT, handleSessionUpdated);
-
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      try {
-        setUser(JSON.parse(saved) as UserSession);
-      } catch (e) {
-        console.error('Error loading auth session', e);
-      }
-    }
-
     const refreshUsers = async () => {
       try {
         const response = await fetch('/api/data?section=users', { cache: 'no-store' });
-        if (!response.ok) return;
+        if (!response.ok) throw new Error(`Users API error: ${response.status}`);
         const payload = await response.json();
         const remoteUsers = Array.isArray(payload?.planner?.users)
           ? payload.planner.users
@@ -167,81 +71,80 @@ export function useAuthStore() {
             : null;
 
         if (remoteUsers?.length) {
-          const normalizedUsers = syncUsersList(remoteUsers);
-          const savedSession = localStorage.getItem(STORAGE_KEY);
-          const currentSession = savedSession ? JSON.parse(savedSession) as UserSession : null;
-          const refreshedAccount = currentSession
-            ? normalizedUsers.find((account) => account.id === currentSession.id)
-            : undefined;
-          if (refreshedAccount && currentSession && (
-            currentSession.name !== refreshedAccount.name ||
-            currentSession.role !== refreshedAccount.role ||
-            currentSession.displayRole !== refreshedAccount.displayRole ||
-            currentSession.avatarUrl !== refreshedAccount.avatarUrl
-          )) {
-            const refreshedSession: UserSession = {
-              id: refreshedAccount.id,
-              name: refreshedAccount.name,
-              role: refreshedAccount.role,
-              displayRole: refreshedAccount.displayRole,
-              avatarUrl: refreshedAccount.avatarUrl,
-            };
-            setUser(refreshedSession);
-            writeSessionToStorage(refreshedSession);
-            window.dispatchEvent(new CustomEvent<UserSession>(AUTH_SESSION_UPDATED_EVENT, { detail: refreshedSession }));
-          }
+          syncUsersList(remoteUsers);
         }
       } catch (error) {
-        console.error('Error loading remote users', error);
+        console.error('[AuthStore] Unable to load public user profiles', error);
+      }
+    };
+
+    const refreshSession = async () => {
+      try {
+        const response = await fetch('/api/auth/session', { cache: 'no-store' });
+        if (!response.ok) throw new Error(`Session API error: ${response.status}`);
+        const payload = await response.json();
+        const sessionUser = payload.user && typeof payload.user.id === 'string'
+          ? payload.user as UserSession
+          : null;
+        setUser(sessionUser);
+        if (sessionUser) window.dispatchEvent(new Event(AUTH_SESSION_READY_EVENT));
+      } catch (error) {
+        console.error('[AuthStore] Unable to restore server session', error);
+        setUser(null);
       }
     };
 
     const refreshWhenVisible = () => {
-      if (document.visibilityState === 'visible') void refreshUsers();
+      if (document.visibilityState === 'visible') {
+        void refreshUsers();
+        void refreshSession();
+      }
     };
     const refreshInterval = window.setInterval(refreshWhenVisible, 60_000);
     document.addEventListener('visibilitychange', refreshWhenVisible);
-    void refreshUsers();
-    setIsLoaded(true);
+    void Promise.all([refreshUsers(), refreshSession()]).finally(() => setIsLoaded(true));
 
     return () => {
       window.clearInterval(refreshInterval);
       document.removeEventListener('visibilitychange', refreshWhenVisible);
-      window.removeEventListener(AUTH_SESSION_UPDATED_EVENT, handleSessionUpdated);
     };
   }, [syncUsersList]);
 
-  const saveUsers = useCallback(async (nextUsers: UserAccount[], deletedUserIds: string[] = []) => {
-    const normalized = normalizeUsers(nextUsers);
-    try {
-      const response = await fetch('/api/data', {
+  const saveUsers = useCallback(async (upsert?: {
+    id: string;
+    name: string;
+    password: string;
+    role: UserRole;
+    displayRole?: string;
+    avatarUrl?: string;
+    originalId?: string;
+  }, deletedUserId?: string) => {
+    if (upsert) {
+      const response = await fetch('/api/auth/users', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ planner: { users: normalized, deletedUserIds } }),
+        body: JSON.stringify({ action: 'upsert', ...upsert }),
       });
-      if (!response.ok) throw new Error(`Users API error: ${response.status}`);
-
-      const verificationResponse = await fetch('/api/data?section=users', { cache: 'no-store' });
-      if (!verificationResponse.ok) throw new Error(`Users verification API error: ${verificationResponse.status}`);
-      const verificationPayload = await verificationResponse.json();
-      const persistedUsers = Array.isArray(verificationPayload?.planner?.users)
-        ? verificationPayload.planner.users
-        : Array.isArray(verificationPayload?.users)
-          ? verificationPayload.users
-          : null;
-      if (!persistedUsers) throw new Error('Users API returned an invalid verification response');
-
-      const persistedById = new Map(
-        normalizeUsers(persistedUsers).map((account) => [account.id, account]),
-      );
-      const isPersisted = persistedById.size === normalized.length &&
-        normalized.every((account) => persistedById.get(account.id)?.avatarUrl === account.avatarUrl);
-      if (!isPersisted) throw new Error('User profile image was not confirmed in shared storage');
-      return syncUsersList(persistedUsers);
-    } catch (error) {
-      console.error('Unable to sync users to remote data', error);
-      throw new Error('No se pudieron sincronizar los cambios del usuario con la base de datos compartida.');
+      if (!response.ok) {
+        const payload = await response.json().catch(() => ({}));
+        throw new Error(payload.error || `Users API error: ${response.status}`);
+      }
     }
+    if (deletedUserId) {
+      const response = await fetch('/api/auth/users', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'delete', id: deletedUserId }),
+      });
+      if (!response.ok) {
+        const payload = await response.json().catch(() => ({}));
+        throw new Error(payload.error || `Users API error: ${response.status}`);
+      }
+    }
+    const verificationResponse = await fetch('/api/auth/users', { cache: 'no-store' });
+    if (!verificationResponse.ok) throw new Error(`Users verification API error: ${verificationResponse.status}`);
+    const verificationPayload = await verificationResponse.json();
+    return syncUsersList(verificationPayload.users);
   }, [syncUsersList]);
 
   const upsertUser = useCallback(async (payload: {
@@ -257,8 +160,8 @@ export function useAuthStore() {
     const nextName = payload.name.trim();
     const nextPassword = payload.password.trim();
 
-    if (!nextId || !nextName || !nextPassword) {
-      throw new Error('Completa usuario, nombre y contraseña');
+    if (!nextId || !nextName || (!nextPassword && !payload.originalId)) {
+      throw new Error('Completa usuario, nombre y la contraseña para una cuenta nueva');
     }
 
     const existing = users.filter((user) => user.id !== payload.originalId);
@@ -267,61 +170,49 @@ export function useAuthStore() {
       throw new Error('Ya existe un usuario con ese identificador');
     }
 
-    const nextUser: UserAccount = {
+    const nextUser = {
       id: nextId,
       name: nextName,
       password: nextPassword,
       role: payload.role,
       displayRole: payload.displayRole || payload.role,
       avatarUrl: payload.avatarUrl,
+      originalId: payload.originalId,
     };
 
-    const nextUsers = payload.originalId
-      ? users.map((user) => user.id === payload.originalId ? nextUser : user)
-      : [...users, nextUser];
-
-    await saveUsers(nextUsers);
-    if (user && (user.id === nextId || user.id === payload.originalId)) {
-      const session: UserSession = {
-        id: nextId,
-        name: nextName,
-        role: payload.role,
-        displayRole: payload.displayRole || payload.role,
-        avatarUrl: payload.avatarUrl,
-      };
-      setUser(session);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
-      window.dispatchEvent(new CustomEvent<UserSession>(AUTH_SESSION_UPDATED_EVENT, { detail: session }));
-    }
-    return nextUser;
-  }, [saveUsers, user, users]);
+    await saveUsers(nextUser);
+    return { ...nextUser, password: '' };
+  }, [saveUsers]);
 
   const deleteUser = useCallback(async (userId: string) => {
-    const nextUsers = users.filter((user) => user.id !== userId);
-    await saveUsers(nextUsers, [userId]);
-    return nextUsers;
-  }, [saveUsers, users]);
+    return saveUsers(undefined, userId);
+  }, [saveUsers]);
 
-  const login = useCallback((id: string, pass: string): boolean => {
-    const found = users.find((userItem) => userItem.id === id && userItem.password === pass);
-    if (found) {
-      const session: UserSession = {
-        id: found.id,
-        name: found.name,
-        role: found.role,
-        displayRole: found.displayRole || found.role,
-        avatarUrl: found.avatarUrl,
-      };
-      setUser(session);
-      writeSessionToStorage(session);
-      return true;
+  const login = useCallback(async (id: string, pass: string): Promise<boolean> => {
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ id, password: pass }),
+    });
+    if (response.status === 401) return false;
+    if (!response.ok) {
+      if (response.status === 429) throw new Error('Demasiados intentos. Intenta más tarde.');
+      if (response.status === 503) {
+        throw new Error('La autenticación del servidor no está configurada. Contacta al administrador.');
+      }
+      throw new Error(`No se pudo iniciar sesión (HTTP ${response.status}).`);
     }
-    return false;
-  }, [users]);
+    const payload = await response.json();
+    if (!payload.user || typeof payload.user.id !== 'string') return false;
+    setUser(payload.user as UserSession);
+    window.dispatchEvent(new Event(AUTH_SESSION_READY_EVENT));
+    return true;
+  }, []);
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    const response = await fetch('/api/auth/logout', { method: 'POST' });
+    if (!response.ok) throw new Error(`Logout API error: ${response.status}`);
     setUser(null);
-    localStorage.removeItem(STORAGE_KEY);
   }, []);
 
   const isRestrictedInventory = user?.id === 'maria.mds' || user?.id === 'alex.mds';

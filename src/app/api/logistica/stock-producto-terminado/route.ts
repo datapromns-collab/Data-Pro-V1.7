@@ -1,6 +1,7 @@
 import { writeDb, readDb } from '@/lib/db-writer';
 import path from 'path';
 import fs from 'fs';
+import { authorizeModuleWrite } from '@/lib/server-auth';
 
 const UPLOAD_DIR = path.join(process.cwd(), 'uploads', 'logistica');
 const STOCK_FILENAME = 'stock-producto-terminado.xlsx';
@@ -12,6 +13,8 @@ function ensureDir() {
 }
 
 export async function POST(request: Request) {
+  const denied = await authorizeModuleWrite(request, 'logistica', 'finished-product');
+  if (denied) return denied;
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File | null;

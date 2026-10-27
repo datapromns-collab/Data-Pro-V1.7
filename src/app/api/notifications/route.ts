@@ -1,14 +1,13 @@
 import { readDb, writeDb } from '@/lib/db-writer';
+import { requireAuthenticated } from '@/lib/server-auth';
 
 export async function GET(request: Request) {
+  const auth = await requireAuthenticated(request);
+  if (auth.response) return auth.response;
   try {
     const db = readDb();
-    const url = new URL(request.url);
-    const userId = url.searchParams.get('userId') || undefined;
-    let notifications = [...(db.notifications ?? [])];
-    if (userId) {
-      notifications = notifications.filter((n: any) => n.userId === userId || n.userId === 'all');
-    }
+    const notifications = [...(db.notifications ?? [])]
+      .filter((n: any) => n.userId === auth.user.id || n.userId === 'all');
     notifications.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     const latest = notifications.slice(0, 10);
     return new Response(JSON.stringify(latest), {
@@ -24,6 +23,8 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  const auth = await requireAuthenticated(request);
+  if (auth.response) return auth.response;
   try {
     const body = await request.json();
     const now = new Date().toISOString();
@@ -67,6 +68,8 @@ export async function POST(request: Request) {
 }
 
 export async function PATCH(request: Request) {
+  const auth = await requireAuthenticated(request);
+  if (auth.response) return auth.response;
   try {
     const body = await request.json();
     await writeDb((db) => {

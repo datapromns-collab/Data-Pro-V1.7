@@ -1,5 +1,6 @@
 import path from 'path';
 import fs from 'fs';
+import { requireAuthenticated } from '@/lib/server-auth';
 
 const DB_PATH = path.join(process.cwd(), 'fcm-tokens.json');
 
@@ -26,10 +27,12 @@ function writeDb(data: { tokens: FcmTokenRecord[] }) {
 }
 
 export async function POST(request: Request) {
+  const auth = await requireAuthenticated(request);
+  if (auth.response) return auth.response;
   try {
     const body = await request.json();
     const token = typeof body.token === 'string' ? body.token.trim() : '';
-    const userId = typeof body.userId === 'string' ? body.userId : '';
+    const userId = auth.user.id;
     if (!token || !userId) {
       return new Response(JSON.stringify({ error: 'token y userId son requeridos' }), {
         status: 400,

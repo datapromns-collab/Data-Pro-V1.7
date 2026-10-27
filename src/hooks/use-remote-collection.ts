@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { AUTH_SESSION_READY_EVENT } from '@/hooks/use-auth-store';
 
 const POLL_INTERVAL = 15000;
 const PENDING_KEY = (namespace: string) => `rc_pending_${namespace}`;
@@ -254,6 +255,7 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
     if (sendingRef.current) return;
     sendingRef.current = true;
     setIsSaving(true);
+    let authenticationRequired = false;
     try {
       while (queueRef.current.length > 0) {
         const current = queueRef.current[0];
@@ -264,10 +266,18 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
           savePendingQueue(namespace, queueRef.current);
           setSyncError(null);
         } catch (error) {
-          console.error(`[RC] Failed to sync pending changes for ${namespace}`, error);
+          const errorMessage = error instanceof Error ? error.message : '';
+          authenticationRequired = errorMessage.startsWith('HTTP 401') || errorMessage.startsWith('HTTP 403');
+          if (!authenticationRequired) {
+            console.error(`[RC] Failed to sync pending changes for ${namespace}`, error);
+          }
           const queueSavedLocally = savePendingQueue(namespace, queueRef.current);
           setSyncError(
-            `No se pudieron guardar los cambios compartidos de "${namespace}". Se reintentará automáticamente.` +
+            (authenticationRequired
+              ? errorMessage.startsWith('HTTP 401')
+                ? `Inicia sesión para sincronizar los cambios pendientes de "${namespace}".`
+                : `No tienes permisos para sincronizar los cambios pendientes de "${namespace}".`
+              : `No se pudieron guardar los cambios compartidos de "${namespace}". Se reintentará automáticamente.`) +
             (queueSavedLocally ? '' : ' La cola tampoco pudo guardarse localmente; mantenga esta página abierta hasta confirmar la sincronización.'),
           );
           break;
@@ -288,7 +298,7 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
       sendingRef.current = false;
       setIsSaving(false);
       setHasPendingChanges(queueRef.current.length > 0);
-      if (queueRef.current.length > 0) {
+      if (queueRef.current.length > 0 && !authenticationRequired) {
         const retries = queueRef.current[0]?.retries || 1;
         const retryDelay = Math.min(1000 * 2 ** Math.min(retries - 1, 5), 30000);
         timerRef.current = setTimeout(() => {
@@ -559,6 +569,14 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
   useEffect(() => {
     load();
   }, [load]);
+
+  useEffect(() => {
+    const resumeQueueAfterLogin = () => {
+      if (queueRef.current.length > 0) void flushQueue();
+    };
+    window.addEventListener(AUTH_SESSION_READY_EVENT, resumeQueueAfterLogin);
+    return () => window.removeEventListener(AUTH_SESSION_READY_EVENT, resumeQueueAfterLogin);
+  }, [flushQueue]);
 
   useEffect(() => {
     if (!isLoaded) return;

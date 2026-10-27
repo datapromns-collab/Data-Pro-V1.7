@@ -10,20 +10,29 @@ import { Lock, User, AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
 interface LoginFormProps {
-  onLogin: (id: string, pass: string) => boolean;
+  onLogin: (id: string, pass: string) => Promise<boolean>;
 }
 
 export function LoginForm({ onLogin }: LoginFormProps) {
   const [id, setId] = useState('');
   const [pass, setPass] = useState('');
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const success = onLogin(id, pass);
-    if (!success) {
-      setError(true);
-      setTimeout(() => setError(false), 3000);
+    setIsSubmitting(true);
+    setError(null);
+    try {
+      const success = await onLogin(id, pass);
+      if (!success) setError('Credenciales incorrectas o acceso temporalmente no disponible');
+    } catch (submitError) {
+      console.error('[LoginForm] Server sign-in failed', submitError);
+      setError(submitError instanceof Error
+        ? submitError.message
+        : 'No se pudo iniciar sesión. Verifica la conexión o contacta al administrador.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -71,15 +80,16 @@ export function LoginForm({ onLogin }: LoginFormProps) {
           {error && (
             <Alert variant="destructive" className="py-2 px-3 rounded-xl border-destructive/20 bg-destructive/5">
               <AlertCircle className="h-4 w-4" />
-              <AlertDescription className="text-xs font-bold">Credenciales incorrectas</AlertDescription>
+              <AlertDescription className="text-xs font-bold">{error}</AlertDescription>
             </Alert>
           )}
 
           <Button 
             type="submit" 
+            disabled={isSubmitting}
             className="w-full h-12 rounded-xl font-black uppercase text-xs tracking-[0.2em] shadow-lg bg-sky-500 hover:bg-sky-600 text-white shadow-sky-200 border-0 hover:translate-y-[-1px] transition-all"
           >
-            Iniciar Sesión
+            {isSubmitting ? 'Validando…' : 'Iniciar Sesión'}
           </Button>
         </form>
 

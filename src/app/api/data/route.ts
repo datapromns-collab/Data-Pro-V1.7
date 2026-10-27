@@ -1,4 +1,5 @@
 import { readDb, writeDb } from '@/lib/db-writer';
+import { authorizeDataWrite, authorizeModuleRead, publicUserList, requireAuthenticated } from '@/lib/server-auth';
 
 function getWeekKey(date: Date): string {
   const d = new Date(date);
@@ -93,6 +94,24 @@ export async function GET(request: Request) {
   try {
     const data = readDb();
     const section = new URL(request.url).searchParams.get('section');
+    if (section !== 'users') {
+      let denied: Response | null = null;
+      if (section === 'ordenesSap') {
+        denied = await authorizeModuleRead(request, 'ordenes-sap');
+      } else if (
+        section === 'productionInventory' ||
+        section === 'productionInventoryPeriod' ||
+        section === 'productionReceptions' ||
+        section === 'productionWaste' ||
+        section === 'productionNonConforming'
+      ) {
+        denied = await authorizeModuleRead(request, 'produccion');
+      } else {
+        const auth = await requireAuthenticated(request);
+        denied = auth.response ?? null;
+      }
+      if (denied) return denied;
+    }
     if (section === 'planner') {
       const planner = data.planner ?? {};
       return new Response(JSON.stringify({
@@ -129,7 +148,7 @@ export async function GET(request: Request) {
         : Array.isArray(data.users)
           ? data.users
           : undefined;
-      return new Response(JSON.stringify(users ? { users } : {}), {
+      return new Response(JSON.stringify(users ? { users: publicUserList(users) } : {}), {
         status: 200,
         headers: { 'content-type': 'application/json' },
       });
@@ -227,6 +246,7 @@ export async function GET(request: Request) {
     }
     const plannerWithMeta = {
       ...data.planner,
+      users: publicUserList(data.planner?.users ?? data.users),
       ordenesSap: Array.isArray(data.ordenesSap) ? data.ordenesSap : [],
       _deletedOrdenesSapIds: Array.isArray(data._deletedOrdenesSapIds) ? data._deletedOrdenesSapIds : [],
       notifications: Array.isArray(data.notifications) ? data.notifications : [],
@@ -275,6 +295,8 @@ export async function POST(request: Request) {
   try {
     body = await request.json();
     const now = new Date().toISOString();
+    const denied = await authorizeDataWrite(request, body);
+    if (denied) return denied;
 
     if (body.permissionUpdates && typeof body.permissionUpdates === 'object') {
       await writeDb((current) => {

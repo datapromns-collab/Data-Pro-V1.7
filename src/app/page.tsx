@@ -113,6 +113,8 @@ const WeeklySummaryReport = lazyModule(() => import('@/components/planner/Weekly
 const ComplianceReport = lazyModule(() => import('@/components/planner/ComplianceReport').then((module) => module.ComplianceReport));
 const MonthlyComplianceReport = lazyModule(() => import('@/components/planner/MonthlyComplianceReport').then((module) => module.MonthlyComplianceReport));
 const RecipeEditor = lazyModule(() => import('@/components/planner/RecipeEditor').then((module) => module.RecipeEditor));
+const AdminDataEditor = lazyModule(() => import('@/components/planner/AdminDataEditor').then((module) => module.AdminDataEditor));
+const FormulaCatalog = lazyModule(() => import('@/components/planner/FormulaCatalog').then((module) => module.FormulaCatalog));
 const ProduccionModule = dynamic(() => import('@/components/planner/ProduccionModule'));
 const LogisticaModule = lazyModule(() => import('@/components/planner/LogisticaModule').then((module) => module.LogisticaModule));
 const SeguimientoPanel = dynamic(() => import('@/components/planner/SeguimientoPanel'));
@@ -4103,6 +4105,22 @@ export default function PlannerPage() {
                            <Package className="h-3.5 w-3.5" />
                            <span className="hidden sm:inline">Recetas de Empaque</span>
                          </button>
+                         <button
+                           onClick={() => setActiveTab('formula-catalog')}
+                           className={cn(navTabClass(activeTab === 'formula-catalog'))}
+                         >
+                           <CalculatorIcon className="h-3.5 w-3.5" />
+                           <span className="hidden sm:inline">Fórmulas de Tablas</span>
+                         </button>
+                         {isAdmin && (
+                           <button
+                             onClick={() => setActiveTab('admin-data-editor')}
+                             className={cn(navTabClass(activeTab === 'admin-data-editor'))}
+                           >
+                             <Settings className="h-3.5 w-3.5" />
+                             <span className="hidden sm:inline">Editor de Datos</span>
+                           </button>
+                         )}
                        </div>
                      ) : null}
                   </div>
@@ -4238,6 +4256,8 @@ export default function PlannerPage() {
                         onRemoveMaterial={removeMaterialFromPackagingRecipe}
                       />
                     )}
+                    {activeTab === 'formula-catalog' && <FormulaCatalog />}
+                    {activeTab === 'admin-data-editor' && isAdmin && <AdminDataEditor />}
                   </>
                 )}
                  {activeModule === 'planta' && hasAccess(user.id, 'planta') && (

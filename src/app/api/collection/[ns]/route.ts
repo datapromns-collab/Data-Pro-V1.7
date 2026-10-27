@@ -1,4 +1,5 @@
 import { readDb, writeDb } from '@/lib/db-writer';
+import { authorizeCollectionRead, authorizeCollectionWrite } from '@/lib/server-auth';
 
 const RETRYABLE_CODES = new Set(['EPERM', 'EACCES', 'EBUSY', 'UNKNOWN']);
 
@@ -231,6 +232,8 @@ function getNsFromUrl(request: Request): string | null {
 export async function GET(request: Request) {
   const ns = getNsFromUrl(request);
   if (!ns) return new Response(JSON.stringify({ error: 'invalid namespace' }), { status: 400 });
+  const denied = await authorizeCollectionRead(request, ns);
+  if (denied) return denied;
   const db = readDb();
   const raw = (db.collections && db.collections[ns]) ?? [];
 
@@ -268,6 +271,8 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   const ns = getNsFromUrl(request);
   if (!ns) return new Response(JSON.stringify({ error: 'invalid namespace' }), { status: 400 });
+  const denied = await authorizeCollectionWrite(request, ns);
+  if (denied) return denied;
   try {
     const incoming = await request.json();
     const incomingItems = incoming && Array.isArray(incoming.items) ? incoming.items : incoming;

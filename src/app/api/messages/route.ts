@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import { notifyRecipients } from '@/lib/fcm';
+import { requireAuthenticated } from '@/lib/server-auth';
 
 export const runtime = 'nodejs';
 
@@ -48,12 +49,10 @@ function isValidId(id: any): id is string {
 
 export async function GET(request: Request) {
   try {
-    const url = new URL(request.url);
-    const userId = url.searchParams.get('userId') || undefined;
+    const auth = await requireAuthenticated(request);
+    if (auth.response) return auth.response;
     let list = readDb().messages;
-    if (userId) {
-      list = list.filter((m) => m.recipient === userId || m.recipient === 'all');
-    }
+    list = list.filter((m) => m.recipient === auth.user.id || m.recipient === 'all');
     list = [...list].sort(
       (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
@@ -70,6 +69,8 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  const auth = await requireAuthenticated(request);
+  if (auth.response) return auth.response;
   try {
     const body = await request.json();
     const title = typeof body.title === 'string' ? body.title.trim() : '';
@@ -77,8 +78,8 @@ export async function POST(request: Request) {
     const type: MessageType = ['info', 'warning', 'success', 'error'].includes(body.type)
       ? body.type
       : 'info';
-    const senderId = typeof body.senderId === 'string' ? body.senderId : 'unknown';
-    const senderName = typeof body.senderName === 'string' ? body.senderName : senderId;
+    const senderId = auth.user.id;
+    const senderName = auth.user.name;
     const recipients = Array.isArray(body.recipients)
       ? body.recipients.filter(isValidId)
       : [];
@@ -150,6 +151,8 @@ export async function POST(request: Request) {
 }
 
 export async function PATCH(request: Request) {
+  const auth = await requireAuthenticated(request);
+  if (auth.response) return auth.response;
   try {
     const body = await request.json();
     const ids = Array.isArray(body.ids) ? body.ids.filter((x: any) => typeof x === 'string') : [];
@@ -161,7 +164,11 @@ export async function PATCH(request: Request) {
     }
     const idSet = new Set(ids);
     const db = readDb();
-    db.messages = db.messages.map((m) => (idSet.has(m.id) ? { ...m, read: true } : m));
+    db.messages = db.messages.map((m) => (
+      idSet.has(m.id) && (m.recipient === auth.user.id || m.recipient === 'all')
+        ? { ...m, read: true }
+        : m
+    ));
     writeDb(db);
     return new Response(JSON.stringify({ ok: true }), {
       status: 200,
