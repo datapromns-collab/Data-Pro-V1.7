@@ -157,7 +157,7 @@ function PermisosModuleContent() {
       setForm({
         id: selectedUser.id,
         name: selectedUser.name,
-        password: selectedUser.password,
+        password: '',
         role: selectedUser.role,
         displayRole: selectedUser.displayRole ?? '',
         avatarUrl: selectedUser.avatarUrl ?? '',
@@ -209,8 +209,8 @@ function PermisosModuleContent() {
     const nextName = form.name.trim();
     const nextPassword = form.password.trim();
 
-    if (!nextId || !nextName || !nextPassword) {
-      setNotice('Completa usuario, nombre y contraseña');
+    if (!nextId || !nextName || (!nextPassword && !selectedUser)) {
+      setNotice('Completa usuario, nombre y la contraseña para una cuenta nueva');
       return;
     }
 
@@ -377,7 +377,7 @@ function PermisosModuleContent() {
                   value={form.password}
                   onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))}
                   className="mt-1 h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm font-bold text-slate-800 outline-none focus:border-primary"
-                  placeholder="Contraseña"
+                  placeholder={selectedUser ? 'Vacía = conservar actual' : 'Mínimo 8 caracteres'}
                 />
               </label>
               <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500">
