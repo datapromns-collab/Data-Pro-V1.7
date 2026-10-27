@@ -1,6 +1,17 @@
 {
   "messages": [
     {
+      "id": "2026-10-27T18:59:09.353Z-01mnf5q",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "jaime.r",
+      "read": false,
+      "createdAt": "2026-10-27T18:59:09.353Z"
+    },
+    {
       "id": "2026-10-23T15:02:26.435Z-5iesx26",
       "title": "Avisó",
       "message": "Data pro en línea actualizaciones compilan sin errores",
@@ -100,15 +111,15 @@
       "createdAt": "2026-09-30T14:43:02.341Z"
     },
     {
-      "id": "2026-09-28T18:44:23.982Z-v6avya3",
-      "title": "Aviso",
-      "message": "Actualizaciones cargadas",
+      "id": "2026-10-27T18:59:09.353Z-viwb6ys",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "jaime.r",
-      "read": true,
-      "createdAt": "2026-09-28T18:44:23.982Z"
+      "recipient": "demon2",
+      "read": false,
+      "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
       "id": "2026-10-23T15:02:26.435Z-6dmnmmu",
@@ -210,15 +221,15 @@
       "createdAt": "2026-09-30T14:43:02.341Z"
     },
     {
-      "id": "2026-09-28T18:44:23.982Z-o17fkdj",
-      "title": "Aviso",
-      "message": "Actualizaciones cargadas",
+      "id": "2026-10-27T18:59:09.353Z-q8scw6o",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "demon2",
-      "read": true,
-      "createdAt": "2026-09-28T18:44:23.982Z"
+      "recipient": "maria.mds",
+      "read": false,
+      "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
       "id": "2026-10-23T15:02:26.435Z-iz46n1o",
@@ -320,15 +331,15 @@
       "createdAt": "2026-10-16T14:54:14.951Z"
     },
     {
-      "id": "2026-10-12T20:40:46.104Z-mzau1u0",
-      "title": "PDP S42",
-      "message": "se realizo modificación en el pdp S42 para las líneas 6 y 7",
+      "id": "2026-10-27T18:59:09.353Z-a4xvgiz",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-10-12T20:40:46.104Z"
+      "recipient": "alex.mds",
+      "read": false,
+      "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
       "id": "2026-10-23T15:02:26.435Z-tj7j7uu",
@@ -430,15 +441,15 @@
       "createdAt": "2026-09-30T14:43:02.341Z"
     },
     {
-      "id": "2026-09-28T18:44:23.982Z-0a0g6xr",
-      "title": "Aviso",
-      "message": "Actualizaciones cargadas",
+      "id": "2026-10-27T18:59:09.353Z-j2yc8c4",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-09-28T18:44:23.982Z"
+      "recipient": "anto.mds",
+      "read": false,
+      "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
       "id": "2026-10-23T15:02:26.435Z-o3tqq4m",
@@ -540,15 +551,15 @@
       "createdAt": "2026-09-30T14:43:02.341Z"
     },
     {
-      "id": "2026-09-28T18:44:23.982Z-mid4vwn",
-      "title": "Aviso",
-      "message": "Actualizaciones cargadas",
+      "id": "2026-10-27T18:59:09.353Z-ys03qdh",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "anto.mds",
+      "recipient": "prodtj.mds",
       "read": false,
-      "createdAt": "2026-09-28T18:44:23.982Z"
+      "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
       "id": "2026-10-23T15:02:26.435Z-9hlydwi",
@@ -650,15 +661,15 @@
       "createdAt": "2026-09-30T14:43:02.341Z"
     },
     {
-      "id": "2026-09-28T18:44:23.982Z-rhe2y4q",
-      "title": "Aviso",
-      "message": "Actualizaciones cargadas",
+      "id": "2026-10-27T18:59:09.353Z-jbe4vbs",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtj.mds",
-      "read": true,
-      "createdAt": "2026-09-28T18:44:23.982Z"
+      "recipient": "prodtg.mds",
+      "read": false,
+      "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
       "id": "2026-10-23T15:02:26.435Z-0atq097",
@@ -760,15 +771,15 @@
       "createdAt": "2026-09-30T14:43:02.341Z"
     },
     {
-      "id": "2026-09-28T18:44:23.982Z-8shwzon",
-      "title": "Aviso",
-      "message": "Actualizaciones cargadas",
+      "id": "2026-10-27T18:59:09.353Z-j1xzgii",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtg.mds",
+      "recipient": "prodts.mds",
       "read": false,
-      "createdAt": "2026-09-28T18:44:23.982Z"
+      "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
       "id": "2026-10-23T15:02:26.435Z-2zmk2s8",
@@ -870,15 +881,15 @@
       "createdAt": "2026-09-30T14:43:02.341Z"
     },
     {
-      "id": "2026-09-28T18:44:23.982Z-j72p97f",
-      "title": "Aviso",
-      "message": "Actualizaciones cargadas",
+      "id": "2026-10-27T18:59:09.353Z-h853dan",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodts.mds",
-      "read": true,
-      "createdAt": "2026-09-28T18:44:23.982Z"
+      "recipient": "procj.mds",
+      "read": false,
+      "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
       "id": "2026-10-23T15:02:26.435Z-l6rn0ak",
@@ -980,15 +991,15 @@
       "createdAt": "2026-09-30T14:43:02.341Z"
     },
     {
-      "id": "2026-09-28T18:44:23.982Z-2l2nz6q",
-      "title": "Aviso",
-      "message": "Actualizaciones cargadas",
+      "id": "2026-10-27T18:59:09.353Z-ysubbmm",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procj.mds",
-      "read": true,
-      "createdAt": "2026-09-28T18:44:23.982Z"
+      "recipient": "cald.mds",
+      "read": false,
+      "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
       "id": "2026-10-23T15:02:26.435Z-vtp56ce",
@@ -1090,15 +1101,15 @@
       "createdAt": "2026-09-30T14:43:02.341Z"
     },
     {
-      "id": "2026-09-28T18:44:23.982Z-6zqwiq0",
-      "title": "Aviso",
-      "message": "Actualizaciones cargadas",
+      "id": "2026-10-27T18:59:09.353Z-bmxsckj",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "cald.mds",
+      "recipient": "prodt.mds",
       "read": false,
-      "createdAt": "2026-09-28T18:44:23.982Z"
+      "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
       "id": "2026-10-23T15:02:26.435Z-pvx4rvt",
@@ -1200,15 +1211,15 @@
       "createdAt": "2026-09-30T14:43:02.341Z"
     },
     {
-      "id": "2026-09-28T18:44:23.982Z-2658286",
-      "title": "Aviso",
-      "message": "Actualizaciones cargadas",
+      "id": "2026-10-27T18:59:09.353Z-6y4bx9s",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt.mds",
+      "recipient": "prodt1.mds",
       "read": false,
-      "createdAt": "2026-09-28T18:44:23.982Z"
+      "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
       "id": "2026-10-23T15:02:26.435Z-m1y4w3q",
@@ -1310,15 +1321,15 @@
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {
-      "id": "2026-09-30T14:43:02.341Z-t8ba5iq",
-      "title": "Modificación PDP S40",
-      "message": "Se realizo modificación en el PDP S40 para la linea 6",
+      "id": "2026-10-27T18:59:09.353Z-6ggn22w",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt1.mds",
-      "read": true,
-      "createdAt": "2026-09-30T14:43:02.341Z"
+      "recipient": "prodt2.mds",
+      "read": false,
+      "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
       "id": "2026-10-23T15:02:26.435Z-i7n6i35",
@@ -1420,15 +1431,15 @@
       "createdAt": "2026-09-30T14:43:02.341Z"
     },
     {
-      "id": "2026-09-28T18:44:23.982Z-ts4p7ik",
-      "title": "Aviso",
-      "message": "Actualizaciones cargadas",
+      "id": "2026-10-27T18:59:09.353Z-vf51km6",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt2.mds",
-      "read": true,
-      "createdAt": "2026-09-28T18:44:23.982Z"
+      "recipient": "proc.mds",
+      "read": false,
+      "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
       "id": "2026-10-23T15:02:26.435Z-cr1y9oe",
@@ -1530,15 +1541,15 @@
       "createdAt": "2026-09-30T14:43:02.341Z"
     },
     {
-      "id": "2026-09-28T18:44:23.982Z-alicd0c",
-      "title": "Aviso",
-      "message": "Actualizaciones cargadas",
+      "id": "2026-10-27T18:59:09.353Z-ux5nrkk",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc.mds",
-      "read": true,
-      "createdAt": "2026-09-28T18:44:23.982Z"
+      "recipient": "proc1.mds",
+      "read": false,
+      "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
       "id": "2026-10-23T15:02:26.435Z-4dqyc78",
@@ -1640,15 +1651,15 @@
       "createdAt": "2026-09-30T14:43:02.341Z"
     },
     {
-      "id": "2026-09-28T18:44:23.982Z-a39qrzo",
-      "title": "Aviso",
-      "message": "Actualizaciones cargadas",
+      "id": "2026-10-27T18:59:09.353Z-8al5i3k",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc1.mds",
+      "recipient": "proc2.mds",
       "read": false,
-      "createdAt": "2026-09-28T18:44:23.982Z"
+      "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
       "id": "2026-10-23T15:02:26.435Z-823qr0x",
@@ -1750,15 +1761,15 @@
       "createdAt": "2026-09-30T14:43:02.341Z"
     },
     {
-      "id": "2026-09-28T18:44:23.982Z-1nr8cq0",
-      "title": "Aviso",
-      "message": "Actualizaciones cargadas",
+      "id": "2026-10-27T18:59:09.353Z-z4a5nmn",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc2.mds",
+      "recipient": "procs1.mds",
       "read": false,
-      "createdAt": "2026-09-28T18:44:23.982Z"
+      "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
       "id": "2026-10-23T15:02:26.435Z-vxh2dfj",
@@ -1860,15 +1871,15 @@
       "createdAt": "2026-09-30T14:43:02.341Z"
     },
     {
-      "id": "2026-09-28T18:44:23.982Z-3bgiorl",
-      "title": "Aviso",
-      "message": "Actualizaciones cargadas",
+      "id": "2026-10-27T18:59:09.353Z-3vpne2x",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procs1.mds",
-      "read": true,
-      "createdAt": "2026-09-28T18:44:23.982Z"
+      "recipient": "procs2.mds",
+      "read": false,
+      "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
       "id": "2026-10-23T15:02:26.435Z-10p6tg6",
@@ -1970,15 +1981,15 @@
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {
-      "id": "2026-09-30T14:43:02.341Z-2qblwjo",
-      "title": "Modificación PDP S40",
-      "message": "Se realizo modificación en el PDP S40 para la linea 6",
+      "id": "2026-10-27T18:59:09.353Z-5gksp3e",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procs2.mds",
+      "recipient": "finan.mds",
       "read": false,
-      "createdAt": "2026-09-30T14:43:02.341Z"
+      "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
       "id": "2026-10-23T15:02:26.435Z-vpjffax",
@@ -2080,15 +2091,15 @@
       "createdAt": "2026-09-30T14:43:02.341Z"
     },
     {
-      "id": "2026-09-28T18:44:23.982Z-xiq1oxi",
-      "title": "Aviso",
-      "message": "Actualizaciones cargadas",
+      "id": "2026-10-27T18:59:09.353Z-f4iwm5x",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "finan.mds",
+      "recipient": "g.tec.mds",
       "read": false,
-      "createdAt": "2026-09-28T18:44:23.982Z"
+      "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
       "id": "2026-10-23T15:02:26.435Z-4tlxq0u",
@@ -2190,15 +2201,15 @@
       "createdAt": "2026-09-30T14:43:02.341Z"
     },
     {
-      "id": "2026-09-28T18:44:23.982Z-cyr7ewq",
-      "title": "Aviso",
-      "message": "Actualizaciones cargadas",
+      "id": "2026-10-27T18:59:09.353Z-kc8ubfo",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "g.tec.mds",
-      "read": true,
-      "createdAt": "2026-09-28T18:44:23.982Z"
+      "recipient": "enf.mds",
+      "read": false,
+      "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
       "id": "2026-10-23T15:02:26.435Z-ksyhmwq",
@@ -2300,15 +2311,15 @@
       "createdAt": "2026-09-30T14:43:02.341Z"
     },
     {
-      "id": "2026-09-28T18:44:23.982Z-n2ivth6",
-      "title": "Aviso",
-      "message": "Actualizaciones cargadas",
+      "id": "2026-10-27T18:59:09.353Z-mqxjbr8",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "enf.mds",
+      "recipient": "etq.mds",
       "read": false,
-      "createdAt": "2026-09-28T18:44:23.982Z"
+      "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
       "id": "2026-10-23T15:02:26.435Z-bir617y",
@@ -2410,15 +2421,15 @@
       "createdAt": "2026-09-30T14:43:02.341Z"
     },
     {
-      "id": "2026-09-28T18:44:23.982Z-msthhgf",
-      "title": "Aviso",
-      "message": "Actualizaciones cargadas",
+      "id": "2026-10-27T18:59:09.353Z-8huhh3t",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "etq.mds",
+      "recipient": "logg.mds",
       "read": false,
-      "createdAt": "2026-09-28T18:44:23.982Z"
+      "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
       "id": "2026-10-23T15:02:26.435Z-lki9bb1",
@@ -2520,15 +2531,15 @@
       "createdAt": "2026-09-30T14:43:02.341Z"
     },
     {
-      "id": "2026-09-28T18:44:23.982Z-m2vw88b",
-      "title": "Aviso",
-      "message": "Actualizaciones cargadas",
+      "id": "2026-10-27T18:59:09.353Z-faomjeq",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "logg.mds",
+      "recipient": "mtto.mds",
       "read": false,
-      "createdAt": "2026-09-28T18:44:23.982Z"
+      "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
       "id": "2026-10-23T15:02:26.435Z-oudzg35",
@@ -2630,15 +2641,15 @@
       "createdAt": "2026-09-30T14:43:02.341Z"
     },
     {
-      "id": "2026-09-28T18:44:23.982Z-d96wsua",
-      "title": "Aviso",
-      "message": "Actualizaciones cargadas",
+      "id": "2026-10-27T18:59:09.353Z-shn4xj9",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto.mds",
-      "read": true,
-      "createdAt": "2026-09-28T18:44:23.982Z"
+      "recipient": "MDS",
+      "read": false,
+      "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
       "id": "2026-10-23T15:02:26.435Z-po1xftz",
@@ -2740,15 +2751,15 @@
       "createdAt": "2026-09-30T14:43:02.341Z"
     },
     {
-      "id": "2026-09-28T18:44:23.982Z-wymeubp",
-      "title": "Aviso",
-      "message": "Actualizaciones cargadas",
+      "id": "2026-10-27T18:59:09.353Z-8cdcdse",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "MDS",
+      "recipient": "mtto1.mds",
       "read": false,
-      "createdAt": "2026-09-28T18:44:23.982Z"
+      "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
       "id": "2026-10-23T15:02:26.435Z-s95gym2",
@@ -2850,6 +2861,17 @@
       "createdAt": "2026-09-30T14:43:02.341Z"
     },
     {
+      "id": "2026-10-27T18:59:09.353Z-mzysq5m",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "stf",
+      "read": false,
+      "createdAt": "2026-10-27T18:59:09.353Z"
+    },
+    {
       "id": "2026-10-23T15:02:26.435Z-z5xwd6s",
       "title": "Avisó",
       "message": "Data pro en línea actualizaciones compilan sin errores",
@@ -2938,6 +2960,17 @@
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {
+      "id": "2026-10-27T18:59:09.353Z-yi1bt0t",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodt3.mds",
+      "read": false,
+      "createdAt": "2026-10-27T18:59:09.353Z"
+    },
+    {
       "id": "2026-10-23T15:02:26.435Z-ryv95pf",
       "title": "Avisó",
       "message": "Data pro en línea actualizaciones compilan sin errores",
@@ -3013,6 +3046,17 @@
       "recipient": "prodt3.mds",
       "read": false,
       "createdAt": "2026-10-16T14:54:14.951Z"
+    },
+    {
+      "id": "2026-10-27T18:59:09.353Z-oc4118k",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodt4.mds",
+      "read": false,
+      "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
       "id": "2026-10-23T15:02:26.435Z-dttdqur",
@@ -3103,6 +3147,17 @@
       "createdAt": "2026-10-16T14:54:14.951Z"
     },
     {
+      "id": "2026-10-27T18:59:09.353Z-dzny2fz",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alc.mds",
+      "read": false,
+      "createdAt": "2026-10-27T18:59:09.353Z"
+    },
+    {
       "id": "2026-10-23T15:02:26.435Z-mwk2vua",
       "title": "Avisó",
       "message": "Data pro en línea actualizaciones compilan sin errores",
@@ -3145,6 +3200,17 @@
       "recipient": "alc.mds",
       "read": false,
       "createdAt": "2026-10-20T17:14:08.396Z"
+    },
+    {
+      "id": "2026-10-27T18:59:09.353Z-zks16uc",
+      "title": "Avisó",
+      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alc1.mds",
+      "read": false,
+      "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
       "id": "2026-10-23T15:02:26.435Z-thqxef2",

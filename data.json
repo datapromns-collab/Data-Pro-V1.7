@@ -13703,19 +13703,6 @@
         "tasks": [
           {
             "name": "GLUP COLA",
-            "lineId": "3",
-            "loadPerHour": 2800,
-            "quantity": 224000,
-            "durationHours": 80,
-            "presentation": "2Lts",
-            "tanks": 25.97,
-            "startTime": "2026-10-26T11:00:00.000Z",
-            "endTime": "2026-10-29T19:00:00.000Z",
-            "id": "ifw6awqlh",
-            "color": "#47CCB0"
-          },
-          {
-            "name": "GLUP COLA",
             "lineId": "4",
             "loadPerHour": 2800,
             "quantity": 210000,
@@ -13861,30 +13848,6 @@
             "endTime": "2026-10-29T21:00:00.000Z",
             "id": "91f7uhm1h",
             "color": "#ef4444"
-          },
-          {
-            "name": "CIP 3P ALCALINO",
-            "lineId": "3",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 2,
-            "startTime": "2026-10-29T19:00:00.000Z",
-            "endTime": "2026-10-29T21:00:00.000Z",
-            "id": "jymfs6gsd",
-            "color": "#587593"
-          },
-          {
-            "name": "GLUP COLA",
-            "lineId": "3",
-            "loadPerHour": 2800,
-            "quantity": 100800,
-            "durationHours": 36,
-            "presentation": "2Lts",
-            "tanks": 11.69,
-            "startTime": "2026-10-29T21:00:00.000Z",
-            "endTime": "2026-10-31T09:00:00.000Z",
-            "id": "r5yoh9rcx",
-            "color": "#10b981"
           },
           {
             "name": "CIP 3P ALCALINO",
@@ -14319,6 +14282,54 @@
             "endTime": "2026-10-31T09:00:00.000Z",
             "id": "gi7dvttig",
             "color": "#ef4444"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "3",
+            "loadPerHour": 2800,
+            "quantity": 131600,
+            "durationHours": 47,
+            "presentation": "2Lts",
+            "tanks": 15.26,
+            "startTime": "2026-10-26T11:00:00.000Z",
+            "endTime": "2026-10-28T10:00:00.000Z",
+            "id": "2blq1txp7",
+            "color": "#ef4444"
+          },
+          {
+            "name": "MTTO",
+            "lineId": "3",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 10.5,
+            "startTime": "2026-10-28T10:00:00.000Z",
+            "endTime": "2026-10-28T20:30:00.000Z",
+            "id": "ql3001ml3",
+            "color": "#6366f1"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "3",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-10-28T20:30:00.000Z",
+            "endTime": "2026-10-28T22:30:00.000Z",
+            "id": "lrncikhcd",
+            "color": "#f59e0b"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "3",
+            "loadPerHour": 2800,
+            "quantity": 163800,
+            "durationHours": 58.5,
+            "presentation": "2Lts",
+            "tanks": 18.99,
+            "startTime": "2026-10-28T22:30:00.000Z",
+            "endTime": "2026-10-31T09:00:00.000Z",
+            "id": "24py22jum",
+            "color": "#ef4444"
           }
         ],
         "realProduction": {},
@@ -14414,7 +14425,10 @@
           "ofw4siaht",
           "qda0w2gkm",
           "gmlchgi75",
-          "l7fvsbxby"
+          "l7fvsbxby",
+          "r5yoh9rcx",
+          "jymfs6gsd",
+          "ifw6awqlh"
         ]
       }
     },
@@ -24088,7 +24102,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-27T18:36:52.369Z"
+    "updatedAt": "2026-10-27T18:56:18.171Z"
   },
   "ordenesSap": [
     {
@@ -36789,8 +36803,8 @@
         },
         {
           "fechaInicio": "2026-10-27",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16470",
+          "cajas1": 1454,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -36820,8 +36834,8 @@
         },
         {
           "fechaInicio": "2026-10-27",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16377",
+          "cajas1": 5200,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -36962,8 +36976,8 @@
       "dias": [
         {
           "fechaInicio": "2026-10-27",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16470",
+          "cajas1": 5923,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -36982,8 +36996,8 @@
       "dias": [
         {
           "fechaInicio": "2026-10-27",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16470",
+          "cajas1": 2028,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -239369,7 +239383,7 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1792740609797,
+        "id": 1793127330978.4565,
         "fechaOrden": "2026-10-14",
         "orden": "9961",
         "fechaEmision": "2026-10-14",
@@ -239392,7 +239406,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Sanchez"
       },
       {
@@ -239423,7 +239437,7 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1792741244325,
+        "id": 1793127330978.2903,
         "fechaOrden": "2026-10-16",
         "orden": "9965",
         "fechaEmision": "2026-10-16",
@@ -239446,11 +239460,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1792741323011,
+        "id": 1793127330978.554,
         "fechaOrden": "2026-10-16",
         "orden": "9966",
         "fechaEmision": "2026-10-16",
@@ -239473,11 +239487,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1792741633020,
+        "id": 1793127330978.4902,
         "fechaOrden": "2026-10-16",
         "orden": "9967",
         "fechaEmision": "2026-10-16",
@@ -239500,7 +239514,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Sanchez"
       },
       {
@@ -239531,7 +239545,7 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1792742129173,
+        "id": 1793127330978.9712,
         "fechaOrden": "2026-10-17",
         "orden": "9969",
         "fechaEmision": "2026-10-17",
@@ -239554,7 +239568,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Sanchez"
       },
       {
@@ -239585,7 +239599,7 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1792742493964,
+        "id": 1793127330978.663,
         "fechaOrden": "2026-10-17",
         "orden": "9970",
         "fechaEmision": "2026-10-17",
@@ -239608,7 +239622,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Sanchez"
       },
       {
@@ -239639,7 +239653,7 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1792743630869,
+        "id": 1793127330978.595,
         "fechaOrden": "2026-10-12",
         "orden": "9750",
         "fechaEmision": "2026-10-12",
@@ -239662,7 +239676,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Sanchez"
       },
       {
@@ -240044,7 +240058,7 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1792799224018,
+        "id": 1793127330978.5608,
         "fechaOrden": "2026-10-15",
         "orden": "10008",
         "fechaEmision": "2026-10-15",
@@ -240067,7 +240081,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Sanchez"
       },
       {
@@ -240152,7 +240166,7 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1792800076434,
+        "id": 1793127330978.7874,
         "fechaOrden": "2026-10-12",
         "orden": "SV6597",
         "fechaEmision": "2026-10-12",
@@ -240175,7 +240189,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Sanchez"
       },
       {
@@ -240206,7 +240220,7 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1792800882003,
+        "id": 1793127330978.6812,
         "fechaOrden": "2026-10-12",
         "orden": "9878",
         "fechaEmision": "2026-10-12",
@@ -240229,7 +240243,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Sanchez"
       },
       {
@@ -240314,7 +240328,7 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1792801576770,
+        "id": 1793127330978.974,
         "fechaOrden": "2026-10-13",
         "orden": "9879",
         "fechaEmision": "2026-10-13",
@@ -240337,11 +240351,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1792801644171,
+        "id": 1793127330978.1145,
         "fechaOrden": "2026-10-13",
         "orden": "9880",
         "fechaEmision": "2026-10-13",
@@ -240364,7 +240378,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Sanchez"
       },
       {
@@ -240476,7 +240490,7 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1792804022033,
+        "id": 1793127330978.4377,
         "fechaOrden": "2026-10-14",
         "orden": "9882",
         "fechaEmision": "2026-10-14",
@@ -240499,11 +240513,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1792804180250,
+        "id": 1793127330978.5679,
         "fechaOrden": "2026-10-14",
         "orden": "9881",
         "fechaEmision": "2026-10-14",
@@ -240526,11 +240540,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1792804686346,
+        "id": 1793127330978.074,
         "fechaOrden": "2026-10-14",
         "orden": "9883",
         "fechaEmision": "2026-10-14",
@@ -240553,11 +240567,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1792805034435,
+        "id": 1793127330978.6638,
         "fechaOrden": "2026-10-14",
         "orden": "9884",
         "fechaEmision": "2026-10-14",
@@ -240580,7 +240594,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Sanchez"
       },
       {
