@@ -24472,7 +24472,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-28T21:27:43.426Z"
+    "updatedAt": "2026-10-28T21:28:49.530Z"
   },
   "ordenesSap": [
     {
@@ -268821,8 +268821,8 @@
         "litros": "17248",
         "ubb": "6",
         "brix": "53.76",
-        "estado": "preparado",
-        "enviarALinea": null,
+        "estado": "enviado a linea",
+        "enviarALinea": 3,
         "editando": false,
         "editandoPor": null
       },
@@ -269478,7 +269478,19 @@
       "2026-10-25-tank-3": "-40",
       "2026-10-25-tank-4": "150",
       "2026-10-25-tank-5": "-50",
-      "2026-10-25-tank-6": "2090"
+      "2026-10-25-tank-6": "2090",
+      "2026-10-26-tank-1": "90",
+      "2026-10-26-tank-2": "0",
+      "2026-10-26-tank-3": "30",
+      "2026-10-26-tank-4": "3090",
+      "2026-10-26-tank-5": "50",
+      "2026-10-26-tank-6": "19020",
+      "2026-10-27-tank-1": "110",
+      "2026-10-27-tank-2": "20",
+      "2026-10-27-tank-3": "30",
+      "2026-10-27-tank-4": "17070",
+      "2026-10-27-tank-5": "30",
+      "2026-10-27-tank-6": "5670"
     },
     "logistica-inventario-mensual": {
       "periods": {
@@ -269892,6 +269904,18 @@
           "horaInicio": "",
           "ubbInicial": "6",
           "volInicialTanque": "17300"
+        },
+        {
+          "sourcePrepKey": "glup:row_1793096433701_wq0nlk",
+          "fechaFiltro": "2026-10-27",
+          "fecha": "2026-10-28",
+          "dia": "miércoles",
+          "turno": "Diurno",
+          "tanque": "11",
+          "sabor": "GLUP COLA",
+          "horaInicio": "17:55",
+          "ubbInicial": "6",
+          "volInicialTanque": "17248"
         }
       ],
       "4": [
@@ -270106,6 +270130,18 @@
           "volInicialTanque": "20000",
           "ubbFinal": "0",
           "volFinalTanque": "0"
+        },
+        {
+          "sourcePrepKey": "justy:row_1793221106946_bswcf2",
+          "fechaFiltro": "2026-10-28",
+          "fecha": "2026-10-28",
+          "dia": "miércoles",
+          "turno": "Diurno",
+          "tanque": "6",
+          "sabor": "JUSTY DURAZNO",
+          "horaInicio": "17:53",
+          "ubbInicial": "20",
+          "volInicialTanque": "20000"
         }
       ],
       "6": [
@@ -271690,8 +271726,8 @@
         "litros": "20000",
         "ubb": "20",
         "brix": "13.49",
-        "estado": "preparado",
-        "enviarALinea": null,
+        "estado": "enviado a linea",
+        "enviarALinea": 5,
         "editando": false,
         "editandoPor": null
       }
