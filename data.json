@@ -24400,7 +24400,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-28T13:38:19.596Z"
+    "updatedAt": "2026-10-28T14:25:12.736Z"
   },
   "ordenesSap": [
     {
@@ -37316,7 +37316,7 @@
           "fechaInicio": "2026-10-27",
           "ticket1": "",
           "cajas1": 0,
-          "ticket2": "1336",
+          "ticket2": "16336",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
@@ -37325,8 +37325,8 @@
         },
         {
           "fechaInicio": "2026-10-28",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16337",
+          "cajas1": 1360,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -37353,6 +37353,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 3040
+        },
+        {
+          "fechaInicio": "2026-10-28",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -37373,6 +37384,97 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 1794
+        },
+        {
+          "fechaInicio": "2026-10-28",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "1-1793197383481",
+      "linea": 1,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "64545",
+      "semana": 44,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-28",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "3-1793197394756",
+      "linea": 3,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "64551",
+      "semana": 44,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-28",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "4-1793197406064",
+      "linea": 4,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "64557",
+      "semana": 44,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-28",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "5-1793197421430",
+      "linea": 5,
+      "sabor": "JUSTY DURAZNO",
+      "ordenNumero": "64562",
+      "semana": 44,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-28",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     }
@@ -50758,8 +50860,8 @@
           },
           "JUSTY DURAZNO": {
             "inicial": "16",
-            "preparado": "",
-            "final": ""
+            "preparado": "240",
+            "final": "29"
           },
           "GLUP KOLITA": {
             "inicial": "41.26",
@@ -50786,110 +50888,110 @@
         },
         "2026-10-28": {
           "GLUP COLA": {
-            "inicial": "71.18",
+            "inicial": "",
             "preparado": "",
-            "final": "71.18"
+            "final": ""
           },
           "JUSTY DURAZNO": {
-            "inicial": "33",
+            "inicial": "",
             "preparado": "",
-            "final": "33"
+            "final": ""
           },
           "GLUP KOLITA": {
-            "inicial": "5.26",
+            "inicial": "",
             "preparado": "",
-            "final": "5.26"
+            "final": ""
           },
           "GLUP UVA": {
-            "inicial": "11",
+            "inicial": "",
             "preparado": "",
-            "final": "11"
+            "final": ""
           },
           "GLUP FRESH": {
-            "inicial": "12",
+            "inicial": "",
             "preparado": "",
-            "final": "12"
+            "final": ""
           }
         },
         "2026-10-29": {
           "GLUP COLA": {
-            "inicial": "71.18",
+            "inicial": "",
             "preparado": "",
-            "final": "71.18"
+            "final": ""
           },
           "JUSTY DURAZNO": {
-            "inicial": "33",
+            "inicial": "",
             "preparado": "",
-            "final": "33"
+            "final": ""
           },
           "GLUP KOLITA": {
-            "inicial": "5.26",
+            "inicial": "",
             "preparado": "",
-            "final": "5.26"
+            "final": ""
           },
           "GLUP UVA": {
-            "inicial": "11",
+            "inicial": "",
             "preparado": "",
-            "final": "11"
+            "final": ""
           },
           "GLUP FRESH": {
-            "inicial": "12",
+            "inicial": "",
             "preparado": "",
-            "final": "12"
+            "final": ""
           }
         },
         "2026-10-30": {
           "GLUP COLA": {
-            "inicial": "71.18",
+            "inicial": "",
             "preparado": "",
-            "final": "71.18"
+            "final": ""
           },
           "JUSTY DURAZNO": {
-            "inicial": "33",
+            "inicial": "",
             "preparado": "",
-            "final": "33"
+            "final": ""
           },
           "GLUP KOLITA": {
-            "inicial": "5.26",
+            "inicial": "",
             "preparado": "",
-            "final": "5.26"
+            "final": ""
           },
           "GLUP UVA": {
-            "inicial": "11",
+            "inicial": "",
             "preparado": "",
-            "final": "11"
+            "final": ""
           },
           "GLUP FRESH": {
-            "inicial": "12",
+            "inicial": "",
             "preparado": "",
-            "final": "12"
+            "final": ""
           }
         },
         "2026-10-31": {
           "GLUP COLA": {
-            "inicial": "71.18",
+            "inicial": "",
             "preparado": "",
-            "final": "71.18"
+            "final": ""
           },
           "JUSTY DURAZNO": {
-            "inicial": "33",
+            "inicial": "",
             "preparado": "",
-            "final": "33"
+            "final": ""
           },
           "GLUP KOLITA": {
-            "inicial": "5.26",
+            "inicial": "",
             "preparado": "",
-            "final": "5.26"
+            "final": ""
           },
           "GLUP UVA": {
-            "inicial": "11",
+            "inicial": "",
             "preparado": "",
-            "final": "11"
+            "final": ""
           },
           "GLUP FRESH": {
-            "inicial": "12",
+            "inicial": "",
             "preparado": "",
-            "final": "12"
+            "final": ""
           }
         }
       },
@@ -52481,37 +52583,42 @@
         },
         "2026-10-27": {
           "PORTUGUESA": {
+            "invInicialSacos": "12080",
+            "recepcionSacos": "920",
+            "invFinalSacos": "11280"
+          },
+          "MONTALBAN": {
             "invInicialSacos": "",
-            "recepcionSacos": "",
+            "recepcionSacos": "3520",
             "invFinalSacos": ""
           }
         },
         "2026-10-28": {
           "PORTUGUESA": {
-            "invInicialSacos": "11600",
+            "invInicialSacos": "",
             "recepcionSacos": "",
-            "invFinalSacos": "11600"
+            "invFinalSacos": ""
           }
         },
         "2026-10-29": {
           "PORTUGUESA": {
-            "invInicialSacos": "11600",
+            "invInicialSacos": "",
             "recepcionSacos": "",
-            "invFinalSacos": "11600"
+            "invFinalSacos": ""
           }
         },
         "2026-10-30": {
           "PORTUGUESA": {
-            "invInicialSacos": "11600",
+            "invInicialSacos": "",
             "recepcionSacos": "",
-            "invFinalSacos": "11600"
+            "invFinalSacos": ""
           }
         },
         "2026-10-31": {
           "PORTUGUESA": {
-            "invInicialSacos": "11600",
+            "invInicialSacos": "",
             "recepcionSacos": "",
-            "invFinalSacos": "11600"
+            "invFinalSacos": ""
           }
         }
       },
@@ -53920,52 +54027,52 @@
         },
         "2026-10-27": {
           "JARABE SIMPLE": {
-            "invInicialSacos": "",
-            "invFinalSacos": ""
+            "invInicialSacos": "300",
+            "invFinalSacos": "105"
           },
           "Sala 1": {
-            "invInicialSacos": "",
-            "invFinalSacos": ""
+            "invInicialSacos": "292",
+            "invFinalSacos": "658"
           }
         },
         "2026-10-28": {
           "JARABE SIMPLE": {
-            "invInicialSacos": "390",
-            "invFinalSacos": "390"
+            "invInicialSacos": "",
+            "invFinalSacos": ""
           },
           "Sala 1": {
-            "invInicialSacos": "1657",
-            "invFinalSacos": "1657"
+            "invInicialSacos": "",
+            "invFinalSacos": ""
           }
         },
         "2026-10-29": {
           "JARABE SIMPLE": {
-            "invInicialSacos": "390",
-            "invFinalSacos": "390"
+            "invInicialSacos": "",
+            "invFinalSacos": ""
           },
           "Sala 1": {
-            "invInicialSacos": "1657",
-            "invFinalSacos": "1657"
+            "invInicialSacos": "",
+            "invFinalSacos": ""
           }
         },
         "2026-10-30": {
           "JARABE SIMPLE": {
-            "invInicialSacos": "390",
-            "invFinalSacos": "390"
+            "invInicialSacos": "",
+            "invFinalSacos": ""
           },
           "Sala 1": {
-            "invInicialSacos": "1657",
-            "invFinalSacos": "1657"
+            "invInicialSacos": "",
+            "invFinalSacos": ""
           }
         },
         "2026-10-31": {
           "JARABE SIMPLE": {
-            "invInicialSacos": "390",
-            "invFinalSacos": "390"
+            "invInicialSacos": "",
+            "invFinalSacos": ""
           },
           "Sala 1": {
-            "invInicialSacos": "1657",
-            "invFinalSacos": "1657"
+            "invInicialSacos": "",
+            "invFinalSacos": ""
           }
         }
       },
@@ -54128,7 +54235,8 @@
         "2026-10-18": "1.02",
         "2026-10-20": "1.02",
         "2026-10-25": "1.02",
-        "2026-10-26": "1.02"
+        "2026-10-26": "1.02",
+        "2026-10-28": "1.02"
       },
       "_deletedIds": {},
       "weeklyFisico": {
@@ -54153,7 +54261,8 @@
         "2026-10-05|2026-10": 1226308.47,
         "2026-10-12|2026-10": 1233076.41,
         "2026-10-19|2026-10": 1098374.84,
-        "2026-10-26|2026-10": 0
+        "2026-10-26|2026-10": 478525.51,
+        "2026-11-01|2026-11": 0
       }
     },
     "seguimiento-etiquetadora": {
@@ -224489,6 +224598,804 @@
         "usuario": "Froilan Bolivar",
         "id": 1793195557387,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "operador": "ERNESTO SALCEDO",
+        "linea": "Línea 3",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "19:20",
+        "finParada": "19:24",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "PAQUETES DESARMADOS",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793195634828,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-26",
+        "semana": 44,
+        "turno": "DIURNO",
+        "operador": "KEVIN MENDOZA",
+        "linea": "Línea 1",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "11:55",
+        "finParada": "12:10",
+        "totalMin": "15",
+        "zona": "Llenado",
+        "falla": "PALETIZADO MANUAL POR REPARACION DE CORREAS DE PREFORMACION DE CAJAS",
+        "orden": "",
+        "observaciones": "CORRESPONDE A O.T 9990",
+        "usuario": "Froilan Bolivar",
+        "id": 1793195312493,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "operador": "ERNESTO SALCEDO",
+        "linea": "Línea 3",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "20:03",
+        "finParada": "20:08",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "RUPTURA DE FILM",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793195744220,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-26",
+        "semana": 44,
+        "turno": "DIURNO",
+        "operador": "KEVIN MENDOZA",
+        "linea": "Línea 1",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "12:19",
+        "finParada": "12:28",
+        "totalMin": "9",
+        "zona": "Llenado",
+        "falla": "PALETIZADO MANUAL POR REPARACION DE CORREAS DE PREFORMACION DE CAJAS ",
+        "orden": "",
+        "observaciones": "CORRESPONDE O.T 9990",
+        "usuario": "Froilan Bolivar",
+        "id": 1793195413285,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "SALA DE JARABE",
+        "inicioParada": "20:21",
+        "finParada": "20:23",
+        "totalMin": "2",
+        "zona": "Llenado",
+        "falla": "CAIDA DE PRESION DE JARABE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793195794796,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-26",
+        "semana": 44,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "12:30",
+        "finParada": "13:18",
+        "totalMin": "48",
+        "zona": "Llenado",
+        "falla": "FALLA DE E/E SE INICIA ENVASADO CON GENERADORES",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793195467397,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "operador": "ERNESTO SALCEDO",
+        "linea": "Línea 3",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "20:28",
+        "finParada": "20:33",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "PAQUETES DESARMADOS",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793195847332,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "operador": "ERNESTO SALCEDO",
+        "linea": "Línea 3",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "20:44",
+        "finParada": "20:47",
+        "totalMin": "3",
+        "zona": "Llenado",
+        "falla": "",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793195891259,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-26",
+        "semana": 44,
+        "turno": "DIURNO",
+        "operador": "KEVIN MENDOZA",
+        "linea": "Línea 1",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "13:32",
+        "finParada": "13:38",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "PALETIZADO MANUAL POR REPARACION DE CORREAS DE PREFORMACION DE CAJAS ",
+        "orden": "",
+        "observaciones": "CORRESPONDE O.T 9990",
+        "usuario": "Froilan Bolivar",
+        "id": 1793195536205,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "operador": "ERNESTO SALCEDO",
+        "linea": "Línea 3",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "21:14",
+        "finParada": "21:20",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "TRENZADO DE BOBINA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793195938203,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-19",
+        "semana": 43,
+        "turno": "DIURNO",
+        "operador": "ERNESTO SALCEDO",
+        "linea": "Línea 3",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "22:24",
+        "finParada": "22:41",
+        "totalMin": "17",
+        "zona": "Llenado",
+        "falla": "SALTO DE VARILLA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793195993092,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "operador": "ERNESTO SALCEDO",
+        "linea": "Línea 3",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "03:21",
+        "finParada": "03:27",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "CAIDA DE BOTELLAS",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793196047764,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "05:06",
+        "finParada": "05:40",
+        "totalMin": "34",
+        "zona": "Llenado",
+        "falla": "CAMBIO DE SABOR GLUP COLA A GLUP UVA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793196118092,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "operador": "LEYBERGLER SILVA",
+        "linea": "Línea 4",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "19:01",
+        "finParada": "19:09",
+        "totalMin": "8",
+        "zona": "Llenado",
+        "falla": "PERDIDA DE FASE Y SALTO DE BOTELLA, POR BOTELLA MAL TAPADA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793196210252,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "operador": "KEVIN MENDOZA",
+        "linea": "Línea 4",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "19:38",
+        "finParada": "20:08",
+        "totalMin": "30",
+        "zona": "Llenado",
+        "falla": "LIMPIEZA DE VENTOSA DEL ROBOT",
+        "orden": "10153",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793196276004,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 4",
+        "equipo": "LLENADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "20:11",
+        "finParada": "20:16",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "REVISION POR BOTELLA MAL TAPADA",
+        "orden": "10154",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793196344524,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-26",
+        "semana": 44,
+        "turno": "DIURNO",
+        "operador": "DENILSON CADRASCO ",
+        "linea": "Línea 2",
+        "equipo": "SOPLADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "07:00",
+        "finParada": "07:33",
+        "totalMin": "33",
+        "zona": "Llenado",
+        "falla": "SE RECIBE LA MAQUINA CON FALLA EN VARIADOR ",
+        "orden": "10031",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793195998463,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-26",
+        "semana": 44,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 2",
+        "equipo": "TRANSPORTADOR DE CAJAS",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "07:44",
+        "finParada": "07:50",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "TRANSPORTADOR DETENIDO POR FALLA EN VARIADOR ",
+        "orden": "10033",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793196069222,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "operador": "LEYBEGLEER SILVA",
+        "linea": "Línea 4",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "20:37",
+        "finParada": "20:47",
+        "totalMin": "10",
+        "zona": "Llenado",
+        "falla": "CAIDA DE AQUETES EN SALIDA DE HORNO POR PAQUETE NO COMPACTADOS, DEBIDO A MALA CALIDAD DEL FILM",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793196464195,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 4",
+        "equipo": "TRANSPORTADOR DE CAJAS",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "20:50",
+        "finParada": "21:07",
+        "totalMin": "17",
+        "zona": "Llenado",
+        "falla": "RYPTURA TRASPORTADOR DE CAJAS",
+        "orden": "10155",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793196535028,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "operador": "LEYBERGLER SILVA",
+        "linea": "Línea 4",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "21:42",
+        "finParada": "21:49",
+        "totalMin": "7",
+        "zona": "Llenado",
+        "falla": "SALTO DE BOTELLAS POR BOTELLAS MAL TAPADAS",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793196590004,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-26",
+        "semana": 44,
+        "turno": "DIURNO",
+        "operador": "HECTOR LORCA ",
+        "linea": "Línea 2",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "INSUMOS",
+        "inicioParada": "08:18",
+        "finParada": "08:24",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "CAMBIO DE BOBINA POR EFECTO CURLING",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793196220974,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 4",
+        "equipo": "LLENADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "01:06",
+        "finParada": "01:20",
+        "totalMin": "14",
+        "zona": "Llenado",
+        "falla": "CAMBIO DE TAPADOR #10",
+        "orden": "10156",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793196649820,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-19",
+        "semana": 43,
+        "turno": "DIURNO",
+        "operador": "LEYBERGLEY SILVA",
+        "linea": "Línea 4",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "02:05",
+        "finParada": "02:25",
+        "totalMin": "20",
+        "zona": "Llenado",
+        "falla": "BEBIDA DERRAMADA EN AREA DE EMPLAYADO Y COMPACTACION BOTELLA MAL TAPADA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793196734780,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-26",
+        "semana": 44,
+        "turno": "DIURNO",
+        "operador": "DENILSON CADRASCO ",
+        "linea": "Línea 2",
+        "equipo": "SOPLADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "08:35",
+        "finParada": "09:17",
+        "totalMin": "42",
+        "zona": "Llenado",
+        "falla": "MALA ENTREGA MOLDE #14, SE AJUSTA ALTURA DE PINZAS Y CAMBIO DE RODAMIENTOS ",
+        "orden": "10034",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793196361342,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-26",
+        "semana": 44,
+        "turno": "DIURNO",
+        "operador": "HECTOR LORCA ",
+        "linea": "Línea 2",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "INSUMOS",
+        "inicioParada": "09:42",
+        "finParada": "10:07",
+        "totalMin": "25",
+        "zona": "Llenado",
+        "falla": "CAMBION DE BOBINA POR EFECTO CURLING, VELOCIDAD ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793196559598,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-26",
+        "semana": 44,
+        "turno": "DIURNO",
+        "operador": "LUIS HERRERA ",
+        "linea": "Línea 2",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "10:21",
+        "finParada": "10:27",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "PALETIZADO MANUAL",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793196639559,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 5",
+        "equipo": "LLENADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "18:30",
+        "finParada": "07:00",
+        "totalMin": "750",
+        "zona": "Llenado",
+        "falla": "ERROR DE COMUNICACION",
+        "orden": "",
+        "observaciones": "PERTENECE A LA O.T 9920",
+        "usuario": "Froilan Bolivar",
+        "id": 1793197065806,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-26",
+        "semana": 44,
+        "turno": "DIURNO",
+        "operador": "LUIS HERRERA ",
+        "linea": "Línea 2",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "11:30",
+        "finParada": "11:34",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "PALETIZADO MANUAL",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793196710231,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "operador": "JUAN GIL",
+        "linea": "Línea 6",
+        "equipo": "SOPLADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "18:58",
+        "finParada": "19:43",
+        "totalMin": "45",
+        "zona": "Llenado",
+        "falla": "CAMBIO DE RESORTE DE BLOQUEO MOLDE  #3,#6,#7 Y #10",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793197144020,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "operador": "KENNY MUÑOZ",
+        "linea": "Línea 6",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "19:55",
+        "finParada": "19:59",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "PERDIDA DE FASE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793197213636,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-26",
+        "semana": 44,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 2",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "12:05",
+        "finParada": "12:35",
+        "totalMin": "30",
+        "zona": "Llenado",
+        "falla": "CAMBIO DE SABOR , ENJUAGUE, PASE DE AGUA CALIENTE ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793196837543,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "operador": "KENNY MUÑOZ",
+        "linea": "Línea 6",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "INSUMOS",
+        "inicioParada": "20:10",
+        "finParada": "20:13",
+        "totalMin": "3",
+        "zona": "Llenado",
+        "falla": "MULTIPLES PAQUETES DESARMADOS POR BOBIN DEFECTUOSA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793197262556,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-01-26",
+        "semana": 5,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 2",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "12:30",
+        "finParada": "18:10",
+        "totalMin": "340",
+        "zona": "Llenado",
+        "falla": "FALLA DE E/E PAC ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793196915072,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 6",
+        "equipo": "",
+        "tipoParada": "SALA DE MÁQUINAS",
+        "inicioParada": "03:05",
+        "finParada": "03:16",
+        "totalMin": "11",
+        "zona": "Llenado",
+        "falla": "FALLA DE AIRE DE ALTA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793197345580,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-26",
+        "semana": 44,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 2",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "12:35",
+        "finParada": "18:10",
+        "totalMin": "335",
+        "zona": "Llenado",
+        "falla": "FALLA DE ENERGIA ELECTRICA PAC",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793197006263,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "operador": "JUAN GIL",
+        "linea": "Línea 6",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "22:42",
+        "finParada": "22:53",
+        "totalMin": "11",
+        "zona": "Llenado",
+        "falla": "ATASCAMIENTO DE BOTELLA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793197401948,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "operador": "OMAR BARRIOS",
+        "linea": "Línea 7",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "18:30",
+        "finParada": "19:14",
+        "totalMin": "44",
+        "zona": "Llenado",
+        "falla": "AJUSTE DEL RECORRIDO DEL SISTEMA DE ENCOLADO",
+        "orden": "10122",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793197465292,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "operador": "OMAR BARRIOS",
+        "linea": "Línea 4",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "19:20",
+        "finParada": "19:31",
+        "totalMin": "11",
+        "zona": "Llenado",
+        "falla": "AJSUTE DE VACIO DEL TAMBOR DE CORTE",
+        "orden": "",
+        "observaciones": "PERTENECE A O.T 10122",
+        "usuario": "Froilan Bolivar",
+        "id": 1793197536204,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-26",
+        "semana": 44,
+        "turno": "DIURNO",
+        "operador": "JOSE GUDIÑO",
+        "linea": "Línea 7",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "INSUMOS",
+        "inicioParada": "07:15",
+        "finParada": "07:20",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "PERDIDA DE MARCA DE CORTE, LONITUD BAJA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793197180912,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "operador": "OMAR BARRIOS",
+        "linea": "Línea 7",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "19:20",
+        "finParada": "19:31",
+        "totalMin": "11",
+        "zona": "Llenado",
+        "falla": "AJUSTE DE VACIO DEL TAMBOR DE CORTE",
+        "orden": "",
+        "observaciones": "PERTENECE A O.T 10122",
+        "usuario": "Froilan Bolivar",
+        "id": 1793197647148,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "operador": "OMAR BARRIOS",
+        "linea": "Línea 7",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "19:38",
+        "finParada": "19:48",
+        "totalMin": "10",
+        "zona": "Llenado",
+        "falla": "SE BAJA VELOCIDAD POR EFECTO CURLING EN LA BOBINA 25000 BPH ",
+        "orden": "",
+        "observaciones": "PERTENECE A O.T 1022",
+        "usuario": "Froilan Bolivar",
+        "id": 1793197750924,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -244267,7 +245174,7 @@
         "usuario": "Froilan Bolivar"
       },
       {
-        "id": 1793195165258,
+        "id": 1793195177056.645,
         "fechaOrden": "2026-10-26",
         "orden": "9989",
         "fechaEmision": "2026-10-26",
@@ -244286,6 +245193,222 @@
         "tipoParada": "AVERÍA",
         "mtto": "",
         "falla": "FALLA EN BOMBA DE MIXER ",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": true,
+        "usuario": "Froilan Bolivar"
+      },
+      {
+        "id": 1793196276007,
+        "fechaOrden": "2026-10-19",
+        "orden": "10153",
+        "fechaEmision": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "solicitante": "",
+        "linea": "Línea 4",
+        "maquina": "PALETIZADORA",
+        "aviso": "",
+        "fechaParada": "2026-10-19",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "19:38",
+        "finParada": "20:08",
+        "tMtto": "30",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "LIMPIEZA DE VENTOSA DEL ROBOT",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": false,
+        "usuario": "Froilan Bolivar"
+      },
+      {
+        "id": 1793196344528,
+        "fechaOrden": "2026-10-19",
+        "orden": "10154",
+        "fechaEmision": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "solicitante": "",
+        "linea": "Línea 4",
+        "maquina": "LLENADORA",
+        "aviso": "",
+        "fechaParada": "2026-10-19",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "20:11",
+        "finParada": "20:16",
+        "tMtto": "5",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "REVISION POR BOTELLA MAL TAPADA",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": false,
+        "usuario": "Froilan Bolivar"
+      },
+      {
+        "id": 1793196002073.264,
+        "fechaOrden": "2026-10-26",
+        "orden": "10031",
+        "fechaEmision": "2026-10-26",
+        "semana": 44,
+        "turno": "DIURNO",
+        "solicitante": "",
+        "linea": "Línea 2",
+        "maquina": "SOPLADORA",
+        "aviso": "",
+        "fechaParada": "2026-10-26",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "07:00",
+        "finParada": "07:33",
+        "tMtto": "33",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "SE RECIBE LA MAQUINA CON FALLA EN VARIADOR ",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": true,
+        "usuario": "Froilan Bolivar"
+      },
+      {
+        "id": 1793196069227,
+        "fechaOrden": "2026-10-26",
+        "orden": "10033",
+        "fechaEmision": "2026-10-26",
+        "semana": 44,
+        "turno": "DIURNO",
+        "solicitante": "",
+        "linea": "Línea 2",
+        "maquina": "TRANSPORTADOR DE CAJAS",
+        "aviso": "",
+        "fechaParada": "2026-10-26",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "07:44",
+        "finParada": "07:50",
+        "tMtto": "6",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "TRANSPORTADOR DETENIDO POR FALLA EN VARIADOR ",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": false,
+        "usuario": "Froilan Bolivar"
+      },
+      {
+        "id": 1793196535032,
+        "fechaOrden": "2026-10-19",
+        "orden": "10155",
+        "fechaEmision": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "solicitante": "",
+        "linea": "Línea 4",
+        "maquina": "TRANSPORTADOR DE CAJAS",
+        "aviso": "",
+        "fechaParada": "2026-10-19",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "20:50",
+        "finParada": "21:07",
+        "tMtto": "17",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "RYPTURA TRASPORTADOR DE CAJAS",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": false,
+        "usuario": "Froilan Bolivar"
+      },
+      {
+        "id": 1793196649824,
+        "fechaOrden": "2026-10-19",
+        "orden": "10156",
+        "fechaEmision": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "solicitante": "",
+        "linea": "Línea 4",
+        "maquina": "LLENADORA",
+        "aviso": "",
+        "fechaParada": "2026-10-19",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "01:06",
+        "finParada": "01:20",
+        "tMtto": "14",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "CAMBIO DE TAPADOR #10",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": false,
+        "usuario": "Froilan Bolivar"
+      },
+      {
+        "id": 1793196513386.4302,
+        "fechaOrden": "2026-10-26",
+        "orden": "10034",
+        "fechaEmision": "2026-10-26",
+        "semana": 44,
+        "turno": "DIURNO",
+        "solicitante": "",
+        "linea": "Línea 2",
+        "maquina": "SOPLADORA",
+        "aviso": "",
+        "fechaParada": "2026-10-26",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "08:35",
+        "finParada": "09:17",
+        "tMtto": "42",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "MALA ENTREGA MOLDE #14, SE AJUSTA ALTURA DE PINZAS Y CAMBIO DE RODAMIENTOS ",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": true,
+        "usuario": "Froilan Bolivar"
+      },
+      {
+        "id": 1793197465296,
+        "fechaOrden": "2026-10-19",
+        "orden": "10122",
+        "fechaEmision": "2026-10-19",
+        "semana": 43,
+        "turno": "NOCTURNO",
+        "solicitante": "",
+        "linea": "Línea 7",
+        "maquina": "ETIQUETADORA",
+        "aviso": "",
+        "fechaParada": "2026-10-19",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "18:30",
+        "finParada": "19:14",
+        "tMtto": "44",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "AJUSTE DEL RECORRIDO DEL SISTEMA DE ENCOLADO",
         "mttoEsp": "",
         "descripcionFalla": "",
         "descripcionAccion": "",
@@ -263631,10 +264754,88 @@
       "2026-10-27-Soda Caustica-0": "496,6",
       "2026-10-27-GermiQuat-0": "225",
       "2026-10-27-Lark Inox-0": "32",
-      "2026-10-27-TM Smart-0": "450,",
+      "2026-10-27-TM Smart-0": "450,4",
       "2026-10-27-Gamma Ro-432-0": "166,5",
       "2026-10-27-RO Cleaner-0": "213,7",
-      "2026-10-27-Sanitizer-0": "200"
+      "2026-10-27-Sanitizer-0": "200",
+      "2026-10-27-LP20-2": "167,7",
+      "2026-10-27-LP20-4": "167,7",
+      "2026-10-27-Cloro-2": "775",
+      "2026-10-27-Cloro-4": "775",
+      "2026-10-27-AntiEscalante-2": "1323,7",
+      "2026-10-27-AntiEscalante-4": "1323,7",
+      "2026-10-26-LARK CLEAN 21C-0": "0",
+      "2026-10-26-LARK CLEAN 21C-2": "0",
+      "2026-10-26-LARK CLEAN 21C-4": "0",
+      "2026-10-26-LARK CLEAN 21C-6": "0",
+      "2026-10-26-Lark Desengrasante-0": "0",
+      "2026-10-26-Lark Desengrasante-2": "0",
+      "2026-10-26-Lark Desengrasante-4": "0",
+      "2026-10-26-Lark Desengrasante-6": "0",
+      "2026-10-27-Lark Desengrasante-0": "0",
+      "2026-10-27-LARK CLEAN 21C-0": "0",
+      "2026-10-27-Sal-2": "7080",
+      "2026-10-27-Sal-4": "7080",
+      "2026-10-27-Alcalino-2": "3297,3",
+      "2026-10-27-Alcalino-4": "3297,3",
+      "2026-10-27-Peracetico-2": "290,5",
+      "2026-10-27-Peracetico-4": "290,5",
+      "2026-10-27-Lark Foam Quat-2": "56,5",
+      "2026-10-27-Lark Foam Quat-4": "56,5",
+      "2026-10-27-Lark Foam IN-2": "169,5",
+      "2026-10-27-Lark Foam IN-4": "169,5",
+      "2026-10-27-Lark Desengrasante-2": "0",
+      "2026-10-27-Lark Desengrasante-4": "0",
+      "2026-10-27-Soda Caustica-2": "496,6",
+      "2026-10-27-Soda Caustica-4": "496,6",
+      "2026-10-27-GermiQuat-2": "225",
+      "2026-10-27-GermiQuat-4": "225",
+      "2026-10-27-Lark Inox-2": "32",
+      "2026-10-27-Lark Inox-4": "32",
+      "2026-10-27-TM Smart-2": "448,4",
+      "2026-10-27-TM Smart-4": "448,4",
+      "2026-10-27-Gamma Ro-432-2": "166,5",
+      "2026-10-27-Gamma Ro-432-4": "166,5",
+      "2026-10-27-RO Cleaner-2": "213,7",
+      "2026-10-27-RO Cleaner-4": "213,7",
+      "2026-10-27-Sanitizer-2": "200",
+      "2026-10-27-Sanitizer-4": "200",
+      "2026-10-27-LARK CLEAN 21C-2": "0",
+      "2026-10-27-LARK CLEAN 21C-4": "0",
+      "2026-10-27-LP20-6": "167,7",
+      "2026-10-27-Cloro-6": "775",
+      "2026-10-27-AntiEscalante-6": "1300,6",
+      "2026-10-27-Sal-6": "6460",
+      "2026-10-27-Alcalino-6": "3297,3",
+      "2026-10-27-Peracetico-6": "290,5",
+      "2026-10-27-Lark Foam Quat-6": "56,5",
+      "2026-10-27-Lark Foam IN-6": "169,5",
+      "2026-10-27-Lark Desengrasante-6": "0",
+      "2026-10-27-Soda Caustica-6": "496,6",
+      "2026-10-27-GermiQuat-6": "225",
+      "2026-10-27-Lark Inox-6": "32",
+      "2026-10-27-TM Smart-6": "431,3",
+      "2026-10-27-Gamma Ro-432-6": "166,5",
+      "2026-10-27-RO Cleaner-6": "213,7",
+      "2026-10-27-Sanitizer-6": "200",
+      "2026-10-27-LARK CLEAN 21C-6": "0",
+      "2026-10-28-LP20-0": "167,7",
+      "2026-10-28-Cloro-0": "775",
+      "2026-10-28-AntiEscalante-0": "1300,6",
+      "2026-10-28-Sal-0": "6460",
+      "2026-10-28-Alcalino-0": "3297,3",
+      "2026-10-28-Peracetico-0": "290,5",
+      "2026-10-28-Lark Foam Quat-0": "56,5",
+      "2026-10-28-Lark Foam IN-0": "169,5",
+      "2026-10-28-Lark Desengrasante-0": "0",
+      "2026-10-28-Soda Caustica-0": "496,6",
+      "2026-10-28-GermiQuat-0": "225",
+      "2026-10-28-Lark Inox-0": "32",
+      "2026-10-28-TM Smart-0": "431,3",
+      "2026-10-28-Gamma Ro-432-0": "166,5",
+      "2026-10-28-RO Cleaner-0": "213,7",
+      "2026-10-28-Sanitizer-0": "200",
+      "2026-10-28-LARK CLEAN 21C-0": "0"
     },
     "sala-jarabe-glup": [
       {
@@ -272682,8 +273883,8 @@
     "filename": "stock-producto-terminado.xlsx",
     "originalName": "Formato Inventario  Fisico Almacen PT DIARIO ACT  0888.xlsx",
     "tipo": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "tamano": 34973,
-    "uploadedAt": "2026-10-27T13:03:33.472Z",
+    "tamano": 35000,
+    "uploadedAt": "2026-10-28T13:51:50.472Z",
     "uploadedBy": "local-user"
   }
 }
