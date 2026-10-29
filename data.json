@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-08-24T00:00:00.000",
+      "weekStartDate": "2026-10-26T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -15714,6 +15714,41 @@
           "aditivosCantidad": {},
           "solidosCantidad": {},
           "quimicosInsumosCantidad": {}
+        },
+        "2026-10-29": {
+          "tapas": {
+            "EMP_0095-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0095-Importada": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaEW": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaTipo2": {
+              "totalCajas": "",
+              "total": ""
+            }
+          },
+          "separadores": {},
+          "preformas": {},
+          "plasticos": {},
+          "adhesivoCantidad": "",
+          "etiquetasCantidad": {},
+          "azucarCantidad": {},
+          "concentradosCantidad": {},
+          "concentradosJustyCantidad": {},
+          "aditivosCantidad": {},
+          "solidosCantidad": {},
+          "quimicosInsumosCantidad": {}
         }
       },
       "semanal": {
@@ -18678,6 +18713,89 @@
               "code": "ENV-00080",
               "material": "BOTELLA ENVASADA GLUP KOLITA 1.0 L (LINEA 7)",
               "quantity": "42",
+              "unit": "UND"
+            }
+          ],
+          "2026-10-28": [
+            {
+              "id": "c7ac13bc-b86b-4426-ad84-023cdcaa2eeb",
+              "line": "Linea 1",
+              "flavor": "GLUP FRESH",
+              "code": "ENV-00013",
+              "material": "BOTELLA ENVASADA GLUP FRESH 2.0.LTS",
+              "quantity": "108",
+              "unit": "UND"
+            },
+            {
+              "id": "0ac90af4-7abe-4a0c-a8da-8ccb9a9d4db5",
+              "line": "Linea 2",
+              "flavor": "GLUP PIÑA",
+              "code": "ENV-00042",
+              "material": "BOTELLA ENVASADA GLUP PIÑA 2.0.LTS  (EN LINEA 2)",
+              "quantity": "256",
+              "unit": "UND"
+            },
+            {
+              "id": "a5fc4c10-280e-46c7-b574-1a069deed928",
+              "line": "Linea 3",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00063",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 2L (LINEA 3)",
+              "quantity": "80",
+              "unit": "UND"
+            },
+            {
+              "id": "b519f956-c7c2-492d-b036-9646214f1f69",
+              "line": "Linea 4",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00054",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 2.LTS (LINEA 4)",
+              "quantity": "225",
+              "unit": "UND"
+            },
+            {
+              "id": "7425601c-654a-4f6e-92ab-a2a18a5e9a95",
+              "line": "Linea 5",
+              "flavor": "JUSTY DURAZNO",
+              "code": "ENV-00095",
+              "material": "BOTELLA ENVASADA JUSTY DURAZNO 1.5 LTS",
+              "quantity": "185",
+              "unit": "UND"
+            },
+            {
+              "id": "fd0feb82-f500-4054-96c8-b4924fedf687",
+              "line": "Linea 6",
+              "flavor": "GLUP UVA",
+              "code": "ENV-00059",
+              "material": "BOTELLA ENVASADA GLUP UVA 400 ML (LINEA 6)",
+              "quantity": "110",
+              "unit": "UND"
+            },
+            {
+              "id": "6726c6a2-b5a0-4711-849c-c88c9a0b4f72",
+              "line": "Linea 6",
+              "flavor": "GLUP KOLITA",
+              "code": "ENV-00061",
+              "material": "BOTELLA ENVASADA GLUP KOLITA 400 ML (LINEA 6)",
+              "quantity": "110",
+              "unit": "UND"
+            },
+            {
+              "id": "5b2a3f1d-a5d5-4ca4-b451-c5d9dad687f3",
+              "line": "Linea 7",
+              "flavor": "GLUP FRESH",
+              "code": "ENV-00081",
+              "material": "BOTELLA ENVASADA GLUP FRESH 1.0 L (LINEA 7)",
+              "quantity": "20",
+              "unit": "UND"
+            },
+            {
+              "id": "f9ac6614-94d0-4946-96fd-0a8c30ef3a29",
+              "line": "Linea 7",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00078",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 1.0 L (LINEA 7)",
+              "quantity": "136",
               "unit": "UND"
             }
           ]
@@ -22537,6 +22655,19 @@
               "kind": "termo",
               "preformSize": ""
             }
+          ],
+          "2026-10-28": [
+            {
+              "id": "bb096af7-8613-4228-8ed0-c63ed3f39838",
+              "line": "Linea 1",
+              "flavor": "",
+              "code": "",
+              "material": "",
+              "quantity": "",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            }
           ]
         }
       },
@@ -24472,7 +24603,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-28T21:28:49.530Z"
+    "updatedAt": "2026-10-29T12:03:34.412Z"
   },
   "ordenesSap": [
     {
@@ -37399,8 +37530,19 @@
           "fechaInicio": "2026-10-28",
           "ticket1": "16337",
           "cajas1": 9440,
-          "ticket2": "",
+          "ticket2": "16338",
           "cajas2": 3680,
+          "ticket3": "",
+          "cajas3": 3360,
+          "ticket4": "",
+          "cajas4": 17360
+        },
+        {
+          "fechaInicio": "2026-10-29",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -37430,12 +37572,12 @@
           "fechaInicio": "2026-10-28",
           "ticket1": "16511",
           "cajas1": 1600,
-          "ticket2": "",
+          "ticket2": "16512",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1120,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 8800
         }
       ]
     },
@@ -37461,12 +37603,12 @@
           "fechaInicio": "2026-10-28",
           "ticket1": "16472",
           "cajas1": 3744,
-          "ticket2": "",
+          "ticket2": "16473",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1638,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 4592
         }
       ]
     },
@@ -37481,6 +37623,17 @@
           "fechaInicio": "2026-10-28",
           "ticket1": "16379",
           "cajas1": 3600,
+          "ticket2": "16380",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 2640,
+          "ticket4": "",
+          "cajas4": 17040
+        },
+        {
+          "fechaInicio": "2026-10-29",
+          "ticket1": "",
+          "cajas1": 0,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -37499,6 +37652,17 @@
       "dias": [
         {
           "fechaInicio": "2026-10-28",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16294",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 13440
+        },
+        {
+          "fechaInicio": "2026-10-29",
           "ticket1": "",
           "cajas1": 0,
           "ticket2": "",
@@ -37521,6 +37685,17 @@
           "fechaInicio": "2026-10-28",
           "ticket1": "16426",
           "cajas1": 6160,
+          "ticket2": "16427",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 3120,
+          "ticket4": "",
+          "cajas4": 14800
+        },
+        {
+          "fechaInicio": "2026-10-29",
+          "ticket1": "",
+          "cajas1": 0,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -37541,12 +37716,43 @@
           "fechaInicio": "2026-10-28",
           "ticket1": "15230",
           "cajas1": 1050,
+          "ticket2": "15231",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 850,
+          "ticket4": "",
+          "cajas4": 5250
+        },
+        {
+          "fechaInicio": "2026-10-29",
+          "ticket1": "",
+          "cajas1": 0,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "7-1793275074946",
+      "linea": 7,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "64568",
+      "semana": 44,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-28",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16474",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 10608
         }
       ]
     }
@@ -224839,7 +225045,7 @@
         "zona": "Llenado",
         "falla": "PALETIZADO MANUAL POR REPARACION DE CORREAS DE PREFORMACION DE CAJAS ",
         "orden": "",
-        "observaciones": "",
+        "observaciones": "CORRESPONDE O.T 9990",
         "usuario": "Froilan Bolivar",
         "id": 1793195536205,
         "bloqueado": true
@@ -248031,7 +248237,7 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1793199943343,
+        "id": 1793274146089.0078,
         "fechaOrden": "2026-10-26",
         "orden": "9848",
         "fechaEmision": "2026-10-26",
@@ -248054,7 +248260,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Froilan Bolivar"
       },
       {
@@ -265204,7 +265410,12 @@
       "2026-10-27-suave": "232979",
       "2026-10-27-procesos": "3272539",
       "2026-10-27-filtrada": "4944854",
-      "2026-10-27-total": "2807040"
+      "2026-10-27-total": "2807040",
+      "2026-10-28-servicio": "19532",
+      "2026-10-28-suave": "143419",
+      "2026-10-28-procesos": "1808861,46",
+      "2026-10-28-filtrada": "2850904,18",
+      "2026-10-28-total": "2523416,67"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
@@ -267638,7 +267849,75 @@
       "2026-10-28-Gamma Ro-432-0": "166,5",
       "2026-10-28-RO Cleaner-0": "213,7",
       "2026-10-28-Sanitizer-0": "200",
-      "2026-10-28-LARK CLEAN 21C-0": "0"
+      "2026-10-28-LARK CLEAN 21C-0": "0",
+      "2026-10-28-LP20-2": "166,8",
+      "2026-10-28-LP20-4": "166,8",
+      "2026-10-28-Cloro-2": "761",
+      "2026-10-28-Cloro-4": "761",
+      "2026-10-28-AntiEscalante-2": "1295,8",
+      "2026-10-28-AntiEscalante-4": "1295,8",
+      "2026-10-28-Sal-2": "6460",
+      "2026-10-28-Sal-4": "6460",
+      "2026-10-28-Alcalino-2": "3118,5",
+      "2026-10-28-Alcalino-4": "3118,5",
+      "2026-10-28-Peracetico-2": "281,8",
+      "2026-10-28-Peracetico-4": "281,8",
+      "2026-10-28-Lark Foam Quat-2": "56,5",
+      "2026-10-28-Lark Foam Quat-4": "56,5",
+      "2026-10-28-Lark Foam IN-2": "169,5",
+      "2026-10-28-Lark Foam IN-4": "169,5",
+      "2026-10-28-Lark Desengrasante-2": "0",
+      "2026-10-28-Lark Desengrasante-4": "0",
+      "2026-10-28-Soda Caustica-2": "496,6",
+      "2026-10-28-Soda Caustica-4": "496,6",
+      "2026-10-28-GermiQuat-2": "225",
+      "2026-10-28-GermiQuat-4": "225",
+      "2026-10-28-Lark Inox-2": "32",
+      "2026-10-28-Lark Inox-4": "32",
+      "2026-10-28-TM Smart-2": "431,3",
+      "2026-10-28-TM Smart-4": "431,3",
+      "2026-10-28-Gamma Ro-432-2": "166,5",
+      "2026-10-28-Gamma Ro-432-4": "166,5",
+      "2026-10-28-RO Cleaner-2": "213,7",
+      "2026-10-28-RO Cleaner-4": "213,7",
+      "2026-10-28-Sanitizer-2": "200",
+      "2026-10-28-Sanitizer-4": "200",
+      "2026-10-28-LARK CLEAN 21C-2": "0",
+      "2026-10-28-LARK CLEAN 21C-4": "0",
+      "2026-10-28-LP20-6": "165,6",
+      "2026-10-28-Cloro-6": "718",
+      "2026-10-28-AntiEscalante-6": "1275,1",
+      "2026-10-28-Sal-6": "6040",
+      "2026-10-28-Alcalino-6": "3104,3",
+      "2026-10-28-Peracetico-6": "274,7",
+      "2026-10-28-Lark Foam Quat-6": "56,5",
+      "2026-10-28-Lark Foam IN-6": "169,5",
+      "2026-10-28-Lark Desengrasante-6": "0",
+      "2026-10-28-Soda Caustica-6": "496,6",
+      "2026-10-28-GermiQuat-6": "225",
+      "2026-10-28-Lark Inox-6": "32",
+      "2026-10-28-TM Smart-6": "384,8",
+      "2026-10-28-Gamma Ro-432-6": "166,5",
+      "2026-10-28-RO Cleaner-6": "213,7",
+      "2026-10-28-Sanitizer-6": "200",
+      "2026-10-28-LARK CLEAN 21C-6": "0",
+      "2026-10-29-LP20-0": "165,6",
+      "2026-10-29-Cloro-0": "718",
+      "2026-10-29-AntiEscalante-0": "1275,1",
+      "2026-10-29-Sal-0": "6040",
+      "2026-10-29-Alcalino-0": "3104,3",
+      "2026-10-29-Peracetico-0": "274,7",
+      "2026-10-29-Lark Foam Quat-0": "56,5",
+      "2026-10-29-Lark Foam IN-0": "169,5",
+      "2026-10-29-Lark Desengrasante-0": "0",
+      "2026-10-29-Soda Caustica-0": "496,6",
+      "2026-10-29-GermiQuat-0": "225",
+      "2026-10-29-Lark Inox-0": "32",
+      "2026-10-29-TM Smart-0": "384,8",
+      "2026-10-29-Gamma Ro-432-0": "166,5",
+      "2026-10-29-RO Cleaner-0": "213,7",
+      "2026-10-29-Sanitizer-0": "200",
+      "2026-10-29-LARK CLEAN 21C-0": "0"
     },
     "sala-jarabe-glup": [
       {
