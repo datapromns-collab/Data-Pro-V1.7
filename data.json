@@ -22658,7 +22658,162 @@
               "preformSize": ""
             }
           ],
-          "2026-10-28": []
+          "2026-10-28": [
+            {
+              "id": "5d4b7afe-88c8-48fa-8c1f-19c970072f0d",
+              "line": "Linea 1",
+              "flavor": "verde",
+              "code": "EMP_0103",
+              "material": "PREFORMA VERDE 42,64 GR-1881",
+              "quantity": "1500",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "00a5750e-c4d3-49cc-86e7-58f7d2eb21b3",
+              "line": "Linea 1",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "1,85",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "8b6036ad-8eb2-4be9-8018-eb3d9231478a",
+              "line": "Linea 2",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "2500",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "52cb5345-82e3-4f68-9cf4-dc0fc496c7e9",
+              "line": "Linea 2",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "2,61",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "638df137-9a79-4029-a964-d034ddc57b50",
+              "line": "Linea 3",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "2047",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "9c3e7d68-388c-4e09-bd24-9f4a6eb912a7",
+              "line": "Linea 3",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "1,90",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "3663ff5a-d14d-44e9-8b5b-7fcfd0368022",
+              "line": "Linea 4",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "1190",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "836fdb98-2105-4665-a200-1930933e78c9",
+              "line": "Linea 4",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "2,68",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "302514ff-cdeb-434f-815c-860c6f0b9dac",
+              "line": "Linea 5",
+              "flavor": "transparente",
+              "code": "EMP_0068",
+              "material": "PREFORMA TRANSPARENTE 36 GR-1881",
+              "quantity": "2642",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "540bc1de-7528-41e2-b0b2-070244ee03c3",
+              "line": "Linea 5",
+              "flavor": "",
+              "code": "EMP_0017",
+              "material": "POLIETILENO TERMOENCOGIBLE 55 X 0.07",
+              "quantity": "1,86",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "7b7b93ed-2235-468d-ad02-f0685412c8b2",
+              "line": "Linea 6",
+              "flavor": "transparente",
+              "code": "EMP_0126",
+              "material": "PREFORMA TRANSPARENTE 20,55GR-1881",
+              "quantity": "937",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "1e4c9c0c-e198-46a6-b689-5f4f7141e3d3",
+              "line": "Linea 6",
+              "flavor": "",
+              "code": "EMP_0130",
+              "material": "POLIETILENO TERMOENCOGIBLE 43 x 0.06",
+              "quantity": "1,00",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "34a46606-a51e-48c6-8ca5-0814054e7960",
+              "line": "Linea 7",
+              "flavor": "verde",
+              "code": "EMP_0171",
+              "material": "PREFORMA VERDE 33 GR-1881",
+              "quantity": "606",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "dba484f7-198c-447f-a32b-f8e2e8b1830b",
+              "line": "Linea 7",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "0,41",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            }
+          ]
         }
       },
       "recepciones": {
@@ -24573,7 +24728,7 @@
       },
       {
         "id": "alc.mds",
-        "name": "Keisy Caldera",
+        "name": "Analista de Calidad",
         "password": "scrypt$wNPY-oL49if6TH0qjKzbGg$-OP1DSIia27KiPt0KhxZ0reFkyZwscc8diQ67DgYDiQ6t9RNVsJobGpDuNYuMympQ9P5JOJZdyAJhkalR8UhBg",
         "role": "STANDARD",
         "displayRole": "Analista de Calidad"
@@ -24595,7 +24750,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-29T15:32:31.766Z"
+    "updatedAt": "2026-10-29T21:33:59.040Z"
   },
   "ordenesSap": [
     {
@@ -37531,8 +37686,8 @@
         },
         {
           "fechaInicio": "2026-10-29",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16339",
+          "cajas1": 13981,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -37570,6 +37725,17 @@
           "cajas3": 1120,
           "ticket4": "",
           "cajas4": 8800
+        },
+        {
+          "fechaInicio": "2026-10-29",
+          "ticket1": "16513",
+          "cajas1": 5760,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -37624,8 +37790,8 @@
         },
         {
           "fechaInicio": "2026-10-29",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16381",
+          "cajas1": 11680,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -37655,10 +37821,10 @@
         },
         {
           "fechaInicio": "2026-10-29",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16295",
+          "cajas1": 9600,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 3840,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -37686,10 +37852,10 @@
         },
         {
           "fechaInicio": "2026-10-29",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16428",
+          "cajas1": 8160,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 560,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -37717,8 +37883,8 @@
         },
         {
           "fechaInicio": "2026-10-29",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "15232",
+          "cajas1": 5500,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -37739,12 +37905,23 @@
           "fechaInicio": "2026-10-28",
           "ticket1": "",
           "cajas1": 0,
-          "ticket2": "16474",
+          "ticket2": "16473",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 10608
+        },
+        {
+          "fechaInicio": "2026-10-29",
+          "ticket1": "16474",
+          "cajas1": 11310,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     }
@@ -51158,14 +51335,14 @@
         },
         "2026-10-28": {
           "GLUP COLA": {
-            "inicial": "",
-            "preparado": "",
-            "final": ""
+            "inicial": "61.56",
+            "preparado": "42",
+            "final": "66.59"
           },
           "JUSTY DURAZNO": {
-            "inicial": "",
-            "preparado": "",
-            "final": ""
+            "inicial": "29",
+            "preparado": "140",
+            "final": "34"
           },
           "GLUP KOLITA": {
             "inicial": "",
@@ -51173,14 +51350,19 @@
             "final": ""
           },
           "GLUP UVA": {
-            "inicial": "",
-            "preparado": "",
-            "final": ""
+            "inicial": "8.25",
+            "preparado": "11",
+            "final": "9.34"
           },
           "GLUP FRESH": {
-            "inicial": "",
-            "preparado": "",
-            "final": ""
+            "inicial": "19.19",
+            "preparado": "18",
+            "final": "14.15"
+          },
+          "GLUP PIÑA": {
+            "inicial": "16.02",
+            "final": "18.03",
+            "preparado": "50"
           }
         },
         "2026-10-29": {
@@ -52865,8 +53047,13 @@
         },
         "2026-10-28": {
           "PORTUGUESA": {
+            "invInicialSacos": "11280",
+            "recepcionSacos": "1680",
+            "invFinalSacos": "11800"
+          },
+          "MONTALBAN": {
             "invInicialSacos": "",
-            "recepcionSacos": "",
+            "recepcionSacos": "2480",
             "invFinalSacos": ""
           }
         },
@@ -54307,12 +54494,12 @@
         },
         "2026-10-28": {
           "JARABE SIMPLE": {
-            "invInicialSacos": "",
-            "invFinalSacos": ""
+            "invInicialSacos": "105",
+            "invFinalSacos": "236"
           },
           "Sala 1": {
-            "invInicialSacos": "",
-            "invFinalSacos": ""
+            "invInicialSacos": "658",
+            "invFinalSacos": "260"
           }
         },
         "2026-10-29": {
@@ -54531,7 +54718,7 @@
         "2026-10-05|2026-10": 1226308.47,
         "2026-10-12|2026-10": 1233076.41,
         "2026-10-19|2026-10": 1098374.84,
-        "2026-10-26|2026-10": 478525.51,
+        "2026-10-26|2026-10": 669622.78,
         "2026-11-01|2026-11": 0,
         "2026-12-01|2026-12": 0,
         "2026-11-02|2026-11": 0
@@ -269336,6 +269523,111 @@
         "enviarALinea": 1,
         "editando": false,
         "editandoPor": null
+      },
+      {
+        "id": "row_1793300044713_59z5tv",
+        "fecha": "2026-10-29",
+        "hora": "10:00",
+        "numeroTanques": "2",
+        "sala": "2",
+        "sabor": "GLUP COLA",
+        "litros": "17290",
+        "ubb": "6",
+        "brix": "53.80",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1793300088768_tfonxa",
+        "fecha": "2026-10-29",
+        "hora": "10:08",
+        "numeroTanques": "11",
+        "sala": "2",
+        "sabor": "GLUP COLA",
+        "litros": "17280",
+        "ubb": "6",
+        "brix": "53.80",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1793300133489_gbg69c",
+        "fecha": "2026-10-29",
+        "hora": "11:10",
+        "numeroTanques": "9",
+        "sala": "2",
+        "sabor": "GLUP COLA",
+        "litros": "17300",
+        "ubb": "6",
+        "brix": "53.70",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1793300201902_ds0l0s",
+        "fecha": "2026-10-29",
+        "hora": "11:53",
+        "numeroTanques": "3",
+        "sala": "2",
+        "sabor": "GLUP COLA",
+        "litros": "17290",
+        "ubb": "6",
+        "brix": "53.75",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1793300252962_3ce234",
+        "fecha": "2026-10-29",
+        "hora": "14:04",
+        "numeroTanques": "7",
+        "sala": "2",
+        "sabor": "GLUP COLA",
+        "litros": "17300",
+        "ubb": "6",
+        "brix": "53.80",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1793300710536_d9lw3s",
+        "fecha": "2026-10-29",
+        "hora": "10:25",
+        "numeroTanques": "5",
+        "sala": "1",
+        "sabor": "GLUP MANZANA ROJA",
+        "litros": "16683",
+        "ubb": "8",
+        "brix": "45.70",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1793300842866_fas6tg",
+        "fecha": "2026-10-29",
+        "hora": "13:37",
+        "numeroTanques": "4",
+        "sala": "1",
+        "sabor": "GLUP FRESH",
+        "litros": "17230",
+        "ubb": "6",
+        "brix": "53.95",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
       }
     ],
     "ventas-pronostico-mensual": {
@@ -275024,6 +275316,196 @@
               "initial": 38150,
               "reception": null,
               "final": null,
+              "initialOverride": true
+            }
+          }
+        },
+        "2026-10-29": {
+          "diurno": {
+            "MATP_0001-sacos-50kg": {
+              "initial": 590000,
+              "reception": 242000,
+              "final": 690000,
+              "initialOverride": true
+            },
+            "MATP_0001": {
+              "initial": 24799,
+              "reception": null,
+              "final": 46500,
+              "initialOverride": true
+            },
+            "MATP_0002": {
+              "initial": 274,
+              "reception": null,
+              "final": 238,
+              "initialOverride": true
+            },
+            "MATP_0003": {
+              "initial": 278,
+              "reception": null,
+              "final": 272,
+              "initialOverride": true
+            },
+            "MATP_0004": {
+              "initial": 4,
+              "reception": null,
+              "final": 4,
+              "initialOverride": true
+            },
+            "MATP_0005": {
+              "initial": 250,
+              "reception": null,
+              "final": 250,
+              "initialOverride": true
+            },
+            "MATP_0006": {
+              "initial": 43,
+              "reception": null,
+              "final": 43,
+              "initialOverride": true
+            },
+            "MATP_0007": {
+              "initial": 338,
+              "reception": null,
+              "final": 320,
+              "initialOverride": true
+            },
+            "MATP_0009": {
+              "initial": 258,
+              "reception": null,
+              "final": 222,
+              "initialOverride": true
+            },
+            "MATP_0032": {
+              "initial": 40,
+              "reception": null,
+              "final": 40,
+              "initialOverride": true
+            },
+            "MATP_0038": {
+              "initial": 84,
+              "reception": null,
+              "final": 84,
+              "initialOverride": true
+            },
+            "MATP_0039": {
+              "initial": 248,
+              "reception": null,
+              "final": 232,
+              "initialOverride": true
+            },
+            "MATP_0022": {
+              "initial": 80,
+              "reception": null,
+              "final": 80,
+              "initialOverride": true
+            },
+            "MATP_0043": {
+              "initial": 8180,
+              "reception": null,
+              "final": 7480,
+              "initialOverride": true
+            },
+            "MATP_0059": {
+              "initial": 20,
+              "reception": null,
+              "final": 20,
+              "initialOverride": true
+            },
+            "MATP_0060": {
+              "initial": 0,
+              "reception": null,
+              "final": 0,
+              "initialOverride": true
+            },
+            "MATP_0010": {
+              "initial": 499.7,
+              "reception": null,
+              "final": 465.5,
+              "initialOverride": true
+            },
+            "MATP_0041": {
+              "initial": 388.31,
+              "reception": null,
+              "final": 351.73,
+              "initialOverride": true
+            },
+            "MATP_0042": {
+              "initial": 1228.7,
+              "reception": null,
+              "final": 1148.7,
+              "initialOverride": true
+            },
+            "MATP_0040": {
+              "initial": 2413.28,
+              "reception": null,
+              "final": 2413.28,
+              "initialOverride": true
+            },
+            "MATP_0037": {
+              "initial": 44.06,
+              "reception": null,
+              "final": 41.596,
+              "initialOverride": true
+            },
+            "MATP_0036": {
+              "initial": 186.9,
+              "reception": null,
+              "final": 186.9,
+              "initialOverride": true
+            },
+            "MATP_0031": {
+              "initial": 185,
+              "reception": null,
+              "final": 185,
+              "initialOverride": true
+            },
+            "MATP_0021": {
+              "initial": 3378.3,
+              "reception": null,
+              "final": 3291,
+              "initialOverride": true
+            },
+            "MATP_0020": {
+              "initial": 1942.4,
+              "reception": null,
+              "final": 1912.4,
+              "initialOverride": true
+            },
+            "MATP_0019": {
+              "initial": 1255.45,
+              "reception": null,
+              "final": 1132.96,
+              "initialOverride": true
+            },
+            "MATP_0018": {
+              "initial": 1434.1,
+              "reception": null,
+              "final": 1359.1,
+              "initialOverride": true
+            },
+            "MATP_0017": {
+              "initial": 15402.45,
+              "reception": null,
+              "final": 14777.25,
+              "initialOverride": true
+            },
+            "MATP_0016": {
+              "initial": 100.6,
+              "reception": null,
+              "final": 93.846,
+              "initialOverride": true
+            },
+            "MATP_0015": {
+              "initial": 1607.4,
+              "reception": null,
+              "final": 1607.4,
+              "initialOverride": true
+            },
+            "MATP_0014": {
+              "initial": 139.6,
+              "reception": null,
+              "final": 139.6,
               "initialOverride": true
             }
           }
