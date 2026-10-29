@@ -13840,12 +13840,12 @@
             "name": "GLUP FRESH",
             "lineId": "1",
             "loadPerHour": 1500,
-            "quantity": 123000,
-            "durationHours": 82,
+            "quantity": 142500,
+            "durationHours": 95,
             "presentation": "2Lts",
-            "tanks": 14.26,
+            "tanks": 16.52,
             "startTime": "2026-10-26T11:00:00.000Z",
-            "endTime": "2026-10-29T21:00:00.000Z",
+            "endTime": "2026-10-30T10:00:00.000Z",
             "id": "91f7uhm1h",
             "color": "#ef4444"
           },
@@ -13957,30 +13957,6 @@
             "endTime": "2026-10-27T12:24:21.600Z",
             "id": "4dvu29326",
             "color": "#10b981"
-          },
-          {
-            "name": "CIP 3P ALCALINO",
-            "lineId": "1",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 2,
-            "startTime": "2026-10-29T21:00:00.000Z",
-            "endTime": "2026-10-29T23:00:00.000Z",
-            "id": "4i2464eiy",
-            "color": "#10b981"
-          },
-          {
-            "name": "GLUP FRESH",
-            "lineId": "1",
-            "loadPerHour": 1500,
-            "quantity": 51000,
-            "durationHours": 34,
-            "presentation": "2Lts",
-            "tanks": 5.91,
-            "startTime": "2026-10-29T23:00:00.000Z",
-            "endTime": "2026-10-31T09:00:00.000Z",
-            "id": "syjdehovh",
-            "color": "#6366f1"
           },
           {
             "name": "CS",
@@ -14330,6 +14306,30 @@
             "endTime": "2026-10-31T09:00:00.000Z",
             "id": "24py22jum",
             "color": "#ef4444"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "1",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-10-30T10:00:00.000Z",
+            "endTime": "2026-10-30T12:00:00.000Z",
+            "id": "02akk2gkl",
+            "color": "#ec4899"
+          },
+          {
+            "name": "GLUP KOLITA",
+            "lineId": "1",
+            "loadPerHour": 1500,
+            "quantity": 31500,
+            "durationHours": 21,
+            "presentation": "2Lts",
+            "tanks": 3.54,
+            "startTime": "2026-10-30T12:00:00.000Z",
+            "endTime": "2026-10-31T09:00:00.000Z",
+            "id": "94i1k894k",
+            "color": "#47CCB0"
           }
         ],
         "realProduction": {},
@@ -14428,7 +14428,9 @@
           "l7fvsbxby",
           "r5yoh9rcx",
           "jymfs6gsd",
-          "ifw6awqlh"
+          "ifw6awqlh",
+          "syjdehovh",
+          "4i2464eiy"
         ]
       }
     },
@@ -24603,7 +24605,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-29T12:03:34.412Z"
+    "updatedAt": "2026-10-29T12:19:14.122Z"
   },
   "ordenesSap": [
     {
@@ -225045,7 +225047,7 @@
         "zona": "Llenado",
         "falla": "PALETIZADO MANUAL POR REPARACION DE CORREAS DE PREFORMACION DE CAJAS ",
         "orden": "",
-        "observaciones": "CORRESPONDE O.T 9990",
+        "observaciones": "",
         "usuario": "Froilan Bolivar",
         "id": 1793195536205,
         "bloqueado": true
@@ -248237,7 +248239,7 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1793274146089.0078,
+        "id": 1793199943343,
         "fechaOrden": "2026-10-26",
         "orden": "9848",
         "fechaEmision": "2026-10-26",
@@ -248260,7 +248262,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Froilan Bolivar"
       },
       {
