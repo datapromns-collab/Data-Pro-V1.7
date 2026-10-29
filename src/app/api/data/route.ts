@@ -1,5 +1,5 @@
 import { readDb, writeDb } from '@/lib/db-writer';
-import { authorizeDataWrite, authorizeModuleRead, publicUserList, requireAuthenticated } from '@/lib/server-auth';
+import { authorizeDataRead, authorizeDataWrite, publicUserList, requireAuthenticated } from '@/lib/server-auth';
 
 function getWeekKey(date: Date): string {
   const d = new Date(date);
@@ -97,7 +97,7 @@ export async function GET(request: Request) {
     if (section !== 'users') {
       let denied: Response | null = null;
       if (section === 'ordenesSap') {
-        denied = await authorizeModuleRead(request, 'ordenes-sap');
+        denied = await authorizeDataRead(request, section);
       } else if (
         section === 'productionInventory' ||
         section === 'productionInventoryPeriod' ||
@@ -105,7 +105,7 @@ export async function GET(request: Request) {
         section === 'productionWaste' ||
         section === 'productionNonConforming'
       ) {
-        denied = await authorizeModuleRead(request, 'produccion');
+        denied = await authorizeDataRead(request, section);
       } else {
         const auth = await requireAuthenticated(request);
         denied = auth.response ?? null;

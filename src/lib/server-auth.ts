@@ -539,9 +539,86 @@ const COLLECTION_READ_FALLBACKS: Record<string, [string, string?][]> = {
     ['management', 'production'], ['management', 'weekly-summary'],
     ['management', 'monthly-summary'], ['management', 'compliance'],
   ],
+  'mtto-nitrogen-consumption': [
+    ['management', 'production'], ['management', 'weekly-summary'],
+    ['management', 'monthly-summary'], ['management', 'compliance'],
+  ],
+  'procesos-rechazos-desperdicios': [
+    ['management', 'production'], ['management', 'weekly-summary'], ['management', 'monthly-summary'],
+  ],
+  'procesos-inventario-materia-prima': [
+    ['management', 'production'], ['management', 'weekly-summary'], ['management', 'monthly-summary'],
+  ],
+  'ventas-pronostico-mensual': [
+    ['planning', 'seguimiento-prodt'],
+    ['purchasing', 'mds.ventas'], ['purchasing', 'aw.ventas'],
+  ],
+  'ventas-inventario-diario': [
+    ['insumos', 'analisis-ventas'],
+  ],
+  'logistica-inventario-mensual': [
+    ['planning', 'seguimiento-prodt'],
+    ['ventas', 'analysis'], ['insumos', 'analisis-ventas'],
+    ['purchasing', 'mds.inventario'], ['purchasing', 'aw.inventario'],
+  ],
 };
 
 const LEGACY_PLANNING_SECTIONS = new Set(['gantt', 'daily', 'preparation', 'requirement']);
+
+const DATA_READ_FALLBACKS: Record<string, [string, string?][]> = {
+  ordenesSap: [
+    ['procesos', 'ptab.agua'],
+    ['insumos', 'ordenes'], ['insumos', 'rendimiento-azucar'], ['insumos', 'co2'], ['insumos', 'agua'],
+    ['management', 'production'], ['management', 'control'],
+    ['management', 'weekly-summary'], ['management', 'monthly-summary'], ['management', 'compliance'],
+    ['planta', 'production'],
+    ['ventas', 'analysis'], ['ventas', 'forecast'],
+    ['planning', 'seguimiento-prodt'], ['insumos', 'analisis-ventas'],
+  ],
+  productionInventory: [
+    ['purchasing', 'mds.inventario'], ['purchasing', 'aw.inventario'],
+  ],
+  productionInventoryPeriod: [
+    ['purchasing', 'mds.inventario'], ['purchasing', 'aw.inventario'],
+    ['insumos', 'consumo-materiales'],
+  ],
+  productionReceptions: [
+    ['purchasing', 'mds.inventario'], ['purchasing', 'aw.inventario'],
+    ['insumos', 'consumo-materiales'],
+  ],
+  productionWaste: [
+    ['insumos', 'mermas-botella-envasada'], ['insumos', 'mermas-materiales-lineas'],
+    ['management', 'production'], ['management', 'weekly-summary'], ['management', 'monthly-summary'],
+  ],
+  productionNonConforming: [
+    ['insumos', 'producto-no-conforme'],
+    ['management', 'production'], ['management', 'weekly-summary'], ['management', 'monthly-summary'],
+  ],
+};
+
+export async function authorizeDataRead(request: Request, section: string): Promise<Response | null> {
+  const primaryModule = section === 'ordenesSap'
+    ? 'ordenes-sap'
+    : section === 'productionInventory' ||
+        section === 'productionInventoryPeriod' ||
+        section === 'productionReceptions' ||
+        section === 'productionWaste' ||
+        section === 'productionNonConforming'
+      ? 'produccion'
+      : null;
+  if (!primaryModule) return Response.json({ error: 'Read permission denied for data section' }, { status: 403 });
+
+  const denied = await authorizeModuleRead(request, primaryModule);
+  if (!denied) return null;
+  if (denied.status !== 403) return denied;
+
+  for (const [module, subsection] of DATA_READ_FALLBACKS[section] ?? []) {
+    const dependencyDenied = await authorizeModuleRead(request, module, subsection);
+    if (!dependencyDenied) return null;
+    if (dependencyDenied.status !== 403) return dependencyDenied;
+  }
+  return denied;
+}
 
 export async function authorizeCollectionRead(request: Request, namespace: string): Promise<Response | null> {
   const permission = COLLECTION_PERMISSION_MAP[namespace];
