@@ -296,6 +296,26 @@ export async function authorizeModuleRead(
     return Response.json({ error: 'Read permission denied' }, { status: 403 });
   }
 
+  if (module === 'management' && section) {
+    const sectionMap: Record<string, string> = {
+      production: 'produccion-diaria',
+      control: 'control-semanal',
+      'weekly-summary': 'resumen-semanal',
+      'monthly-summary': 'resumen-mensual',
+      compliance: 'cumplimiento',
+    };
+    const managementSection = sectionMap[section.split('.').at(-1) ?? ''];
+    const allowed = permissions.management?.[auth.user.id];
+    if (
+      managementSection &&
+      Array.isArray(allowed) &&
+      allowed.length > 0 &&
+      !allowed.includes(managementSection)
+    ) {
+      return Response.json({ error: 'Read permission denied' }, { status: 403 });
+    }
+  }
+
   if (module === 'planning' && section) {
     const planning = permissions.planning?.[auth.user.id];
     const sectionLevel = permissions.sections?.[auth.user.id]?.[`planning.${section}`];
@@ -454,12 +474,88 @@ const COLLECTION_PERMISSION_MAP: Record<string, [string, string?]> = {
     'logistica-inventario-mensual': ['logistica', 'monthly-inventory'],
 };
 
+const COLLECTION_READ_FALLBACKS: Record<string, [string, string?][]> = {
+  jarabes: [
+    ['insumos', 'rendimiento-azucar'], ['insumos', 'ordenes'],
+    ['management', 'production'], ['management', 'weekly-summary'], ['management', 'monthly-summary'],
+  ],
+  'mtto-co2-consumption': [
+    ['mtto', 'co2.weekly'], ['mtto', 'co2.monthly'], ['insumos', 'co2'],
+    ['management', 'production'], ['management', 'weekly-summary'], ['management', 'monthly-summary'],
+  ],
+  'sala-jarabe-glup': [
+    ['insumos', 'ordenes'], ['insumos', 'rendimiento-azucar'],
+    ['management', 'production'], ['management', 'weekly-summary'], ['management', 'monthly-summary'],
+  ],
+  'sala-jarabe-justy': [
+    ['insumos', 'ordenes'], ['insumos', 'rendimiento-azucar'],
+    ['management', 'production'], ['management', 'weekly-summary'], ['management', 'monthly-summary'],
+  ],
+  'sala-jarabe-consumo-lineas': [
+    ['insumos', 'ordenes'], ['insumos', 'rendimiento-azucar'],
+    ['management', 'production'], ['management', 'weekly-summary'], ['management', 'monthly-summary'],
+  ],
+  'ptab-agua': [
+    ['insumos', 'agua'],
+    ['management', 'production'], ['management', 'weekly-summary'], ['management', 'monthly-summary'],
+  ],
+  'ptab-insumos': [
+    ['insumos', 'agua'],
+    ['management', 'production'], ['management', 'weekly-summary'], ['management', 'monthly-summary'],
+  ],
+  'insumos-agua': [
+    ['insumos', 'agua'],
+    ['management', 'production'], ['management', 'weekly-summary'], ['management', 'monthly-summary'],
+  ],
+  'planta-pnc': [
+    ['insumos', 'producto-no-conforme'],
+    ['management', 'production'], ['management', 'weekly-summary'], ['management', 'monthly-summary'],
+  ],
+  'planta-informes-operacionales': [
+    ['management', 'production'], ['management', 'control'],
+    ['management', 'weekly-summary'], ['management', 'monthly-summary'],
+  ],
+  'planta-ordenes-trabajo': [
+    ['management', 'production'], ['management', 'control'],
+    ['management', 'weekly-summary'], ['management', 'monthly-summary'],
+  ],
+  'planta-produccion-producidas': [
+    ['management', 'production'], ['management', 'weekly-summary'],
+    ['management', 'monthly-summary'], ['management', 'compliance'],
+  ],
+  'planta-hrs-pagadas': [
+    ['management', 'production'], ['management', 'weekly-summary'], ['management', 'monthly-summary'],
+  ],
+  'planta-hrs-pagadas-dt': [
+    ['management', 'production'], ['management', 'weekly-summary'], ['management', 'monthly-summary'],
+  ],
+  'planta-hrs-programadas': [
+    ['management', 'production'], ['management', 'weekly-summary'], ['management', 'monthly-summary'],
+  ],
+  'planta-hrs-programadas-dt': [
+    ['management', 'production'], ['management', 'weekly-summary'], ['management', 'monthly-summary'],
+  ],
+  'planta-velocidades-bpm': [
+    ['management', 'production'], ['management', 'weekly-summary'],
+    ['management', 'monthly-summary'], ['management', 'compliance'],
+  ],
+};
+
 const LEGACY_PLANNING_SECTIONS = new Set(['gantt', 'daily', 'preparation', 'requirement']);
 
 export async function authorizeCollectionRead(request: Request, namespace: string): Promise<Response | null> {
   const permission = COLLECTION_PERMISSION_MAP[namespace];
   if (!permission) return Response.json({ error: 'Read permission denied for collection' }, { status: 403 });
-  return authorizeModuleRead(request, permission[0], permission[1]);
+  const denied = await authorizeModuleRead(request, permission[0], permission[1]);
+  if (!denied) return null;
+  if (denied.status !== 403) return denied;
+
+  for (const [module, section] of COLLECTION_READ_FALLBACKS[namespace] ?? []) {
+    const reportDenied = await authorizeModuleRead(request, module, section);
+    if (!reportDenied) return null;
+    if (reportDenied.status !== 403) return reportDenied;
+  }
+  return denied;
 }
 
 export async function authorizeCollectionWrite(request: Request, namespace: string): Promise<Response | null> {

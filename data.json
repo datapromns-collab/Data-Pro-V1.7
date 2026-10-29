@@ -24132,8 +24132,7 @@
           "planning"
         ],
         "procs2.mds": [
-          "planning",
-          "management"
+          "planning"
         ],
         "g.tec.mds": [
           "seguimiento",
@@ -24208,7 +24207,8 @@
         "g.tec.mds": {
           "planning.calculator": "write",
           "planning.speeds": "read",
-          "logistica.monthly-inventory": "none"
+          "logistica.monthly-inventory": "none",
+          "management.monthly-summary": "write"
         },
         "prodtj.mds": {
           "management.control": "none",
@@ -24347,7 +24347,9 @@
           "procesos.ptab.insumos": "write",
           "management.production": "none",
           "management.control": "none",
-          "management.compliance": "none"
+          "management.compliance": "none",
+          "management.weekly-summary": "read",
+          "management.monthly-summary": "read"
         },
         "proc3.mds": {
           "planning.gantt": "read",
@@ -24605,7 +24607,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-29T12:19:14.122Z"
+    "updatedAt": "2026-10-29T14:48:17.100Z"
   },
   "ordenesSap": [
     {
@@ -54534,7 +54536,7 @@
         "2026-09-14|2026-09": 1174355.86,
         "2026-09-21|2026-09": 1009476.45,
         "2026-09-28|2026-09": 550986.53,
-        "2026-10-01|2026-10": 479385.1,
+        "2026-10-01|2026-10": 0,
         "2026-04-13|2026-04": 1316706.34,
         "2026-04-27|2026-04": 1059135.18,
         "2026-04-01|2026-04": 0,
@@ -247537,7 +247539,7 @@
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793193909109.3198,
+        "id": 1793151152860,
         "fechaOrden": "2026-10-24",
         "orden": "9985",
         "fechaEmision": "2026-10-24",
@@ -247560,11 +247562,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793193909109.888,
+        "id": 1793151258060,
         "fechaOrden": "2026-10-24",
         "orden": "9986",
         "fechaEmision": "2026-10-24",
@@ -247587,11 +247589,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793193909109.4502,
+        "id": 1793151746171,
         "fechaOrden": "2026-10-24",
         "orden": "10204",
         "fechaEmision": "2026-10-24",
@@ -247614,11 +247616,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793193909109.6775,
+        "id": 1793151942347,
         "fechaOrden": "2026-10-24",
         "orden": "10205",
         "fechaEmision": "2026-10-24",
@@ -247641,11 +247643,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793193909110.371,
+        "id": 1793154183478,
         "fechaOrden": "2026-10-24",
         "orden": "10169",
         "fechaEmision": "2026-10-24",
@@ -247668,11 +247670,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793193909110.5598,
+        "id": 1793154841988,
         "fechaOrden": "2026-10-24",
         "orden": "10206",
         "fechaEmision": "2026-10-24",
@@ -247695,11 +247697,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793193909110.9438,
+        "id": 1793156443976,
         "fechaOrden": "2026-10-24",
         "orden": "10023/10024",
         "fechaEmision": "2026-10-24",
@@ -247722,11 +247724,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793193909110.7217,
+        "id": 1793157027359,
         "fechaOrden": "2026-10-24",
         "orden": "10025",
         "fechaEmision": "2026-10-24",
@@ -247749,11 +247751,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793193909110.8457,
+        "id": 1793157081542,
         "fechaOrden": "2026-10-24",
         "orden": "10026",
         "fechaEmision": "2026-10-24",
@@ -247776,11 +247778,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793193909110.2036,
+        "id": 1793157169632,
         "fechaOrden": "2026-10-24",
         "orden": "9987",
         "fechaEmision": "2026-10-24",
@@ -247803,7 +247805,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Richard Marín"
       },
       {
@@ -247996,7 +247998,7 @@
         "usuario": "Froilan Bolivar"
       },
       {
-        "id": 1793196069227,
+        "id": 1793282921314.4897,
         "fechaOrden": "2026-10-26",
         "orden": "10033",
         "fechaEmision": "2026-10-26",
@@ -248019,7 +248021,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Froilan Bolivar"
       },
       {
@@ -248239,7 +248241,7 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1793199943343,
+        "id": 1793274146089.0078,
         "fechaOrden": "2026-10-26",
         "orden": "9848",
         "fechaEmision": "2026-10-26",
@@ -248262,7 +248264,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Froilan Bolivar"
       },
       {
