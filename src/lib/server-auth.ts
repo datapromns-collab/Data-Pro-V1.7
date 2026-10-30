@@ -469,6 +469,7 @@ const COLLECTION_PERMISSION_MAP: Record<string, [string, string?]> = {
     'seguimiento-etiquetadora': ['seguimiento', 'etiquetadora'],
     'seguimiento-ordenes': ['seguimiento'],
     'seguimiento-ordenes-auto': ['seguimiento'],
+    'planning-production-forecast': ['planning', 'seguimiento-prodt'],
     'ventas-pronostico-mensual': ['ventas', 'forecast'],
     'ventas-inventario-diario': ['ventas', 'analysis'],
     'logistica-inventario-mensual': ['logistica', 'monthly-inventory'],

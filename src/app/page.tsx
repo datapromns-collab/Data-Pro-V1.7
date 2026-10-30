@@ -4163,7 +4163,10 @@ export default function PlannerPage() {
                           <WeeklyPlanSection tasks={tasks} weekStartDate={weekStartDate} weeklyData={weeklyData} />
                         )}
                         {activeTab === 'seguimiento-prodt' && getPermissionLevel(user.id, 'planning', 'seguimiento-prodt') !== 'none' && (
-                          <SeguimientoProdtSection weekStartDate={weekStartDate} />
+                          <SeguimientoProdtSection
+                            weekStartDate={weekStartDate}
+                            canUploadForecast={getPermissionLevel(user.id, 'planning', 'seguimiento-prodt') === 'write'}
+                          />
                         )}
                         {activeTab === 'preparation' && getPermissionLevel(user.id, 'planning', 'preparation') !== 'none' && (
                           <PreparationSection tasks={tasks} weekStartDate={weekStartDate} onPrint={handlePrintPreparation} />
