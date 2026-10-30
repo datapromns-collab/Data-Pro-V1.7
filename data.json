@@ -24750,7 +24750,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-29T21:33:59.040Z"
+    "updatedAt": "2026-10-30T11:10:21.369Z"
   },
   "ordenesSap": [
     {
@@ -269696,6 +269696,81 @@
         "enviarALinea": null,
         "editando": false,
         "editandoPor": null
+      },
+      {
+        "id": "row_1793354640389_lefkpu",
+        "fecha": "2026-10-30",
+        "hora": "01:34",
+        "numeroTanques": "8",
+        "sala": "2",
+        "sabor": "GLUP COLA",
+        "litros": "17286",
+        "ubb": "6",
+        "brix": "53.78",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1793354790047_d2mwef",
+        "fecha": "2026-10-29",
+        "hora": "01:08",
+        "numeroTanques": "14",
+        "sala": "2",
+        "sabor": "GLUP COLA",
+        "litros": "17260",
+        "ubb": "6",
+        "brix": "53.72",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1793354870338_rwdf3v",
+        "fecha": "2026-10-29",
+        "hora": "20:50",
+        "numeroTanques": "7",
+        "sala": "1",
+        "sabor": "GLUP KOLITA",
+        "litros": "17750",
+        "ubb": "18",
+        "brix": "54.47",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1793354949228_9dasqn",
+        "fecha": "2026-10-29",
+        "hora": "22:57",
+        "numeroTanques": "1",
+        "sala": "1",
+        "sabor": "GLUP MANZANA ROJA",
+        "litros": "16600",
+        "ubb": "8",
+        "brix": "45.70",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1793355011398_zg8ch3",
+        "fecha": "2026-10-30",
+        "hora": "00:04",
+        "numeroTanques": "2",
+        "sala": "1",
+        "sabor": "GLUP MANZANA ROJA",
+        "litros": "16612",
+        "ubb": "8",
+        "brix": "46.08",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
       }
     ],
     "ventas-pronostico-mensual": {
@@ -275587,6 +275662,163 @@
               "reception": null,
               "final": 139.6,
               "initialOverride": true
+            }
+          },
+          "nocturno": {
+            "MATP_0003": {
+              "initial": 272,
+              "reception": null,
+              "final": 272
+            },
+            "MATP_0004": {
+              "initial": 4,
+              "reception": null,
+              "final": 4
+            },
+            "MATP_0005": {
+              "initial": 250,
+              "reception": null,
+              "final": 250
+            },
+            "MATP_0006": {
+              "initial": 43,
+              "reception": null,
+              "final": 43
+            },
+            "MATP_0032": {
+              "initial": 40,
+              "reception": null,
+              "final": 40
+            },
+            "MATP_0038": {
+              "initial": 84,
+              "reception": null,
+              "final": 84
+            },
+            "MATP_0039": {
+              "initial": 232,
+              "reception": null,
+              "final": 232
+            },
+            "MATP_0022": {
+              "initial": 80,
+              "reception": null,
+              "final": 80
+            },
+            "MATP_0059": {
+              "initial": 20,
+              "reception": null,
+              "final": 20
+            },
+            "MATP_0060": {
+              "initial": 0,
+              "reception": null,
+              "final": 0
+            },
+            "MATP_0041": {
+              "initial": 351.73,
+              "reception": null,
+              "final": 314.16
+            },
+            "MATP_0014": {
+              "initial": 139.6,
+              "reception": null,
+              "final": 139.6
+            },
+            "MATP_0015": {
+              "initial": 1607.4,
+              "reception": null,
+              "final": 1607.4
+            },
+            "MATP_0031": {
+              "initial": 185,
+              "reception": null,
+              "final": 185
+            },
+            "MATP_0036": {
+              "initial": 186.9,
+              "reception": null,
+              "final": 186.9
+            },
+            "MATP_0002": {
+              "initial": 238,
+              "reception": null,
+              "final": 226
+            },
+            "MATP_0007": {
+              "initial": 320,
+              "reception": null,
+              "final": 302
+            },
+            "MATP_0009": {
+              "initial": 222,
+              "reception": null,
+              "final": 209
+            },
+            "MATP_0043": {
+              "initial": 7480,
+              "reception": null,
+              "final": 6500
+            },
+            "MATP_0010": {
+              "initial": 465.5,
+              "reception": null,
+              "final": 454.1
+            },
+            "MATP_0016": {
+              "initial": 93.846,
+              "reception": null,
+              "final": 87.22
+            },
+            "MATP_0017": {
+              "initial": 14777.25,
+              "reception": null,
+              "final": 14193.95
+            },
+            "MATP_0018": {
+              "initial": 1359.1,
+              "reception": null,
+              "final": 1254.1
+            },
+            "MATP_0019": {
+              "initial": 1132.96,
+              "reception": null,
+              "final": 1025.77
+            },
+            "MATP_0020": {
+              "initial": 1912.4,
+              "reception": null,
+              "final": 1870.4
+            },
+            "MATP_0021": {
+              "initial": 3291,
+              "reception": null,
+              "final": 3207
+            },
+            "MATP_0037": {
+              "initial": 41.596,
+              "reception": null,
+              "final": 39.13
+            },
+            "MATP_0040": {
+              "initial": 2413.28,
+              "reception": null,
+              "final": 1751.3
+            },
+            "MATP_0042": {
+              "initial": 1148.7,
+              "reception": null,
+              "final": 1036.7
+            },
+            "MATP_0001": {
+              "initial": 46500,
+              "reception": null,
+              "final": 65400
+            },
+            "MATP_0001-sacos-50kg": {
+              "initial": 690000,
+              "reception": null,
+              "final": 600000
             }
           }
         }
