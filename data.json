@@ -25995,7 +25995,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-31T12:47:36.809Z"
+    "updatedAt": "2026-10-31T14:19:11.310Z"
   },
   "ordenesSap": [
     {
@@ -39198,6 +39198,17 @@
           "cajas3": 2080,
           "ticket4": "",
           "cajas4": 15680
+        },
+        {
+          "fechaInicio": "2026-10-31",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -39249,6 +39260,17 @@
           "cajas3": 1440,
           "ticket4": "",
           "cajas4": 7360
+        },
+        {
+          "fechaInicio": "2026-10-31",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -39269,6 +39291,17 @@
           "cajas3": 1360,
           "ticket4": "",
           "cajas4": 13360
+        },
+        {
+          "fechaInicio": "2026-10-31",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -39309,6 +39342,17 @@
           "cajas3": 1600,
           "ticket4": "",
           "cajas4": 4200
+        },
+        {
+          "fechaInicio": "2026-10-31",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -39329,6 +39373,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 6560
+        },
+        {
+          "fechaInicio": "2026-10-31",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -39349,6 +39404,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 3198
+        },
+        {
+          "fechaInicio": "2026-10-31",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     }
@@ -56099,7 +56165,12 @@
         "2026-10-22": "50.38",
         "2026-10-23": "50.23",
         "2026-10-24": "50.31",
-        "2026-10-25": "50.22"
+        "2026-10-25": "50.22",
+        "2026-10-26": "50.23",
+        "2026-10-27": "50.13",
+        "2026-10-28": "50.09",
+        "2026-10-29": "50.40",
+        "2026-10-30": "50.41"
       },
       "costoAzucar": {
         "2026-07-28": "1.43",
@@ -56141,7 +56212,8 @@
         "2026-10-20": "1.02",
         "2026-10-25": "1.02",
         "2026-10-26": "1.02",
-        "2026-10-28": "1.02"
+        "2026-10-28": "1.02",
+        "2026-10-30": "1.02"
       },
       "_deletedIds": {},
       "weeklyFisico": {
@@ -56166,7 +56238,7 @@
         "2026-10-05|2026-10": 1226308.47,
         "2026-10-12|2026-10": 1233076.41,
         "2026-10-19|2026-10": 1098374.84,
-        "2026-10-26|2026-10": 865360.75,
+        "2026-10-26|2026-10": 1064579.58,
         "2026-11-01|2026-11": 0,
         "2026-12-01|2026-12": 0,
         "2026-11-02|2026-11": 0
@@ -278113,6 +278185,36 @@
         "enviarALinea": null,
         "editando": false,
         "editandoPor": null
+      },
+      {
+        "id": "row_1793456253492_h74rik",
+        "fecha": "2026-10-31",
+        "hora": "09:07",
+        "numeroTanques": "5",
+        "sala": "1",
+        "sabor": "GLUP UVA",
+        "litros": "17080",
+        "ubb": "11",
+        "brix": "49.33",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1793456511829_givl2u",
+        "fecha": "2026-10-31",
+        "hora": "00:00",
+        "numeroTanques": "2",
+        "sala": "1",
+        "sabor": "GLUP UVA",
+        "litros": "17110",
+        "ubb": "11",
+        "brix": "49.29",
+        "estado": "enviado a linea",
+        "enviarALinea": 2,
+        "editando": false,
+        "editandoPor": null
       }
     ],
     "ventas-pronostico-mensual": {
@@ -278902,6 +279004,18 @@
           "horaInicio": "17:46",
           "ubbInicial": "8",
           "volInicialTanque": "16683"
+        },
+        {
+          "sourcePrepKey": "glup:row_1793456511829_givl2u",
+          "fechaFiltro": "2026-10-31",
+          "fecha": "2026-10-31",
+          "dia": "sábado",
+          "turno": "Nocturno",
+          "tanque": "2",
+          "sabor": "GLUP UVA",
+          "horaInicio": "4:10",
+          "ubbInicial": "11",
+          "volInicialTanque": "17110"
         }
       ],
       "3": [
@@ -284399,6 +284513,196 @@
               "initial": null,
               "reception": null,
               "final": null
+            }
+          }
+        },
+        "2026-10-31": {
+          "diurno": {
+            "MATP_0001-sacos-50kg": {
+              "initial": 585000,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0001": {
+              "initial": 44200,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0002": {
+              "initial": 400,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0003": {
+              "initial": 266,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0004": {
+              "initial": 4,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0005": {
+              "initial": 217,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0006": {
+              "initial": 48,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0007": {
+              "initial": 422,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0009": {
+              "initial": 384,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0032": {
+              "initial": 40,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0038": {
+              "initial": 84,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0039": {
+              "initial": 208,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0022": {
+              "initial": 80,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0043": {
+              "initial": 4540,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0059": {
+              "initial": 20,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0060": {
+              "initial": 0,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0010": {
+              "initial": 566.2,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0041": {
+              "initial": 296.8,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0042": {
+              "initial": 1812.7,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0040": {
+              "initial": 1585.8,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0037": {
+              "initial": 104.62,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0036": {
+              "initial": 186.9,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0031": {
+              "initial": 185,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0021": {
+              "initial": 3011.7,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0020": {
+              "initial": 1786.4,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0019": {
+              "initial": 2754.08,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0018": {
+              "initial": 2294.1,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0017": {
+              "initial": 17892.5,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0016": {
+              "initial": 140.05,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0015": {
+              "initial": 1396.2,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0014": {
+              "initial": 139.6,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
             }
           }
         }
