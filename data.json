@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-10-26T00:00:00.000",
+      "weekStartDate": "2026-11-02T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -14588,12 +14588,12 @@
             "name": "GLUP MANZANA ROJA",
             "lineId": "7",
             "loadPerHour": 2500,
-            "quantity": 24143,
-            "durationHours": 9.6572,
+            "quantity": 24166,
+            "durationHours": 9.6664,
             "presentation": "1Lt",
             "tanks": 3,
             "startTime": "2026-11-03T07:45:00.000Z",
-            "endTime": "2026-11-03T17:24:25.920Z",
+            "endTime": "2026-11-03T17:24:59.040Z",
             "id": "h6wk73g3z",
             "color": "#f59e0b"
           },
@@ -14649,12 +14649,12 @@
             "name": "GLUP MANZANA ROJA",
             "lineId": "6",
             "loadPerHour": 1200,
-            "quantity": 16095,
-            "durationHours": 13.4125,
+            "quantity": 16100,
+            "durationHours": 13.416666666666666,
             "presentation": "0.4Lts",
             "tanks": 1,
             "startTime": "2026-11-05T01:24:00.000Z",
-            "endTime": "2026-11-05T14:48:45.000Z",
+            "endTime": "2026-11-05T14:49:00.000Z",
             "id": "tloam6wtj",
             "color": "#587593"
           },
@@ -14675,12 +14675,12 @@
             "name": "GLUP COLA",
             "lineId": "4",
             "loadPerHour": 2800,
-            "quantity": 67200,
-            "durationHours": 24,
+            "quantity": 207200,
+            "durationHours": 74,
             "presentation": "2Lts",
-            "tanks": 7.79,
+            "tanks": 24.02,
             "startTime": "2026-11-02T14:00:00.000Z",
-            "endTime": "2026-11-03T14:00:00.000Z",
+            "endTime": "2026-11-05T16:00:00.000Z",
             "id": "hwx75hz7v",
             "color": "#6366f1"
           },
@@ -14688,12 +14688,12 @@
             "name": "GLUP COLA",
             "lineId": "3",
             "loadPerHour": 2800,
-            "quantity": 67200,
-            "durationHours": 24,
+            "quantity": 224000,
+            "durationHours": 80,
             "presentation": "2Lts",
-            "tanks": 7.79,
+            "tanks": 25.97,
             "startTime": "2026-11-02T14:00:00.000Z",
-            "endTime": "2026-11-03T14:00:00.000Z",
+            "endTime": "2026-11-05T22:00:00.000Z",
             "id": "7fzan9jyg",
             "color": "#ef4444"
           },
@@ -14709,6 +14709,294 @@
             "endTime": "2026-11-03T00:21:00.000Z",
             "id": "f2duubsxw",
             "color": "#587593"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "6",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-11-05T14:49:00.000Z",
+            "endTime": "2026-11-05T16:49:00.000Z",
+            "id": "jrxs6morw",
+            "color": "#f59e0b"
+          },
+          {
+            "name": "GLUP FRESH",
+            "lineId": "6",
+            "loadPerHour": 1200,
+            "quantity": 17260,
+            "durationHours": 14.383333333333333,
+            "presentation": "0.4Lts",
+            "tanks": 1,
+            "startTime": "2026-11-05T16:49:00.000Z",
+            "endTime": "2026-11-06T07:12:00.000Z",
+            "id": "dyl41qdmo",
+            "color": "#6366f1"
+          },
+          {
+            "name": "CS",
+            "lineId": "6",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-11-06T07:12:00.000Z",
+            "endTime": "2026-11-06T07:42:00.000Z",
+            "id": "55ufzeyvr",
+            "color": "#ef4444"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "6",
+            "loadPerHour": 1200,
+            "quantity": 30360,
+            "durationHours": 25.3,
+            "presentation": "0.4Lts",
+            "tanks": 1.76,
+            "startTime": "2026-11-06T07:42:00.000Z",
+            "endTime": "2026-11-07T09:00:00.000Z",
+            "id": "b1xfrgmdb",
+            "color": "#f59e0b"
+          },
+          {
+            "name": "CS",
+            "lineId": "7",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-11-03T17:25:00.000Z",
+            "endTime": "2026-11-03T17:55:00.000Z",
+            "id": "jzkeru5om",
+            "color": "#ef4444"
+          },
+          {
+            "name": "GLUP UVA",
+            "lineId": "7",
+            "loadPerHour": 2500,
+            "quantity": 21375,
+            "durationHours": 8.55,
+            "presentation": "1Lt",
+            "tanks": 3.01,
+            "startTime": "2026-11-03T17:55:00.000Z",
+            "endTime": "2026-11-04T02:28:00.000Z",
+            "id": "hhms49mvh",
+            "color": "#6366f1"
+          },
+          {
+            "name": "CS",
+            "lineId": "7",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-11-04T02:28:00.000Z",
+            "endTime": "2026-11-04T02:58:00.000Z",
+            "id": "mvu56hkab",
+            "color": "#f59e0b"
+          },
+          {
+            "name": "GLUP KOLITA",
+            "lineId": "7",
+            "loadPerHour": 2500,
+            "quantity": 35583,
+            "durationHours": 14.2332,
+            "presentation": "1Lt",
+            "tanks": 4,
+            "startTime": "2026-11-04T02:58:00.000Z",
+            "endTime": "2026-11-04T17:11:59.520Z",
+            "id": "r9s0dt203",
+            "color": "#587593"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "7",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-11-04T17:12:00.000Z",
+            "endTime": "2026-11-04T19:12:00.000Z",
+            "id": "gbt0n7p8g",
+            "color": "#f59e0b"
+          },
+          {
+            "name": "GLUP FRESH",
+            "lineId": "7",
+            "loadPerHour": 2500,
+            "quantity": 34500,
+            "durationHours": 13.8,
+            "presentation": "1Lt",
+            "tanks": 4,
+            "startTime": "2026-11-04T19:12:00.000Z",
+            "endTime": "2026-11-05T09:00:00.000Z",
+            "id": "ikt29lusm",
+            "color": "#587593"
+          },
+          {
+            "name": "CS",
+            "lineId": "7",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-11-05T09:00:00.000Z",
+            "endTime": "2026-11-05T09:30:00.000Z",
+            "id": "ib7sohlta",
+            "color": "#6366f1"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "7",
+            "loadPerHour": 2500,
+            "quantity": 118750,
+            "durationHours": 47.5,
+            "presentation": "1Lt",
+            "tanks": 13.77,
+            "startTime": "2026-11-05T09:30:00.000Z",
+            "endTime": "2026-11-07T09:00:00.000Z",
+            "id": "c9umcntbl",
+            "color": "#ef4444"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "3",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-11-05T22:00:00.000Z",
+            "endTime": "2026-11-06T00:00:00.000Z",
+            "id": "k0twy0pu6",
+            "color": "#10b981"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "3",
+            "loadPerHour": 2800,
+            "quantity": 92400,
+            "durationHours": 33,
+            "presentation": "2Lts",
+            "tanks": 10.71,
+            "startTime": "2026-11-06T00:00:00.000Z",
+            "endTime": "2026-11-07T09:00:00.000Z",
+            "id": "iodzo1kv4",
+            "color": "#ec4899"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "4",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-11-05T16:00:00.000Z",
+            "endTime": "2026-11-05T18:00:00.000Z",
+            "id": "9szv2l3gq",
+            "color": "#10b981"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "4",
+            "loadPerHour": 2800,
+            "quantity": 109200,
+            "durationHours": 39,
+            "presentation": "2Lts",
+            "tanks": 12.66,
+            "startTime": "2026-11-05T18:00:00.000Z",
+            "endTime": "2026-11-07T09:00:00.000Z",
+            "id": "m28ljej0w",
+            "color": "#10b981"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "5",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-11-03T14:00:00.000Z",
+            "endTime": "2026-11-03T16:00:00.000Z",
+            "id": "vpc564ykk",
+            "color": "#6366f1"
+          },
+          {
+            "name": "JUSTY DURAZNO",
+            "lineId": "5",
+            "loadPerHour": 1210,
+            "quantity": 29040,
+            "durationHours": 24,
+            "presentation": "1.5Lts",
+            "tanks": 26.14,
+            "startTime": "2026-11-03T16:00:00.000Z",
+            "endTime": "2026-11-04T16:00:00.000Z",
+            "id": "sg43bunqh",
+            "color": "#47CCB0"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "5",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-11-04T16:00:00.000Z",
+            "endTime": "2026-11-04T18:00:00.000Z",
+            "id": "ypqxkwo0f",
+            "color": "#47CCB0"
+          },
+          {
+            "name": "JUSTY DURAZNO",
+            "lineId": "5",
+            "loadPerHour": 1210,
+            "quantity": 29040,
+            "durationHours": 24,
+            "presentation": "1.5Lts",
+            "tanks": 26.14,
+            "startTime": "2026-11-04T18:00:00.000Z",
+            "endTime": "2026-11-05T18:00:00.000Z",
+            "id": "0nzfztcfg",
+            "color": "#f59e0b"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "5",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-11-05T18:00:00.000Z",
+            "endTime": "2026-11-05T20:00:00.000Z",
+            "id": "vawhp0wwq",
+            "color": "#6366f1"
+          },
+          {
+            "name": "JUSTY DURAZNO",
+            "lineId": "5",
+            "loadPerHour": 1210,
+            "quantity": 29040,
+            "durationHours": 24,
+            "presentation": "1.5Lts",
+            "tanks": 26.14,
+            "startTime": "2026-11-05T20:00:00.000Z",
+            "endTime": "2026-11-06T20:00:00.000Z",
+            "id": "42xr8dnnq",
+            "color": "#ef4444"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "5",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-11-06T20:00:00.000Z",
+            "endTime": "2026-11-06T22:00:00.000Z",
+            "id": "lmdb1ny3i",
+            "color": "#6366f1"
+          },
+          {
+            "name": "JUSTY DURAZNO",
+            "lineId": "5",
+            "loadPerHour": 1210,
+            "quantity": 10890,
+            "durationHours": 9,
+            "presentation": "1.5Lts",
+            "tanks": 9.8,
+            "startTime": "2026-11-06T22:00:00.000Z",
+            "endTime": "2026-11-07T07:00:00.000Z",
+            "id": "9uatz8fqq",
+            "color": "#47CCB0"
           }
         ],
         "realProduction": {},
@@ -14729,7 +15017,11 @@
         "logisticsInventoryAW": {},
         "plantInventoryAW": {},
         "deletedTaskIds": [
-          "qrur0wi7r"
+          "qrur0wi7r",
+          "b311jxd0q",
+          "9e29vjp6s",
+          "gmi94c2if",
+          "wsntuwomv"
         ]
       }
     },
@@ -19243,6 +19535,71 @@
               "quantity": "120",
               "unit": "UND"
             }
+          ],
+          "2026-10-30": [
+            {
+              "id": "56185d49-af09-48c0-95b6-fb2e8fc8c7a5",
+              "line": "Linea 1",
+              "flavor": "GLUP KOLITA",
+              "code": "ENV-00017",
+              "material": "BOTELLA ENVASADA GLUP KOLITA 2.0.LTS",
+              "quantity": "118",
+              "unit": "UND"
+            },
+            {
+              "id": "cc539e41-ae95-4594-a088-aed1c457202a",
+              "line": "Linea 2",
+              "flavor": "GLUP MANZANA ROJA",
+              "code": "ENV-00086",
+              "material": "BOTELLA ENVASADA MANZANA ROJA 2.0 L (LINEA 2)",
+              "quantity": "68",
+              "unit": "UND"
+            },
+            {
+              "id": "07683977-c502-4074-83fe-95b55f61cd10",
+              "line": "Linea 2",
+              "flavor": "GLUP UVA",
+              "code": "ENV-00039",
+              "material": "BOTELLA ENVASADA GLUP UVA  2.0.LTS  (EN LINEA 2)",
+              "quantity": "6",
+              "unit": "UND"
+            },
+            {
+              "id": "c34839f6-7566-4adf-81ef-c3a351135972",
+              "line": "Linea 3",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00063",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 2L (LINEA 3)",
+              "quantity": "370",
+              "unit": "UND"
+            },
+            {
+              "id": "4e756066-8916-44ec-8bd3-06688396c50d",
+              "line": "Linea 4",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00054",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 2.LTS (LINEA 4)",
+              "quantity": "85",
+              "unit": "UND"
+            },
+            {
+              "id": "0d1f0282-2b7f-4371-bab4-30b58d95ea0f",
+              "line": "Linea 5",
+              "flavor": "JUSTY DURAZNO",
+              "code": "ENV-00095",
+              "material": "BOTELLA ENVASADA JUSTY DURAZNO 1.5 LTS",
+              "quantity": "78",
+              "unit": "UND"
+            },
+            {
+              "id": "234b3039-d2d1-418a-afbd-b953fa838843",
+              "line": "Linea 6",
+              "flavor": "GLUP FRESH",
+              "code": "ENV-00060",
+              "material": "BOTELLA ENVASADA GLUP FRESH 400 ML (LINEA 6)",
+              "quantity": "138",
+              "unit": "UND"
+            }
           ]
         },
         "desperdicios": {
@@ -23412,6 +23769,140 @@
               "kind": "termo",
               "preformSize": ""
             }
+          ],
+          "2026-10-30": [
+            {
+              "id": "76de0ff1-d707-4af6-84a7-2e8b4cf511bd",
+              "line": "Linea 1",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "4309",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "c489f5b9-0437-449a-abcd-af8163a17dbd",
+              "line": "Linea 1",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "2,58",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "870c6a08-986c-4128-a571-3122f0225974",
+              "line": "Linea 2",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "8047",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "4d03e836-0ca2-4ba7-882b-82fa95b276d1",
+              "line": "Linea 2",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "2,32",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "8eefaea7-d45a-47ff-9938-5af5476eceda",
+              "line": "Linea 3",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "3428",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "7f8a8900-31c4-43ff-9163-028450a05e43",
+              "line": "Linea 3",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "1,72",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "df731895-d0be-4363-956e-79b0ad843ecb",
+              "line": "Linea 4",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "5809",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "3c7c9568-a9c4-4742-a9ba-b7131b5f4c14",
+              "line": "Linea 4",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "3,32",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "0dad9e4c-3f76-45d1-99b4-15040469e847",
+              "line": "Linea 5",
+              "flavor": "transparente",
+              "code": "EMP_0068",
+              "material": "PREFORMA TRANSPARENTE 36 GR-1881",
+              "quantity": "2305",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "f880b7ee-35ed-49c5-8313-5bb1905c285d",
+              "line": "Linea 5",
+              "flavor": "",
+              "code": "EMP_0017",
+              "material": "POLIETILENO TERMOENCOGIBLE 55 X 0.07",
+              "quantity": "4,18",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "ebc53859-d214-429d-a2f9-ec9e187886ce",
+              "line": "Linea 6",
+              "flavor": "verde",
+              "code": "EMP_0135",
+              "material": "PREFORMA VERDE 20,5-1881",
+              "quantity": "600",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "62c8e84f-4aea-4677-8313-2f6316a064ad",
+              "line": "Linea 6",
+              "flavor": "",
+              "code": "EMP_0130",
+              "material": "POLIETILENO TERMOENCOGIBLE 43 x 0.06",
+              "quantity": "1,12",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            }
           ]
         }
       },
@@ -25504,7 +25995,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-31T11:53:23.906Z"
+    "updatedAt": "2026-10-31T12:47:36.809Z"
   },
   "ordenesSap": [
     {
@@ -52325,7 +52816,7 @@
           "GLUP FRESH": {
             "inicial": "14.15",
             "preparado": "6",
-            "final": "3.09"
+            "final": "3.06"
           },
           "GLUP PIÑA": {
             "inicial": "18.03"
@@ -52337,29 +52828,33 @@
         },
         "2026-10-30": {
           "GLUP COLA": {
-            "inicial": "",
-            "preparado": "",
-            "final": ""
+            "inicial": "70.50",
+            "preparado": "42",
+            "final": "76.14"
           },
           "JUSTY DURAZNO": {
-            "inicial": "",
-            "preparado": "",
-            "final": ""
+            "inicial": "24",
+            "preparado": "280",
+            "final": "31"
           },
           "GLUP KOLITA": {
-            "inicial": "",
-            "preparado": "",
-            "final": ""
+            "inicial": "28.12",
+            "preparado": "72",
+            "final": "34.91"
           },
           "GLUP UVA": {
             "inicial": "",
-            "preparado": "",
-            "final": ""
+            "preparado": "33",
+            "final": "21.31"
           },
           "GLUP FRESH": {
-            "inicial": "",
-            "preparado": "",
-            "final": ""
+            "inicial": "3.06",
+            "preparado": "6",
+            "final": "3.30"
+          },
+          "GLUP MANZANA ROJA": {
+            "inicial": "16.72",
+            "preparado": "8"
           }
         },
         "2026-10-31": {
@@ -54009,9 +54504,19 @@
         },
         "2026-10-30": {
           "PORTUGUESA": {
+            "invInicialSacos": "12000",
+            "recepcionSacos": "",
+            "invFinalSacos": "10800"
+          },
+          "MONTALBAN": {
             "invInicialSacos": "",
             "recepcionSacos": "",
             "invFinalSacos": ""
+          },
+          "PASTORA": {
+            "invInicialSacos": "",
+            "recepcionSacos": "3600",
+            "invFinalSacos": "920"
           }
         },
         "2026-10-31": {
@@ -55457,12 +55962,12 @@
         },
         "2026-10-30": {
           "JARABE SIMPLE": {
-            "invInicialSacos": "",
-            "invFinalSacos": ""
+            "invInicialSacos": "347",
+            "invFinalSacos": "424"
           },
           "Sala 1": {
-            "invInicialSacos": "",
-            "invFinalSacos": ""
+            "invInicialSacos": "961",
+            "invFinalSacos": "460"
           }
         },
         "2026-10-31": {
@@ -255633,7 +256138,7 @@
         "usuario": "Froilan Bolivar"
       },
       {
-        "id": 1793418074516,
+        "id": 1793449178936.7915,
         "fechaOrden": "2026-10-26",
         "orden": "10170",
         "fechaEmision": "2026-10-26",
@@ -255656,11 +256161,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793418127818,
+        "id": 1793449178936.5244,
         "fechaOrden": "2026-10-26",
         "orden": "10171",
         "fechaEmision": "2026-10-26",
@@ -255683,11 +256188,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793420306168,
+        "id": 1793449178936.9253,
         "fechaOrden": "2026-10-26",
         "orden": "9849",
         "fechaEmision": "2026-10-26",
@@ -255710,11 +256215,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793426480490,
+        "id": 1793449178936.696,
         "fechaOrden": "2026-10-26",
         "orden": "9850",
         "fechaEmision": "2026-10-26",
@@ -255737,11 +256242,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793426852610,
+        "id": 1793449178936.4001,
         "fechaOrden": "2026-10-26",
         "orden": "10251",
         "fechaEmision": "2026-10-26",
@@ -255764,11 +256269,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793426943340,
+        "id": 1793449178936.0984,
         "fechaOrden": "2026-10-26",
         "orden": "10172",
         "fechaEmision": "2026-10-26",
@@ -255791,11 +256296,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793426983164,
+        "id": 1793449178936.6003,
         "fechaOrden": "2026-10-26",
         "orden": "10173",
         "fechaEmision": "2026-10-26",
@@ -255818,11 +256323,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793428014782,
+        "id": 1793449178936.2058,
         "fechaOrden": "2026-10-27",
         "orden": "9995",
         "fechaEmision": "2026-10-27",
@@ -255845,11 +256350,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793428073437,
+        "id": 1793449178936.999,
         "fechaOrden": "2026-10-27",
         "orden": "9994",
         "fechaEmision": "2026-10-27",
@@ -255872,11 +256377,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793428864242,
+        "id": 1793449178936.7415,
         "fechaOrden": "2026-10-27",
         "orden": "10207",
         "fechaEmision": "2026-10-27",
@@ -255899,11 +256404,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793430055328,
+        "id": 1793449178936.592,
         "fechaOrden": "2026-10-27",
         "orden": "9923",
         "fechaEmision": "2026-10-27",
@@ -255926,11 +256431,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793430643374,
+        "id": 1793449178936.601,
         "fechaOrden": "2026-10-27",
         "orden": "10132",
         "fechaEmision": "2026-10-27",
@@ -255953,11 +256458,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793430735662,
+        "id": 1793449178936.6638,
         "fechaOrden": "2026-10-27",
         "orden": "10133",
         "fechaEmision": "2026-10-27",
@@ -255980,11 +256485,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793431418673,
+        "id": 1793449178936.4045,
         "fechaOrden": "2026-10-27",
         "orden": "10208",
         "fechaEmision": "2026-10-27",
@@ -256007,11 +256512,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793431531475,
+        "id": 1793449178936.6665,
         "fechaOrden": "2026-10-27",
         "orden": "10174",
         "fechaEmision": "2026-10-27",
@@ -256034,11 +256539,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793432111272,
+        "id": 1793449178936.2083,
         "fechaOrden": "2026-10-27",
         "orden": "9924",
         "fechaEmision": "2026-10-27",
@@ -256061,11 +256566,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793433321780,
+        "id": 1793449178936.7593,
         "fechaOrden": "2026-10-27",
         "orden": "10036",
         "fechaEmision": "2026-10-27",
@@ -256088,11 +256593,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793434278746,
+        "id": 1793449178936.027,
         "fechaOrden": "2026-10-28",
         "orden": "10209",
         "fechaEmision": "2026-10-28",
@@ -256115,11 +256620,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793434325628,
+        "id": 1793449178936.4202,
         "fechaOrden": "2026-10-28",
         "orden": "10175",
         "fechaEmision": "2026-10-28",
@@ -256142,11 +256647,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793434438098,
+        "id": 1793449178936.642,
         "fechaOrden": "2026-10-28",
         "orden": "10176",
         "fechaEmision": "2026-10-28",
@@ -256169,11 +256674,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793434814891,
+        "id": 1793449178936.9358,
         "fechaOrden": "2026-10-28",
         "orden": "10254",
         "fechaEmision": "2026-10-28",
@@ -256196,11 +256701,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793434969017,
+        "id": 1793449178936.952,
         "fechaOrden": "2026-10-28",
         "orden": "10255",
         "fechaEmision": "2026-10-28",
@@ -256223,11 +256728,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793435979842,
+        "id": 1793449178936.6006,
         "fechaOrden": "2026-10-28",
         "orden": "10210",
         "fechaEmision": "2026-10-28",
@@ -256250,11 +256755,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793436065711,
+        "id": 1793449178936.4363,
         "fechaOrden": "2026-10-28",
         "orden": "10211",
         "fechaEmision": "2026-10-28",
@@ -256277,11 +256782,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793436193952,
+        "id": 1793449178936.7673,
         "fechaOrden": "2026-10-28",
         "orden": "10212",
         "fechaEmision": "2026-10-28",
@@ -256304,11 +256809,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793436353557,
+        "id": 1793449178936.8718,
         "fechaOrden": "2026-10-28",
         "orden": "10177",
         "fechaEmision": "2026-10-28",
@@ -256331,11 +256836,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793436447729,
+        "id": 1793449178936.697,
         "fechaOrden": "2026-10-28",
         "orden": "10178",
         "fechaEmision": "2026-10-28",
@@ -256358,11 +256863,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793437441098,
+        "id": 1793449178936.6072,
         "fechaOrden": "2026-10-28",
         "orden": "9926",
         "fechaEmision": "2026-10-28",
@@ -256385,11 +256890,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793437597561,
+        "id": 1793449178936.6682,
         "fechaOrden": "2026-10-28",
         "orden": "10256",
         "fechaEmision": "2026-10-28",
@@ -256412,11 +256917,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793438970898,
+        "id": 1793449178936.1436,
         "fechaOrden": "2026-10-28",
         "orden": "10179",
         "fechaEmision": "2026-10-28",
@@ -256439,11 +256944,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793439105297,
+        "id": 1793449178936.485,
         "fechaOrden": "2026-10-28",
         "orden": "9927",
         "fechaEmision": "2026-10-28",
@@ -256466,7 +256971,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       }
     ],
@@ -286023,8 +286528,8 @@
     "filename": "stock-producto-terminado.xlsx",
     "originalName": "Formato Inventario  Fisico Almacen PT DIARIO ACT  0888.xlsx",
     "tipo": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "tamano": 34974,
-    "uploadedAt": "2026-10-30T14:46:03.990Z",
+    "tamano": 34945,
+    "uploadedAt": "2026-10-31T12:20:40.209Z",
     "uploadedBy": "local-user"
   }
 }
