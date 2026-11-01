@@ -24277,7 +24277,7 @@
               "EMP_0080-Plastven": "5904",
               "EMP_0084": "1152"
             },
-            "adhesivoCantidad": "112",
+            "adhesivoCantidad": "",
             "etiquetasCantidad": {
               "EMP_0042": "811,50",
               "EMP_0111": "272,67",
@@ -24317,9 +24317,10 @@
               "EMP_0068": "313650"
             },
             "plasticos": {
-              "EMP_0017": "13740,50",
-              "EMP_0080-Plastven": "",
-              "EMP_0019": "2040"
+              "EMP_0017": "",
+              "EMP_0080-Plastven": "7836.5",
+              "EMP_0019": "2040",
+              "EMP_0080-plastico-empaque": "5904"
             },
             "adhesivoCantidad": "112",
             "etiquetasCantidad": {
@@ -24522,7 +24523,11 @@
             "tapas": {},
             "separadores": {},
             "preformas": {},
-            "plasticos": {},
+            "plasticos": {
+              "EMP_0019": "2040",
+              "EMP_0080-Plastven": "6688",
+              "EMP_0080-plastico-empaque": "7872"
+            },
             "adhesivoCantidad": "84",
             "etiquetasCantidad": {},
             "azucarCantidad": {},
@@ -24536,7 +24541,10 @@
             "tapas": {},
             "separadores": {},
             "preformas": {},
-            "plasticos": {},
+            "plasticos": {
+              "EMP_0019": "2040",
+              "EMP_0080-Plastven": "9840"
+            },
             "adhesivoCantidad": "112",
             "etiquetasCantidad": {},
             "azucarCantidad": {},
@@ -24550,7 +24558,10 @@
             "tapas": {},
             "separadores": {},
             "preformas": {},
-            "plasticos": {},
+            "plasticos": {
+              "EMP_0019": "2040",
+              "EMP_0080-Plastven": "9840"
+            },
             "adhesivoCantidad": "84",
             "etiquetasCantidad": {},
             "azucarCantidad": {},
@@ -24564,7 +24575,9 @@
             "tapas": {},
             "separadores": {},
             "preformas": {},
-            "plasticos": {},
+            "plasticos": {
+              "EMP_0080-Plastven": "2624"
+            },
             "adhesivoCantidad": "112",
             "etiquetasCantidad": {},
             "azucarCantidad": {},
@@ -24646,12 +24659,13 @@
               "EMP_0135-Ultrapack": "491520"
             },
             "plasticos": {
-              "EMP_0017": "19217.5",
+              "EMP_0017": "5477",
               "EMP_0019": "4080",
-              "EMP_0080-Plastven": "5904",
-              "EMP_0084": "1152"
+              "EMP_0080-Plastven": "13740.5",
+              "EMP_0084": "1152",
+              "EMP_0080-plastico-empaque": "5904"
             },
-            "adhesivoCantidad": "672",
+            "adhesivoCantidad": "560",
             "etiquetasCantidad": {
               "EMP_0042": "1618",
               "EMP_0111": "272.67",
@@ -24697,7 +24711,7 @@
               "EMP_0017": "",
               "EMP_0019": "3060",
               "EMP_0084": "2304",
-              "EMP_0080-Plastven": "16182",
+              "EMP_0080-Plastven": "18806",
               "EMP_0130": "2077.5"
             },
             "adhesivoCantidad": "336",
@@ -24719,7 +24733,11 @@
             "tapas": {},
             "separadores": {},
             "preformas": {},
-            "plasticos": {},
+            "plasticos": {
+              "EMP_0019": "6120",
+              "EMP_0080-Plastven": "26368",
+              "EMP_0080-plastico-empaque": "7872"
+            },
             "adhesivoCantidad": "280",
             "etiquetasCantidad": {},
             "azucarCantidad": {},
@@ -26434,7 +26452,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-01T17:53:46.436Z"
+    "updatedAt": "2026-11-01T19:38:08.679Z"
   },
   "ordenesSap": [
     {
@@ -56781,7 +56799,7 @@
         "2026-09-14|2026-09": 1174355.86,
         "2026-09-21|2026-09": 1009476.45,
         "2026-09-28|2026-09": 550986.53,
-        "2026-10-01|2026-10": 0,
+        "2026-10-01|2026-10": 479385.1,
         "2026-04-13|2026-04": 1316706.34,
         "2026-04-27|2026-04": 1059135.18,
         "2026-04-01|2026-04": 0,
@@ -236361,6 +236379,291 @@
         "usuario": "Richard Marín",
         "id": 1793439321364,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-01",
+        "semana": 44,
+        "turno": "DIURNO",
+        "operador": "JOSE CORDERO ",
+        "linea": "Línea 1",
+        "equipo": "SOPLADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "08:12",
+        "finParada": "08:32",
+        "totalMin": "20",
+        "zona": "Llenado",
+        "falla": "AJUSTE DE MOLDE #2 Y CAMBIO DE PINZA, LEVA ",
+        "orden": "10351",
+        "observaciones": "CAMBIO DE CORONADOR #8 POR MAL TAPADO ",
+        "usuario": "Froilan Bolivar",
+        "id": 1793564216119,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-01",
+        "semana": 44,
+        "turno": "DIURNO",
+        "operador": "JOSE CORDERO ",
+        "linea": "Línea 1",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "08:38",
+        "finParada": "08:41",
+        "totalMin": "3",
+        "zona": "Llenado",
+        "falla": "FALLA EN MOLDE #6",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793564282590,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-01",
+        "semana": 44,
+        "turno": "DIURNO",
+        "operador": "JOSE CORDERO",
+        "linea": "Línea 1",
+        "equipo": "LLENADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "08:45",
+        "finParada": "08:57",
+        "totalMin": "12",
+        "zona": "Llenado",
+        "falla": "CAMBIO DE CORONADOR #8 POR MAL TAPADO",
+        "orden": "",
+        "observaciones": "CORRESPONDE A O.T 10351",
+        "usuario": "Froilan Bolivar",
+        "id": 1793564685095,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-01",
+        "semana": 44,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "10:17",
+        "finParada": "10:35",
+        "totalMin": "18",
+        "zona": "Llenado",
+        "falla": "FALLA E/E ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793565009430,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-01",
+        "semana": 44,
+        "turno": "DIURNO",
+        "operador": "JOSE CORDERO ",
+        "linea": "Línea 1",
+        "equipo": "LLENADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "09:56",
+        "finParada": "10:00",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "TAPAS OBSTRUIDAS EN PLATO DE TRANSFERENCIA ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793565144299,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-01",
+        "semana": 44,
+        "turno": "DIURNO",
+        "operador": "JOSE CORDERO",
+        "linea": "Línea 1",
+        "equipo": "LLENADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "11:19",
+        "finParada": "11:25",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "BOTELLAS CAIDAS EN TRANSPORTADOR DE SALIDA DE LLENADORA ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793565547187,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-01",
+        "semana": 44,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "12:10",
+        "finParada": "12:30",
+        "totalMin": "20",
+        "zona": "Llenado",
+        "falla": "FALLA E/E VARIACION DE VOLTAJE ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793565632642,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-01",
+        "semana": 44,
+        "turno": "DIURNO",
+        "operador": "CARLOS GALINDO ",
+        "linea": "Línea 1",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "INSUMOS",
+        "inicioParada": "12:51",
+        "finParada": "13:08",
+        "totalMin": "17",
+        "zona": "Llenado",
+        "falla": "ETIQUETA NO TRANSFERIDA, INSUMO DEFECTUOSO POR EFECTO CURLING",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793565757682,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-01",
+        "semana": 44,
+        "turno": "DIURNO",
+        "operador": "JOSE CODERO ",
+        "linea": "Línea 1",
+        "equipo": "SOPLADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "13:32",
+        "finParada": "14:01",
+        "totalMin": "29",
+        "zona": "Llenado",
+        "falla": "COMPENSACION MOLDE #1 Y EXTRACION DE TORNILLO PARTIDO ",
+        "orden": "10352",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793565898801,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-01",
+        "semana": 44,
+        "turno": "DIURNO",
+        "operador": "CARLOS GALINDO ",
+        "linea": "Línea 1",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "15:09",
+        "finParada": "15:25",
+        "totalMin": "16",
+        "zona": "Llenado",
+        "falla": "DEFICIT DE VACIO ORIFICIOS DE TAMBOR DE CORTE CONTAMINADOS CON RESTOS DE ETIQUETAS ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793565996897,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-01",
+        "semana": 44,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 2",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "09:23",
+        "finParada": "09:48",
+        "totalMin": "25",
+        "zona": "Llenado",
+        "falla": "FALLA E/E VARIACION DE VOLTAJE ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793566200416,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-01",
+        "semana": 44,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 2",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "12:10",
+        "finParada": "12:20",
+        "totalMin": "10",
+        "zona": "Llenado",
+        "falla": "FALLA E/E VARIACION DE VOLTAJE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793566356632,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-01",
+        "semana": 44,
+        "turno": "DIURNO",
+        "operador": "GABRIEL PADRON",
+        "linea": "Línea 2",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "12:43",
+        "finParada": "12:47",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "ACUMULACION DE BOTELLA POR PAELTIZADO MANUAL",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793566432912,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-01",
+        "semana": 44,
+        "turno": "DIURNO",
+        "operador": "GABRIEL PADRON",
+        "linea": "Línea 2",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "12:51",
+        "finParada": "12:55",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "ACUMULACION DE BOTELLA POR PAELTIZADO MANUAL",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793566473088,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-01",
+        "semana": 44,
+        "turno": "DIURNO",
+        "operador": "GABRIEL PADRON ",
+        "linea": "Línea 2",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "13:00",
+        "finParada": "13:06",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "ACUMULACION DE BOTELLA POR PAELTIZADO MANUAL",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793566527335,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -257595,6 +257898,60 @@
         "observaciones": "",
         "bloqueado": true,
         "usuario": "Richard Marín"
+      },
+      {
+        "id": 1793564216124,
+        "fechaOrden": "2026-11-01",
+        "orden": "10351",
+        "fechaEmision": "2026-11-01",
+        "semana": 44,
+        "turno": "DIURNO",
+        "solicitante": "",
+        "linea": "Línea 1",
+        "maquina": "SOPLADORA",
+        "aviso": "",
+        "fechaParada": "2026-11-01",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "08:12",
+        "finParada": "08:32",
+        "tMtto": "20",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "AJUSTE DE MOLDE #2 Y CAMBIO DE PINZA, LEVA ",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "CAMBIO DE CORONADOR #8 POR MAL TAPADO ",
+        "bloqueado": false,
+        "usuario": "Froilan Bolivar"
+      },
+      {
+        "id": 1793565898805,
+        "fechaOrden": "2026-11-01",
+        "orden": "10352",
+        "fechaEmision": "2026-11-01",
+        "semana": 44,
+        "turno": "DIURNO",
+        "solicitante": "",
+        "linea": "Línea 1",
+        "maquina": "SOPLADORA",
+        "aviso": "",
+        "fechaParada": "2026-11-01",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "13:32",
+        "finParada": "14:01",
+        "tMtto": "29",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "COMPENSACION MOLDE #1 Y EXTRACION DE TORNILLO PARTIDO ",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": false,
+        "usuario": "Froilan Bolivar"
       }
     ],
     "seguimiento-ordenes": {
@@ -278931,8 +279288,8 @@
         "litros": "17745",
         "ubb": "18",
         "brix": "54.36",
-        "estado": "preparado",
-        "enviarALinea": null,
+        "estado": "enviado a linea",
+        "enviarALinea": 2,
         "editando": false,
         "editandoPor": null
       },
@@ -279056,6 +279413,37 @@
             "PRODT-0100": "147377",
             "PRODT-0116": "90964",
             "PRODT-0115": "63974"
+          },
+          "matp": {},
+          "emp": {}
+        },
+        "2026-11": {
+          "prodt": {
+            "PRODT-0007": "1957062",
+            "PRODT-0008": "243338",
+            "PRODT-0009": "540327",
+            "PRODT-0010": "209577",
+            "PRODT-0011": "58669",
+            "PRODT-0012": "662800",
+            "PRODT-0049": "13137",
+            "PRODT-0097": "132209",
+            "PRODT-0098": "11630",
+            "PRODT-0082": "273991",
+            "PRODT-0084": "39221",
+            "PRODT-0086": "111844",
+            "PRODT-0088": "104243",
+            "PRODT-0104": "23470",
+            "PRODT-0105": "1549",
+            "PRODT-0107": "22013",
+            "PRODT-0092": "194223",
+            "PRODT-0093": "25817",
+            "PRODT-0094": "93208",
+            "PRODT-0095": "88376",
+            "PRODT-0111": "25998",
+            "PRODT-0014": "148256",
+            "PRODT-0100": "179384",
+            "PRODT-0115": "88855",
+            "PRODT-0116": "88096"
           },
           "matp": {},
           "emp": {}
@@ -279795,6 +280183,18 @@
           "horaInicio": "16:20",
           "ubbInicial": "11",
           "volInicialTanque": "17080"
+        },
+        {
+          "sourcePrepKey": "glup:row_1793529022993_lrjm9s",
+          "fechaFiltro": "2026-10-31",
+          "fecha": "2026-11-01",
+          "dia": "domingo",
+          "turno": "Diurno",
+          "tanque": "7",
+          "sabor": "GLUP KOLITA",
+          "horaInicio": "4:18",
+          "ubbInicial": "18",
+          "volInicialTanque": "17745"
         }
       ],
       "3": [
@@ -285703,6 +286103,175 @@
               "initial": 1585.8,
               "reception": null,
               "final": 1585.7
+            }
+          }
+        },
+        "2026-11-01": {
+          "diurno": {
+            "MATP_0001-sacos-50kg": {
+              "initial": 424000,
+              "reception": null,
+              "final": 348000,
+              "initialOverride": true
+            },
+            "MATP_0001": {
+              "initial": 78100,
+              "reception": null,
+              "final": 42300,
+              "initialOverride": true
+            },
+            "MATP_0002": {
+              "initial": 358,
+              "reception": null,
+              "final": 310
+            },
+            "MATP_0003": {
+              "initial": 266,
+              "reception": null,
+              "final": 266,
+              "initialOverride": true
+            },
+            "MATP_0004": {
+              "initial": 4,
+              "reception": null,
+              "final": 4
+            },
+            "MATP_0005": {
+              "initial": 151,
+              "reception": null,
+              "final": 151
+            },
+            "MATP_0006": {
+              "initial": 43,
+              "reception": null,
+              "final": 23,
+              "initialOverride": true
+            },
+            "MATP_0007": {
+              "initial": 368,
+              "reception": null,
+              "final": 368
+            },
+            "MATP_0009": {
+              "initial": 342,
+              "reception": null,
+              "final": 294
+            },
+            "MATP_0032": {
+              "initial": 40,
+              "reception": null,
+              "final": 40
+            },
+            "MATP_0038": {
+              "initial": 84,
+              "reception": null,
+              "final": 84
+            },
+            "MATP_0039": {
+              "initial": 208,
+              "reception": null,
+              "final": 207
+            },
+            "MATP_0022": {
+              "initial": 80,
+              "reception": null,
+              "final": 80
+            },
+            "MATP_0043": {
+              "initial": 2860,
+              "reception": null,
+              "final": 2860
+            },
+            "MATP_0059": {
+              "initial": 20,
+              "reception": null,
+              "final": 20
+            },
+            "MATP_0060": {
+              "initial": 0,
+              "reception": null,
+              "final": 0,
+              "initialOverride": true
+            },
+            "MATP_0010": {
+              "initial": 526.3,
+              "reception": null,
+              "final": 480.7
+            },
+            "MATP_0041": {
+              "initial": 296.87,
+              "reception": null,
+              "final": 296.87,
+              "initialOverride": true
+            },
+            "MATP_0042": {
+              "initial": 1620.7,
+              "reception": null,
+              "final": 1620.7,
+              "initialOverride": true
+            },
+            "MATP_0040": {
+              "initial": 1585.8,
+              "reception": null,
+              "final": 1585.8,
+              "initialOverride": true
+            },
+            "MATP_0037": {
+              "initial": 96.17,
+              "reception": null,
+              "final": 93.83
+            },
+            "MATP_0036": {
+              "initial": 186.9,
+              "reception": null,
+              "final": 186.9
+            },
+            "MATP_0031": {
+              "initial": 185,
+              "reception": null,
+              "final": 185
+            },
+            "MATP_0021": {
+              "initial": 2867.7,
+              "reception": null,
+              "final": 2867.7,
+              "initialOverride": true
+            },
+            "MATP_0020": {
+              "initial": 1714.14,
+              "reception": null,
+              "final": 1714.14
+            },
+            "MATP_0019": {
+              "initial": 2487.68,
+              "reception": null,
+              "final": 2448.68
+            },
+            "MATP_0018": {
+              "initial": 2114.1,
+              "reception": null,
+              "final": 2114.1,
+              "initialOverride": true
+            },
+            "MATP_0017": {
+              "initial": 16789.1,
+              "reception": null,
+              "final": 16550.1
+            },
+            "MATP_0016": {
+              "initial": 118.66,
+              "reception": null,
+              "final": 115.52
+            },
+            "MATP_0015": {
+              "initial": 973.8,
+              "reception": null,
+              "final": 973.8
+            },
+            "MATP_0014": {
+              "initial": 139.6,
+              "reception": null,
+              "final": 139.6
             }
           }
         }

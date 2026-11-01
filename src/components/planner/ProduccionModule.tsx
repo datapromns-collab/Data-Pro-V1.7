@@ -658,9 +658,8 @@ const buildMaterialComparisonGroups = (data: MaterialComparisonData | null): Mat
   },
 ] : [];
 
-const formatComparisonValue = (value: string): string => value.trim()
-  ? parseProductionNumber(value).toLocaleString('es-VE', { maximumFractionDigits: 6 })
-  : '—';
+const formatComparisonValue = (value: string): string =>
+  (value.trim() ? parseProductionNumber(value) : 0).toLocaleString('es-VE', { maximumFractionDigits: 6 });
 
 interface ProduccionModuleProps {
   weeklyOnly?: boolean;
@@ -4400,9 +4399,10 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                                       const final = row.final[key] || '';
                                                       const initialValue = parseCantidadCajas(initial);
                                                       const finalValue = parseCantidadCajas(final);
-                                                      const consumption = initialValue !== null && finalValue !== null
-                                                        ? initialValue + (parseCantidadCajas(reception) ?? 0) - finalValue
-                                                        : null;
+                                                      const consumption =
+                                                        (initialValue ?? 0) +
+                                                        (parseCantidadCajas(reception) ?? 0) -
+                                                        (finalValue ?? 0);
                                                       return (
                                                         <tr key={`${key}-${row.id}`} className={cn('border-t border-slate-100', row.id === 'month-total' && 'bg-indigo-50/70 font-semibold')}>
                                                           <td className="px-3 py-2 font-semibold text-slate-700">{code}</td>
@@ -4412,7 +4412,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                                           <td className="px-3 py-2 text-right tabular-nums">{formatComparisonValue(reception)}</td>
                                                           <td className="px-3 py-2 text-right tabular-nums">{formatComparisonValue(final)}</td>
                                                           <td className="px-3 py-2 text-right font-bold tabular-nums text-indigo-800">
-                                                            {consumption === null ? '—' : consumption.toLocaleString('es-VE', { maximumFractionDigits: 6 })}
+                                                            {consumption.toLocaleString('es-VE', { maximumFractionDigits: 6 })}
                                                           </td>
                                                         </tr>
                                                       );

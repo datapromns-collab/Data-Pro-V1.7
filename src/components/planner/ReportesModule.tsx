@@ -222,12 +222,10 @@ const calculatePhysicalMaterialConsumption = (
 ): number | null => {
   if (initial === null || final === null) return null;
   const keys = new Set([...Object.keys(initial), ...Object.keys(reception || {}), ...Object.keys(final)]);
-  if (keys.size === 0) return null;
   let total = 0;
   for (const key of keys) {
-    const initialValue = parseCantidadCajas(initial[key]);
-    const finalValue = parseCantidadCajas(final[key]);
-    if (initialValue === null || finalValue === null) return null;
+    const initialValue = parseCantidadCajas(initial[key]) ?? 0;
+    const finalValue = parseCantidadCajas(final[key]) ?? 0;
     total += initialValue + (parseCantidadCajas(reception?.[key]) ?? 0) - finalValue;
   }
   return total;
