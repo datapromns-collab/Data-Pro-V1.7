@@ -26008,7 +26008,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-31T21:38:05.650Z"
+    "updatedAt": "2026-11-01T12:17:08.944Z"
   },
   "ordenesSap": [
     {
@@ -39216,12 +39216,12 @@
           "fechaInicio": "2026-10-31",
           "ticket1": "16385",
           "cajas1": 9360,
-          "ticket2": "",
+          "ticket2": "16386",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2480,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 16480
         }
       ]
     },
@@ -39278,12 +39278,12 @@
           "fechaInicio": "2026-10-31",
           "ticket1": "16299",
           "cajas1": 1760,
-          "ticket2": "",
+          "ticket2": "16300",
           "cajas2": 2400,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 3840,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 23840
         }
       ]
     },
@@ -39309,12 +39309,12 @@
           "fechaInicio": "2026-10-31",
           "ticket1": "16432",
           "cajas1": 3040,
-          "ticket2": "",
+          "ticket2": "16433",
           "cajas2": 1600,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 4400,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 26790
         }
       ]
     },
@@ -39340,12 +39340,12 @@
           "fechaInicio": "2026-10-31",
           "ticket1": "16517",
           "cajas1": 2240,
-          "ticket2": "",
+          "ticket2": "16518",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1760,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 5428
         }
       ]
     },
@@ -39371,12 +39371,12 @@
           "fechaInicio": "2026-10-31",
           "ticket1": "15236",
           "cajas1": 2250,
-          "ticket2": "",
+          "ticket2": "15237",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1000,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 11471
         }
       ]
     },
@@ -39402,12 +39402,12 @@
           "fechaInicio": "2026-10-31",
           "ticket1": "16343",
           "cajas1": 14480,
-          "ticket2": "",
+          "ticket2": "16344",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2160,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 19280
         }
       ]
     },
@@ -39433,12 +39433,112 @@
           "fechaInicio": "2026-10-31",
           "ticket1": "16477",
           "cajas1": 2028,
+          "ticket2": "16478",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 2955,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "1-1793532795652",
+      "linea": 1,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "64574",
+      "semana": 44,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-31",
+          "ticket1": "",
+          "cajas1": 0,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "2-1793532816850",
+      "linea": 2,
+      "sabor": "GLUP UVA",
+      "ordenNumero": "64609",
+      "semana": 44,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-31",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "3-1793532835629",
+      "linea": 3,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "64586",
+      "semana": 44,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-31",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "4-1793532847872",
+      "linea": 4,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "64592",
+      "semana": 44,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-31",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "6-1793535379302",
+      "linea": 6,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "64621",
+      "semana": 44,
+      "dias": [
+        {
+          "fechaInicio": "2026-10-31",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16518",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 3126
         }
       ]
     }
@@ -274070,7 +274170,12 @@
       "2026-10-30-suave": "201678",
       "2026-10-30-procesos": "2917630,52",
       "2026-10-30-filtrada": "4274388,19",
-      "2026-10-30-total": "3363278,67"
+      "2026-10-30-total": "3363278,67",
+      "2026-10-31-servicio": "18852",
+      "2026-10-31-suave": "210468",
+      "2026-10-31-procesos": "3091924,33",
+      "2026-10-31-filtrada": "4599198,72",
+      "2026-10-31-total": "3161701,67"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
@@ -278280,6 +278385,171 @@
         "litros": "17290",
         "ubb": "6",
         "brix": "53.76",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1793528642974_4evenj",
+        "fecha": "2026-10-31",
+        "hora": "19:54",
+        "numeroTanques": "9",
+        "sala": "2",
+        "sabor": "GLUP COLA",
+        "litros": "17205",
+        "ubb": "6",
+        "brix": "53.54",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1793528704185_xhj1c9",
+        "fecha": "2026-10-31",
+        "hora": "21:00",
+        "numeroTanques": "3",
+        "sala": "2",
+        "sabor": "GLUP COLA",
+        "litros": "17240",
+        "ubb": "6",
+        "brix": "53.77",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1793528749902_ojf0va",
+        "fecha": "2026-10-31",
+        "hora": "21:30",
+        "numeroTanques": "4",
+        "sala": "2",
+        "sabor": "GLUP COLA",
+        "litros": "17201",
+        "ubb": "6",
+        "brix": "53.80",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1793528793314_iftx6v",
+        "fecha": "2026-10-31",
+        "hora": "10:30",
+        "numeroTanques": "7",
+        "sala": "2",
+        "sabor": "GLUP COLA",
+        "litros": "17282",
+        "ubb": "6",
+        "brix": "53.71",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1793528852404_3ppr7a",
+        "fecha": "2026-10-31",
+        "hora": "23:10",
+        "numeroTanques": "19",
+        "sala": "2",
+        "sabor": "GLUP COLA",
+        "litros": "17294",
+        "ubb": "6",
+        "brix": "53.72",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1793528904092_qd0fq1",
+        "fecha": "",
+        "hora": "00:10",
+        "numeroTanques": "14",
+        "sala": "2",
+        "sabor": "GLUP COLA",
+        "litros": "17242",
+        "ubb": "6",
+        "brix": "53.78",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1793528963630_k1dpgb",
+        "fecha": "2026-10-31",
+        "hora": "19:40",
+        "numeroTanques": "2",
+        "sala": "1",
+        "sabor": "GLUP UVA",
+        "litros": "17040",
+        "ubb": "6",
+        "brix": "49.38",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1793529022993_lrjm9s",
+        "fecha": "2026-10-31",
+        "hora": "20:03",
+        "numeroTanques": "7",
+        "sala": "1",
+        "sabor": "GLUP KOLITA",
+        "litros": "17745",
+        "ubb": "18",
+        "brix": "54.36",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1793529077437_t3d2td",
+        "fecha": "2026-11-01",
+        "hora": "00:30",
+        "numeroTanques": "4",
+        "sala": "1",
+        "sabor": "GLUP KOLITA",
+        "litros": "17760",
+        "ubb": "18",
+        "brix": "54.45",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1793529147501_ekznr8",
+        "fecha": "2026-10-31",
+        "hora": "11:17",
+        "numeroTanques": "-2",
+        "sala": "1",
+        "sabor": "GLUP UVA",
+        "litros": "17060",
+        "ubb": "11",
+        "brix": "49.40",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1793529270368_d69vir",
+        "fecha": "2026-11-01",
+        "hora": "04:20",
+        "numeroTanques": "6",
+        "sala": "2",
+        "sabor": "GLUP UVA",
+        "litros": "17100",
+        "ubb": "11",
+        "brix": "49.38",
         "estado": "preparado",
         "enviarALinea": null,
         "editando": false,
@@ -284672,13 +284942,13 @@
             "MATP_0001-sacos-50kg": {
               "initial": 540000,
               "reception": null,
-              "final": null,
+              "final": 524000,
               "initialOverride": true
             },
             "MATP_0001": {
               "initial": 44200,
               "reception": null,
-              "final": null,
+              "final": 60750,
               "initialOverride": true
             },
             "MATP_0002": {
@@ -284857,9 +285127,156 @@
             },
             "MATP_0001-montalban": {
               "initial": 46000,
-              "reception": null,
-              "final": null,
+              "reception": 48000,
+              "final": 48000,
               "initialOverride": true
+            },
+            "MATP_0001-pastora": {
+              "initial": null,
+              "reception": 30000,
+              "final": 12000
+            }
+          },
+          "nocturno": {
+            "MATP_0002": {
+              "initial": 394,
+              "reception": null,
+              "final": 358
+            },
+            "MATP_0003": {
+              "initial": 266,
+              "reception": null,
+              "final": 342
+            },
+            "MATP_0004": {
+              "initial": 4,
+              "reception": null,
+              "final": 4
+            },
+            "MATP_0005": {
+              "initial": 184,
+              "reception": null,
+              "final": 151
+            },
+            "MATP_0006": {
+              "initial": 48,
+              "reception": null,
+              "final": 48
+            },
+            "MATP_0007": {
+              "initial": 404,
+              "reception": null,
+              "final": 368
+            },
+            "MATP_0009": {
+              "initial": 378,
+              "reception": null,
+              "final": 342
+            },
+            "MATP_0032": {
+              "initial": 40,
+              "reception": null,
+              "final": 40
+            },
+            "MATP_0038": {
+              "initial": 84,
+              "reception": null,
+              "final": 84
+            },
+            "MATP_0039": {
+              "initial": 208,
+              "reception": null,
+              "final": 208
+            },
+            "MATP_0022": {
+              "initial": 80,
+              "reception": null,
+              "final": 80
+            },
+            "MATP_0043": {
+              "initial": 4120,
+              "reception": null,
+              "final": 2860
+            },
+            "MATP_0059": {
+              "initial": 20,
+              "reception": null,
+              "final": 20
+            },
+            "MATP_0060": {
+              "initial": 0,
+              "reception": null,
+              "final": 20
+            },
+            "MATP_0010": {
+              "initial": 560.5,
+              "reception": null,
+              "final": 526.3
+            },
+            "MATP_0041": {
+              "initial": 296.8,
+              "reception": null,
+              "final": 296.3
+            },
+            "MATP_0014": {
+              "initial": 139.6,
+              "reception": null,
+              "final": 139.6
+            },
+            "MATP_0015": {
+              "initial": 1185,
+              "reception": null,
+              "final": 973.8
+            },
+            "MATP_0016": {
+              "initial": 131.38,
+              "reception": null,
+              "final": 118.66
+            },
+            "MATP_0017": {
+              "initial": 17521.85,
+              "reception": null,
+              "final": 16789.1
+            },
+            "MATP_0018": {
+              "initial": 2249.1,
+              "reception": null,
+              "final": 2248.1
+            },
+            "MATP_0019": {
+              "initial": 2646.53,
+              "reception": null,
+              "final": 2487.68
+            },
+            "MATP_0020": {
+              "initial": 1768.4,
+              "reception": null,
+              "final": 1714.14
+            },
+            "MATP_0021": {
+              "initial": 2975.7,
+              "reception": null,
+              "final": 2867.7
+            },
+            "MATP_0031": {
+              "initial": 185,
+              "reception": null,
+              "final": 185
+            },
+            "MATP_0036": {
+              "initial": 186.9,
+              "reception": null,
+              "final": 186.9
+            },
+            "MATP_0037": {
+              "initial": 100.396,
+              "reception": null,
+              "final": 96.17
+            },
+            "MATP_0040": {
+              "initial": 1585.8,
+              "reception": null,
+              "final": 1585.7
             }
           }
         }
