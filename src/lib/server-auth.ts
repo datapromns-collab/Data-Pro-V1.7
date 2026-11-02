@@ -230,6 +230,26 @@ export async function requireAdmin(request: Request): Promise<
   return auth;
 }
 
+function stableStringify(value: unknown): string {
+  if (Array.isArray(value)) {
+    return `[${value.map(stableStringify).join(',')}]`;
+  }
+  if (value && typeof value === 'object') {
+    const record = value as Record<string, unknown>;
+    return `{${Object.keys(record).sort().map((key) => `${JSON.stringify(key)}:${stableStringify(record[key])}`).join(',')}}`;
+  }
+  return JSON.stringify(value) ?? 'undefined';
+}
+
+function samePlannerValue(incoming: unknown, current: unknown): boolean {
+  const isEmpty = (value: unknown) =>
+    value == null ||
+    (Array.isArray(value) && value.length === 0) ||
+    (typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0);
+  if (isEmpty(incoming) && isEmpty(current)) return true;
+  return stableStringify(incoming) === stableStringify(current);
+}
+
 export async function authorizeModuleWrite(
   request: Request,
   module: string,
@@ -360,6 +380,7 @@ export async function authorizeDataWrite(request: Request, body: unknown): Promi
       ? payload
       : null;
   if (!incomingPlanner) return Response.json({ error: 'Invalid planner payload' }, { status: 400 });
+  const currentPlanner = readDb().planner ?? {};
   const adminOnlyWrite =
     incomingPlanner.users !== undefined ||
     incomingPlanner.deletedUserIds !== undefined ||
@@ -375,7 +396,7 @@ export async function authorizeDataWrite(request: Request, body: unknown): Promi
   const checks: Array<[string, string?]> = [];
   if (payload.ordenesSap !== undefined) checks.push(['ordenes-sap']);
   if (incomingPlanner.config && typeof incomingPlanner.config === 'object') {
-    const currentConfig = readDb().planner?.config ?? {};
+    const currentConfig = currentPlanner.config ?? {};
     if (
       incomingPlanner.config.lineSpeeds !== undefined &&
       JSON.stringify(incomingPlanner.config.lineSpeeds) !== JSON.stringify(currentConfig.lineSpeeds)
@@ -389,9 +410,18 @@ export async function authorizeDataWrite(request: Request, body: unknown): Promi
       checks.push(['planning', 'gantt']);
     }
   }
-  if (incomingPlanner.customRecipes !== undefined) checks.push(['recipes', 'recipes-editor']);
-  if (incomingPlanner.customPackagingRecipes !== undefined) checks.push(['recipes', 'packaging-recipes-editor']);
-  if (incomingPlanner.productionInventory !== undefined) checks.push(['produccion']);
+  if (
+    incomingPlanner.customRecipes !== undefined &&
+    !samePlannerValue(incomingPlanner.customRecipes, currentPlanner.customRecipes)
+  ) checks.push(['recipes', 'recipes-editor']);
+  if (
+    incomingPlanner.customPackagingRecipes !== undefined &&
+    !samePlannerValue(incomingPlanner.customPackagingRecipes, currentPlanner.customPackagingRecipes)
+  ) checks.push(['recipes', 'packaging-recipes-editor']);
+  if (
+    incomingPlanner.productionInventory !== undefined &&
+    !samePlannerValue(incomingPlanner.productionInventory, currentPlanner.productionInventory)
+  ) checks.push(['produccion']);
 
   const weekFields: Record<string, [string, string?]> = {
     tasks: ['planning', 'gantt'],
@@ -412,15 +442,18 @@ export async function authorizeDataWrite(request: Request, body: unknown): Promi
     productionPlanAW: ['purchasing', 'aw.resumen.plan-produccion'],
     logisticsInventoryAW: ['purchasing', 'aw.inventario.mat-logistica'],
     plantInventoryAW: ['purchasing', 'aw.inventario.mat-planta'],
+    deletedTaskIds: ['planning', 'gantt'],
   };
   const weeks = incomingPlanner.weeks;
   if (weeks && typeof weeks === 'object' && !Array.isArray(weeks)) {
-    for (const weekData of Object.values(weeks)) {
+    for (const [weekKey, weekData] of Object.entries(weeks)) {
       if (!weekData || typeof weekData !== 'object' || Array.isArray(weekData)) continue;
-      for (const field of Object.keys(weekData as Record<string, unknown>)) {
+      const currentWeek = currentPlanner.weeks?.[weekKey] ?? {};
+      for (const [field, value] of Object.entries(weekData as Record<string, unknown>)) {
         const check = weekFields[field];
-        if (check) checks.push(check);
-        else if (field !== 'deletedTaskIds') {
+        if (check) {
+          if (!samePlannerValue(value, currentWeek[field])) checks.push(check);
+        } else {
           return Response.json({ error: `Unsupported write field: ${field}` }, { status: 403 });
         }
       }
@@ -467,8 +500,8 @@ const COLLECTION_PERMISSION_MAP: Record<string, [string, string?]> = {
     'planta-velocidades-bpm': ['planta', 'production'],
     'seguimiento-enfardadora': ['seguimiento', 'enfardadora'],
     'seguimiento-etiquetadora': ['seguimiento', 'etiquetadora'],
-    'seguimiento-ordenes': ['seguimiento'],
-    'seguimiento-ordenes-auto': ['seguimiento'],
+    'seguimiento-ordenes': ['ordenes-sap', 'seguimiento-ordenes'],
+    'seguimiento-ordenes-auto': ['ordenes-sap', 'seguimiento-ordenes'],
     'planning-production-forecast': ['planning', 'seguimiento-prodt'],
     'ventas-pronostico-mensual': ['ventas', 'forecast'],
     'ventas-inventario-diario': ['ventas', 'analysis'],

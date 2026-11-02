@@ -26,7 +26,7 @@ export function SeguimientoLineaTable({
   label: string;
   filasAuto?: SeguimientoOrdenFuente[];
 }) {
-  const { data, updateRow, deleteRow, autoOverrides, updateAutoOverride } = useSeguimientoOrdenes(linea);
+  const { data, updateRow, deleteRow, autoOverrides, updateAutoOverride, syncError } = useSeguimientoOrdenes(linea);
 
   const handleUpdate = (id: string, updates: Partial<SeguimientoOrdenLinea>) => {
     updateRow(id, updates);
@@ -174,6 +174,11 @@ export function SeguimientoLineaTable({
           </span>
         )}
       </div>
+      {syncError && (
+        <p role="alert" className="mx-4 mt-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs font-medium text-red-700">
+          {syncError}
+        </p>
+      )}
       <div className="p-2 sm:p-4 overflow-x-auto">
         <Table className="border-separate border-spacing-0">
           <TableHeader>

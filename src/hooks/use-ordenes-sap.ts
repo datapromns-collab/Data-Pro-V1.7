@@ -54,9 +54,11 @@ function applyDeleted(items: OrdenSap[], deleted: Set<string>): OrdenSap[] {
 export function useOrdenesSap() {
   const [ordenes, setOrdenesState] = useState<OrdenSap[]>(loadLocal);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const deletedRef = useRef(loadDeletedLocal());
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const dirtyRef = useRef(false);
+  const changeVersionRef = useRef(0);
   const loadingRef = useRef(false);
   const migratedRef = useRef(false);
   const hadLocalData = useRef(ordenes.length > 0);
@@ -108,20 +110,28 @@ export function useOrdenesSap() {
   const save = useCallback(() => {
     const snapshot = ordenesRef.current;
     const deletedIds = Array.from(deletedRef.current);
+    const changeVersion = changeVersionRef.current;
     persistLocal(snapshot);
     persistDeletedLocal(deletedRef.current);
     saveOrdenesSapData(snapshot, deletedIds)
       .then(() => {
-        dirtyRef.current = false;
+        if (changeVersionRef.current === changeVersion) {
+          dirtyRef.current = false;
+          setSaveError(null);
+        }
       })
       .catch((err) => {
         console.warn('[ordenesSap] save failed, kept local copy', err);
-        dirtyRef.current = false;
+        if (changeVersionRef.current === changeVersion) {
+          dirtyRef.current = true;
+          setSaveError(err instanceof Error ? err.message : 'No se pudieron guardar las órdenes SAP.');
+        }
       });
   }, []);
 
   const setOrdenes = useCallback(
     (updater: OrdenSap[] | ((prev: OrdenSap[]) => OrdenSap[])) => {
+      changeVersionRef.current += 1;
       dirtyRef.current = true;
       setOrdenesState((prev) => {
         const next =
@@ -144,6 +154,13 @@ export function useOrdenesSap() {
       saveTimer.current = null;
       save();
     }
+  }, [save]);
+
+  const retrySave = useCallback(() => {
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    saveTimer.current = null;
+    dirtyRef.current = true;
+    save();
   }, [save]);
 
   const eliminarOrden = useCallback((ordenId: string) => {
@@ -178,5 +195,5 @@ export function useOrdenesSap() {
     };
   }, [refresh, flush]);
 
-  return { ordenes, setOrdenes, eliminarOrden, eliminarDia, isLoaded };
+  return { ordenes, setOrdenes, eliminarOrden, eliminarDia, isLoaded, saveError, retrySave };
 }

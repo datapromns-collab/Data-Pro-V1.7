@@ -170,7 +170,17 @@ export function useSeguimientoOrdenes(linea: LineaKey) {
     [linea, remotoAuto]
   );
 
-  return { data, setData, addRow, updateRow, deleteRow, autoOverrides, updateAutoOverride, isLoaded: remoto.isLoaded };
+  return {
+    data,
+    setData,
+    addRow,
+    updateRow,
+    deleteRow,
+    autoOverrides,
+    updateAutoOverride,
+    isLoaded: remoto.isLoaded,
+    syncError: remoto.syncError || remotoAuto.syncError,
+  };
 }
 
 export interface SeguimientoOrdenLineaConLinea extends SeguimientoOrdenLinea {

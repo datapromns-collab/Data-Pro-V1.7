@@ -931,7 +931,7 @@ export default function OrdenesSapModule({
   const [tablaTurnoEdits, setTablaTurnoEdits] = useState<Record<string, Record<string, Record<number, number>>>>({});
   const [tablaProdtSemanalEdits, setTablaProdtSemanalEdits] = useState<Record<string, Record<number, number>>>({});
   const [tablaResumenMensualEdits, setTablaResumenMensualEdits] = useState<Record<string, Record<number, number>>>({});
-  const { ordenes, setOrdenes, eliminarOrden, eliminarDia } = useOrdenesSap();
+  const { ordenes, setOrdenes, eliminarOrden, eliminarDia, saveError: ordenesSaveError, retrySave: retryOrdenesSave } = useOrdenesSap();
   const { getAutoOverrides, data: dataManual } = useSeguimientoResumenOptimizado();
 
   const autoOverridesFlat = useMemo(() => {
@@ -2255,6 +2255,14 @@ const exportarPDFdia = async () => {
 
   return (
     <div className="pb-10">
+      {ordenesSaveError && (
+        <div role="alert" className="mb-4 flex items-center gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+          <p className="flex-1">Los cambios de Órdenes SAP no se sincronizaron con la base compartida y permanecen guardados localmente. {ordenesSaveError}</p>
+          <button type="button" onClick={retryOrdenesSave} className="shrink-0 rounded px-2 py-1 font-bold hover:bg-red-100">
+            Reintentar
+          </button>
+        </div>
+      )}
       <div className="space-y-3 mb-6 no-print">
         <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full border border-slate-200 w-full sm:w-auto">

@@ -435,7 +435,10 @@ export default function PlannerPage() {
      updateInitialUBBTanksDaily,
      updateFinalUBBTanksDaily,
      isLoaded: plannerLoaded,
-     refreshFromServer
+     refreshFromServer,
+     saveError: plannerSaveError,
+     clearSaveError: clearPlannerSaveError,
+     retrySave: retryPlannerSave
    } = usePlannerStore();
 
   const {
@@ -4010,6 +4013,18 @@ export default function PlannerPage() {
           </header>
           <div className="flex-1 overflow-auto p-4 lg:p-8">
             <div className="flex flex-col gap-4 lg:gap-6 h-full">
+              {plannerSaveError && (
+                <div role="alert" className="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-800">
+                  <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+                  <p className="flex-1">No se pudieron sincronizar los datos del plan con la base compartida. Los cambios siguen guardados en este dispositivo. {plannerSaveError}</p>
+                  <button type="button" onClick={retryPlannerSave} className="shrink-0 rounded px-2 py-1 font-bold hover:bg-red-100">
+                    Reintentar
+                  </button>
+                  <button type="button" onClick={clearPlannerSaveError} aria-label="Cerrar aviso" className="rounded p-1 hover:bg-red-100">
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              )}
               
                  {activeModule !== 'purchasing' && activeModule !== 'raw-materials' && activeModule !== 'planta' && activeModule !== 'produccion' && activeModule !== 'procesos' && activeModule !== 'calidad' && activeModule !== 'mtto' && activeModule !== 'insumos' && activeModule !== 'logistica' && activeModule !== 'ventas' && activeModule !== 'permissions' && activeModule !== 'jarabes' && activeModule !== 'ordenes-sap' && activeModule !== 'seguimiento' && (
                   <div className="flex items-center bg-slate-100/50 border border-slate-200 rounded-full p-1 shadow-none self-start animate-in fade-in slide-in-from-top-2 overflow-x-auto max-w-full no-print h-11 shrink-0 gap-1 w-full justify-between">

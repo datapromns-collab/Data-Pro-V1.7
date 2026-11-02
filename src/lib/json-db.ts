@@ -226,16 +226,13 @@ export async function loadOrdenesSapData(): Promise<{ ordenes: OrdenSap[]; delet
   }
 }
 
-export async function saveOrdenesSapData(ordenes: OrdenSap[], deletedIds: string[]): Promise<boolean> {
-  try {
-    const res = await fetchWithRetry(API_URL, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ ordenesSap: ordenes, _deletedOrdenesSapIds: deletedIds }),
-    });
-    return res.ok;
-  } catch (error) {
-    console.warn('[JSON_DB] Save ordenesSap failed', error);
-    return false;
+export async function saveOrdenesSapData(ordenes: OrdenSap[], deletedIds: string[]): Promise<void> {
+  const res = await fetchWithRetry(API_URL, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ ordenesSap: ordenes, _deletedOrdenesSapIds: deletedIds }),
+  });
+  if (!res.ok) {
+    throw new Error(`No se pudieron guardar las órdenes SAP (HTTP ${res.status}).`);
   }
 }

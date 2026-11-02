@@ -199,6 +199,8 @@ function usePlannerStoreInner() {
   const [customPackagingRecipes, setCustomPackagingRecipes] = useState<Record<string, Record<string, Record<string, number>>>>(DEFAULT_PACKAGING_RECIPES);
   const [isLoaded, setIsLoaded] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [saveRetryCount, setSaveRetryCount] = useState(0);
+  const forceSaveRef = useRef(false);
   const pendingRef = useRef(false);
 
   useEffect(() => {
@@ -328,6 +330,10 @@ function usePlannerStoreInner() {
   }, [deletedTaskIds]);
 
   const clearSaveError = useCallback(() => setSaveError(null), []);
+  const retrySave = useCallback(() => {
+    forceSaveRef.current = true;
+    setSaveRetryCount((count) => count + 1);
+  }, []);
 
   const legacyToWeeklyData = (parsed: any): WeeklyData => ({
     tasks: (parsed.tasks || []).map((t: any) => ({
@@ -730,7 +736,7 @@ function usePlannerStoreInner() {
    useEffect(() => {
      if (!isLoaded) return;
      const snapshot = computePlannerSnapshot();
-     if (snapshot === lastPersistedSnapshotRef.current) {
+     if (snapshot === lastPersistedSnapshotRef.current && !forceSaveRef.current) {
        return;
      }
 
@@ -743,10 +749,12 @@ function usePlannerStoreInner() {
     };
 
     const timer = setTimeout(async () => {
+      forceSaveRef.current = false;
       pendingRef.current = true;
       try {
         await savePlannerData(plan);
         lastPersistedSnapshotRef.current = snapshot;
+        setSaveError(null);
       } catch (error) {
         saveToLocalStorageRef.current();
         setSaveError(error instanceof Error ? error.message : 'Error desconocido al guardar');
@@ -756,7 +764,7 @@ function usePlannerStoreInner() {
     }, 100);
 
     return () => clearTimeout(timer);
-  }, [isLoaded, computePlannerSnapshot, weeklyData, weekStartDate, lineSpeeds, customRecipes, customPackagingRecipes]);
+  }, [isLoaded, computePlannerSnapshot, weeklyData, weekStartDate, lineSpeeds, customRecipes, customPackagingRecipes, saveRetryCount]);
 
   useEffect(() => {
     if (!isLoaded) return;
@@ -1136,6 +1144,7 @@ function usePlannerStoreInner() {
     refreshFromServer,
     saveError,
     clearSaveError,
+    retrySave,
   };
 }
 
