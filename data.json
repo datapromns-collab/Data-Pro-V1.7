@@ -258648,12 +258648,12 @@
           "cajasPlanificadas": 84750,
           "pnc": 74,
           "producto": "518",
-          "jarabeReal": 130111,
+          "jarabeReal": 126911,
           "ubb": 131.86
         },
         "auto-1-1793532795652": {
           "cajasPlanificadas": 84750,
-          "jarabeReal": 20109,
+          "jarabeReal": 20609,
           "ubb": 20.4
         }
       },
@@ -258972,6 +258972,53 @@
           "jarabeReal": 119446,
           "producto": "299",
           "ubb": 77
+        },
+        "auto-2-1793022914032": {
+          "cajasPlanificadas": 7125,
+          "jarabeReal": 17037,
+          "producto": "132",
+          "ubb": 11
+        },
+        "auto-2-1793102424983": {
+          "cajasPlanificadas": 6813,
+          "jarabeReal": 16370,
+          "producto": "78",
+          "ubb": 6
+        },
+        "auto-2-1793102687751": {
+          "cajasPlanificadas": 16541,
+          "jarabeReal": 33103,
+          "producto": "23",
+          "ubb": 38
+        },
+        "auto-2-1793122190056": {
+          "cajasPlanificadas": 29265,
+          "jarabeReal": 53355,
+          "producto": "56",
+          "ubb": 54
+        },
+        "auto-2-1793188762250": {
+          "cajasPlanificadas": 50838,
+          "jarabeReal": 121920,
+          "producto": "374",
+          "ubb": 70
+        },
+        "auto-2-1793361229673": {
+          "cajasPlanificadas": 40250,
+          "jarabeReal": 83235,
+          "producto": "71",
+          "ubb": 40
+        },
+        "auto-2-1793446652832": {
+          "cajasPlanificadas": 115002,
+          "jarabeReal": 102550,
+          "producto": "318",
+          "ubb": 66
+        },
+        "auto-2-1793532816850": {
+          "cajasPlanificadas": 115002,
+          "jarabeReal": 39532,
+          "ubb": 25.52
         }
       },
       "linea-3": {
@@ -259238,6 +259285,31 @@
           "jarabeReal": 132856,
           "ubb": 46.16,
           "producto": "215"
+        },
+        "auto-3-1793022930315": {
+          "jarabeReal": 124900,
+          "producto": "512",
+          "ubb": 43.37,
+          "cajasPlanificadas": 134400
+        },
+        "auto-3-1793197394756": {
+          "jarabeReal": 93537,
+          "producto": "556",
+          "ubb": 32.53,
+          "pnc": 196,
+          "cajasPlanificadas": 102200
+        },
+        "auto-3-1793371796735": {
+          "jarabeReal": 112955,
+          "producto": "662",
+          "ubb": 39.55,
+          "pnc": 177,
+          "cajasPlanificadas": 161000
+        },
+        "auto-3-1793532835629": {
+          "jarabeReal": 33284,
+          "ubb": 11.2,
+          "cajasPlanificadas": 161000
         }
       },
       "linea-4": {
