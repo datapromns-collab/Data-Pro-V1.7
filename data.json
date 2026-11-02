@@ -258633,7 +258633,10 @@
           "ubb": 142.88
         },
         "auto-1-1793027246226": {
-          "cajasPlanificadas": 72000
+          "cajasPlanificadas": 72000,
+          "jarabeReal": 112450,
+          "producto": "595",
+          "ubb": 39.15
         }
       },
       "linea-2": {
