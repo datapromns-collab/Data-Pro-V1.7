@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-10-12T00:00:00.000",
+      "weekStartDate": "2026-11-02T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -26812,7 +26812,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-02T17:47:22.400Z"
+    "updatedAt": "2026-11-02T21:23:15.553Z"
   },
   "ordenesSap": [
     {
@@ -40355,8 +40355,8 @@
       "dias": [
         {
           "fechaInicio": "2026-11-02",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16388",
+          "cajas1": 4624,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -40375,7 +40375,7 @@
       "dias": [
         {
           "fechaInicio": "2026-11-02",
-          "ticket1": "",
+          "ticket1": "16346",
           "cajas1": 0,
           "ticket2": "",
           "cajas2": 0,
@@ -40395,8 +40395,8 @@
       "dias": [
         {
           "fechaInicio": "2026-11-02",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16552",
+          "cajas1": 3440,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -40415,8 +40415,8 @@
       "dias": [
         {
           "fechaInicio": "2026-11-02",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16435",
+          "cajas1": 7200,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -40458,7 +40458,7 @@
           "ticket1": "16519",
           "cajas1": 640,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 1280,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -40475,8 +40475,8 @@
       "dias": [
         {
           "fechaInicio": "2026-11-02",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16479",
+          "cajas1": 1950,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -54014,8 +54014,8 @@
         "2026-10-31": {
           "GLUP COLA": {
             "inicial": "76.14",
-            "preparado": "42",
-            "final": "66.77"
+            "preparado": "108",
+            "final": "109.02"
           },
           "JUSTY DURAZNO": {
             "inicial": "31",
@@ -54025,38 +54025,43 @@
           "GLUP KOLITA": {
             "inicial": "34.91",
             "preparado": "54",
-            "final": "30.14"
+            "final": "9.74"
           },
           "GLUP UVA": {
             "inicial": "21.31",
             "preparado": "66",
-            "final": "30.38"
+            "final": "7.48"
           },
           "GLUP FRESH": {
             "inicial": "3.30",
             "preparado": "",
             "final": ""
-          }
-        },
-        "2026-11-01": {
-          "GLUP COLA": {
-            "inicial": "66.77",
-            "preparado": "66",
-            "final": "109.02"
-          },
-          "GLUP KOLITA": {
-            "inicial": "30.14",
-            "preparado": "",
-            "final": "9.74"
-          },
-          "GLUP UVA": {
-            "inicial": "30.38",
-            "preparado": "",
-            "final": "7.48"
           },
           "GLUP PIÑA": {
             "preparado": "20",
             "final": "20"
+          }
+        },
+        "2026-11-01": {
+          "GLUP COLA": {
+            "inicial": "109.02",
+            "preparado": "",
+            "final": "109.02"
+          },
+          "GLUP KOLITA": {
+            "inicial": "9.74",
+            "preparado": "",
+            "final": "9.74"
+          },
+          "GLUP UVA": {
+            "inicial": "7.48",
+            "preparado": "",
+            "final": "7.48"
+          },
+          "GLUP PIÑA": {
+            "preparado": "",
+            "final": "20",
+            "inicial": "20"
           }
         },
         "2026-11-02": {
@@ -55761,7 +55766,7 @@
           "PORTUGUESA": {
             "invInicialSacos": "10800",
             "recepcionSacos": "",
-            "invFinalSacos": "8480"
+            "invFinalSacos": "6280"
           },
           "MONTALBAN": {
             "invInicialSacos": "",
@@ -55781,7 +55786,7 @@
         },
         "2026-11-01": {
           "PORTUGUESA": {
-            "invInicialSacos": "8480",
+            "invInicialSacos": "6280",
             "recepcionSacos": "",
             "invFinalSacos": "6280"
           }
@@ -57240,20 +57245,20 @@
         "2026-10-31": {
           "JARABE SIMPLE": {
             "invInicialSacos": "424",
-            "invFinalSacos": "410"
+            "invFinalSacos": "629"
           },
           "Sala 1": {
             "invInicialSacos": "460",
-            "invFinalSacos": "1152"
+            "invFinalSacos": "226"
           }
         },
         "2026-11-01": {
           "JARABE SIMPLE": {
-            "invInicialSacos": "410",
+            "invInicialSacos": "629",
             "invFinalSacos": "629"
           },
           "Sala 1": {
-            "invInicialSacos": "1152",
+            "invInicialSacos": "226",
             "invFinalSacos": "226"
           }
         },
@@ -57459,7 +57464,7 @@
         "2026-09-14|2026-09": 1174355.86,
         "2026-09-21|2026-09": 1009476.45,
         "2026-09-28|2026-09": 550986.53,
-        "2026-10-01|2026-10": 479385.1,
+        "2026-10-01|2026-10": 0,
         "2026-04-13|2026-04": 1316706.34,
         "2026-04-27|2026-04": 1059135.18,
         "2026-04-01|2026-04": 0,
@@ -237040,6 +237045,538 @@
         "usuario": "Richard Marín",
         "id": 1793439321364,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 6",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "07:00",
+        "finParada": "10:00",
+        "totalMin": "180",
+        "zona": "Llenado",
+        "falla": "INVENTARIO DE FIN DE MES",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793649692851,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 6",
+        "equipo": "",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "10:00",
+        "finParada": "10:20",
+        "totalMin": "20",
+        "zona": "Llenado",
+        "falla": "EXTENSION DE INVENTARIO DE FIN DE MES",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793649755546,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "GERARDO ALVARES",
+        "linea": "Línea 6",
+        "equipo": "MIXER",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "10:35",
+        "finParada": "11:01",
+        "totalMin": "26",
+        "zona": "Llenado",
+        "falla": "AJUSTE DE CO2 EN CARBONATADOR, CO2 BAJO",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793649906850,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 6",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "11:38",
+        "finParada": "12:03",
+        "totalMin": "25",
+        "zona": "Llenado",
+        "falla": "INTERRUPCION DE E/E POR VARIACION DE VOLTAJE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793650225546,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 6",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "12:10",
+        "finParada": "13:03",
+        "totalMin": "53",
+        "zona": "Llenado",
+        "falla": "INTERRUPCION DE E/E EXTERNA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793650520922,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 6",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "13:03",
+        "finParada": "13:10",
+        "totalMin": "7",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES POST INTERRUPCION DE E/E",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793650548089,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "ALBERTO TORO",
+        "linea": "Línea 6",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "13:25",
+        "finParada": "13:53",
+        "totalMin": "28",
+        "zona": "Llenado",
+        "falla": "PISTON TENSOR DE CADENA EN EMPLAYADO DAÑADO",
+        "orden": "6705",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793650655065,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 7",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "07:00",
+        "finParada": "10:00",
+        "totalMin": "180",
+        "zona": "Llenado",
+        "falla": "INVENTARIO DE FIN DE MES",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793651066330,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 7",
+        "equipo": "",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "10:00",
+        "finParada": "11:20",
+        "totalMin": "80",
+        "zona": "Llenado",
+        "falla": "EXTENSION DE INVENTARIO DE FIN DE MES",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793651100529,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 7",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "11:38",
+        "finParada": "12:03",
+        "totalMin": "25",
+        "zona": "Llenado",
+        "falla": "INTERRUPCION DE E/E POR VARIACION DE VOLTAJE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793651383842,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "JORFRANK RIVERO",
+        "linea": "Línea 7",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "12:05",
+        "finParada": "12:10",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "SALTO DE BOTELLA, CAIDA DE BOTELLAS EN DIENTES  DE SEPARACION",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793651466348,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 7",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "12:10",
+        "finParada": "13:03",
+        "totalMin": "53",
+        "zona": "Llenado",
+        "falla": "INTERRUPCION DE E/E EXTERNA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793651508040,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 7",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "13:03",
+        "finParada": "13:20",
+        "totalMin": "17",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES LUEGO DE LA INTERRUPCION DE E/E",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793651558721,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 7",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "13:20",
+        "finParada": "14:10",
+        "totalMin": "50",
+        "zona": "Llenado",
+        "falla": "INTERRUPCION DE E/E EXTERNA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793651678721,
+        "bloqueado": false
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "07:00",
+        "finParada": "10:00",
+        "totalMin": "180",
+        "zona": "Llenado",
+        "falla": "INVENTARIO DE FIN DE MES",
+        "orden": "10138",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793652199625,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "10:00",
+        "finParada": "10:30",
+        "totalMin": "30",
+        "zona": "Llenado",
+        "falla": "EXTENSION DE INVENTARIO DE FIN DE MES",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793652327473,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "11:38",
+        "finParada": "12:03",
+        "totalMin": "25",
+        "zona": "Llenado",
+        "falla": "INTERRUPCION DE E/E POR VARIACION DE VOLTAJE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793652657401,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "12:10",
+        "finParada": "13:03",
+        "totalMin": "53",
+        "zona": "Llenado",
+        "falla": "INTERRUPCION DE E/E EXTERNA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793652699401,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "13:03",
+        "finParada": "13:20",
+        "totalMin": "17",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES POST FALLA DE E/E",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793652915569,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "ENDERSON BUSTAMANTE",
+        "linea": "Línea 3",
+        "equipo": "LLENADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "14:02",
+        "finParada": "14:06",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "DESMONTAJE DE ASPERSORES DE RINSER PARA TRABAJO DE AHORRO DE AGUA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793652969680,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 4",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "07:00",
+        "finParada": "10:00",
+        "totalMin": "180",
+        "zona": "Llenado",
+        "falla": "INVENTARIO DE FIN DE MES",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793653338432,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 4",
+        "equipo": "",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "10:00",
+        "finParada": "11:38",
+        "totalMin": "98",
+        "zona": "Llenado",
+        "falla": "EXTENSION DEL INVENTARIO DE FIN DE MES",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793653439696,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 4",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "11:38",
+        "finParada": "12:03",
+        "totalMin": "25",
+        "zona": "Llenado",
+        "falla": "INTERRUPCION DE E/E POR VARIACION DE VOLTAJE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793653466807,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 4",
+        "equipo": "",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "12:03",
+        "finParada": "12:12",
+        "totalMin": "9",
+        "zona": "Llenado",
+        "falla": "EXTENSION DEL INVENTARIO DE FIN DE MES ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793653563608,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 4",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "12:12",
+        "finParada": "13:03",
+        "totalMin": "51",
+        "zona": "Llenado",
+        "falla": "INTERRUPCION DE E/E EXTERNA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793657050015,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 4",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "13:03",
+        "finParada": "13:14",
+        "totalMin": "11",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES LUEGO DE LA FALLA DE E/E",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793657083815,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 4",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "14:55",
+        "finParada": "18:30",
+        "totalMin": "215",
+        "zona": "Llenado",
+        "falla": "INTERRUPCION DE E/E EXTERNA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793657168607,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 6",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "14:55",
+        "finParada": "18:30",
+        "totalMin": "215",
+        "zona": "Llenado",
+        "falla": "INTERRUPCION DE E/E EXTERNA PAC",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793657252798,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -258328,6 +258865,60 @@
         "observaciones": "",
         "bloqueado": false,
         "usuario": "Froilan Bolivar"
+      },
+      {
+        "id": 1793650317580.627,
+        "fechaOrden": "2026-11-02",
+        "orden": "6705",
+        "fechaEmision": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "solicitante": "",
+        "linea": "Línea 6",
+        "maquina": "ENFARDADORA",
+        "aviso": "",
+        "fechaParada": "2026-11-02",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "13:25",
+        "finParada": "13:53",
+        "tMtto": "28",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "PISTON TENSOR DE CADENA EN EMPLAYADO DAÑADO",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": true,
+        "usuario": "Luis Blandin"
+      },
+      {
+        "id": 1793652199628,
+        "fechaOrden": "2026-11-02",
+        "orden": "10138",
+        "fechaEmision": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "solicitante": "",
+        "linea": "Línea 3",
+        "maquina": "",
+        "aviso": "",
+        "fechaParada": "2026-11-02",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "07:00",
+        "finParada": "10:00",
+        "tMtto": "180",
+        "tipoParada": "PROGRAMADA",
+        "mtto": "",
+        "falla": "INVENTARIO DE FIN DE MES",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": false,
+        "usuario": "Luis Blandin"
       }
     ],
     "seguimiento-ordenes": {
@@ -260304,32 +260895,38 @@
         "auto-7-1793022972211": {
           "jarabeReal": 61736,
           "producto": "119",
-          "ubb": 21.45
+          "ubb": 21.45,
+          "cajasPlanificadas": 86250
         },
         "auto-7-1793122231322": {
           "jarabeReal": 12765,
           "producto": "42",
-          "ubb": 12.94
+          "ubb": 12.94,
+          "cajasPlanificadas": 8895
         },
         "auto-7-1793122244286": {
           "jarabeReal": 34825,
           "producto": "0",
-          "ubb": 20
+          "ubb": 20,
+          "cajasPlanificadas": 14525
         },
         "auto-7-1793191177400": {
           "jarabeReal": 25067,
           "producto": "20",
-          "ubb": 8.71
+          "ubb": 8.71,
+          "cajasPlanificadas": 12938
         },
         "auto-7-1793275074946": {
           "jarabeReal": 55860,
           "producto": "256",
-          "ubb": 19.4
+          "ubb": 19.4,
+          "cajasPlanificadas": 103958
         },
         "auto-7-1793447593247": {
           "jarabeReal": 17280,
           "producto": "45",
-          "ubb": 6
+          "ubb": 6,
+          "cajasPlanificadas": 86250
         }
       }
     },
@@ -287184,103 +287781,197 @@
             "MATP_0001": {
               "initial": 42750,
               "reception": null,
-              "final": null,
+              "final": 62850,
               "initialOverride": true
             },
             "MATP_0001-sacos-50kg": {
               "initial": 314000,
               "reception": null,
-              "final": null,
+              "final": 338000,
               "initialOverride": true
             },
             "MATP_0002": {
               "initial": 256,
               "reception": null,
-              "final": null,
+              "final": 256,
               "initialOverride": true
             },
             "MATP_0003": {
               "initial": 266,
               "reception": null,
-              "final": null,
+              "final": 266,
               "initialOverride": true
             },
             "MATP_0004": {
               "initial": 4,
               "reception": null,
-              "final": null,
+              "final": 4,
               "initialOverride": true
             },
             "MATP_0005": {
               "initial": 151,
               "reception": null,
-              "final": null,
+              "final": 151,
               "initialOverride": true
             },
             "MATP_0006": {
               "initial": 23,
               "reception": null,
-              "final": null,
+              "final": 13,
               "initialOverride": true
             },
             "MATP_0007": {
               "initial": 368,
               "reception": null,
-              "final": null,
+              "final": 368,
               "initialOverride": true
             },
             "MATP_0009": {
               "initial": 270,
               "reception": null,
-              "final": null,
+              "final": 270,
               "initialOverride": true
             },
             "MATP_0032": {
               "initial": 40,
               "reception": null,
-              "final": null,
+              "final": 40,
               "initialOverride": true
             },
             "MATP_0038": {
               "initial": 84,
               "reception": null,
-              "final": null,
+              "final": 84,
               "initialOverride": true
             },
             "MATP_0039": {
               "initial": 208,
               "reception": null,
-              "final": null,
+              "final": 208,
               "initialOverride": true
             },
             "MATP_0022": {
               "initial": 80,
               "reception": null,
-              "final": null,
+              "final": 80,
               "initialOverride": true
             },
             "MATP_0043": {
               "initial": 2860,
-              "reception": null,
-              "final": null,
+              "reception": 1920,
+              "final": 4500,
               "initialOverride": true
             },
             "MATP_0059": {
               "initial": 20,
               "reception": null,
-              "final": null,
+              "final": 20,
               "initialOverride": true
             },
             "MATP_0060": {
               "initial": 0,
               "reception": null,
-              "final": null,
+              "final": 0,
               "initialOverride": true
             },
             "MATP_0010": {
               "initial": 463.6,
               "reception": null,
-              "final": null,
+              "final": 463.6,
+              "initialOverride": true
+            },
+            "MATP_0001-pastora": {
+              "initial": null,
+              "reception": 30000,
+              "final": 18000
+            },
+            "MATP_0001-montalban": {
+              "initial": null,
+              "reception": 30000,
+              "final": 21999
+            },
+            "MATP_0041": {
+              "initial": 296.6,
+              "reception": null,
+              "final": 296.6,
+              "initialOverride": true
+            },
+            "MATP_0014": {
+              "initial": 139.7,
+              "reception": null,
+              "final": 139.7,
+              "initialOverride": true
+            },
+            "MATP_0015": {
+              "initial": 973.7,
+              "reception": 1625,
+              "final": 2598.7,
+              "initialOverride": true
+            },
+            "MATP_0016": {
+              "initial": 122.67,
+              "reception": null,
+              "final": 121.1,
+              "initialOverride": true
+            },
+            "MATP_0017": {
+              "initial": 16550.3,
+              "reception": null,
+              "final": 16318.8,
+              "initialOverride": true
+            },
+            "MATP_0018": {
+              "initial": 2116.1,
+              "reception": null,
+              "final": 2086.1,
+              "initialOverride": true
+            },
+            "MATP_0019": {
+              "initial": 2440.1,
+              "reception": null,
+              "final": 2408.6,
+              "initialOverride": true
+            },
+            "MATP_0020": {
+              "initial": 1715.2,
+              "reception": null,
+              "final": 1703.2,
+              "initialOverride": true
+            },
+            "MATP_0021": {
+              "initial": 2871.7,
+              "reception": null,
+              "final": 2847.7,
+              "initialOverride": true
+            },
+            "MATP_0031": {
+              "initial": 181,
+              "reception": null,
+              "final": 181,
+              "initialOverride": true
+            },
+            "MATP_0036": {
+              "initial": 183,
+              "reception": null,
+              "final": 183,
+              "initialOverride": true
+            },
+            "MATP_0037": {
+              "initial": 98.89,
+              "reception": null,
+              "final": 97.72,
+              "initialOverride": true
+            },
+            "MATP_0040": {
+              "initial": 1584.7,
+              "reception": null,
+              "final": 1584.7,
+              "initialOverride": true
+            },
+            "MATP_0042": {
+              "initial": 1621.6,
+              "reception": null,
+              "final": 1589.6,
               "initialOverride": true
             }
           }
