@@ -237329,7 +237329,7 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1793652199625,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-02",
@@ -237709,6 +237709,25 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1793657840790,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "VICTOR GUTIERREZ",
+        "linea": "Línea 1",
+        "equipo": "TRANSPORTADOR DE BOTELLAS",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "13:27",
+        "finParada": "13:32",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "FALLA EN TRANSPORTADOR DE BOTELLAS SE APAGA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Richard Marín",
+        "id": 1793657491983,
         "bloqueado": true
       }
     ],
