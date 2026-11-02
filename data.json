@@ -17543,6 +17543,50 @@
           "aditivosCantidad": {},
           "solidosCantidad": {},
           "quimicosInsumosCantidad": {}
+        },
+        "2026-11-02": {
+          "tapas": {
+            "EMP_0095-Alpla": {
+              "totalCajas": "924000",
+              "total": ""
+            },
+            "EMP_0095-Importada": {
+              "totalCajas": "1464000",
+              "total": ""
+            },
+            "EMP_0105-Alpla": {
+              "totalCajas": "1183000",
+              "total": ""
+            },
+            "EMP_0105-ImportadaEW": {
+              "totalCajas": "2592000",
+              "total": ""
+            },
+            "EMP_0105-ImportadaTipo2": {
+              "totalCajas": "1435200",
+              "total": ""
+            }
+          },
+          "separadores": {},
+          "preformas": {
+            "EMP_0009": "232200",
+            "EMP_0068": "706500",
+            "EMP_0093-Ultrapack": "781886",
+            "EMP_0103-Ultrapack": "484320",
+            "EMP_0120-Ultrapack": "455800",
+            "EMP_0126-Ultrapack": "751080",
+            "EMP_0135-Alpla": "450360",
+            "EMP_0166": "911600"
+          },
+          "plasticos": {},
+          "adhesivoCantidad": "",
+          "etiquetasCantidad": {},
+          "azucarCantidad": {},
+          "concentradosCantidad": {},
+          "concentradosJustyCantidad": {},
+          "aditivosCantidad": {},
+          "solidosCantidad": {},
+          "quimicosInsumosCantidad": {}
         }
       },
       "mensual": {
@@ -26768,7 +26812,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-02T15:03:43.576Z"
+    "updatedAt": "2026-11-02T17:47:22.400Z"
   },
   "ordenesSap": [
     {
@@ -40299,6 +40343,166 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 3126
+        }
+      ]
+    },
+    {
+      "id": "1-1793634762263",
+      "linea": 1,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "64632",
+      "semana": 45,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-02",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "2-1793634889879",
+      "linea": 2,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "64638",
+      "semana": 45,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-02",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "3-1793635082953",
+      "linea": 3,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "64644",
+      "semana": 45,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-02",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "4-1793640543747",
+      "linea": 4,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "64650",
+      "semana": 45,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-02",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "5-1793640676516",
+      "linea": 5,
+      "sabor": "JUSTY DURAZNO",
+      "ordenNumero": "64665",
+      "semana": 45,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-02",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "6-1793640780696",
+      "linea": 6,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "64661",
+      "semana": 45,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-02",
+          "ticket1": "16519",
+          "cajas1": 640,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "7-1793640888638",
+      "linea": 7,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "64667",
+      "semana": 45,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-02",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "1-1793640984200",
+      "linea": 1,
+      "sabor": "GLUP PIÑA",
+      "ordenNumero": "64673",
+      "semana": 45,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-02",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     }
@@ -53854,6 +54058,69 @@
             "preparado": "20",
             "final": "20"
           }
+        },
+        "2026-11-02": {
+          "GLUP COLA": {
+            "inicial": "109.02",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP KOLITA": {
+            "inicial": "9.74",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP UVA": {
+            "inicial": "7.48",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP PIÑA": {
+            "inicial": "20",
+            "preparado": "",
+            "final": ""
+          }
+        },
+        "2026-11-25": {
+          "GLUP COLA": {
+            "inicial": ""
+          },
+          "GLUP FRESH": {
+            "inicial": ""
+          },
+          "GLUP UVA": {
+            "inicial": ""
+          },
+          "GLUP PIÑA": {
+            "inicial": ""
+          },
+          "GLUP NARANJA": {
+            "inicial": ""
+          },
+          "GLUP KOLITA": {
+            "inicial": ""
+          },
+          "GLUP MANZANA VERDE": {
+            "inicial": ""
+          },
+          "GLUP PIÑA PARCHITA": {
+            "inicial": ""
+          },
+          "GLUP MANZANA ROJA": {
+            "inicial": ""
+          },
+          "JUSTY NARANJA": {
+            "inicial": ""
+          },
+          "JUSTY DURAZNO": {
+            "inicial": ""
+          },
+          "JUSTY PERA": {
+            "inicial": ""
+          },
+          "JUSTY MANZANA": {
+            "inicial": ""
+          }
         }
       },
       "sugar": {
@@ -55518,6 +55785,13 @@
             "recepcionSacos": "",
             "invFinalSacos": "6280"
           }
+        },
+        "2026-11-02": {
+          "PORTUGUESA": {
+            "invInicialSacos": "6280",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          }
         }
       },
       "tanques": {
@@ -56982,6 +57256,16 @@
             "invInicialSacos": "1152",
             "invFinalSacos": "226"
           }
+        },
+        "2026-11-02": {
+          "JARABE SIMPLE": {
+            "invInicialSacos": "629",
+            "invFinalSacos": ""
+          },
+          "Sala 1": {
+            "invInicialSacos": "226",
+            "invFinalSacos": ""
+          }
         }
       },
       "realKgPerSack": {
@@ -57153,7 +57437,11 @@
         "2026-10-26": "1.02",
         "2026-10-28": "1.02",
         "2026-10-30": "1.02",
-        "2026-11-01": "1.02"
+        "2026-11-01": "1.02",
+        "2026-10-31": "1.02",
+        "2026-10-02": "1.02",
+        "2026-10-10": "1.02",
+        "2026-10-12": "1.02"
       },
       "_deletedIds": {},
       "weeklyFisico": {
@@ -57181,7 +57469,8 @@
         "2026-10-26|2026-10": 1293146.15,
         "2026-11-01|2026-11": 77570.03,
         "2026-12-01|2026-12": 0,
-        "2026-11-02|2026-11": 0
+        "2026-11-02|2026-11": 0,
+        "2026-11-23|2026-11": 0
       }
     },
     "seguimiento-etiquetadora": {
@@ -258342,6 +258631,9 @@
           "jarabeReal": 141014,
           "producto": "522",
           "ubb": 142.88
+        },
+        "auto-1-1793027246226": {
+          "cajasPlanificadas": 72000
         }
       },
       "linea-2": {
@@ -277810,7 +278102,24 @@
       "2026-11-01-Gamma Ro-432-6": "166,5",
       "2026-11-01-RO Cleaner-6": "213,7",
       "2026-11-01-Sanitizer-6": "200",
-      "2026-11-01-LARK CLEAN 21C-6": "0"
+      "2026-11-01-LARK CLEAN 21C-6": "0",
+      "2026-11-02-LP20-0": "108,6",
+      "2026-11-02-Cloro-0": "601",
+      "2026-11-02-AntiEscalante-0": "1168,6",
+      "2026-11-02-Sal-0": "3780",
+      "2026-11-02-Alcalino-0": "1708",
+      "2026-11-02-Peracetico-0": "444",
+      "2026-11-02-Lark Foam Quat-0": "56,5",
+      "2026-11-02-Lark Foam IN-0": "107,4",
+      "2026-11-02-Lark Desengrasante-0": "200",
+      "2026-11-02-Soda Caustica-0": "496,6",
+      "2026-11-02-GermiQuat-0": "162,5",
+      "2026-11-02-Lark Inox-0": "24",
+      "2026-11-02-TM Smart-0": "294,2",
+      "2026-11-02-Gamma Ro-432-0": "166,5",
+      "2026-11-02-RO Cleaner-0": "213,7",
+      "2026-11-02-Sanitizer-0": "200",
+      "2026-11-02-LARK CLEAN 21C-0": "0"
     },
     "sala-jarabe-glup": [
       {
@@ -286673,6 +286982,112 @@
               "final": 139.6
             }
           }
+        },
+        "2026-11-02": {
+          "diurno": {
+            "MATP_0001": {
+              "initial": 42750,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0001-sacos-50kg": {
+              "initial": 314000,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0002": {
+              "initial": 256,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0003": {
+              "initial": 266,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0004": {
+              "initial": 4,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0005": {
+              "initial": 151,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0006": {
+              "initial": 23,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0007": {
+              "initial": 368,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0009": {
+              "initial": 270,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0032": {
+              "initial": 40,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0038": {
+              "initial": 84,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0039": {
+              "initial": 208,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0022": {
+              "initial": 80,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0043": {
+              "initial": 2860,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0059": {
+              "initial": 20,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0060": {
+              "initial": 0,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            },
+            "MATP_0010": {
+              "initial": 463.6,
+              "reception": null,
+              "final": null,
+              "initialOverride": true
+            }
+          }
         }
       }
     },
@@ -288694,7 +289109,66 @@
         "1793567238598",
         "1793567302078",
         "1793567354397",
-        "1793567415454"
+        "1793567415454",
+        "1784566101946",
+        "1784568143186",
+        "1785014920340",
+        "1785358753845",
+        "1785358876155",
+        "1785414190166",
+        "1785414573668",
+        "1785415183096",
+        "1785415259439",
+        "1785415351871",
+        "1785415572542",
+        "1785415633951",
+        "1785415689630",
+        "1785415811823",
+        "1785415847510",
+        "1785415957655",
+        "1785416031310",
+        "1785416298630",
+        "1785416369910",
+        "1785416608317",
+        "1785416736028",
+        "1785416910693",
+        "1785417138565",
+        "1785417183419",
+        "1785417331300",
+        "1785417417646",
+        "1785417479222",
+        "1785418190316",
+        "1785508515291",
+        "1785509131922",
+        "1786024306648",
+        "1786024932528",
+        "1786037074553",
+        "1786037361081",
+        "1786037547921",
+        "1786037695201",
+        "1786037731718",
+        "1786037990748",
+        "1786037996096",
+        "1786038155639",
+        "1786038321776",
+        "1786027053232",
+        "1786040712235",
+        "1786119936092",
+        "1786128206608",
+        "1786456646957",
+        "1786456705797",
+        "1786996948604",
+        "1787086190625",
+        "1787086273033",
+        "1787938439979",
+        "1787237062452",
+        "1787247465383",
+        "1787959521278",
+        "1788293882619",
+        "1788991023411",
+        "1788978219703",
+        "1792082511178",
+        "1792082611811"
       ]
     },
     "planta-ordenes-trabajo": {
@@ -288756,7 +289230,8 @@
     "6-1791209874652",
     "6-1791374112487",
     "1-1791811962984",
-    "7-1791899489586"
+    "7-1791899489586",
+    "6-1793640781925"
   ],
   "logisticsStockFile": {
     "filename": "stock-producto-terminado.xlsx",
