@@ -259528,6 +259528,31 @@
           "jarabeReal": 108506,
           "ubb": 37.69,
           "producto": "243"
+        },
+        "auto-4-1793022940860": {
+          "cajasPlanificadas": 134400,
+          "jarabeReal": 149022,
+          "producto": "250",
+          "ubb": 51.85,
+          "pnc": 58
+        },
+        "auto-4-1793197406064": {
+          "cajasPlanificadas": 128800,
+          "jarabeReal": 83778,
+          "producto": "293",
+          "ubb": 29.13,
+          "pnc": 603
+        },
+        "auto-4-1793371977276": {
+          "cajasPlanificadas": 161000,
+          "jarabeReal": 117995,
+          "producto": "633",
+          "ubb": 40.96
+        },
+        "auto-4-1793532847872": {
+          "cajasPlanificadas": 161000,
+          "jarabeReal": 36139,
+          "ubb": 12.55
         }
       },
       "linea-5": {
@@ -259700,6 +259725,24 @@
           "producto": "219",
           "jarabeReal": 27000,
           "ubb": 27
+        },
+        "auto-5-1793103292196": {
+          "jarabeReal": 341000,
+          "producto": "416",
+          "ubb": 341,
+          "cajasPlanificadas": 55660
+        },
+        "auto-5-1793197421430": {
+          "jarabeReal": 385000,
+          "producto": "253",
+          "ubb": 385,
+          "cajasPlanificadas": 53240
+        },
+        "auto-5-1793372524705": {
+          "jarabeReal": 554000,
+          "producto": "225",
+          "ubb": 554,
+          "cajasPlanificadas": 48400
         }
       },
       "linea-6": {
@@ -259919,6 +259962,36 @@
           "jarabeReal": 22177,
           "ubb": 22.49,
           "producto": "230"
+        },
+        "auto-6-1793022952455": {
+          "cajasPlanificadas": 34500,
+          "jarabeReal": 20018,
+          "producto": "188",
+          "ubb": 6.95
+        },
+        "auto-6-1793122213351": {
+          "cajasPlanificadas": 10000,
+          "jarabeReal": 10141,
+          "producto": "360",
+          "ubb": 10.32
+        },
+        "auto-6-1793190690096": {
+          "cajasPlanificadas": 28460,
+          "jarabeReal": 34150,
+          "producto": "348",
+          "ubb": 22
+        },
+        "auto-6-1793372218036": {
+          "cajasPlanificadas": 25880,
+          "jarabeReal": 26744,
+          "producto": "363",
+          "ubb": 9.29
+        },
+        "auto-6-1793535379302": {
+          "cajasPlanificadas": 31250,
+          "jarabeReal": 3516,
+          "producto": "0",
+          "ubb": 1.22
         }
       },
       "linea-7": {
@@ -260227,6 +260300,36 @@
           "jarabeReal": 78340,
           "ubb": 79.45,
           "producto": "186"
+        },
+        "auto-7-1793022972211": {
+          "jarabeReal": 61736,
+          "producto": "119",
+          "ubb": 21.45
+        },
+        "auto-7-1793122231322": {
+          "jarabeReal": 12765,
+          "producto": "42",
+          "ubb": 12.94
+        },
+        "auto-7-1793122244286": {
+          "jarabeReal": 34825,
+          "producto": "0",
+          "ubb": 20
+        },
+        "auto-7-1793191177400": {
+          "jarabeReal": 25067,
+          "producto": "20",
+          "ubb": 8.71
+        },
+        "auto-7-1793275074946": {
+          "jarabeReal": 55860,
+          "producto": "256",
+          "ubb": 19.4
+        },
+        "auto-7-1793447593247": {
+          "jarabeReal": 17280,
+          "producto": "45",
+          "ubb": 6
         }
       }
     },
