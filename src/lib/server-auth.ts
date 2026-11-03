@@ -467,7 +467,9 @@ export async function authorizeDataWrite(request: Request, body: unknown): Promi
   const uniqueChecks = Array.from(new Map(checks.map((check) => [`${check[0]}:${check[1] ?? ''}`, check])).values());
   if (uniqueChecks.length === 0) {
     if (adminOnlyWrite) return null;
-    return Response.json({ error: 'No authorized writable data fields found' }, { status: 403 });
+    const auth = await requireAuthenticated(request);
+    if (auth.response) return auth.response;
+    return Response.json({ ok: true, unchanged: true });
   }
   for (const [module, section] of uniqueChecks) {
     const denied = await authorizeModuleWrite(request, module, section);

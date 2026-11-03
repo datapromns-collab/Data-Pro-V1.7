@@ -26847,7 +26847,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-03T11:08:34.964Z"
+    "updatedAt": "2026-11-03T11:44:46.537Z"
   },
   "ordenesSap": [
     {
@@ -40411,13 +40411,13 @@
         {
           "fechaInicio": "2026-11-02",
           "ticket1": "16346",
-          "cajas1": 0,
-          "ticket2": "",
+          "cajas1": 4660,
+          "ticket2": "16347",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1040,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 18400
         }
       ]
     },
@@ -40432,7 +40432,7 @@
           "fechaInicio": "2026-11-02",
           "ticket1": "16552",
           "cajas1": 3440,
-          "ticket2": "",
+          "ticket2": "16553",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
@@ -40532,12 +40532,12 @@
           "fechaInicio": "2026-11-02",
           "ticket1": "",
           "cajas1": 0,
-          "ticket2": "",
+          "ticket2": "16389",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2160,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 17440
         }
       ]
     }
@@ -237332,20 +237332,20 @@
         "fecha": "2026-11-02",
         "semana": 45,
         "turno": "DIURNO",
-        "operador": "JORFRANK RIVERO",
+        "operador": "",
         "linea": "Línea 7",
-        "equipo": "ENFARDADORA",
-        "tipoParada": "AVERÍA",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
         "inicioParada": "13:20",
         "finParada": "14:10",
         "totalMin": "50",
         "zona": "Llenado",
-        "falla": "FALLA EN DIENTES DE SEPARACION",
-        "orden": "10138",
+        "falla": "INTERRUPCION DE E/E EXTERNA",
+        "orden": "",
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1793651678721,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-02",
@@ -238219,7 +238219,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793683641931,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238238,7 +238238,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793683872505,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238257,7 +238257,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793684021576,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238276,7 +238276,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793684123969,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238295,7 +238295,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793684237425,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238314,7 +238314,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793684396017,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238333,7 +238333,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793684517096,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238352,7 +238352,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793685416602,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238371,7 +238371,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793685809370,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238390,7 +238390,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793685976866,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238409,7 +238409,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793686054610,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238428,7 +238428,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793686172938,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238447,7 +238447,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793686247105,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238466,7 +238466,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793686378610,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238485,7 +238485,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793687771490,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238504,7 +238504,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793688067298,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238523,7 +238523,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793688160066,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238542,7 +238542,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793688256650,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238561,7 +238561,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793688555242,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238580,7 +238580,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793688649419,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238599,7 +238599,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793688740401,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238618,7 +238618,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793688899498,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238637,7 +238637,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793689063506,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238656,7 +238656,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793689180579,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238675,7 +238675,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793689274123,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-01",
@@ -238713,7 +238713,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793691266611,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238732,7 +238732,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793691396451,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238751,7 +238751,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793691578819,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238770,7 +238770,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793691722715,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238789,7 +238789,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793691816779,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238808,7 +238808,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793691983242,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238827,7 +238827,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793692115804,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238846,7 +238846,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793692200516,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238865,7 +238865,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793692248139,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238884,7 +238884,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793695037196,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-03",
@@ -238903,7 +238903,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793695624900,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-11-02",
@@ -260617,33 +260617,6 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1793697863057.6697,
-        "fechaOrden": "2026-11-02",
-        "orden": "10138",
-        "fechaEmision": "2026-11-02",
-        "semana": 45,
-        "turno": "DIURNO",
-        "solicitante": "",
-        "linea": "Línea 7",
-        "maquina": "ENFARDADORA",
-        "aviso": "",
-        "fechaParada": "2026-11-02",
-        "inicioMtto": "",
-        "finMtto": "",
-        "inicioParada": "13:20",
-        "finParada": "14:10",
-        "tMtto": "50",
-        "tipoParada": "AVERÍA",
-        "mtto": "",
-        "falla": "FALLA EN DIENTES DE SEPARACION",
-        "mttoEsp": "",
-        "descripcionFalla": "",
-        "descripcionAccion": "",
-        "observaciones": "",
-        "bloqueado": true,
-        "usuario": "Luis Blandin"
-      },
-      {
         "id": 1793658436755.1196,
         "fechaOrden": "2026-11-02",
         "orden": "6903",
@@ -260833,31 +260806,31 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1793566760572.201,
-        "fechaOrden": "2026-11-01",
-        "orden": "10219",
-        "fechaEmision": "2026-11-01",
-        "semana": 44,
+        "id": 1793697863057.6697,
+        "fechaOrden": "2026-11-02",
+        "orden": "10138",
+        "fechaEmision": "2026-11-02",
+        "semana": 45,
         "turno": "DIURNO",
         "solicitante": "",
-        "linea": "Línea 3",
-        "maquina": "SOPLADORA",
+        "linea": "Línea 7",
+        "maquina": "ENFARDADORA",
         "aviso": "",
-        "fechaParada": "2026-11-01",
+        "fechaParada": "2026-11-02",
         "inicioMtto": "",
         "finMtto": "",
-        "inicioParada": "07:53",
-        "finParada": "08:23",
-        "tMtto": "30",
+        "inicioParada": "13:20",
+        "finParada": "14:10",
+        "tMtto": "50",
         "tipoParada": "AVERÍA",
         "mtto": "",
-        "falla": "ELEVADOR DE CESTAS DE PREFORMA SE DESCARRILA DE LA GUIA",
+        "falla": "FALLA EN DIENTES DE SEPARACION",
         "mttoEsp": "",
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
         "bloqueado": true,
-        "usuario": "Froilan Bolivar"
+        "usuario": "Luis Blandin"
       }
     ],
     "seguimiento-ordenes": {
@@ -277661,7 +277634,7 @@
             "4": 18000,
             "5": "",
             "6": 8320,
-            "7": 11154
+            "7": 11076
           },
           "GLUP FRESH": {
             "1": "",
@@ -278458,7 +278431,12 @@
       "2026-11-01-suave": "138058",
       "2026-11-01-procesos": "1765252",
       "2026-11-01-filtrada": "2780924,08",
-      "2026-11-01-total": "3140940,33"
+      "2026-11-01-total": "3140940,33",
+      "2026-11-02-servicio": "20907",
+      "2026-11-02-suave": "178398",
+      "2026-11-02-procesos": "1896896,11",
+      "2026-11-02-filtrada": "2987444,49",
+      "2026-11-02-total": "3140190,33"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
@@ -292383,7 +292361,11 @@
     },
     "planta-ordenes-trabajo": {
       "*": [
-        "1793652199628"
+        "1793566760572.201",
+        "1793652199628",
+        "1787938449943.3247",
+        "1793628428049.4448",
+        "1793628428049.7358"
       ]
     },
     "seguimiento-enfardadora": {},
