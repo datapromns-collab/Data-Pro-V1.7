@@ -642,7 +642,7 @@ export default function PlannerPage() {
         descripcionFalla: '',
         descripcionAccion: '',
         observaciones: r.observaciones || '',
-        bloqueado: true,
+        bloqueado: false,
         usuario: r.usuario || '',
       }));
 
@@ -4583,72 +4583,63 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                            } else {
                                                              setInformesOperacionales(prev => prev.map(r => String(r.id) === String(row.id) ? updated : r));
                                                            }
-                                                           if (!isSharedEdit && updated.orden && String(updated.orden).trim() !== '') {
-                                                              setOrdenesTrabajo(prev => {
-                                                                const idx = prev.findIndex((o: any) => o.orden === updated.orden && o.fechaOrden === updated.fecha);
-                                                                if (idx >= 0) {
-                                                                  const next = [...prev];
-                                                                  next[idx] = {
-                                                                    ...next[idx],
-                                                                    fechaOrden: updated.fecha || next[idx].fechaOrden,
-                                                                    orden: updated.orden || next[idx].orden,
-                                                                    fechaEmision: updated.fecha || next[idx].fechaEmision,
-                                                                    semana: updated.semana || next[idx].semana,
-                                                                    turno: updated.turno || next[idx].turno,
-                                                                    solicitante: updated.solicitante || next[idx].solicitante,
-                                                                    linea: updated.linea || next[idx].linea,
-                                                                    maquina: updated.equipo || next[idx].maquina,
-                                                                    aviso: updated.aviso || next[idx].aviso,
-                                                                    fechaParada: updated.fecha || next[idx].fechaParada,
-                                                                    inicioMtto: updated.inicioMtto || next[idx].inicioMtto,
-                                                                    finMtto: updated.finMtto || next[idx].finMtto,
-                                                                    inicioParada: updated.inicioParada || next[idx].inicioParada,
-                                                                    finParada: updated.finParada || next[idx].finParada,
-                                                                    tMtto: updated.totalMin || next[idx].tMtto,
-                                                                    tipoParada: updated.tipoParada || next[idx].tipoParada,
-                                                                    mtto: updated.mtto || next[idx].mtto,
-                                                                    falla: updated.falla || next[idx].falla,
-                                                                    mttoEsp: updated.mttoEsp || next[idx].mttoEsp,
-                                                                    descripcionFalla: updated.descripcionFalla || next[idx].descripcionFalla,
-                                                                    descripcionAccion: updated.descripcionAccion || next[idx].descripcionAccion,
-                                                                    observaciones: updated.observaciones || next[idx].observaciones,
-                                                                    usuario: user?.name || next[idx].usuario,
-                                                                  };
-                                                                  return next;
-                                                                }
-                                                                return [...prev, {
-                                                                  id: Date.now(),
-                                                                  fechaOrden: updated.fecha || format(new Date(), 'yyyy-MM-dd'),
-                                                                  orden: updated.orden || '',
-                                                                  fechaEmision: updated.fecha || format(new Date(), 'yyyy-MM-dd'),
-                                                                  semana: updated.semana || '',
-                                                                  turno: updated.turno || 'DIURNO',
-                                                                  solicitante: '',
-                                                                  linea: updated.linea || 'Línea 1',
-                                                                  maquina: updated.equipo || '',
-                                                                  aviso: '',
-                                                                  fechaParada: updated.fecha || format(new Date(), 'yyyy-MM-dd'),
-                                                                  inicioMtto: '',
-                                                                  finMtto: '',
-                                                                  inicioParada: updated.inicioParada || '',
-                                                                  finParada: updated.finParada || '',
-                                                                  tMtto: updated.totalMin || '',
-                                                                  tipoParada: updated.tipoParada || 'PROGRAMADA',
-                                                                  mtto: '',
-                                                                  falla: updated.falla || '',
-                                                                  mttoEsp: '',
-                                                                  descripcionFalla: '',
-                                                                  descripcionAccion: '',
-                                                                  observaciones: updated.observaciones || '',
-                                                                  usuario: user?.name || '',
-                                                                }];
-                                                               });
-                                                              } else if (!isSharedEdit && row.orden && String(row.orden).trim() !== '') {
-                                                                const ordenAEliminar = ordenesTrabajo.find((o: any) => o.orden === row.orden && o.fechaOrden === row.fecha);
-                                                                if (ordenAEliminar) {
-                                                                  ordenesTrabajoStore.removeItem(ordenAEliminar.id);
-                                                                }
-                                                              }
+                                                           const previousOrder = ordenesTrabajo.find((o: any) =>
+                                                             String(o.orden ?? '').trim() === String(row.orden ?? '').trim() &&
+                                                             String(o.fechaOrden ?? '') === String(row.fecha ?? '')
+                                                           );
+                                                           const hasUpdatedOrder = Boolean(updated.orden && String(updated.orden).trim());
+                                                           const updatedOrder = hasUpdatedOrder
+                                                             ? ordenesTrabajo.find((o: any) =>
+                                                               String(o.orden ?? '').trim() === String(updated.orden).trim() &&
+                                                               String(o.fechaOrden ?? '') === String(updated.fecha ?? '')
+                                                             )
+                                                             : undefined;
+
+                                                           if (!hasUpdatedOrder) {
+                                                             if (previousOrder) ordenesTrabajoStore.removeItem(String(previousOrder.id));
+                                                           } else {
+                                                             if (previousOrder && updatedOrder && String(previousOrder.id) !== String(updatedOrder.id)) {
+                                                               ordenesTrabajoStore.removeItem(String(previousOrder.id));
+                                                             }
+                                                             const existingOrder = updatedOrder || previousOrder;
+                                                             const fechaOrden = updated.fecha || format(new Date(), 'yyyy-MM-dd');
+                                                             setOrdenesTrabajo(prev => {
+                                                               const nextOrder = {
+                                                                 ...(existingOrder || {
+                                                                   id: Date.now(),
+                                                                   solicitante: '',
+                                                                   aviso: '',
+                                                                   inicioMtto: '',
+                                                                   finMtto: '',
+                                                                   mtto: '',
+                                                                   mttoEsp: '',
+                                                                   descripcionFalla: '',
+                                                                   descripcionAccion: '',
+                                                                   bloqueado: false,
+                                                                 }),
+                                                                 fechaOrden,
+                                                                 orden: updated.orden,
+                                                                 fechaEmision: updated.fecha || existingOrder?.fechaEmision || fechaOrden,
+                                                                 semana: updated.semana || existingOrder?.semana || '',
+                                                                 turno: updated.turno || existingOrder?.turno || 'DIURNO',
+                                                                 linea: updated.linea || existingOrder?.linea || 'Línea 1',
+                                                                 maquina: updated.equipo || existingOrder?.maquina || '',
+                                                                 fechaParada: updated.fecha || existingOrder?.fechaParada || fechaOrden,
+                                                                 inicioParada: updated.inicioParada || existingOrder?.inicioParada || '',
+                                                                 finParada: updated.finParada || existingOrder?.finParada || '',
+                                                                 tMtto: updated.totalMin || existingOrder?.tMtto || '',
+                                                                 tipoParada: updated.tipoParada || existingOrder?.tipoParada || 'PROGRAMADA',
+                                                                 falla: updated.falla || existingOrder?.falla || '',
+                                                                 observaciones: updated.observaciones || existingOrder?.observaciones || '',
+                                                                 usuario: user?.name || existingOrder?.usuario || '',
+                                                               };
+                                                               const existingIndex = prev.findIndex((o: any) =>
+                                                                 existingOrder && String(o.id) === String(existingOrder.id)
+                                                               );
+                                                               if (existingIndex < 0) return [...prev, nextOrder];
+                                                               return prev.map((o: any, index: number) => index === existingIndex ? nextOrder : o);
+                                                             });
+                                                           }
                                                             setEditingId(null);
                                                            setEditForm({});
                                                            setErrorValidacion('');

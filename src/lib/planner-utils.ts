@@ -345,7 +345,8 @@ export const RECIPES: Record<string, Record<string, number>> = {
 export const CONSUMABLES_RECIPES: Record<string, Record<string, Record<string, number>>> = {
   "GLUP COLA": {
     "2Lts": { "AGUA-00005": 18.114288, "AGUA-00004": 3.714288, "AGUA-00003": 3.6, "AGUA-00002": 10.8, "JARA-00001": 1.6652, "MATP_0008": 0.106176 },
-    "1Lt": { "AGUA-00005": 18.114288, "AGUA-00004": 3.714288, "AGUA-00003": 3.6, "AGUA-00002": 10.8, "JARA-00001": 1.6652, "MATP_0008": 0.106176 }
+    "1Lt": { "AGUA-00005": 18.114288, "AGUA-00004": 3.714288, "AGUA-00003": 3.6, "AGUA-00002": 10.8, "JARA-00001": 1.6652, "MATP_0008": 0.106176 },
+    "0.4Lts": { "JARA-00001": 0.8326 }
   }
 };
 
