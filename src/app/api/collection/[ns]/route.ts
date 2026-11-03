@@ -105,7 +105,8 @@ function mergeCollection(existing: any, incoming: any, ns?: string): any[] {
       const merged = { ...(existingItem || {}) };
       for (const key of Object.keys(item)) {
         if (key === '_deletedIds') continue;
-        if (ns === 'planta-informes-operacionales' && existingItem && key === 'bloqueado') continue;
+        // Full snapshots may be stale; existing reports are edited through their validated PATCH endpoint.
+        if (ns === 'planta-informes-operacionales' && existingItem) continue;
         if (
           ns === 'planta-ordenes-trabajo' &&
           existingItem?.bloqueado === true &&

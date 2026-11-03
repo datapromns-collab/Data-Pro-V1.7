@@ -27100,7 +27100,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-03T21:42:04.205Z"
+    "updatedAt": "2026-11-03T21:45:50.842Z"
   },
   "ordenesSap": [
     {
@@ -40795,6 +40795,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 11076
+        },
+        {
+          "fechaInicio": "2026-11-03",
+          "ticket1": "16481",
+          "cajas1": 14664,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -238573,7 +238584,7 @@
         "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "FRANKLIN ALVADARO",
@@ -238649,7 +238660,7 @@
         "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "",
@@ -238877,7 +238888,7 @@
         "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "DANIEL PARRA",
@@ -239048,7 +239059,7 @@
         "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "",
@@ -239064,10 +239075,10 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793691396451,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "",
@@ -239143,7 +239154,7 @@
         "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "",
@@ -239162,7 +239173,7 @@
         "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "",
@@ -241135,6 +241146,44 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1793742641086,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-03",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "CHRISTIAN CELIS",
+        "linea": "Línea 2",
+        "equipo": "TRANSPORTADOR DE BOTELLAS",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "16:58",
+        "finParada": "17:01",
+        "totalMin": "3",
+        "zona": "Llenado",
+        "falla": "CAIDA DE BOTELLAS EN TRANSPORTE DE BOTELLAS",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793742680166,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-03",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 5",
+        "equipo": "",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "15:25",
+        "finParada": "16:00",
+        "totalMin": "35",
+        "zona": "Llenado",
+        "falla": "FALLA EN MOLDE #10",
+        "orden": "9937",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793742729869,
         "bloqueado": true
       }
     ],
@@ -262883,6 +262932,33 @@
         "observaciones": "",
         "bloqueado": false,
         "usuario": "Luis Sanchez"
+      },
+      {
+        "id": 1793742729873,
+        "fechaOrden": "2026-11-03",
+        "orden": "9937",
+        "fechaEmision": "2026-11-03",
+        "semana": 45,
+        "turno": "DIURNO",
+        "solicitante": "RONALD VALERA",
+        "linea": "Línea 5",
+        "maquina": "",
+        "aviso": "6933",
+        "fechaParada": "2026-11-03",
+        "inicioMtto": "15:25",
+        "finMtto": "16:00",
+        "inicioParada": "15:25",
+        "finParada": "16:00",
+        "tMtto": "35",
+        "tipoParada": "AVERÍA",
+        "mtto": "correctivo",
+        "falla": "FALLA EN MOLDE #10",
+        "mttoEsp": "PAULO UVIEDO",
+        "descripcionFalla": "FALLA EN MOLDE #10",
+        "descripcionAccion": "CAMBIO DE BLOQUE DE SOPLADO #10",
+        "observaciones": "",
+        "bloqueado": true,
+        "usuario": "Luis Blandin"
       }
     ],
     "seguimiento-ordenes": {
@@ -294976,7 +295052,15 @@
     },
     "planta-ordenes-trabajo": {
       "*": [
-        "1793742466526.9434"
+        "1793742244826.4792",
+        "1793695624902",
+        "1793688555246",
+        "1793688740405",
+        "1793691396454",
+        "1793695037199",
+        "1793742466526.9434",
+        "1793742586505.362",
+        "1793652199628"
       ]
     },
     "seguimiento-enfardadora": {},
