@@ -4711,7 +4711,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                       )}
                                                          {row.bloqueado !== false && (user?.id === 'alex.mds' || user?.id === 'maria.mds') && (
                                                           <>
-                                                            <Button size="icon" variant="ghost" className="h-7 w-7 text-blue-600 hover:text-blue-700" onClick={() => { setEditingId(row.id); setEditForm(row); }}><Pencil className="h-3.5 w-3.5" /></Button>
+                                                            <Button size="icon" variant="ghost" className="h-7 w-7 text-blue-600 hover:text-blue-700" onClick={() => handleReactivarInforme(row)}><Pencil className="h-3.5 w-3.5" /></Button>
                                                             {(user?.id === 'alex.mds' || user?.id === 'maria.mds') && (
                                                               <Button size="icon" variant="ghost" className="h-7 w-7 text-red-600 hover:text-red-700" onClick={() => {
                                                                 if (window.confirm('¿Eliminar este registro?')) {
@@ -8908,7 +8908,7 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
     const estaBloqueado = (row as any).bloqueado === true;
     const estaEnEdicion = editingRows[row.id] != null;
     const enEdicion = (esAdmin || esUsuarioPlanta) && !esUsuarioRestringido && (estaEnEdicion || !estaBloqueado);
-    const puedeEditar = esAdmin || (!estaBloqueado && !esUsuarioRestringido);
+    const puedeEditar = !estaBloqueado && !esUsuarioRestringido;
     const camposEditables = new Set(['fechaEmision','solicitante','aviso','inicioMtto','finMtto','inicioParada','finParada','tMtto','tipoParada','mtto','falla','mttoEsp','descripcionFalla','descripcionAccion','observaciones','fechaParada']);
     const editable = (campo: string) => enEdicion && camposEditables.has(campo);
     const tMttoCalc = tiempoTranscurrido(rowEdit.fechaEmision, rowEdit.inicioMtto, rowEdit.fechaParada, rowEdit.finMtto);
@@ -8955,21 +8955,6 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
       });
       setEditingRows((prev: any) => { const next = { ...prev }; delete next[row.id]; return next; });
       setFilasNoEditables((prev: any) => ({ ...prev, [row.id]: true }));
-    };
-
-    const handleReactivar = (e: any) => {
-      e.stopPropagation();
-      const originalId = row.id;
-      setOrdenesTrabajo((prev: any[]) => {
-        const idx = prev.findIndex((r: any) => String(r.id) === String(originalId));
-        if (idx < 0) return prev;
-        const updated: any = { ...prev[idx], bloqueado: false };
-        const next = [...prev];
-        next[idx] = updated;
-        return next;
-      });
-      setEditingRows((prev: any) => { const next = { ...prev }; delete next[row.id]; return next; });
-      setFilasNoEditables((prev: any) => { const next = { ...prev }; delete next[row.id]; return next; });
     };
 
     return (
@@ -9043,18 +9028,6 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
             </Button>
           ) : (
             <>
-              {estaBloqueado && esAdmin && (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button size="icon" variant="ghost" className="h-7 w-7 text-orange-600 hover:text-orange-700" type="button" onClick={handleReactivar}>
-                      <RefreshCw className="h-3.5 w-3.5" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <span className="text-xs font-black uppercase text-slate-800">Pasar a Pendiente</span>
-                  </TooltipContent>
-                </Tooltip>
-              )}
               {puedeEditar && (
                 <Button size="icon" variant="ghost" className="h-7 w-7 text-blue-600 hover:text-blue-700" onClick={() => { setEditingRows((prev: any) => ({ ...prev, [row.id]: { ...row } })); setFilasNoEditables((prev: any) => { const next = { ...prev }; delete next[row.id]; return next; }); }}><Pencil className="h-3.5 w-3.5" /></Button>
               )}

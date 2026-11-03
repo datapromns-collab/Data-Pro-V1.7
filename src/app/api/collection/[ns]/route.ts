@@ -76,12 +76,8 @@ function dedupByKeys(items: any[], keys: string[]): any[] {
     const prev = seen.get(key);
     if (!prev) {
       seen.set(key, item);
-    } else {
-      if (item.bloqueado === true && prev.bloqueado !== true) {
-        seen.set(key, item);
-      } else if (item.bloqueado !== true && prev.bloqueado === true) {
-        seen.set(key, item);
-      }
+    } else if (item.bloqueado === true || prev.bloqueado !== true) {
+      seen.set(key, item);
     }
   });
   return Array.from(seen.values());
@@ -110,6 +106,12 @@ function mergeCollection(existing: any, incoming: any, ns?: string): any[] {
       for (const key of Object.keys(item)) {
         if (key === '_deletedIds') continue;
         if (ns === 'planta-informes-operacionales' && existingItem && key === 'bloqueado') continue;
+        if (
+          ns === 'planta-ordenes-trabajo' &&
+          existingItem?.bloqueado === true &&
+          key === 'bloqueado' &&
+          item[key] === false
+        ) continue;
         const value = (item as any)[key];
         if (value === undefined || value === null) {
           if (value === null && key === 'enviarALinea' && (ns === 'sala-jarabe-glup' || ns === 'sala-jarabe-justy')) {

@@ -94,7 +94,7 @@ export async function PATCH(request: Request) {
 
       const index = items.findIndex((item: any) => String(item?.id) === String(id));
       if (index < 0) return db;
-      if (items[index]?.bloqueado !== false && !isEditManager) {
+      if (items[index]?.bloqueado !== false) {
         result = { status: 409, error: 'La edición de este registro ya fue cerrada. Actualiza la lista e inténtalo de nuevo.' };
         return db;
       }
