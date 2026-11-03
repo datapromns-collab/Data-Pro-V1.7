@@ -14675,12 +14675,12 @@
             "name": "GLUP COLA",
             "lineId": "4",
             "loadPerHour": 2800,
-            "quantity": 190400,
-            "durationHours": 68,
+            "quantity": 123200,
+            "durationHours": 44,
             "presentation": "2Lts",
-            "tanks": 22.08,
+            "tanks": 14.28,
             "startTime": "2026-11-02T14:00:00.000Z",
-            "endTime": "2026-11-05T10:00:00.000Z",
+            "endTime": "2026-11-04T10:00:00.000Z",
             "id": "hwx75hz7v",
             "color": "#6366f1"
           },
@@ -15028,8 +15028,8 @@
             "loadPerHour": 0,
             "quantity": 0,
             "durationHours": 10.5,
-            "startTime": "2026-11-05T10:00:00.000Z",
-            "endTime": "2026-11-05T20:30:00.000Z",
+            "startTime": "2026-11-04T10:00:00.000Z",
+            "endTime": "2026-11-04T20:30:00.000Z",
             "id": "iri9lsxpu",
             "color": "#587593"
           },
@@ -15039,8 +15039,8 @@
             "loadPerHour": 0,
             "quantity": 0,
             "durationHours": 2,
-            "startTime": "2026-11-05T20:30:00.000Z",
-            "endTime": "2026-11-05T22:30:00.000Z",
+            "startTime": "2026-11-04T20:30:00.000Z",
+            "endTime": "2026-11-04T22:30:00.000Z",
             "id": "hjpu042wx",
             "color": "#6366f1"
           },
@@ -15048,11 +15048,11 @@
             "name": "GLUP COLA",
             "lineId": "4",
             "loadPerHour": 2800,
-            "quantity": 96600,
-            "durationHours": 34.5,
+            "quantity": 163800,
+            "durationHours": 58.5,
             "presentation": "2Lts",
-            "tanks": 11.2,
-            "startTime": "2026-11-05T22:30:00.000Z",
+            "tanks": 18.99,
+            "startTime": "2026-11-04T22:30:00.000Z",
             "endTime": "2026-11-07T09:00:00.000Z",
             "id": "xcy76equh",
             "color": "#10b981"
@@ -26847,7 +26847,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-03T11:57:38.132Z"
+    "updatedAt": "2026-11-03T11:58:59.544Z"
   },
   "ordenesSap": [
     {
@@ -239246,6 +239246,25 @@
         "usuario": "Luis Blandin",
         "id": 1793705104855,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-02",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "JESUS ARREAZA",
+        "linea": "Línea 2",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "13:55",
+        "finParada": "13:58",
+        "totalMin": "3",
+        "zona": "Llenado",
+        "falla": "ACUMULACION POR PALETIZADO MANUAL",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Richard Marín",
+        "id": 1793707172470,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -281264,7 +281283,24 @@
       "2026-11-02-Gamma Ro-432-6": "166,5",
       "2026-11-02-RO Cleaner-6": "213,7",
       "2026-11-02-Sanitizer-6": "200",
-      "2026-11-02-LARK CLEAN 21C-6": "0"
+      "2026-11-02-LARK CLEAN 21C-6": "0",
+      "2026-11-03-LP20-0": "107,4",
+      "2026-11-03-Cloro-0": "573",
+      "2026-11-03-AntiEscalante-0": "1144",
+      "2026-11-03-Sal-0": "3140",
+      "2026-11-03-Alcalino-0": "1570",
+      "2026-11-03-Peracetico-0": "419,5",
+      "2026-11-03-Lark Foam Quat-0": "56,5",
+      "2026-11-03-Lark Foam IN-0": "107,4",
+      "2026-11-03-Lark Desengrasante-0": "0",
+      "2026-11-03-Soda Caustica-0": "496,6",
+      "2026-11-03-GermiQuat-0": "162,5",
+      "2026-11-03-Lark Inox-0": "24",
+      "2026-11-03-TM Smart-0": "228",
+      "2026-11-03-Gamma Ro-432-0": "166,5",
+      "2026-11-03-RO Cleaner-0": "213,7",
+      "2026-11-03-Sanitizer-0": "200",
+      "2026-11-03-LARK CLEAN 21C-0": "0"
     },
     "sala-jarabe-glup": [
       {
@@ -292412,7 +292448,11 @@
     },
     "planta-ordenes-trabajo": {
       "*": [
-        "1793566760572.201"
+        "1793566760572.201",
+        "1787938449943.3247",
+        "1793628428049.4448",
+        "1793628428049.7358",
+        "1793652199628"
       ]
     },
     "seguimiento-enfardadora": {},
