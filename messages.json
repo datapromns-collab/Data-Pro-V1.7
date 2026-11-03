@@ -1,6 +1,17 @@
 {
   "messages": [
     {
+      "id": "2026-11-03T12:17:51.828Z-5o1piml",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "jaime.r",
+      "read": false,
+      "createdAt": "2026-11-03T12:17:51.828Z"
+    },
+    {
       "id": "2026-10-27T18:59:09.353Z-01mnf5q",
       "title": "Avisó",
       "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
@@ -100,15 +111,15 @@
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {
-      "id": "2026-09-30T14:43:02.341Z-nnh4wy3",
-      "title": "Modificación PDP S40",
-      "message": "Se realizo modificación en el PDP S40 para la linea 6",
+      "id": "2026-11-03T12:17:51.828Z-c3bblwo",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "jaime.r",
-      "read": true,
-      "createdAt": "2026-09-30T14:43:02.341Z"
+      "recipient": "demon2",
+      "read": false,
+      "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
       "id": "2026-10-27T18:59:09.353Z-viwb6ys",
@@ -210,15 +221,15 @@
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {
-      "id": "2026-09-30T14:43:02.341Z-ujg6rfo",
-      "title": "Modificación PDP S40",
-      "message": "Se realizo modificación en el PDP S40 para la linea 6",
+      "id": "2026-11-03T12:17:51.828Z-3uvq34r",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "demon2",
-      "read": true,
-      "createdAt": "2026-09-30T14:43:02.341Z"
+      "recipient": "maria.mds",
+      "read": false,
+      "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
       "id": "2026-10-27T18:59:09.353Z-q8scw6o",
@@ -320,15 +331,15 @@
       "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
-      "id": "2026-10-16T14:54:14.951Z-esjp8vt",
+      "id": "2026-11-03T12:17:51.828Z-b5pczfj",
       "title": "Aviso",
-      "message": "Se subirá una actualización que puede hacer que el sistema pase por distintas recargas",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-10-16T14:54:14.951Z"
+      "recipient": "alex.mds",
+      "read": false,
+      "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
       "id": "2026-10-27T18:59:09.353Z-a4xvgiz",
@@ -430,15 +441,15 @@
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {
-      "id": "2026-09-30T14:43:02.341Z-sd76vad",
-      "title": "Modificación PDP S40",
-      "message": "Se realizo modificación en el PDP S40 para la linea 6",
+      "id": "2026-11-03T12:17:51.828Z-u9lleg8",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-09-30T14:43:02.341Z"
+      "recipient": "anto.mds",
+      "read": false,
+      "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
       "id": "2026-10-27T18:59:09.353Z-j2yc8c4",
@@ -540,15 +551,15 @@
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {
-      "id": "2026-09-30T14:43:02.341Z-s0mgi8z",
-      "title": "Modificación PDP S40",
-      "message": "Se realizo modificación en el PDP S40 para la linea 6",
+      "id": "2026-11-03T12:17:51.828Z-06wyfez",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "anto.mds",
+      "recipient": "prodtj.mds",
       "read": false,
-      "createdAt": "2026-09-30T14:43:02.341Z"
+      "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
       "id": "2026-10-27T18:59:09.353Z-ys03qdh",
@@ -650,15 +661,15 @@
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {
-      "id": "2026-09-30T14:43:02.341Z-nfg2tk9",
-      "title": "Modificación PDP S40",
-      "message": "Se realizo modificación en el PDP S40 para la linea 6",
+      "id": "2026-11-03T12:17:51.828Z-eq029mx",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtj.mds",
-      "read": true,
-      "createdAt": "2026-09-30T14:43:02.341Z"
+      "recipient": "prodtg.mds",
+      "read": false,
+      "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
       "id": "2026-10-27T18:59:09.353Z-jbe4vbs",
@@ -760,15 +771,15 @@
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {
-      "id": "2026-09-30T14:43:02.341Z-0fbjve6",
-      "title": "Modificación PDP S40",
-      "message": "Se realizo modificación en el PDP S40 para la linea 6",
+      "id": "2026-11-03T12:17:51.828Z-d71qfk5",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtg.mds",
+      "recipient": "prodts.mds",
       "read": false,
-      "createdAt": "2026-09-30T14:43:02.341Z"
+      "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
       "id": "2026-10-27T18:59:09.353Z-j1xzgii",
@@ -870,15 +881,15 @@
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {
-      "id": "2026-09-30T14:43:02.341Z-xe8plw8",
-      "title": "Modificación PDP S40",
-      "message": "Se realizo modificación en el PDP S40 para la linea 6",
+      "id": "2026-11-03T12:17:51.828Z-l163wh7",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodts.mds",
-      "read": true,
-      "createdAt": "2026-09-30T14:43:02.341Z"
+      "recipient": "procj.mds",
+      "read": false,
+      "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
       "id": "2026-10-27T18:59:09.353Z-h853dan",
@@ -980,15 +991,15 @@
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {
-      "id": "2026-09-30T14:43:02.341Z-ct5q8bj",
-      "title": "Modificación PDP S40",
-      "message": "Se realizo modificación en el PDP S40 para la linea 6",
+      "id": "2026-11-03T12:17:51.828Z-1kj7zmy",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procj.mds",
-      "read": true,
-      "createdAt": "2026-09-30T14:43:02.341Z"
+      "recipient": "cald.mds",
+      "read": false,
+      "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
       "id": "2026-10-27T18:59:09.353Z-ysubbmm",
@@ -1090,15 +1101,15 @@
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {
-      "id": "2026-09-30T14:43:02.341Z-uwcftzf",
-      "title": "Modificación PDP S40",
-      "message": "Se realizo modificación en el PDP S40 para la linea 6",
+      "id": "2026-11-03T12:17:51.828Z-pmsiawv",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "cald.mds",
+      "recipient": "prodt.mds",
       "read": false,
-      "createdAt": "2026-09-30T14:43:02.341Z"
+      "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
       "id": "2026-10-27T18:59:09.353Z-bmxsckj",
@@ -1200,15 +1211,15 @@
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {
-      "id": "2026-09-30T14:43:02.341Z-v0g37pk",
-      "title": "Modificación PDP S40",
-      "message": "Se realizo modificación en el PDP S40 para la linea 6",
+      "id": "2026-11-03T12:17:51.828Z-al206x5",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt.mds",
+      "recipient": "prodt1.mds",
       "read": false,
-      "createdAt": "2026-09-30T14:43:02.341Z"
+      "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
       "id": "2026-10-27T18:59:09.353Z-6y4bx9s",
@@ -1310,15 +1321,15 @@
       "createdAt": "2026-10-16T14:54:14.951Z"
     },
     {
-      "id": "2026-10-12T20:40:46.104Z-e13pt2d",
-      "title": "PDP S42",
-      "message": "se realizo modificación en el pdp S42 para las líneas 6 y 7",
+      "id": "2026-11-03T12:17:51.828Z-vjipuen",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt1.mds",
-      "read": true,
-      "createdAt": "2026-10-12T20:40:46.104Z"
+      "recipient": "prodt2.mds",
+      "read": false,
+      "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
       "id": "2026-10-27T18:59:09.353Z-6ggn22w",
@@ -1420,15 +1431,15 @@
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {
-      "id": "2026-09-30T14:43:02.341Z-plwip90",
-      "title": "Modificación PDP S40",
-      "message": "Se realizo modificación en el PDP S40 para la linea 6",
+      "id": "2026-11-03T12:17:51.828Z-rw4e1eh",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt2.mds",
-      "read": true,
-      "createdAt": "2026-09-30T14:43:02.341Z"
+      "recipient": "proc.mds",
+      "read": false,
+      "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
       "id": "2026-10-27T18:59:09.353Z-vf51km6",
@@ -1530,15 +1541,15 @@
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {
-      "id": "2026-09-30T14:43:02.341Z-fvik7h6",
-      "title": "Modificación PDP S40",
-      "message": "Se realizo modificación en el PDP S40 para la linea 6",
+      "id": "2026-11-03T12:17:51.828Z-19hkq7k",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc.mds",
-      "read": true,
-      "createdAt": "2026-09-30T14:43:02.341Z"
+      "recipient": "proc1.mds",
+      "read": false,
+      "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
       "id": "2026-10-27T18:59:09.353Z-ux5nrkk",
@@ -1640,15 +1651,15 @@
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {
-      "id": "2026-09-30T14:43:02.341Z-tb7e1hb",
-      "title": "Modificación PDP S40",
-      "message": "Se realizo modificación en el PDP S40 para la linea 6",
+      "id": "2026-11-03T12:17:51.828Z-p5eqykk",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc1.mds",
+      "recipient": "proc2.mds",
       "read": false,
-      "createdAt": "2026-09-30T14:43:02.341Z"
+      "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
       "id": "2026-10-27T18:59:09.353Z-8al5i3k",
@@ -1750,15 +1761,15 @@
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {
-      "id": "2026-09-30T14:43:02.341Z-3s8iopt",
-      "title": "Modificación PDP S40",
-      "message": "Se realizo modificación en el PDP S40 para la linea 6",
+      "id": "2026-11-03T12:17:51.828Z-ya6janl",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc2.mds",
+      "recipient": "procs1.mds",
       "read": false,
-      "createdAt": "2026-09-30T14:43:02.341Z"
+      "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
       "id": "2026-10-27T18:59:09.353Z-z4a5nmn",
@@ -1860,15 +1871,15 @@
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {
-      "id": "2026-09-30T14:43:02.341Z-vy04mik",
-      "title": "Modificación PDP S40",
-      "message": "Se realizo modificación en el PDP S40 para la linea 6",
+      "id": "2026-11-03T12:17:51.828Z-ck9lpkb",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procs1.mds",
-      "read": true,
-      "createdAt": "2026-09-30T14:43:02.341Z"
+      "recipient": "procs2.mds",
+      "read": false,
+      "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
       "id": "2026-10-27T18:59:09.353Z-3vpne2x",
@@ -1970,15 +1981,15 @@
       "createdAt": "2026-10-16T14:54:14.951Z"
     },
     {
-      "id": "2026-10-12T20:40:46.104Z-b1vftlx",
-      "title": "PDP S42",
-      "message": "se realizo modificación en el pdp S42 para las líneas 6 y 7",
+      "id": "2026-11-03T12:17:51.828Z-4cyvl5m",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procs2.mds",
+      "recipient": "finan.mds",
       "read": false,
-      "createdAt": "2026-10-12T20:40:46.104Z"
+      "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
       "id": "2026-10-27T18:59:09.353Z-5gksp3e",
@@ -2080,15 +2091,15 @@
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {
-      "id": "2026-09-30T14:43:02.341Z-j0k9p00",
-      "title": "Modificación PDP S40",
-      "message": "Se realizo modificación en el PDP S40 para la linea 6",
+      "id": "2026-11-03T12:17:51.828Z-w1x8uog",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "finan.mds",
+      "recipient": "g.tec.mds",
       "read": false,
-      "createdAt": "2026-09-30T14:43:02.341Z"
+      "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
       "id": "2026-10-27T18:59:09.353Z-f4iwm5x",
@@ -2190,15 +2201,15 @@
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {
-      "id": "2026-09-30T14:43:02.341Z-8xg07o1",
-      "title": "Modificación PDP S40",
-      "message": "Se realizo modificación en el PDP S40 para la linea 6",
+      "id": "2026-11-03T12:17:51.828Z-7oiqr83",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "g.tec.mds",
-      "read": true,
-      "createdAt": "2026-09-30T14:43:02.341Z"
+      "recipient": "enf.mds",
+      "read": false,
+      "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
       "id": "2026-10-27T18:59:09.353Z-kc8ubfo",
@@ -2300,15 +2311,15 @@
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {
-      "id": "2026-09-30T14:43:02.341Z-x87lefy",
-      "title": "Modificación PDP S40",
-      "message": "Se realizo modificación en el PDP S40 para la linea 6",
+      "id": "2026-11-03T12:17:51.828Z-uxywq87",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "enf.mds",
+      "recipient": "etq.mds",
       "read": false,
-      "createdAt": "2026-09-30T14:43:02.341Z"
+      "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
       "id": "2026-10-27T18:59:09.353Z-mqxjbr8",
@@ -2410,15 +2421,15 @@
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {
-      "id": "2026-09-30T14:43:02.341Z-1gr5vrv",
-      "title": "Modificación PDP S40",
-      "message": "Se realizo modificación en el PDP S40 para la linea 6",
+      "id": "2026-11-03T12:17:51.828Z-y4n75vm",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "etq.mds",
+      "recipient": "logg.mds",
       "read": false,
-      "createdAt": "2026-09-30T14:43:02.341Z"
+      "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
       "id": "2026-10-27T18:59:09.353Z-8huhh3t",
@@ -2520,15 +2531,15 @@
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {
-      "id": "2026-09-30T14:43:02.341Z-46a0287",
-      "title": "Modificación PDP S40",
-      "message": "Se realizo modificación en el PDP S40 para la linea 6",
+      "id": "2026-11-03T12:17:51.828Z-7zforqp",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "logg.mds",
+      "recipient": "mtto.mds",
       "read": false,
-      "createdAt": "2026-09-30T14:43:02.341Z"
+      "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
       "id": "2026-10-27T18:59:09.353Z-faomjeq",
@@ -2630,15 +2641,15 @@
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {
-      "id": "2026-09-30T14:43:02.341Z-guo2nra",
-      "title": "Modificación PDP S40",
-      "message": "Se realizo modificación en el PDP S40 para la linea 6",
+      "id": "2026-11-03T12:17:51.828Z-ubxy5b0",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto.mds",
-      "read": true,
-      "createdAt": "2026-09-30T14:43:02.341Z"
+      "recipient": "MDS",
+      "read": false,
+      "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
       "id": "2026-10-27T18:59:09.353Z-shn4xj9",
@@ -2740,15 +2751,15 @@
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {
-      "id": "2026-09-30T14:43:02.341Z-zbic1mg",
-      "title": "Modificación PDP S40",
-      "message": "Se realizo modificación en el PDP S40 para la linea 6",
+      "id": "2026-11-03T12:17:51.828Z-fkn60cw",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "MDS",
+      "recipient": "mtto1.mds",
       "read": false,
-      "createdAt": "2026-09-30T14:43:02.341Z"
+      "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
       "id": "2026-10-27T18:59:09.353Z-8cdcdse",
@@ -2850,15 +2861,15 @@
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {
-      "id": "2026-09-30T14:43:02.341Z-gurwdts",
-      "title": "Modificación PDP S40",
-      "message": "Se realizo modificación en el PDP S40 para la linea 6",
+      "id": "2026-11-03T12:17:51.828Z-6yzmzho",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto1.mds",
+      "recipient": "stf",
       "read": false,
-      "createdAt": "2026-09-30T14:43:02.341Z"
+      "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
       "id": "2026-10-27T18:59:09.353Z-mzysq5m",
@@ -2960,6 +2971,17 @@
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {
+      "id": "2026-11-03T12:17:51.828Z-fngiv0x",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodt3.mds",
+      "read": false,
+      "createdAt": "2026-11-03T12:17:51.828Z"
+    },
+    {
       "id": "2026-10-27T18:59:09.353Z-yi1bt0t",
       "title": "Avisó",
       "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
@@ -3046,6 +3068,17 @@
       "recipient": "prodt3.mds",
       "read": false,
       "createdAt": "2026-10-16T14:54:14.951Z"
+    },
+    {
+      "id": "2026-11-03T12:17:51.828Z-8ig7to4",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodt4.mds",
+      "read": false,
+      "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
       "id": "2026-10-27T18:59:09.353Z-oc4118k",
@@ -3147,6 +3180,17 @@
       "createdAt": "2026-10-16T14:54:14.951Z"
     },
     {
+      "id": "2026-11-03T12:17:51.828Z-myrqi2b",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alc.mds",
+      "read": false,
+      "createdAt": "2026-11-03T12:17:51.828Z"
+    },
+    {
       "id": "2026-10-27T18:59:09.353Z-dzny2fz",
       "title": "Avisó",
       "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
@@ -3202,6 +3246,17 @@
       "createdAt": "2026-10-20T17:14:08.396Z"
     },
     {
+      "id": "2026-11-03T12:17:51.828Z-9g40bmo",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alc1.mds",
+      "read": false,
+      "createdAt": "2026-11-03T12:17:51.828Z"
+    },
+    {
       "id": "2026-10-27T18:59:09.353Z-zks16uc",
       "title": "Avisó",
       "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
@@ -3255,6 +3310,17 @@
       "recipient": "alc1.mds",
       "read": false,
       "createdAt": "2026-10-20T17:14:08.396Z"
+    },
+    {
+      "id": "2026-11-03T12:17:51.828Z-pgzk950",
+      "title": "Aviso",
+      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "proc3.mds",
+      "read": false,
+      "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
       "id": "2026-10-20T17:14:08.396Z-qm55jui",
