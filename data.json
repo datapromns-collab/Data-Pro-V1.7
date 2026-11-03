@@ -17903,6 +17903,41 @@
             "INSU_0042": "213.70",
             "INSU_0044": "200"
           }
+        },
+        "2026-11": {
+          "tapas": {
+            "EMP_0095-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0095-Importada": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaEW": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaTipo2": {
+              "totalCajas": "",
+              "total": ""
+            }
+          },
+          "separadores": {},
+          "preformas": {},
+          "plasticos": {},
+          "adhesivoCantidad": "",
+          "etiquetasCantidad": {},
+          "azucarCantidad": {},
+          "concentradosCantidad": {},
+          "concentradosJustyCantidad": {},
+          "aditivosCantidad": {},
+          "solidosCantidad": {},
+          "quimicosInsumosCantidad": {}
         }
       },
       "mermasDesperdicios": {
@@ -27063,7 +27098,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-03T19:53:53.144Z"
+    "updatedAt": "2026-11-03T20:31:06.767Z"
   },
   "ordenesSap": [
     {
@@ -237556,7 +237591,7 @@
         "finParada": "14:10",
         "totalMin": "50",
         "zona": "Llenado",
-        "falla": "INTERRUPCION DE E/E EXTERNA",
+        "falla": "",
         "orden": "10138",
         "observaciones": "",
         "usuario": "Luis Blandin",
@@ -238419,7 +238454,7 @@
         "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "FRANKLIN ALVADARO",
@@ -238435,7 +238470,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793683872505,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-02",
@@ -238457,7 +238492,7 @@
         "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "JOSE CORDERO",
@@ -238473,10 +238508,10 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793684123969,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "FRANKLIN ALVADARO ",
@@ -238492,10 +238527,10 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793684237425,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "",
@@ -238511,10 +238546,10 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793684396017,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "SAUL ALBANO",
@@ -238530,10 +238565,10 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793684517096,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "JOSE CORDERO",
@@ -238549,7 +238584,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793685416602,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238568,7 +238603,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793685809370,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238587,10 +238622,10 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793685976866,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "",
@@ -238606,7 +238641,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793686054610,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238647,7 +238682,7 @@
         "bloqueado": false
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "",
@@ -238663,10 +238698,10 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793686378610,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "",
@@ -238682,10 +238717,10 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793688067298,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "DIURNO",
         "operador": "DANIEL PARRA",
@@ -238701,10 +238736,10 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793688160066,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "",
@@ -238720,10 +238755,10 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793688256650,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "DANIEL PARRA",
@@ -238739,10 +238774,10 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793688555242,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "",
@@ -238758,10 +238793,10 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793688649419,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "DANIEL PARRA",
@@ -238777,10 +238812,10 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793688740401,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "",
@@ -238796,10 +238831,10 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793688899498,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "LEYBEGLER SILVA ",
@@ -238815,10 +238850,10 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793689063506,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "",
@@ -238834,7 +238869,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793689180579,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238853,7 +238888,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793689274123,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-01",
@@ -238875,7 +238910,7 @@
         "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "",
@@ -238891,7 +238926,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793691266611,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238910,10 +238945,10 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793691396451,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "",
@@ -238929,10 +238964,10 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793691578819,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "",
@@ -238948,10 +238983,10 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793691722715,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "",
@@ -238967,10 +239002,10 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793691816779,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "KENNY MUÑOZ ",
@@ -238986,10 +239021,10 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793691983242,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "",
@@ -239005,10 +239040,10 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793692115804,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "",
@@ -239024,10 +239059,10 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793692248139,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "KENNY MUÑOZ",
@@ -239043,10 +239078,10 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793695037196,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
-        "fecha": "2026-11-03",
+        "fecha": "2026-11-02",
         "semana": 45,
         "turno": "NOCTURNO",
         "operador": "",
@@ -239062,7 +239097,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793695624900,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-02",
@@ -240278,6 +240313,82 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1793735846580,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-03",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "ANGEL SANZ",
+        "linea": "Línea 7",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "08:55",
+        "finParada": "09:02",
+        "totalMin": "7",
+        "zona": "Llenado",
+        "falla": "LIMITE DE TORQUE SALIDA DE SOPLADORA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793738742710,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-03",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "ANGEL SANZ",
+        "linea": "Línea 7",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "10:40",
+        "finParada": "10:52",
+        "totalMin": "12",
+        "zona": "Llenado",
+        "falla": "CAMBIO DE MANGUERA DE MOLDE #09",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793738851613,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-03",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 7",
+        "equipo": "",
+        "tipoParada": "SALA DE MÁQUINAS",
+        "inicioParada": "11:30",
+        "finParada": "11:38",
+        "totalMin": "8",
+        "zona": "Llenado",
+        "falla": "FALLA DE AIRE DE ALTA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793739295102,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-03",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 7",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "13:03",
+        "finParada": "13:29",
+        "totalMin": "26",
+        "zona": "Llenado",
+        "falla": "VARIACION DE VOLTAJE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793739365461,
         "bloqueado": true
       }
     ],
@@ -261704,141 +261815,6 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1793735848910.0735,
-        "fechaOrden": "2026-11-03",
-        "orden": "10221",
-        "fechaEmision": "2026-11-03",
-        "semana": 45,
-        "turno": "NOCTURNO",
-        "solicitante": "",
-        "linea": "Línea 3",
-        "maquina": "LLENADORA",
-        "aviso": "",
-        "fechaParada": "2026-11-03",
-        "inicioMtto": "",
-        "finMtto": "",
-        "inicioParada": "23:55",
-        "finParada": "00:06",
-        "tMtto": "11",
-        "tipoParada": "AVERÍA",
-        "mtto": "",
-        "falla": "CAMBIO DE RESORTE DE SNIP VALVULA 87",
-        "mttoEsp": "",
-        "descripcionFalla": "",
-        "descripcionAccion": "",
-        "observaciones": "",
-        "bloqueado": false,
-        "usuario": "Luis Sanchez"
-      },
-      {
-        "id": 1793735848910.59,
-        "fechaOrden": "2026-11-03",
-        "orden": "10220",
-        "fechaEmision": "2026-11-03",
-        "semana": 45,
-        "turno": "NOCTURNO",
-        "solicitante": "",
-        "linea": "Línea 3",
-        "maquina": "LLENADORA",
-        "aviso": "",
-        "fechaParada": "2026-11-03",
-        "inicioMtto": "",
-        "finMtto": "",
-        "inicioParada": "01:23",
-        "finParada": "01:26",
-        "tMtto": "3",
-        "tipoParada": "AVERÍA",
-        "mtto": "",
-        "falla": "VALVULA MAL LLENADO 34-78",
-        "mttoEsp": "",
-        "descripcionFalla": "",
-        "descripcionAccion": "",
-        "observaciones": "",
-        "bloqueado": false,
-        "usuario": "Luis Sanchez"
-      },
-      {
-        "id": 1793735848910.3232,
-        "fechaOrden": "2026-11-03",
-        "orden": "10195",
-        "fechaEmision": "2026-11-03",
-        "semana": 45,
-        "turno": "NOCTURNO",
-        "solicitante": "",
-        "linea": "Línea 4",
-        "maquina": "TRANSPORTADOR DE CAJAS",
-        "aviso": "",
-        "fechaParada": "2026-11-03",
-        "inicioMtto": "",
-        "finMtto": "",
-        "inicioParada": "02:40",
-        "finParada": "02:49",
-        "tMtto": "9",
-        "tipoParada": "AVERÍA",
-        "mtto": "",
-        "falla": "DAÑO BANDA POR ROTURA EN MOTOR 22 ",
-        "mttoEsp": "",
-        "descripcionFalla": "",
-        "descripcionAccion": "",
-        "observaciones": "",
-        "bloqueado": false,
-        "usuario": "Luis Sanchez"
-      },
-      {
-        "id": 1793735848910.952,
-        "fechaOrden": "2026-11-03",
-        "orden": "10269",
-        "fechaEmision": "2026-11-03",
-        "semana": 45,
-        "turno": "NOCTURNO",
-        "solicitante": "",
-        "linea": "Línea 6",
-        "maquina": "ENFARDADORA",
-        "aviso": "",
-        "fechaParada": "2026-11-03",
-        "inicioMtto": "",
-        "finMtto": "",
-        "inicioParada": "02:26",
-        "finParada": "02:43",
-        "tMtto": "17",
-        "tipoParada": "AVERÍA",
-        "mtto": "",
-        "falla": "REPARACION DE GUIA DE COMPACTADORA DE PAQUETES ",
-        "mttoEsp": "",
-        "descripcionFalla": "",
-        "descripcionAccion": "",
-        "observaciones": "",
-        "bloqueado": false,
-        "usuario": "Luis Sanchez"
-      },
-      {
-        "id": 1793735848910.323,
-        "fechaOrden": "2026-11-03",
-        "orden": "10139",
-        "fechaEmision": "2026-11-03",
-        "semana": 45,
-        "turno": "NOCTURNO",
-        "solicitante": "",
-        "linea": "Línea 7",
-        "maquina": "SOPLADORA",
-        "aviso": "",
-        "fechaParada": "2026-11-03",
-        "inicioMtto": "",
-        "finMtto": "",
-        "inicioParada": "03:58",
-        "finParada": "04:21",
-        "tMtto": "23",
-        "tipoParada": "AVERÍA",
-        "mtto": "",
-        "falla": "CAMBIO DE SELLO DE VARILLA MOLDE 14 ",
-        "mttoEsp": "",
-        "descripcionFalla": "",
-        "descripcionAccion": "",
-        "observaciones": "",
-        "bloqueado": false,
-        "usuario": "Luis Sanchez"
-      },
-      {
         "id": 1793713043851.7324,
         "fechaOrden": "2026-11-02",
         "orden": "10139",
@@ -262055,7 +262031,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1793735848910.6316,
+        "id": 1793737580263.1843,
         "fechaOrden": "2026-11-02",
         "orden": "10138",
         "fechaEmision": "2026-11-02",
@@ -262080,6 +262056,87 @@
         "observaciones": "",
         "bloqueado": false,
         "usuario": "Luis Blandin"
+      },
+      {
+        "id": 1793738895277.563,
+        "fechaOrden": "2026-11-03",
+        "orden": "10195",
+        "fechaEmision": "2026-11-03",
+        "semana": 45,
+        "turno": "NOCTURNO",
+        "solicitante": "",
+        "linea": "Línea 4",
+        "maquina": "TRANSPORTADOR DE CAJAS",
+        "aviso": "",
+        "fechaParada": "2026-11-03",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "02:40",
+        "finParada": "02:49",
+        "tMtto": "9",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "DAÑO BANDA POR ROTURA EN MOTOR 22 ",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": false,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "id": 1793735848910.952,
+        "fechaOrden": "2026-11-03",
+        "orden": "10269",
+        "fechaEmision": "2026-11-03",
+        "semana": 45,
+        "turno": "NOCTURNO",
+        "solicitante": "",
+        "linea": "Línea 6",
+        "maquina": "ENFARDADORA",
+        "aviso": "",
+        "fechaParada": "2026-11-03",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "02:26",
+        "finParada": "02:43",
+        "tMtto": "17",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "REPARACION DE GUIA DE COMPACTADORA DE PAQUETES ",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": false,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "id": 1793735848910.323,
+        "fechaOrden": "2026-11-03",
+        "orden": "10139",
+        "fechaEmision": "2026-11-03",
+        "semana": 45,
+        "turno": "NOCTURNO",
+        "solicitante": "",
+        "linea": "Línea 7",
+        "maquina": "SOPLADORA",
+        "aviso": "",
+        "fechaParada": "2026-11-03",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "03:58",
+        "finParada": "04:21",
+        "tMtto": "23",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "CAMBIO DE SELLO DE VARILLA MOLDE 14 ",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": false,
+        "usuario": "Luis Sanchez"
       }
     ],
     "seguimiento-ordenes": {
@@ -294168,101 +294225,14 @@
     "planta-informes-operacionales": {
       "*": [
         "1793729620737",
-        "1793729780607",
-        "1784566101946",
-        "1784568143186",
-        "1785014920340",
-        "1785358753845",
-        "1785358876155",
-        "1785414190166",
-        "1785414573668",
-        "1785415183096",
-        "1785415259439",
-        "1785415351871",
-        "1785415572542",
-        "1785415633951",
-        "1785415689630",
-        "1785415811823",
-        "1785415847510",
-        "1785415957655",
-        "1785416031310",
-        "1785416298630",
-        "1785416369910",
-        "1785416608317",
-        "1785416736028",
-        "1785416910693",
-        "1785417138565",
-        "1785417183419",
-        "1785417331300",
-        "1785417417646",
-        "1785417479222",
-        "1785418190316",
-        "1785508515291",
-        "1785509131922",
-        "1786024306648",
-        "1786024932528",
-        "1786037074553",
-        "1786037361081",
-        "1786037547921",
-        "1786037695201",
-        "1786037731718",
-        "1786037990748",
-        "1786037996096",
-        "1786038155639",
-        "1786038321776",
-        "1786027053232",
-        "1786040712235",
-        "1786119936092",
-        "1786128206608",
-        "1786456646957",
-        "1786456705797",
-        "1786996948604",
-        "1787086190625",
-        "1787086273033",
-        "1787938439979",
-        "1787237062452",
-        "1787247465383",
-        "1787959521278",
-        "1788293882619",
-        "1788991023411",
-        "1788978219703",
-        "1792082511178",
-        "1792082611811",
-        "1793564216119",
-        "1793564282590",
-        "1793564685095",
-        "1793565009430",
-        "1793565144299",
-        "1793565547187",
-        "1793565632642",
-        "1793565757682",
-        "1793565898801",
-        "1793565996897",
-        "1793566200416",
-        "1793566356632",
-        "1793566432912",
-        "1793566473088",
-        "1793566527335",
-        "1793566752855",
-        "1793566866342",
-        "1793566927645",
-        "1793567008054",
-        "1793567075985",
-        "1793567238598",
-        "1793567302078",
-        "1793567354397",
-        "1793567415454",
-        "1793683641931",
-        "1793687771490",
-        "1793692200516",
-        "1793716880627",
-        "1793720451292"
+        "1793729780607"
       ]
     },
     "planta-ordenes-trabajo": {
       "*": [
-        "1793721410131.5422",
-        "1793652199628"
+        "1793735848910.59",
+        "1793735848910.3232",
+        "1793735848910.0735"
       ]
     },
     "seguimiento-enfardadora": {},

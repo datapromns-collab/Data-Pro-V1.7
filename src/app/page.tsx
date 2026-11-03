@@ -754,11 +754,28 @@ export default function PlannerPage() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editForm, setEditForm] = useState<any>({});
   const [errorValidacion, setErrorValidacion] = useState<string>('');
-  const handleReactivarInforme = (row: any) => {
-    setInformesOperacionales(prev => prev.map(r => String(r.id) === String(row.id) ? { ...r, bloqueado: false } : r));
-    setEditingId(row.id);
-    setEditForm(row);
+  const handleReactivarInforme = async (row: any) => {
     setErrorValidacion('');
+    try {
+      const response = await fetch('/api/planta/informes-operacionales', {
+        method: 'PATCH',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ id: row.id, action: 'unlock' }),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        setErrorValidacion(result.error || `No se pudo habilitar la edición (HTTP ${response.status}).`);
+        return;
+      }
+      setInformesOperacionalesLocal((prev) => prev.map((item: any) =>
+        String(item.id) === String(row.id) ? result.item : item
+      ));
+      setEditingId(row.id);
+      setEditForm(result.item);
+    } catch (error) {
+      console.error('[PLANTA] Failed to unlock operational report', error);
+      setErrorValidacion('No se pudo habilitar la edición por un error de conexión.');
+    }
   };
   const [activeModule, setActiveModule] = useState('planning');
   const [activeTab, setActiveTab] = useState('gantt');
@@ -4559,29 +4576,24 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                            let diff = fin - inicio;
                                                            if (diff < 0) diff += 1440;
                                                             const updated = { ...formData, totalMin: String(diff), bloqueado: true };
-                                                           const isSharedEdit = row.bloqueado === false && user?.id !== 'alex.mds' && user?.id !== 'maria.mds';
-                                                           if (isSharedEdit) {
-                                                             try {
-                                                               const response = await fetch('/api/planta/informes-operacionales', {
-                                                                 method: 'PATCH',
-                                                                 headers: { 'content-type': 'application/json' },
-                                                                 body: JSON.stringify({ id: row.id, updates: updated }),
-                                                               });
-                                                               const result = await response.json().catch(() => ({}));
-                                                               if (!response.ok) {
-                                                                 setErrorValidacion(result.error || `No se pudieron guardar los cambios (HTTP ${response.status}).`);
-                                                                 return;
-                                                               }
-                                                               setInformesOperacionalesLocal((prev) => prev.map((item: any) =>
-                                                                 String(item.id) === String(row.id) ? result.item : item
-                                                               ));
-                                                             } catch (error) {
-                                                               console.error('[PLANTA] Failed to save unlocked operational report', error);
-                                                               setErrorValidacion('No se pudieron guardar los cambios por un error de conexión.');
+                                                           try {
+                                                             const response = await fetch('/api/planta/informes-operacionales', {
+                                                               method: 'PATCH',
+                                                               headers: { 'content-type': 'application/json' },
+                                                               body: JSON.stringify({ id: row.id, updates: updated }),
+                                                             });
+                                                             const result = await response.json().catch(() => ({}));
+                                                             if (!response.ok) {
+                                                               setErrorValidacion(result.error || `No se pudieron guardar los cambios (HTTP ${response.status}).`);
                                                                return;
                                                              }
-                                                           } else {
-                                                             setInformesOperacionales(prev => prev.map(r => String(r.id) === String(row.id) ? updated : r));
+                                                             setInformesOperacionalesLocal((prev) => prev.map((item: any) =>
+                                                               String(item.id) === String(row.id) ? result.item : item
+                                                             ));
+                                                           } catch (error) {
+                                                             console.error('[PLANTA] Failed to save operational report', error);
+                                                             setErrorValidacion('No se pudieron guardar los cambios por un error de conexión.');
+                                                             return;
                                                            }
                                                            const previousOrder = ordenesTrabajo.find((o: any) =>
                                                              String(o.orden ?? '').trim() === String(row.orden ?? '').trim() &&

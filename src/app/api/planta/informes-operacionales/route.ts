@@ -1,7 +1,8 @@
 import { writeDb } from '@/lib/db-writer';
-import { authorizeCollectionRead } from '@/lib/server-auth';
+import { authorizeCollectionRead, getAuthenticatedUser } from '@/lib/server-auth';
 
 const COLLECTION = 'planta-informes-operacionales';
+const EDIT_MANAGERS = new Set(['alex.mds', 'maria.mds']);
 const EDITABLE_FIELDS = [
   'fecha',
   'semana',
@@ -34,7 +35,38 @@ export async function PATCH(request: Request) {
     const body = await request.json();
     const id = body?.id;
     const updates = body?.updates;
-    if ((typeof id !== 'string' && typeof id !== 'number') || !updates || typeof updates !== 'object' || Array.isArray(updates)) {
+    if (typeof id !== 'string' && typeof id !== 'number') {
+      return Response.json({ error: 'Invalid operational report update' }, { status: 400 });
+    }
+
+    const user = await getAuthenticatedUser(request);
+    if (!user) return Response.json({ error: 'Authentication required' }, { status: 401 });
+    const isEditManager = EDIT_MANAGERS.has(user.id);
+
+    if (body?.action === 'unlock') {
+      if (!isEditManager) {
+        return Response.json({ error: 'Solo maria.mds o alex.mds pueden habilitar la edición.' }, { status: 403 });
+      }
+
+      let result: { status: number; item?: Record<string, unknown> } = { status: 404 };
+      await writeDb((db) => {
+        const items = db.collections?.[COLLECTION];
+        if (!Array.isArray(items)) return db;
+        const index = items.findIndex((item: any) => String(item?.id) === String(id));
+        if (index < 0) return db;
+        const unlocked = { ...items[index], bloqueado: false };
+        db.collections[COLLECTION] = items.map((item: any, itemIndex: number) => itemIndex === index ? unlocked : item);
+        result = { status: 200, item: unlocked };
+        return db;
+      });
+
+      if (result.status !== 200) {
+        return Response.json({ error: 'No se encontró el registro.' }, { status: result.status });
+      }
+      return Response.json({ item: result.item });
+    }
+
+    if (!updates || typeof updates !== 'object' || Array.isArray(updates)) {
       return Response.json({ error: 'Invalid operational report update' }, { status: 400 });
     }
 
@@ -62,7 +94,7 @@ export async function PATCH(request: Request) {
 
       const index = items.findIndex((item: any) => String(item?.id) === String(id));
       if (index < 0) return db;
-      if (items[index]?.bloqueado !== false) {
+      if (items[index]?.bloqueado !== false && !isEditManager) {
         result = { status: 409, error: 'La edición de este registro ya fue cerrada. Actualiza la lista e inténtalo de nuevo.' };
         return db;
       }

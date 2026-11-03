@@ -109,6 +109,7 @@ function mergeCollection(existing: any, incoming: any, ns?: string): any[] {
       const merged = { ...(existingItem || {}) };
       for (const key of Object.keys(item)) {
         if (key === '_deletedIds') continue;
+        if (ns === 'planta-informes-operacionales' && existingItem && key === 'bloqueado') continue;
         const value = (item as any)[key];
         if (value === undefined || value === null) {
           if (value === null && key === 'enviarALinea' && (ns === 'sala-jarabe-glup' || ns === 'sala-jarabe-justy')) {
