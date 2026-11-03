@@ -26847,7 +26847,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-03T11:44:46.537Z"
+    "updatedAt": "2026-11-03T11:57:38.132Z"
   },
   "ordenesSap": [
     {
@@ -40437,7 +40437,7 @@
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 19360
         }
       ]
     },
@@ -40452,32 +40452,12 @@
           "fechaInicio": "2026-11-02",
           "ticket1": "16435",
           "cajas1": 7200,
-          "ticket2": "",
+          "ticket2": "16436",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
-        }
-      ]
-    },
-    {
-      "id": "5-1793640676516",
-      "linea": 5,
-      "sabor": "JUSTY DURAZNO",
-      "ordenNumero": "64665",
-      "semana": 45,
-      "dias": [
-        {
-          "fechaInicio": "2026-11-02",
-          "ticket1": "",
-          "cajas1": 0,
-          "ticket2": "",
-          "cajas2": 0,
-          "ticket3": "",
-          "cajas3": 0,
-          "ticket4": "",
-          "cajas4": 0
+          "cajas4": 18000
         }
       ]
     },
@@ -40492,12 +40472,12 @@
           "fechaInicio": "2026-11-02",
           "ticket1": "16519",
           "cajas1": 640,
-          "ticket2": "",
+          "ticket2": "16520",
           "cajas2": 1280,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 8320
         }
       ]
     },
@@ -40512,12 +40492,12 @@
           "fechaInicio": "2026-11-02",
           "ticket1": "16479",
           "cajas1": 1950,
-          "ticket2": "",
+          "ticket2": "16480",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 11076
         }
       ]
     },
@@ -40538,6 +40518,26 @@
           "cajas3": 2160,
           "ticket4": "",
           "cajas4": 17440
+        }
+      ]
+    },
+    {
+      "id": "5-1793706594876",
+      "linea": 5,
+      "sabor": "JUSTY DURAZNO",
+      "ordenNumero": "64655",
+      "semana": 45,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-02",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "15238",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 6350
         }
       ]
     }
@@ -237332,20 +237332,20 @@
         "fecha": "2026-11-02",
         "semana": 45,
         "turno": "DIURNO",
-        "operador": "",
+        "operador": "JORFRANK RIVERO",
         "linea": "Línea 7",
-        "equipo": "",
-        "tipoParada": "FALLA DE E/E",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "AVERÍA",
         "inicioParada": "13:20",
         "finParada": "14:10",
         "totalMin": "50",
         "zona": "Llenado",
-        "falla": "INTERRUPCION DE E/E EXTERNA",
-        "orden": "",
+        "falla": "FALLA EN DIENTES DE SEPARACION",
+        "orden": "10138",
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1793651678721,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-02",
@@ -238219,7 +238219,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793683641931,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238238,7 +238238,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793683872505,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238257,7 +238257,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793684021576,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238276,7 +238276,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793684123969,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238295,7 +238295,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793684237425,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238314,7 +238314,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793684396017,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238333,7 +238333,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793684517096,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238352,7 +238352,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793685416602,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238371,7 +238371,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793685809370,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238390,7 +238390,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793685976866,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238409,7 +238409,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793686054610,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238428,7 +238428,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793686172938,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238447,7 +238447,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793686247105,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238466,7 +238466,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793686378610,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238485,7 +238485,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793687771490,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238504,7 +238504,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793688067298,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238523,7 +238523,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793688160066,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238542,7 +238542,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793688256650,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238561,7 +238561,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793688555242,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238580,7 +238580,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793688649419,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238599,7 +238599,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793688740401,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238618,7 +238618,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793688899498,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238637,7 +238637,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793689063506,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238656,7 +238656,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793689180579,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238675,7 +238675,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793689274123,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-01",
@@ -238713,7 +238713,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793691266611,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238732,7 +238732,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793691396451,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238751,7 +238751,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793691578819,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238770,7 +238770,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793691722715,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238789,7 +238789,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793691816779,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238808,7 +238808,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793691983242,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238827,7 +238827,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793692115804,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238846,7 +238846,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793692200516,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238865,7 +238865,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793692248139,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238884,7 +238884,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793695037196,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-03",
@@ -238903,7 +238903,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793695624900,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-02",
@@ -281213,7 +281213,58 @@
       "2026-11-02-Gamma Ro-432-0": "166,5",
       "2026-11-02-RO Cleaner-0": "213,7",
       "2026-11-02-Sanitizer-0": "200",
-      "2026-11-02-LARK CLEAN 21C-0": "0"
+      "2026-11-02-LARK CLEAN 21C-0": "0",
+      "2026-11-02-LP20-2": "108,6",
+      "2026-11-02-LP20-4": "108,6",
+      "2026-11-02-Cloro-2": "601",
+      "2026-11-02-Cloro-4": "601",
+      "2026-11-02-AntiEscalante-2": "1157,1",
+      "2026-11-02-AntiEscalante-4": "1157,1",
+      "2026-11-02-Sal-2": "3420",
+      "2026-11-02-Sal-4": "3420",
+      "2026-11-02-Alcalino-2": "1620,2",
+      "2026-11-02-Alcalino-4": "1620,2",
+      "2026-11-02-Peracetico-2": "419,5",
+      "2026-11-02-Peracetico-4": "419,5",
+      "2026-11-02-Lark Foam Quat-2": "56,5",
+      "2026-11-02-Lark Foam Quat-4": "56,5",
+      "2026-11-02-Lark Foam IN-2": "107,4",
+      "2026-11-02-Lark Foam IN-4": "107,4",
+      "2026-11-02-Lark Desengrasante-2": "0",
+      "2026-11-02-Lark Desengrasante-4": "0",
+      "2026-11-02-Soda Caustica-2": "496,6",
+      "2026-11-02-Soda Caustica-4": "496,6",
+      "2026-11-02-GermiQuat-2": "162,5",
+      "2026-11-02-GermiQuat-4": "162,5",
+      "2026-11-02-Lark Inox-2": "24",
+      "2026-11-02-Lark Inox-4": "24",
+      "2026-11-02-TM Smart-2": "236,18",
+      "2026-11-02-TM Smart-4": "236,18",
+      "2026-11-02-Gamma Ro-432-2": "166,5",
+      "2026-11-02-Gamma Ro-432-4": "166,5",
+      "2026-11-02-RO Cleaner-2": "213,7",
+      "2026-11-02-RO Cleaner-4": "213,7",
+      "2026-11-02-Sanitizer-2": "200",
+      "2026-11-02-Sanitizer-4": "200",
+      "2026-11-02-LARK CLEAN 21C-2": "0",
+      "2026-11-02-LARK CLEAN 21C-4": "0",
+      "2026-11-02-LP20-6": "107,4",
+      "2026-11-02-Cloro-6": "573",
+      "2026-11-02-AntiEscalante-6": "1144",
+      "2026-11-02-Sal-6": "3140",
+      "2026-11-02-Alcalino-6": "1570",
+      "2026-11-02-Peracetico-6": "419,5",
+      "2026-11-02-Lark Foam Quat-6": "56,5",
+      "2026-11-02-Lark Foam IN-6": "107,4",
+      "2026-11-02-Lark Desengrasante-6": "0",
+      "2026-11-02-Soda Caustica-6": "496,6",
+      "2026-11-02-GermiQuat-6": "162,5",
+      "2026-11-02-Lark Inox-6": "24",
+      "2026-11-02-TM Smart-6": "228",
+      "2026-11-02-Gamma Ro-432-6": "166,5",
+      "2026-11-02-RO Cleaner-6": "213,7",
+      "2026-11-02-Sanitizer-6": "200",
+      "2026-11-02-LARK CLEAN 21C-6": "0"
     },
     "sala-jarabe-glup": [
       {
@@ -292361,11 +292412,7 @@
     },
     "planta-ordenes-trabajo": {
       "*": [
-        "1793566760572.201",
-        "1793652199628",
-        "1787938449943.3247",
-        "1793628428049.4448",
-        "1793628428049.7358"
+        "1793566760572.201"
       ]
     },
     "seguimiento-enfardadora": {},
@@ -292420,7 +292467,8 @@
     "6-1791374112487",
     "1-1791811962984",
     "7-1791899489586",
-    "6-1793640781925"
+    "6-1793640781925",
+    "5-1793640676516"
   ],
   "logisticsStockFile": {
     "filename": "stock-producto-terminado.xlsx",
