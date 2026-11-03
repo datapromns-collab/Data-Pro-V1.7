@@ -2438,6 +2438,16 @@ export default function PlannerPage() {
   ]);
 
   const planificadasPorDia = useMemo(() => getPlanificadasPorDia(tareasDelMesPlanta), [tareasDelMesPlanta]);
+  const reporteTasks = useMemo(() => {
+    const seen = new Set<string>();
+    return allTasks.filter((task) => {
+      const key = `${task.startTime.getTime()}|${task.endTime.getTime()}|${task.name}|${task.lineId}|${task.quantity}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }, [allTasks]);
+  const reportePlanificadasPorDia = useMemo(() => getPlanificadasPorDia(reporteTasks), [reporteTasks]);
 
   const planificadasTablaDiario = useMemo(() => {
     const tabla: Record<string, Record<number, number>> = {};
@@ -3033,6 +3043,12 @@ export default function PlannerPage() {
       refreshFromServer();
     }
    }, [activeModule, plannerLoaded, refreshFromServer]);
+
+  useEffect(() => {
+    if (activeModule === 'planta' && activeTab === 'reporte' && plannerLoaded) {
+      void refreshFromServer();
+    }
+  }, [activeModule, activeTab, plannerLoaded, refreshFromServer]);
 
   useEffect(() => {
     if (authLoaded && user && permissionsLoaded) {
@@ -5092,7 +5108,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                            lineSpeeds={lineSpeeds}
                                            turno="DIARIO"
                                            fecha={reporteDiarioFecha}
-                                            planificadasPorDia={planificadasPorDia}
+                                            planificadasPorDia={reportePlanificadasPorDia}
                                             ordenes={allOrdenesTrabajo}
                                             velocidadesDt={velocidadesDt}
                                            hrsPagadasDia={(() => { const a = hrsPagadasDt.td; const b = hrsPagadasDt.tn; return a.map((v, idx) => String((Number(v) || 0) + (Number(b[idx]) || 0))); })()}
@@ -5101,7 +5117,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                            ordenesSap={allOrdenesSap}
                                          />
                                         {(() => {
-                                               const row = calcularTotalesDiario(allInformesOperacionales, tasks, realProduction, lineSpeeds, reporteDiarioFecha, planificadasPorDia, allOrdenesTrabajo, undefined, allOrdenesSap, 'DIARIO');
+                                               const row = calcularTotalesDiario(allInformesOperacionales, tasks, realProduction, lineSpeeds, reporteDiarioFecha, reportePlanificadasPorDia, allOrdenesTrabajo, undefined, allOrdenesSap, 'DIARIO');
                                           return (
                                             <div className="border border-slate-200 rounded-[2.5rem] bg-slate-50/30 overflow-visible">
                                               <div className="p-4">
@@ -5142,7 +5158,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                    realProduction={realProduction}
                                                    lineSpeeds={lineSpeeds}
                                                    fecha={reporteDiarioFecha}
-                                                   planificadasPorDia={planificadasPorDia}
+                                                   planificadasPorDia={reportePlanificadasPorDia}
                                                    ordenes={allOrdenesTrabajo}
                                                   ordenesSap={allOrdenesSap}/>
                                         </div>
@@ -5203,7 +5219,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                  lineSpeeds={lineSpeeds}
                                                  turno="DIURNO"
                                                  fecha={reporteDiarioFecha}
-                                                  planificadasPorDia={planificadasPorDia}
+                                                  planificadasPorDia={reportePlanificadasPorDia}
                                                   ordenes={allOrdenesTrabajo}
                                                   velocidadesDt={velocidadesDt}
                                                   hrsPagadasDia={hrsPagadasDt.td}
@@ -5218,7 +5234,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                    realProduction={realProduction}
                                                    lineSpeeds={lineSpeeds}
                                                    fecha={reporteDiarioFecha}
-                                                   planificadasPorDia={planificadasPorDia}
+                                                   planificadasPorDia={reportePlanificadasPorDia}
                                                    ordenes={allOrdenesTrabajo}
                                                   ordenesSap={allOrdenesSap}/>
                                            </div>
@@ -5263,7 +5279,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                 lineSpeeds={lineSpeeds}
                                                 turno="NOCTURNO"
                                                 fecha={reporteDiarioFecha}
-                                                 planificadasPorDia={planificadasPorDia}
+                                                 planificadasPorDia={reportePlanificadasPorDia}
                                                  ordenes={allOrdenesTrabajo}
                                                  velocidadesDt={velocidadesDt}
                                                  hrsPagadasDia={hrsPagadasDt.tn}
@@ -5278,7 +5294,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                    realProduction={realProduction}
                                                    lineSpeeds={lineSpeeds}
                                                    fecha={reporteDiarioFecha}
-                                                   planificadasPorDia={planificadasPorDia}
+                                                   planificadasPorDia={reportePlanificadasPorDia}
                                                    ordenes={allOrdenesTrabajo}
                                                   ordenesSap={allOrdenesSap}/>
                                            </div>

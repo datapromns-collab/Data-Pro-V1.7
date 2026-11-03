@@ -1,7 +1,7 @@
 "use client";
 
 import { ScheduledTask } from '@/lib/types';
-import { format } from 'date-fns';
+import { addDays, format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { 
@@ -34,10 +34,12 @@ interface CalculationReportProps {
 }
 
 export function CalculationReport({ tasks, calcStartDate, calcEndDate, availability, recipes, packagingRecipes }: CalculationReportProps) {
+  const calcEndExclusive = addDays(calcEndDate, 1);
+
   const getCalculatedValue = (code: string) => {
     let packagingTotal = 0;
     tasks.forEach(task => {
-      if (task.endTime > calcStartDate && task.startTime < calcEndDate) {
+      if (task.endTime > calcStartDate && task.startTime < calcEndExclusive) {
         const customPkg = packagingRecipes?.[task.name]?.[task.presentation || ''];
         if (customPkg && customPkg[code] !== undefined) {
           packagingTotal += (task.quantity || 0) * customPkg[code];
@@ -55,7 +57,7 @@ export function CalculationReport({ tasks, calcStartDate, calcEndDate, availabil
           if (code === 'EMP_0009' && pres === "1Lt" && !isFresh && !isColaKolita && !isJugo) { packagingTotal += qty * 12; return; }
           if (code === 'EMP_0135' && pres === "0.4Lts" && isFresh) { packagingTotal += qty * 15; return; }
           if (code === 'EMP_0126' && pres === "0.4Lts" && !isFresh && !isJugo) { packagingTotal += qty * 15; return; }
-          if (code === 'EMP_068' && pres === "1.5Lts" && isJugo) { packagingTotal += qty * 12; return; }
+          if (code === 'EMP_0068' && pres === "1.5Lts" && isJugo) { packagingTotal += qty * 12; return; }
 
           const recipe = CONSUMABLES_RECIPES[task.name];
           if (recipe && pres && recipe[pres] && recipe[pres][code]) {
@@ -68,7 +70,7 @@ export function CalculationReport({ tasks, calcStartDate, calcEndDate, availabil
 
     let materialTotal = 0;
     tasks.forEach(task => {
-      if (task.endTime > calcStartDate && task.startTime < calcEndDate) {
+      if (task.endTime > calcStartDate && task.startTime < calcEndExclusive) {
         const recipe = recipes[task.name];
         if (recipe && recipe[code]) {
           const productUbbFactor = UBB_FACTORS[task.name] || 0;
@@ -87,7 +89,7 @@ export function CalculationReport({ tasks, calcStartDate, calcEndDate, availabil
           t.name === mapping.product && 
           t.presentation === mapping.presentation &&
           t.endTime > calcStartDate && 
-          t.startTime < calcEndDate
+          t.startTime < calcEndExclusive
         )
         .reduce((acc, t) => acc + (t.quantity || 0), 0);
       return Number((totalBoxes * factor).toFixed(2));
@@ -98,7 +100,7 @@ export function CalculationReport({ tasks, calcStartDate, calcEndDate, availabil
       return Number(formats.reduce((acc, fmt) => {
         const factor = PLASTIC_FACTORS[fmt];
         const totalBoxes = tasks
-          .filter(t => t.presentation === fmt && t.endTime > calcStartDate && t.startTime < calcEndDate && t.quantity > 0)
+          .filter(t => t.presentation === fmt && t.endTime > calcStartDate && t.startTime < calcEndExclusive && t.quantity > 0)
           .reduce((sum, t) => sum + (t.quantity || 0), 0);
         return acc + (totalBoxes * factor);
       }, 0).toFixed(2));
@@ -109,7 +111,7 @@ export function CalculationReport({ tasks, calcStartDate, calcEndDate, availabil
       return Number(formats.reduce((acc, fmt) => {
         const factor = TERMO_0017_FACTORS[fmt];
         const totalBoxes = tasks
-          .filter(t => t.presentation === fmt && t.endTime > calcStartDate && t.startTime < calcEndDate && t.quantity > 0)
+          .filter(t => t.presentation === fmt && t.endTime > calcStartDate && t.startTime < calcEndExclusive && t.quantity > 0)
           .reduce((sum, t) => sum + (t.quantity || 0), 0);
         return acc + (totalBoxes * factor);
       }, 0).toFixed(2));
@@ -120,7 +122,7 @@ export function CalculationReport({ tasks, calcStartDate, calcEndDate, availabil
       return Number(formats.reduce((acc, fmt) => {
         const factor = TERMO_0080_FACTORS[fmt];
         const totalBoxes = tasks
-          .filter(t => t.presentation === fmt && t.endTime > calcStartDate && t.startTime < calcEndDate && t.quantity > 0)
+          .filter(t => t.presentation === fmt && t.endTime > calcStartDate && t.startTime < calcEndExclusive && t.quantity > 0)
           .reduce((sum, t) => sum + (t.quantity || 0), 0);
         return acc + (totalBoxes * factor);
       }, 0).toFixed(2));
@@ -131,7 +133,7 @@ export function CalculationReport({ tasks, calcStartDate, calcEndDate, availabil
       return Number(formats.reduce((acc, fmt) => {
         const factor = TERMO_0130_FACTORS[fmt];
         const totalBoxes = tasks
-          .filter(t => t.presentation === fmt && t.endTime > calcStartDate && t.startTime < calcEndDate && t.quantity > 0)
+          .filter(t => t.presentation === fmt && t.endTime > calcStartDate && t.startTime < calcEndExclusive && t.quantity > 0)
           .reduce((sum, t) => sum + (t.quantity || 0), 0);
         return acc + (totalBoxes * factor);
       }, 0).toFixed(2));
@@ -142,26 +144,26 @@ export function CalculationReport({ tasks, calcStartDate, calcEndDate, availabil
       return Number(formats.reduce((acc, fmt) => {
         const factor = ADHESIVE_FACTORS[fmt];
         const totalBoxes = tasks
-          .filter(t => t.presentation === fmt && t.endTime > calcStartDate && t.startTime < calcEndDate && t.quantity > 0)
+          .filter(t => t.presentation === fmt && t.endTime > calcStartDate && t.startTime < calcEndExclusive && t.quantity > 0)
           .reduce((sum, t) => sum + (t.quantity || 0), 0);
         return acc + (totalBoxes * factor);
       }, 0).toFixed(6));
     }
 
     if (code === 'EMP_0105_N') {
-       return Math.round(tasks.filter(t => t.name === "GLUP FRESH" && t.endTime > calcStartDate && t.startTime < calcEndDate).reduce((acc, t) => {
+       return Math.round(tasks.filter(t => t.name === "GLUP FRESH" && t.endTime > calcStartDate && t.startTime < calcEndExclusive).reduce((acc, t) => {
           const f = t.presentation === "2Lts" ? 6 : (t.presentation === "1Lt" ? 12 : 15);
           return acc + (t.quantity || 0) * f;
        }, 0));
     }
     if (code === 'EMP_0105') {
-       return Math.round(tasks.filter(t => t.name !== "GLUP FRESH" && !(t.name || '').startsWith("JUSTY") && !(t.name || '').startsWith("VITA") && t.presentation !== "0.4Lts" && t.endTime > calcStartDate && t.startTime < calcEndDate).reduce((acc, t) => {
+       return Math.round(tasks.filter(t => t.name !== "GLUP FRESH" && !(t.name || '').startsWith("JUSTY") && !(t.name || '').startsWith("VITA") && t.presentation !== "0.4Lts" && t.endTime > calcStartDate && t.startTime < calcEndExclusive).reduce((acc, t) => {
           const f = t.presentation === "2Lts" ? 6 : 12;
           return acc + (t.quantity || 0) * f;
        }, 0));
     }
     if (code === 'EMP_0095') {
-       return Math.round(tasks.filter(t => ((t.name || '').startsWith("JUSTY") || (t.name || '').startsWith("VITA")) && t.endTime > calcStartDate && t.startTime < calcEndDate).reduce((acc, t) => {
+       return Math.round(tasks.filter(t => ((t.name || '').startsWith("JUSTY") || (t.name || '').startsWith("VITA")) && t.endTime > calcStartDate && t.startTime < calcEndExclusive).reduce((acc, t) => {
           const f = (t.presentation === "1.5Lts") ? 12 : 15;
           return acc + (t.quantity || 0) * f;
        }, 0));
@@ -206,8 +208,7 @@ export function CalculationReport({ tasks, calcStartDate, calcEndDate, availabil
                 {empaqueItems.map((item, index) => {
                   const requerida = Number(getCalculatedValue(item.code).toFixed(2));
                   const disp = availability[item.code] || 0;
-                  const base = requerida - disp;
-                  const solicitar = Number((base * 1.05).toFixed(2));
+                  const solicitar = Number((Math.max(0, requerida - disp) * 1.05).toFixed(2));
                   return (
                     <TableRow key={`${item.code}-${index}`} className="border-b last:border-0">
                       <TableCell className="py-0.5 text-[10px] font-medium text-slate-800">{item.description}</TableCell>

@@ -262,11 +262,11 @@ export async function authorizeModuleWrite(
   const permissions = readDb().planner?.permissions ?? {};
   const modules = permissions.modules?.[auth.user.id];
   if (!Array.isArray(modules) || !modules.includes(module)) {
-    return Response.json({ error: 'Write permission denied' }, { status: 403 });
+    return Response.json({ error: `Write permission denied: module "${module}" is not enabled for this account.` }, { status: 403 });
   }
   const readOnlyModules = permissions.readOnlyModules?.[auth.user.id];
   if (Array.isArray(readOnlyModules) && readOnlyModules.includes(module)) {
-    return Response.json({ error: 'Write permission denied' }, { status: 403 });
+    return Response.json({ error: `Write permission denied: module "${module}" is read-only for this account.` }, { status: 403 });
   }
 
   const planningSection = section && module === 'planning'
@@ -275,14 +275,14 @@ export async function authorizeModuleWrite(
   if (section && module === 'planning') {
     const sectionLevel = permissions.sections?.[auth.user.id]?.[`planning.${section}`];
     if (sectionLevel === 'none' || sectionLevel === 'read') {
-      return Response.json({ error: 'Write permission denied' }, { status: 403 });
+      return Response.json({ error: `Write permission denied: section "planning.${section}" is read-only for this account.` }, { status: 403 });
     }
     if (
       sectionLevel !== 'write' &&
       LEGACY_PLANNING_SECTIONS.has(section) &&
       (!Array.isArray(planningSection?.write) || !planningSection.write.includes(section))
     ) {
-      return Response.json({ error: 'Write permission denied' }, { status: 403 });
+      return Response.json({ error: `Write permission denied: no write access to "planning.${section}".` }, { status: 403 });
     }
   }
 
@@ -293,7 +293,7 @@ export async function authorizeModuleWrite(
       const key = `${module}.${segments.slice(0, end).join('.')}`;
       const level = configuredSections[key];
       if (level === 'none' || level === 'read') {
-        return Response.json({ error: 'Write permission denied' }, { status: 403 });
+        return Response.json({ error: `Write permission denied: section "${key}" is read-only for this account.` }, { status: 403 });
       }
     }
   }

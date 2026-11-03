@@ -59,6 +59,8 @@ export function useAuthStore() {
   }, []);
 
   useEffect(() => {
+    let sessionRefreshPromise: Promise<void> | null = null;
+
     const refreshUsers = async () => {
       try {
         const response = await fetch('/api/data?section=users', { cache: 'no-store' });
@@ -78,20 +80,40 @@ export function useAuthStore() {
       }
     };
 
-    const refreshSession = async () => {
-      try {
-        const response = await fetch('/api/auth/session', { cache: 'no-store' });
-        if (!response.ok) throw new Error(`Session API error: ${response.status}`);
-        const payload = await response.json();
-        const sessionUser = payload.user && typeof payload.user.id === 'string'
-          ? payload.user as UserSession
-          : null;
-        setUser(sessionUser);
-        if (sessionUser) window.dispatchEvent(new Event(AUTH_SESSION_READY_EVENT));
-      } catch (error) {
-        console.error('[AuthStore] Unable to restore server session', error);
-        setUser(null);
-      }
+    const refreshSession = () => {
+      if (sessionRefreshPromise) return sessionRefreshPromise;
+
+      sessionRefreshPromise = (async () => {
+        let lastError: unknown;
+        for (let attempt = 0; attempt < 3; attempt += 1) {
+          try {
+            const response = await fetch('/api/auth/session', { cache: 'no-store' });
+            if (response.status >= 500 && attempt < 2) {
+              await new Promise((resolve) => setTimeout(resolve, 250 * (attempt + 1)));
+              continue;
+            }
+            if (!response.ok) throw new Error(`Session API error: ${response.status}`);
+            const payload = await response.json();
+            const sessionUser = payload.user && typeof payload.user.id === 'string'
+              ? payload.user as UserSession
+              : null;
+            setUser(sessionUser);
+            if (sessionUser) window.dispatchEvent(new Event(AUTH_SESSION_READY_EVENT));
+            return;
+          } catch (error) {
+            lastError = error;
+            if (attempt < 2) {
+              await new Promise((resolve) => setTimeout(resolve, 250 * (attempt + 1)));
+              continue;
+            }
+          }
+        }
+        console.warn('[AuthStore] Unable to refresh server session; retaining the current session state', lastError);
+      })().finally(() => {
+        sessionRefreshPromise = null;
+      });
+
+      return sessionRefreshPromise;
     };
 
     const refreshWhenVisible = () => {

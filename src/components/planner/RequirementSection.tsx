@@ -21,7 +21,7 @@ import {
   Calendar as CalendarIcon
 } from 'lucide-react';
 import { ScheduledTask } from '@/lib/types';
-import { addDays } from 'date-fns';
+import { addDays, format } from 'date-fns';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { 
@@ -64,7 +64,7 @@ export function RequirementSection({ onPrint, onPrintCalculation, tasks, weekSta
   const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
 
   const [calcStartDate, setCalcStartDate] = useState<Date>(weekStartDate);
-  const [calcEndDate, setCalcEndDate] = useState<Date>(weekEnd);
+  const [calcEndDate, setCalcEndDate] = useState<Date>(addDays(weekEnd, -1));
   const [availability, setAvailability] = useState<Record<string, number>>({});
 
   const empaqueItems = useMemo(() => {
@@ -82,7 +82,7 @@ export function RequirementSection({ onPrint, onPrintCalculation, tasks, weekSta
 
   const getCalculatedValue = (code: string, startDate?: Date, endDate?: Date) => {
     const start = startDate || weekStartDate;
-    const end = endDate || weekEnd;
+    const end = endDate ? addDays(endDate, 1) : weekEnd;
     let packagingTotal = 0;
     tasks.forEach(task => {
       if (task.endTime > start && task.startTime < end) {
@@ -113,7 +113,7 @@ export function RequirementSection({ onPrint, onPrintCalculation, tasks, weekSta
           if (code === 'EMP_0126' && pres === "0.4Lts" && !isFresh && !isJugo) { packagingTotal += qty * 15; return; }
           
           // 1.5Lts Jugos
-          if (code === 'EMP_068' && pres === "1.5Lts" && isJugo) { packagingTotal += qty * 12; return; }
+          if (code === 'EMP_0068' && pres === "1.5Lts" && isJugo) { packagingTotal += qty * 12; return; }
 
           // Otros consumibles
           const recipe = CONSUMABLES_RECIPES[task.name];
@@ -379,7 +379,7 @@ export function RequirementSection({ onPrint, onPrintCalculation, tasks, weekSta
                 <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Inicio</span>
                 <input
                   type="date"
-                  value={calcStartDate.toISOString().split('T')[0]}
+                  value={format(calcStartDate, 'yyyy-MM-dd')}
                   onChange={(e) => setCalcStartDate(new Date(e.target.value + 'T00:00:00'))}
                   className="text-xs font-bold text-slate-700 border-0 bg-transparent focus:ring-0 p-0 w-[130px]"
                 />
@@ -389,7 +389,7 @@ export function RequirementSection({ onPrint, onPrintCalculation, tasks, weekSta
                 <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Fin</span>
                 <input
                   type="date"
-                  value={calcEndDate.toISOString().split('T')[0]}
+                  value={format(calcEndDate, 'yyyy-MM-dd')}
                   onChange={(e) => setCalcEndDate(new Date(e.target.value + 'T00:00:00'))}
                   className="text-xs font-bold text-slate-700 border-0 bg-transparent focus:ring-0 p-0 w-[130px]"
                 />
@@ -421,8 +421,7 @@ export function RequirementSection({ onPrint, onPrintCalculation, tasks, weekSta
                 {empaqueItems.map((item, idx) => {
                   const requerida = Number(getCalculatedValue(item.code, calcStartDate, calcEndDate).toFixed(2));
                   const disp = availability[item.code] || 0;
-                  const base = requerida - disp;
-                  const solicitar = Number((base * 1.05).toFixed(2));
+                  const solicitar = Number((Math.max(0, requerida - disp) * 1.05).toFixed(2));
                   return (
                     <TableRow key={`calc-${item.code}`} className="hover:bg-slate-50/50 transition-colors">
                       <TableCell className="text-sm font-bold text-slate-700 py-4">{item.description}</TableCell>
