@@ -207,59 +207,101 @@ export function OrdenesReporteResumenMensual({ reportMonthDate }: OrdenesReporte
       });
   }, [sugarPerformance.items]);
 
-  const exportFlavorPdf = async () => {
-    const { jsPDF } = await import('jspdf');
-    const items = byFlavor.items;
-    if (items.length === 0) return;
-    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    const headers = ['SABOR', 'JARABE REQUERIDO', 'JARABE REAL', 'DIFERENCIA', 'PORCENTAJE'];
-    const widths = [90, 45, 45, 40, 40];
-    const width = widths.reduce((sum, value) => sum + value, 0);
-    const startX = (210 - width) / 2;
-    let y = 18;
-    const drawRow = (values: string[], height: number, fill: [number, number, number], color: [number, number, number]) => {
-      pdf.setFillColor(...fill);
-      pdf.rect(startX, y, width, height, 'F');
-      pdf.setDrawColor(0, 0, 0);
-      pdf.setFont('helvetica', 'bold');
-      pdf.setFontSize(7);
-      pdf.setTextColor(...color);
-      let x = startX;
-      values.forEach((value, index) => {
-        pdf.text(value, x + widths[index] / 2, y + (height === 6 ? 4 : 3.2), { align: 'center' });
-        pdf.line(x, y, x, y + height);
-        x += widths[index];
-      });
-      pdf.line(x, y, x, y + height);
-      pdf.line(startX, y, startX + width, y);
-      pdf.line(startX, y + height, startX + width, y + height);
-      y += height;
-    };
-    pdf.setFont('helvetica', 'bold');
-    pdf.setFontSize(11);
-    pdf.text('Resumen Seguimiento Mensual por Sabor', 105, 12, { align: 'center' });
-    drawRow(headers, 6, [15, 23, 42], [255, 255, 255]);
-    items.forEach((item, index) => {
-      if (y + 4.6 > 265) {
-        pdf.addPage();
-        y = 18;
-      }
-      drawRow([
+  const exportPdf = async () => {
+    const [{ jsPDF }, { autoTable }] = await Promise.all([
+      import('jspdf'),
+      import('jspdf-autotable'),
+    ]);
+    const period = format(new Date(year, month - 1, 1), 'MMMM yyyy', { locale: es }).toUpperCase();
+    let title: string;
+    let filename: string;
+    let head: string[][];
+    let body: string[][];
+
+    if (subsection === 'resumen-por-sabor') {
+      title = 'Resumen mensual por sabor';
+      filename = `Resumen Seguimiento por Sabor ${period}.pdf`;
+      head = [['SABOR', 'JARABE REQUERIDO', 'JARABE REAL', 'DIFERENCIA', 'PORCENTAJE']];
+      body = [
+        ...byFlavor.items.map((item) => [
+          item.sabor,
+          formatNumber(item.requerido),
+          formatNumber(item.real),
+          formatNumber(item.diff),
+          `${formatNumber(item.pct)}%`,
+        ]),
+        [
+          byFlavor.total.sabor,
+          formatNumber(byFlavor.total.requerido),
+          formatNumber(byFlavor.total.real),
+          formatNumber(byFlavor.total.diff),
+          `${formatNumber(byFlavor.total.pct)}%`,
+        ],
+      ];
+    } else if (subsection === 'resumen-por-lineas') {
+      title = 'Resumen mensual por líneas';
+      filename = `Resumen Seguimiento por Lineas ${period}.pdf`;
+      head = [['LÍNEA', 'JARABE REQUERIDO', 'JARABE REAL', 'DIFERENCIA', 'PORCENTAJE']];
+      body = [
+        ...byLine.items.map((item) => [
+          `L${item.linea}`,
+          formatNumber(item.requerido),
+          formatNumber(item.real),
+          formatNumber(item.diff),
+          `${formatNumber(item.pct)}%`,
+        ]),
+        [
+          byLine.total.linea,
+          formatNumber(byLine.total.requerido),
+          formatNumber(byLine.total.real),
+          formatNumber(byLine.total.diff),
+          `${formatNumber(byLine.total.pct)}%`,
+        ],
+      ];
+    } else {
+      title = 'Rendimiento de azúcar por sabor';
+      filename = `Rendimiento de Azucar por Sabor ${period}.pdf`;
+      head = [['SABOR', 'JARABE REQUERIDO', 'JARABE REAL', 'DIFERENCIA', 'AZÚCAR POR DIFERENCIA']];
+      body = sugarPerformance.items.map((item) => [
         item.sabor,
         formatNumber(item.requerido),
         formatNumber(item.real),
-        formatNumber(item.diff),
-        `${formatNumber(item.pct)}%`,
-      ], 4.6, index % 2 ? [245, 250, 255] : [255, 255, 255], [15, 23, 42]);
+        formatNumber(item.diferencia),
+        item.azucar === null ? 'N/D' : formatNumber(item.azucar),
+      ]);
+      body.push([
+        'TOTAL',
+        formatNumber(sugarPerformance.total.requerido),
+        formatNumber(sugarPerformance.total.real),
+        formatNumber(sugarPerformance.total.diferencia),
+        formatNumber(sugarPerformance.total.azucar),
+      ]);
+    }
+
+    const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(12);
+    pdf.text(title, pdf.internal.pageSize.getWidth() / 2, 15, { align: 'center' });
+    pdf.setFont('helvetica', 'normal');
+    pdf.setFontSize(9);
+    pdf.text(period, pdf.internal.pageSize.getWidth() / 2, 21, { align: 'center' });
+    autoTable(pdf, {
+      startY: 26,
+      head,
+      body,
+      margin: { left: 10, right: 10 },
+      styles: { font: 'helvetica', fontSize: 8, cellPadding: 2, halign: 'center', overflow: 'linebreak' },
+      headStyles: { fillColor: [15, 23, 42], textColor: [255, 255, 255], fontStyle: 'bold' },
+      alternateRowStyles: { fillColor: [245, 250, 255] },
+      didParseCell: (data) => {
+        if (data.section === 'body' && data.row.index === body.length - 1) {
+          data.cell.styles.fillColor = [15, 23, 42];
+          data.cell.styles.textColor = [255, 255, 255];
+          data.cell.styles.fontStyle = 'bold';
+        }
+      },
     });
-    drawRow([
-      byFlavor.total.sabor,
-      formatNumber(byFlavor.total.requerido),
-      formatNumber(byFlavor.total.real),
-      formatNumber(byFlavor.total.diff),
-      `${formatNumber(byFlavor.total.pct)}%`,
-    ], 6, [15, 23, 42], [255, 255, 255]);
-    pdf.save(`Resumen Seguimiento por Sabor ${format(new Date(year, month - 1, 1), 'MMMM yyyy', { locale: es }).toUpperCase()}.pdf`);
+    pdf.save(filename);
   };
 
   const subsections: { id: ResumenMensualSubsection; label: string }[] = [
@@ -292,7 +334,7 @@ export function OrdenesReporteResumenMensual({ reportMonthDate }: OrdenesReporte
           </span>
           <Button
             size="sm"
-            onClick={exportFlavorPdf}
+            onClick={exportPdf}
             className="h-8 flex-shrink-0 gap-1.5 rounded-full bg-blue-600 pl-3 pr-4 text-[9px] font-black uppercase tracking-widest text-white shadow-sm hover:bg-blue-700"
           >
             <FileDown className="h-3 w-3" />

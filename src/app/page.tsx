@@ -538,6 +538,7 @@ export default function PlannerPage() {
   const ordenesTrabajoStore = useRemoteCollection<any[]>('planta-ordenes-trabajo', [], plantaWeekQuery);
   const informesOperacionales = informesOperacionalesStore.data;
   const setInformesOperacionales = informesOperacionalesStore.setData;
+  const setInformesOperacionalesLocal = informesOperacionalesStore.setDataLocal;
   const removeInformeOperacional = informesOperacionalesStore.removeItem;
   const ordenesTrabajo = ordenesTrabajoStore.data;
   const setOrdenesTrabajo = ordenesTrabajoStore.setData;
@@ -4459,6 +4460,11 @@ export default function PlannerPage() {
                                        }).length} registros
                                    </span>
                                  </div>
+                                 {errorValidacion && (
+                                   <div role="alert" className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-[10px] font-bold text-red-700">
+                                     {errorValidacion}
+                                   </div>
+                                 )}
                                   <div className="rounded-lg border border-slate-200 overflow-auto max-h-[62vh] tabla-ordenes-scroll" style={{ scrollBehavior: 'smooth' }}>
                                     <div className="min-w-[1200px]">
                                       <Table>
@@ -4512,7 +4518,7 @@ export default function PlannerPage() {
                                                   <TableCell className="px-2 py-2 flex items-center gap-1">
                                                         {(user?.id !== 'prodtj.mds' && user?.id !== 'prodtg.mds' && user?.id !== 'prodts.mds' && user?.id !== 'enf.mds') && (
                                                        <>
-                                                         <Button size="icon" variant="ghost" className="h-7 w-7 text-emerald-600 hover:text-emerald-700" onClick={() => {
+                                                         <Button size="icon" variant="ghost" className="h-7 w-7 text-emerald-600 hover:text-emerald-700" onClick={async () => {
                                                            const formData = { ...row, ...editForm };
                                                             if (!editForm.inicioParada || !editForm.finParada) {
                                                              setErrorValidacion('Ingrese hora de inicio y fin de la parada.');
@@ -4537,8 +4543,31 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                            let diff = fin - inicio;
                                                            if (diff < 0) diff += 1440;
                                                             const updated = { ...formData, totalMin: String(diff), bloqueado: true };
-                                                            setInformesOperacionales(prev => prev.map(r => String(r.id) === String(row.id) ? updated : r));
-                                                            if (updated.orden && String(updated.orden).trim() !== '') {
+                                                           const isSharedEdit = row.bloqueado === false && user?.id !== 'alex.mds' && user?.id !== 'maria.mds';
+                                                           if (isSharedEdit) {
+                                                             try {
+                                                               const response = await fetch('/api/planta/informes-operacionales', {
+                                                                 method: 'PATCH',
+                                                                 headers: { 'content-type': 'application/json' },
+                                                                 body: JSON.stringify({ id: row.id, updates: updated }),
+                                                               });
+                                                               const result = await response.json().catch(() => ({}));
+                                                               if (!response.ok) {
+                                                                 setErrorValidacion(result.error || `No se pudieron guardar los cambios (HTTP ${response.status}).`);
+                                                                 return;
+                                                               }
+                                                               setInformesOperacionalesLocal((prev) => prev.map((item: any) =>
+                                                                 String(item.id) === String(row.id) ? result.item : item
+                                                               ));
+                                                             } catch (error) {
+                                                               console.error('[PLANTA] Failed to save unlocked operational report', error);
+                                                               setErrorValidacion('No se pudieron guardar los cambios por un error de conexión.');
+                                                               return;
+                                                             }
+                                                           } else {
+                                                             setInformesOperacionales(prev => prev.map(r => String(r.id) === String(row.id) ? updated : r));
+                                                           }
+                                                           if (!isSharedEdit && updated.orden && String(updated.orden).trim() !== '') {
                                                               setOrdenesTrabajo(prev => {
                                                                 const idx = prev.findIndex((o: any) => o.orden === updated.orden && o.fechaOrden === updated.fecha);
                                                                 if (idx >= 0) {
@@ -4598,7 +4627,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                   usuario: user?.name || '',
                                                                 }];
                                                                });
-                                                              } else if (row.orden && String(row.orden).trim() !== '') {
+                                                              } else if (!isSharedEdit && row.orden && String(row.orden).trim() !== '') {
                                                                 const ordenAEliminar = ordenesTrabajo.find((o: any) => o.orden === row.orden && o.fechaOrden === row.fecha);
                                                                 if (ordenAEliminar) {
                                                                   ordenesTrabajoStore.removeItem(ordenAEliminar.id);

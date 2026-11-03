@@ -341,6 +341,14 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
     });
   }, [persistLocal, enqueue, flushQueue, namespace]);
 
+  const setDataLocal = useCallback((updater: T | ((prev: T) => T)) => {
+    setData((prevData) => {
+      const next = typeof updater === 'function' ? (updater as (p: T) => T)(prevData) : updater;
+      persistLocal(next);
+      return next;
+    });
+  }, [persistLocal]);
+
   // Igual que setData pero envia al servidor SOLO las claves indicadas en `patch`
   // (delta), sin sobrescribir el estado completo. El servidor hace merge por clave,
   // de modo que cambios concurrentes en otras lineas/claves no se pierden.
@@ -600,5 +608,5 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
     load();
   }, [queryParamsKey, load]);
 
-  return { data, setData: setDataSynced, patchData, savePatch, removeItem, removeKey, isLoaded, isLoading, isSaving, hasPendingChanges, loadError, syncError };
+  return { data, setData: setDataSynced, setDataLocal, patchData, savePatch, removeItem, removeKey, isLoaded, isLoading, isSaving, hasPendingChanges, loadError, syncError };
 }
