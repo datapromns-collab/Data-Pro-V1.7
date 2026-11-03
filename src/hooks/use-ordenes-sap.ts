@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { loadOrdenesSapData, saveOrdenesSapData, type OrdenSap } from '@/lib/json-db';
+import { AUTH_SESSION_READY_EVENT } from '@/hooks/use-auth-store';
 
 const STORAGE_KEY = 'ordenes-sap-v1';
 const DELETED_KEY = 'ordenes-sap-deleted-v1';
@@ -184,12 +185,14 @@ export function useOrdenesSap() {
   useEffect(() => {
     refresh();
     const interval = setInterval(refresh, POLL_INTERVAL);
+    window.addEventListener(AUTH_SESSION_READY_EVENT, refresh);
     const onVisible = () => {
       if (document.visibilityState === 'visible') refresh();
     };
     document.addEventListener('visibilitychange', onVisible);
     return () => {
       clearInterval(interval);
+      window.removeEventListener(AUTH_SESSION_READY_EVENT, refresh);
       document.removeEventListener('visibilitychange', onVisible);
       flush();
     };

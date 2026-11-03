@@ -5,6 +5,7 @@ import { ScheduledTask } from '@/lib/types';
 import { startOfWeek, addDays, format, parseISO } from 'date-fns';
 import { RECIPES, CONSUMABLES_RECIPES, DEFAULT_PACKAGING_RECIPES } from '@/lib/planner-utils';
 import { loadPlannerData, savePlannerData, type PlannerDataPatch } from '@/lib/json-db';
+import { AUTH_SESSION_READY_EVENT } from '@/hooks/use-auth-store';
 
 function toLocalISO(d: Date): string {
   const pad = (n: number) => String(n).padStart(2, '0');
@@ -748,6 +749,11 @@ function usePlannerStoreInner() {
      if (!isLoaded) return;
      refreshFromServer();
    }, [isLoaded, refreshFromServer]);
+
+  useEffect(() => {
+   window.addEventListener(AUTH_SESSION_READY_EVENT, refreshFromServer);
+   return () => window.removeEventListener(AUTH_SESSION_READY_EVENT, refreshFromServer);
+  }, [refreshFromServer]);
 
    useEffect(() => {
      if (!isLoaded) return;
