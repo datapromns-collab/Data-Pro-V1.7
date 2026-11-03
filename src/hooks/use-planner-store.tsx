@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, createContext, useContext, ReactNode,
 import { ScheduledTask } from '@/lib/types';
 import { startOfWeek, addDays, format, parseISO } from 'date-fns';
 import { RECIPES, CONSUMABLES_RECIPES, DEFAULT_PACKAGING_RECIPES } from '@/lib/planner-utils';
-import { loadPlannerData, savePlannerData } from '@/lib/json-db';
+import { loadPlannerData, savePlannerData, type PlannerDataPatch } from '@/lib/json-db';
 
 function toLocalISO(d: Date): string {
   const pad = (n: number) => String(n).padStart(2, '0');
@@ -127,6 +127,12 @@ const weeklyDataFields: (keyof WeeklyData)[] = [
   'plantInventoryAW',
 ];
 
+const persistedWeekFields: (keyof WeeklyData)[] = [
+  'tasks',
+  ...weeklyDataFields,
+  'deletedTaskIds',
+];
+
 function deepMergeWeeklyData(current: WeeklyData, incoming: any): WeeklyData {
   if (!incoming) return current;
   const next: WeeklyData = { ...current };
@@ -187,7 +193,7 @@ const STORAGE_KEY_SELECTED_DATE = 'planner_selected_date_v1';
 
 function usePlannerStoreInner() {
   const [weeklyData, setWeeklyData] = useState<Record<string, WeeklyData>>({});
-  const [weekStartDate, setWeekStartDate] = useState<Date>(() => {
+  const [weekStartDate, setWeekStartDateState] = useState<Date>(() => {
     const d = new Date();
     d.setHours(0, 0, 0, 0);
     return startOfWeek(d, { weekStartsOn: 1 });
@@ -202,6 +208,10 @@ function usePlannerStoreInner() {
   const [saveRetryCount, setSaveRetryCount] = useState(0);
   const forceSaveRef = useRef(false);
   const pendingRef = useRef(false);
+  const dirtyWeeksRef = useRef<Record<string, Set<keyof WeeklyData>>>({});
+  const dirtyConfigRef = useRef(new Set<'weekStartDate' | 'lineSpeeds'>());
+  const dirtyRecipesRef = useRef(new Set<'customRecipes' | 'customPackagingRecipes'>());
+  const changeVersionRef = useRef(0);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -212,7 +222,7 @@ function usePlannerStoreInner() {
         if (!Number.isNaN(parsed.getTime())) {
           const d = new Date(parsed);
           d.setHours(0, 0, 0, 0);
-          setWeekStartDate(startOfWeek(d, { weekStartsOn: 1 }));
+          setWeekStartDateState(startOfWeek(d, { weekStartsOn: 1 }));
         }
       } catch (e) {}
     }
@@ -221,10 +231,25 @@ function usePlannerStoreInner() {
   const weekKey = getWeekKey(weekStartDate);
   const week = weeklyData[weekKey] ?? emptyWeek();
 
+  const setWeekStartDate = useCallback((value: Date | ((previous: Date) => Date)) => {
+    dirtyConfigRef.current.add('weekStartDate');
+    changeVersionRef.current += 1;
+    setWeekStartDateState(value);
+  }, []);
+
   const setWeek = useCallback((updater: (prev: WeeklyData) => WeeklyData) => {
     setWeeklyData((prev) => {
       const current = prev[weekKey] ?? emptyWeek();
       const next = updater(current);
+      const changedFields = persistedWeekFields.filter(
+        (field) => JSON.stringify(current[field]) !== JSON.stringify(next[field]),
+      );
+      if (changedFields.length > 0) {
+        const dirtyFields = dirtyWeeksRef.current[weekKey] ?? new Set<keyof WeeklyData>();
+        changedFields.forEach((field) => dirtyFields.add(field));
+        dirtyWeeksRef.current[weekKey] = dirtyFields;
+        changeVersionRef.current += 1;
+      }
       return { ...prev, [weekKey]: next };
     });
   }, [weekKey]);
@@ -584,8 +609,6 @@ function usePlannerStoreInner() {
     customPackagingRecipes,
   }), [weeklyData, weekStartDate, lineSpeeds, customRecipes, customPackagingRecipes]);
 
-  const lastPersistedSnapshotRef = useRef<string>('');
-
   useEffect(() => {
     if (!isLoaded) return;
     const current = computePlannerSnapshot();
@@ -721,39 +744,55 @@ function usePlannerStoreInner() {
   const saveToLocalStorageRef = useRef(saveToLocalStorage);
   saveToLocalStorageRef.current = saveToLocalStorage;
 
-  const initPersistedRef = useRef(false);
-   useEffect(() => {
-     if (!isLoaded || initPersistedRef.current) return;
-     initPersistedRef.current = true;
-     lastPersistedSnapshotRef.current = computePlannerSnapshot();
-   }, [isLoaded, computePlannerSnapshot]);
-
-   useEffect(() => {
+  useEffect(() => {
      if (!isLoaded) return;
      refreshFromServer();
    }, [isLoaded, refreshFromServer]);
 
    useEffect(() => {
      if (!isLoaded) return;
-     const snapshot = computePlannerSnapshot();
-     if (snapshot === lastPersistedSnapshotRef.current && !forceSaveRef.current) {
+     const hasDirtyWeeks = Object.values(dirtyWeeksRef.current).some((fields) => fields.size > 0);
+     const hasDirtyFields =
+       hasDirtyWeeks || dirtyConfigRef.current.size > 0 || dirtyRecipesRef.current.size > 0;
+     if (!hasDirtyFields && !forceSaveRef.current) {
        return;
      }
 
-    const plan = {
-      weeks: weeklyData,
-      config: { weekStartDate: toLocalISO(weekStartDate), lineSpeeds },
-      customRecipes,
-      customPackagingRecipes,
-      _meta: { updatedAt: new Date().toISOString() },
-    };
+    const plan: PlannerDataPatch = {};
+    const changedWeeks: Record<string, Partial<WeeklyData>> = {};
+    Object.entries(dirtyWeeksRef.current).forEach(([key, fields]) => {
+      const currentWeek = weeklyData[key];
+      if (!currentWeek || fields.size === 0) return;
+      const patch: Partial<WeeklyData> = {};
+      fields.forEach((field) => {
+        Object.assign(patch, { [field]: currentWeek[field] });
+      });
+      changedWeeks[key] = patch;
+    });
+    if (Object.keys(changedWeeks).length > 0) plan.weeks = changedWeeks;
+
+    if (dirtyConfigRef.current.size > 0) {
+      const config: NonNullable<PlannerDataPatch['config']> = {};
+      if (dirtyConfigRef.current.has('weekStartDate')) config.weekStartDate = toLocalISO(weekStartDate);
+      if (dirtyConfigRef.current.has('lineSpeeds')) config.lineSpeeds = lineSpeeds;
+      plan.config = config;
+    }
+    if (dirtyRecipesRef.current.has('customRecipes')) plan.customRecipes = customRecipes;
+    if (dirtyRecipesRef.current.has('customPackagingRecipes')) {
+      plan.customPackagingRecipes = customPackagingRecipes;
+    }
+    const changeVersion = changeVersionRef.current;
 
     const timer = setTimeout(async () => {
       forceSaveRef.current = false;
       pendingRef.current = true;
       try {
         await savePlannerData(plan);
-        lastPersistedSnapshotRef.current = snapshot;
+        if (changeVersionRef.current === changeVersion) {
+          dirtyWeeksRef.current = {};
+          dirtyConfigRef.current.clear();
+          dirtyRecipesRef.current.clear();
+        }
         setSaveError(null);
       } catch (error) {
         saveToLocalStorageRef.current();
@@ -764,7 +803,7 @@ function usePlannerStoreInner() {
     }, 100);
 
     return () => clearTimeout(timer);
-  }, [isLoaded, computePlannerSnapshot, weeklyData, weekStartDate, lineSpeeds, customRecipes, customPackagingRecipes, saveRetryCount]);
+  }, [isLoaded, weeklyData, weekStartDate, lineSpeeds, customRecipes, customPackagingRecipes, saveRetryCount]);
 
   useEffect(() => {
     if (!isLoaded) return;
@@ -841,6 +880,8 @@ function usePlannerStoreInner() {
   }, [tasks, setTasks, setDeletedTaskIds]);
 
   const updateLineSpeed = useCallback((lineId: string, speed: number) => {
+    dirtyConfigRef.current.add('lineSpeeds');
+    changeVersionRef.current += 1;
     setLineSpeeds((prev) => ({ ...prev, [lineId]: speed }));
   }, []);
 
@@ -856,6 +897,8 @@ function usePlannerStoreInner() {
   }, [setRealProduction]);
 
   const updateRecipe = useCallback((product: string, materialCode: string, value: number) => {
+    dirtyRecipesRef.current.add('customRecipes');
+    changeVersionRef.current += 1;
     setCustomRecipes((prev) => {
       const next = { ...prev };
       if (!next[product]) next[product] = {};
@@ -865,6 +908,8 @@ function usePlannerStoreInner() {
   }, [setCustomRecipes]);
 
   const updatePackagingRecipe = useCallback((product: string, presentation: string, materialCode: string, value: number) => {
+    dirtyRecipesRef.current.add('customPackagingRecipes');
+    changeVersionRef.current += 1;
     setCustomPackagingRecipes((prev) => {
       const next = { ...prev } as Record<string, Record<string, Record<string, number>>>;
       if (!next[product]) next[product] = {};
@@ -875,6 +920,8 @@ function usePlannerStoreInner() {
   }, [setCustomPackagingRecipes]);
 
   const removeMaterialFromRecipe = useCallback((product: string, materialCode: string) => {
+    dirtyRecipesRef.current.add('customRecipes');
+    changeVersionRef.current += 1;
     setCustomRecipes((prev) => {
       const next = { ...prev };
       if (!next[product]) return prev;
@@ -886,6 +933,8 @@ function usePlannerStoreInner() {
   }, [setCustomRecipes]);
 
   const removeMaterialFromPackagingRecipe = useCallback((product: string, presentation: string, materialCode: string) => {
+    dirtyRecipesRef.current.add('customPackagingRecipes');
+    changeVersionRef.current += 1;
     setCustomPackagingRecipes((prev) => {
       const next = { ...prev };
       if (!next[product]) return prev;
@@ -898,10 +947,14 @@ function usePlannerStoreInner() {
   }, [setCustomPackagingRecipes]);
 
   const resetRecipesToDefaults = useCallback(() => {
+    dirtyRecipesRef.current.add('customRecipes');
+    changeVersionRef.current += 1;
     setCustomRecipes(RECIPES);
   }, [setCustomRecipes]);
 
   const resetPackagingRecipesToDefaults = useCallback(() => {
+    dirtyRecipesRef.current.add('customPackagingRecipes');
+    changeVersionRef.current += 1;
     setCustomPackagingRecipes(DEFAULT_PACKAGING_RECIPES);
   }, [setCustomPackagingRecipes]);
 

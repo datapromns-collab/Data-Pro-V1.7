@@ -29,6 +29,11 @@ export interface PlannerData {
   _meta?: { updatedAt: string };
 }
 
+export type PlannerDataPatch = Partial<Omit<PlannerData, 'config' | 'weeks'>> & {
+  config?: Partial<PlannerData['config']>;
+  weeks?: Record<string, Partial<WeeklyData>>;
+};
+
 export interface OrdenSapDia {
   fechaInicio: string;
   ticket1: string;
@@ -192,7 +197,7 @@ export async function saveProductionNonConformingRows(
   }
 }
 
-export async function savePlannerData(data: Partial<PlannerData>): Promise<void> {
+export async function savePlannerData(data: PlannerDataPatch): Promise<void> {
   try {
     const { _meta: _ignoredMeta, ...plannerData } = data as any;
     const payload = { planner: plannerData, _meta: { updatedAt: new Date().toISOString() } };
