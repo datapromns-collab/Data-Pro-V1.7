@@ -311,6 +311,27 @@ export async function POST(request: Request) {
           const value = incomingClean[key];
           if (Array.isArray(value) && value.length === 0 && ns !== 'sala-jarabe-consumo-lineas') continue;
           if (value && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0) continue;
+          if (
+            ns === 'ventas-inventario-diario' &&
+            key === 'externalEntries' &&
+            value &&
+            typeof value === 'object' &&
+            !Array.isArray(value)
+          ) {
+            const externalEntries = { ...(base[key] && typeof base[key] === 'object' ? base[key] : {}) };
+            for (const [dateKey, entries] of Object.entries(value)) {
+              if (entries === null) {
+                if (!/^\d{4}-\d{2}-\d{2}$/.test(dateKey)) {
+                  throw new Error('La fecha de eliminación de entradas externas no es válida.');
+                }
+                delete externalEntries[dateKey];
+              } else {
+                externalEntries[dateKey] = deepMerge(externalEntries[dateKey], entries);
+              }
+            }
+            merged[key] = externalEntries;
+            continue;
+          }
           merged[key] = deepMerge(base[key], value);
         }
         result = merged;

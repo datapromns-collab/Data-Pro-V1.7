@@ -58,6 +58,7 @@ import { useRemoteCollection } from '@/hooks/use-remote-collection';
 import OrdenesSapModule, { CorrelativoSelector } from '@/components/planner/OrdenesSapModule';
 import { useOrdenesSap } from '@/hooks/use-ordenes-sap';
 import PlantaReporteResumen from '@/components/planner/PlantaReporteResumen';
+import PlantaReporteTendencias from '@/components/planner/PlantaReporteTendencias';
 import type { PurchasingSummaryPrintData } from '@/components/planner/PurchasingModule';
 import { usePlannerStore, getWeekKey } from '@/hooks/use-planner-store';
 import { getWeekDays } from '@/lib/planner-utils';
@@ -5078,7 +5079,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                              <div className="flex items-center justify-between gap-2 mb-4 no-print">
                                <div className="flex items-center gap-3">
                                   <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
-                                       {['diario', 'por-turno', 'resumen'].map((subTab) => (
+                                       {['diario', 'por-turno', 'resumen', 'tendencias'].map((subTab) => (
                                       <button
                                         key={subTab}
                                         onClick={() => setReporteSubTab(subTab)}
@@ -5088,7 +5089,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                         )}
                                       >
                                         {subTab === 'diario' && <CalendarIcon className="h-3.5 w-3.5" />}
-                                         {subTab === 'diario' ? 'Diario' : subTab === 'por-turno' ? 'Por Turno' : subTab === 'resumen' ? 'Resumen' : 'Data'}
+                                         {subTab === 'diario' ? 'Diario' : subTab === 'por-turno' ? 'Por Turno' : subTab === 'resumen' ? 'Resumen' : 'Tendencias'}
                                         {subTab === 'por-turno' && <Clock className="h-3.5 w-3.5" />}
                                       </button>
                                     ))}
@@ -5111,6 +5112,18 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                  </div>
                                )}
                               </div>
+                            {reporteSubTab === 'tendencias' && (
+                               <div role="tablist" aria-label="Subsecciones de tendencias" className="mb-3 flex items-center gap-2">
+                                 <button
+                                   type="button"
+                                   role="tab"
+                                   aria-selected="true"
+                                   className="inline-flex h-8 items-center justify-center rounded-full bg-white px-5 text-[10px] font-bold uppercase tracking-widest text-slate-900 shadow-sm"
+                                 >
+                                   Alcance
+                                 </button>
+                               </div>
+                            )}
                             <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                                 <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
                                      {reporteSubTab === 'diario' && (
@@ -5152,10 +5165,10 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                     </thead>
                                                     <tbody>
                                                       <tr className="even:bg-slate-50/60">
-                                                        <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{totalPlanificado}</td>
-                                                        <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{totalAlcance}</td>
+                                                        <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(totalPlanificado)}</td>
+                                                        <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(totalAlcance)}</td>
                                                         <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{cumplimientoTotal}</td>
-                                                        <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{row.disponibilidadTotal}</td>
+                                                        <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.disponibilidadTotal)}</td>
                                                       </tr>
                                                     </tbody>
                                                   </table>
@@ -5355,6 +5368,9 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                          lineSpeeds={lineSpeeds}
                                          ordenesSap={allOrdenesSap}
                                        />
+                                     )}
+                                     {reporteSubTab === 'tendencias' && (
+                                       <PlantaReporteTendencias ordenesSap={allOrdenesSap} tasks={reporteTasks} />
                                      )}
                                </div>
                             </div>
@@ -8014,13 +8030,13 @@ function TablaResumenReporteDiario({ informesOperacionales, tasks, realProductio
             </thead>
             <tbody>
               <tr className="even:bg-slate-50/60">
-                <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.totalPlanificadoTD}</td>
-                <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.totalPlanificadoTN ?? '0'}</td>
-                <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.totalAlcanceTD}</td>
-                <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.totalAlcanceTN ?? '0'}</td>
-                <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.cumplimientoTD}</td>
-                <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.cumplimientoTN}</td>
-                <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.disponibilidadTotal}</td>
+                <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.totalPlanificadoTD)}</td>
+                <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.totalPlanificadoTN ?? '0')}</td>
+                <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.totalAlcanceTD)}</td>
+                <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.totalAlcanceTN ?? '0')}</td>
+                <td style={getCumplimientoCellStyle(row.totalAlcanceTD, row.totalPlanificadoTD)} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.cumplimientoTD}</td>
+                <td style={getCumplimientoCellStyle(row.totalAlcanceTN, row.totalPlanificadoTN)} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.cumplimientoTN}</td>
+                <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.disponibilidadTotal)}</td>
               </tr>
             </tbody>
           </table>
@@ -8540,14 +8556,14 @@ function TablaResumenPorLinea({ informesOperacionales, tasks, realProduction, li
               {datos.map((row, idx) => (
                 <tr key={row.linea} className={idx % 2 === 0 ? 'even:bg-slate-50/60' : ''}>
                   <td className="px-1 py-0.5 text-[10px] font-bold text-slate-900 border-r border-b border-slate-100 text-left">{row.linea}</td>
-                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.planificado}</td>
-                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.alcance}</td>
-                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.cumplimiento}</td>
-                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.ot}</td>
-                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.adecuaciones}</td>
-                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.tiempoMuerto}</td>
-                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.ausentismo}</td>
-                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{row.disponibilidad}</td>
+                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.planificado)}</td>
+                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.alcance)}</td>
+                  <td style={getCumplimientoCellStyle(row.alcance, row.planificado)} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.cumplimiento}</td>
+                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.ot)}</td>
+                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.adecuaciones)}</td>
+                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.tiempoMuerto)}</td>
+                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.ausentismo)}</td>
+                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.disponibilidad)}</td>
                 </tr>
               ))}
             </tbody>
@@ -8556,6 +8572,43 @@ function TablaResumenPorLinea({ informesOperacionales, tasks, realProduction, li
       </div>
     </div>
   );
+}
+
+function getCumplimientoCellStyle(alcance: unknown, planificado: unknown): React.CSSProperties {
+  const completed = Number(alcance) || 0;
+  const planned = Number(planificado) || 0;
+  const ratio = planned > 0 ? Math.max(0, Math.min(completed / planned, 1)) : 0;
+  const stops = [
+    { at: 0, color: [255, 0, 0] },
+    { at: 0.6, color: [255, 255, 0] },
+    { at: 1, color: [0, 176, 80] },
+  ];
+  const start = ratio <= 0.6 ? stops[0] : stops[1];
+  const end = ratio <= 0.6 ? stops[1] : stops[2];
+  const progress = (ratio - start.at) / (end.at - start.at);
+  const color = start.color.map((channel, index) =>
+    Math.round(channel + (end.color[index] - channel) * progress)
+  );
+  return { backgroundColor: `rgb(${color.join(', ')})` };
+}
+
+function formatReporteNumero(value: unknown): string {
+  if (typeof value !== 'number' && typeof value !== 'string') return value == null ? '0' : String(value);
+  const raw = String(value).trim();
+  if (!raw) return '0';
+  if (raw.includes('%')) return raw;
+
+  const normalized = raw.includes(',')
+    ? raw.replace(/\./g, '').replace(',', '.')
+    : raw.replace(/(\d)\.(?=\d{3}(?:\.|$))/g, '$1');
+  const number = Number(normalized);
+  if (!Number.isFinite(number)) return raw;
+
+  const decimalPlaces = Math.min(normalized.split('.')[1]?.length ?? 0, 6);
+  return new Intl.NumberFormat('es-VE', {
+    minimumFractionDigits: decimalPlaces,
+    maximumFractionDigits: decimalPlaces,
+  }).format(number);
 }
 
 function PlanificadasPorDiaTable({ datosPorDia, fecha, turno }: { datosPorDia: any; fecha: Date; turno: 'diurno' | 'nocturno' | 'diario' }) {
@@ -8683,7 +8736,7 @@ function PlanificadasPorDiaTable({ datosPorDia, fecha, turno }: { datosPorDia: a
 
 function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineSpeeds, turno = 'DIURNO', fecha, planificadasPorDia, ordenes, velocidadesDt, hrsPagadasDia, hrsProgramadasDia, allTasks, ordenesSap }: any) {
    const data = useReportData(informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha, planificadasPorDia, ordenes, velocidadesDt, hrsPagadasDia, hrsProgramadasDia, undefined, allTasks, ordenesSap);
-   const formatCell = (v: any) => v ?? '0';
+   const formatCell = formatReporteNumero;
    const esDiurno = turno === 'DIURNO';
    const esNocturno = turno === 'NOCTURNO';
    const totalPlanificadoTD = data.reduce((acc: number, r: any) => acc + (Number(r.planificadoTD) || 0), 0);
@@ -8783,10 +8836,10 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
                      {!esDiurno && !esNocturno && <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.alcanceTN)}</td>}
                      {esDiurno && <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.alcanceTD)}</td>}
                      {esNocturno && <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.alcanceTN)}</td>}
-                     {!esDiurno && !esNocturno && <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.cumplimientoTD)}</td>}
-                     {!esDiurno && !esNocturno && <td className="px-1 py-0.5 text-[10px] text-slate-700 border-b border-slate-100 text-center tabular-nums">{formatCell(row.cumplimientoTN)}</td>}
-                     {esDiurno && <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.cumplimientoTD)}</td>}
-                     {esNocturno && <td className="px-1 py-0.5 text-[10px] text-slate-700 border-b border-slate-100 text-center tabular-nums">{formatCell(row.cumplimientoTN)}</td>}
+                     {!esDiurno && !esNocturno && <td style={getCumplimientoCellStyle(row.alcanceTD, row.planificadoTD)} className="px-1 py-0.5 text-[10px] text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.cumplimientoTD)}</td>}
+                     {!esDiurno && !esNocturno && <td style={getCumplimientoCellStyle(row.alcanceTN, row.planificadoTN)} className="px-1 py-0.5 text-[10px] text-slate-900 border-b border-slate-100 text-center tabular-nums">{formatCell(row.cumplimientoTN)}</td>}
+                     {esDiurno && <td style={getCumplimientoCellStyle(row.alcanceTD, row.planificadoTD)} className="px-1 py-0.5 text-[10px] text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.cumplimientoTD)}</td>}
+                     {esNocturno && <td style={getCumplimientoCellStyle(row.alcanceTN, row.planificadoTN)} className="px-1 py-0.5 text-[10px] text-slate-900 border-b border-slate-100 text-center tabular-nums">{formatCell(row.cumplimientoTN)}</td>}
                       <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.velocidad)}</td>
                      <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.cajasH)}</td>
 
@@ -8852,34 +8905,34 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
                    return (
                      <tr className="bg-slate-100 font-black">
                        <td className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-r border-b border-slate-200 w-36 text-left">TOTAL</td>
-                       {!esDiurno && !esNocturno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalPlanificadoTD}</td>}
-                       {!esDiurno && !esNocturno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalPlanificadoTN}</td>}
-                       {esDiurno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalPlanificadoTD}</td>}
-                       {esNocturno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalPlanificadoTN}</td>}
-                       {!esDiurno && !esNocturno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalAlcanceTD}</td>}
-                       {!esDiurno && !esNocturno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalAlcanceTN}</td>}
-                       {esDiurno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalAlcanceTD}</td>}
-                       {esNocturno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalAlcanceTN}</td>}
-                       {!esDiurno && !esNocturno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{cumplimientoTD}</td>}
-                       {!esDiurno && !esNocturno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums">{cumplimientoTN}</td>}
-                       {esDiurno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{cumplimientoTD}</td>}
-                        {esNocturno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums">{cumplimientoTN}</td>}
+                       {!esDiurno && !esNocturno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{formatReporteNumero(totalPlanificadoTD)}</td>}
+                       {!esDiurno && !esNocturno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{formatReporteNumero(totalPlanificadoTN)}</td>}
+                       {esDiurno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{formatReporteNumero(totalPlanificadoTD)}</td>}
+                       {esNocturno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{formatReporteNumero(totalPlanificadoTN)}</td>}
+                       {!esDiurno && !esNocturno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{formatReporteNumero(totalAlcanceTD)}</td>}
+                       {!esDiurno && !esNocturno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{formatReporteNumero(totalAlcanceTN)}</td>}
+                       {esDiurno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{formatReporteNumero(totalAlcanceTD)}</td>}
+                       {esNocturno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{formatReporteNumero(totalAlcanceTN)}</td>}
+                       {!esDiurno && !esNocturno && <td style={getCumplimientoCellStyle(totalAlcanceTD, totalPlanificadoTD)} className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{cumplimientoTD}</td>}
+                       {!esDiurno && !esNocturno && <td style={getCumplimientoCellStyle(totalAlcanceTN, totalPlanificadoTN)} className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums">{cumplimientoTN}</td>}
+                       {esDiurno && <td style={getCumplimientoCellStyle(totalAlcanceTD, totalPlanificadoTD)} className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{cumplimientoTD}</td>}
+                        {esNocturno && <td style={getCumplimientoCellStyle(totalAlcanceTN, totalPlanificadoTN)} className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums">{cumplimientoTN}</td>}
                         <td className="px-1 py-1.5 text-[9px] font-black text-slate-500 border-r border-b border-slate-200 text-center"></td>
                         <td className="px-1 py-1.5 text-[9px] font-black text-slate-500 border-r border-b border-slate-200 text-center"></td>
 
-                        <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalHorasProgramadas}</td>
-                         <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalParadasProgramadas}</td>
-                         <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalHorasProgramadasReales}</td>
-                         <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalServicios}</td>
-                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalAusentismo}</td>
-                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalExternas}</td>
-                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalAdecuaciones}</td>
-                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalAveria}</td>
-                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalOperacionales}</td>
+                        <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{formatReporteNumero(totalHorasProgramadas)}</td>
+                         <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{formatReporteNumero(totalParadasProgramadas)}</td>
+                         <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{formatReporteNumero(totalHorasProgramadasReales)}</td>
+                         <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{formatReporteNumero(totalServicios)}</td>
+                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{formatReporteNumero(totalAusentismo)}</td>
+                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{formatReporteNumero(totalExternas)}</td>
+                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{formatReporteNumero(totalAdecuaciones)}</td>
+                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{formatReporteNumero(totalAveria)}</td>
+                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{formatReporteNumero(totalOperacionales)}</td>
                         <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalDisponibilidadPromedio}</td>
-                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalProduccionTeorica}</td>
-                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalHorasEfectivas}</td>
-                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums">{totalTiempoMuerto}</td>
+                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{formatReporteNumero(totalProduccionTeorica)}</td>
+                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{formatReporteNumero(totalHorasEfectivas)}</td>
+                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums">{formatReporteNumero(totalTiempoMuerto)}</td>
                       </tr>
                     );
                   })()}
@@ -8903,9 +8956,9 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
                  </thead>
                  <tbody>
                    <tr className="even:bg-slate-50/60">
-                     <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{planificadoTurno}</td>
-                     <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{alcanceTurno}</td>
-                     <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{cumplimientoTurno}</td>
+                     <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(planificadoTurno)}</td>
+                     <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(alcanceTurno)}</td>
+                     <td style={getCumplimientoCellStyle(alcanceTurno, planificadoTurno)} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{cumplimientoTurno}</td>
                      <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{disponibilidadTotal}</td>
                      </tr>
                                                     </tbody>

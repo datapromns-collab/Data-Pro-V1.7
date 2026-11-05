@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import ExcelJS from 'exceljs';
-import { BarChart3, CalendarDays, ChevronDown, TrendingUp, Upload } from 'lucide-react';
+import { BarChart3, CalendarDays, ChevronDown, Trash2, TrendingUp, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useRemoteCollection } from '@/hooks/use-remote-collection';
@@ -27,7 +27,7 @@ type PronosticoMensualData = {
 type InventarioDiarioData = {
   days: Record<string, Record<string, number>>;
   openingOverrides?: Record<string, Record<string, number>>;
-  externalEntries?: Record<string, Record<string, number>>;
+  externalEntries?: Record<string, Record<string, number> | null>;
 };
 type AnalisisPeriodo = 'dia' | 'promedio' | 'semana' | 'mes';
 type AnalisisFila = {
@@ -199,6 +199,7 @@ export function VentasModule({
   const [cargaPronosticoMensaje, setCargaPronosticoMensaje] = useState('');
   const [cargaDiariaMensaje, setCargaDiariaMensaje] = useState('');
   const [cargaEntradasMensaje, setCargaEntradasMensaje] = useState('');
+  const [eliminandoEntradasExternas, setEliminandoEntradasExternas] = useState(false);
   const [fechaAjusteSeleccionada, setFechaAjusteSeleccionada] = useState<Record<string, string>>({});
   const [borradoresInventarioInicial, setBorradoresInventarioInicial] = useState<Record<string, string>>({});
   const [forecastStocks, setForecastStocks] = useState<PronosticoStocks>({
@@ -463,6 +464,34 @@ export function VentasModule({
       setCargaEntradasMensaje(`No se pudieron cargar las entradas: ${message}`);
     } finally {
       event.target.value = '';
+    }
+  };
+
+  const handleEliminarEntradasExternas = async () => {
+    const entradasDelDia = inventarioDiarioStore.data.externalEntries?.[fechaAnalisis];
+    if (!entradasDelDia || Object.keys(entradasDelDia).length === 0) return;
+    if (!window.confirm(`¿Eliminar las entradas externas cargadas para ${fechaAnalisis}? Esta acción no afectará el inventario ni otras fechas.`)) {
+      return;
+    }
+
+    setEliminandoEntradasExternas(true);
+    setCargaEntradasMensaje(`Eliminando las entradas externas de ${fechaAnalisis}...`);
+    try {
+      await inventarioDiarioStore.savePatch({
+        externalEntries: { [fechaAnalisis]: null },
+      });
+      inventarioDiarioStore.setDataLocal((previous) => {
+        const externalEntries = { ...(previous.externalEntries || {}) };
+        delete externalEntries[fechaAnalisis];
+        return { ...previous, externalEntries };
+      });
+      setCargaEntradasMensaje(`Se eliminaron las entradas externas de ${fechaAnalisis}.`);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Error desconocido al eliminar las entradas.';
+      console.error('Error al eliminar entradas externas de ventas:', error);
+      setCargaEntradasMensaje(`No se pudieron eliminar las entradas: ${message}`);
+    } finally {
+      setEliminandoEntradasExternas(false);
     }
   };
 
@@ -978,6 +1007,21 @@ export function VentasModule({
                     className="hidden"
                     onChange={handleEntradasExternasCarga}
                   />
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="destructive"
+                    onClick={handleEliminarEntradasExternas}
+                    disabled={
+                      !inventarioDiarioStore.isLoaded ||
+                      eliminandoEntradasExternas ||
+                      !Object.keys(entradasExternasDiarias[fechaAnalisis] || {}).length
+                    }
+                    className="h-9 rounded-full px-4 text-[10px] font-black uppercase tracking-widest shadow-sm transition-none active:scale-95"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                    Eliminar entradas del día
+                  </Button>
                 </>
               )}
             </div>
@@ -996,7 +1040,15 @@ export function VentasModule({
                 </p>
               )}
               {cargaEntradasMensaje && (
-                <p role="status" className="rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800">
+                <p
+                  role="status"
+                  className={cn(
+                    'rounded-xl border px-4 py-3 text-sm font-semibold',
+                    cargaEntradasMensaje.startsWith('No se pudieron')
+                      ? 'border-red-100 bg-red-50 text-red-800'
+                      : 'border-emerald-100 bg-emerald-50 text-emerald-800'
+                  )}
+                >
                   {cargaEntradasMensaje}
                 </p>
               )}
