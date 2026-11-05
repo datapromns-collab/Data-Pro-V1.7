@@ -2222,9 +2222,23 @@ export default function PlannerPage() {
   const [allOrdenesTrabajo, setAllOrdenesTrabajo] = useState<any[]>([]);
   const [allOrdenesSap, setAllOrdenesSap] = useState<any[]>([]);
   const [reporteDataLoaded, setReporteDataLoaded] = useState(false);
+  const [resumenSemanalSubTab, setResumenSemanalSubTab] = useState('resumen');
+  const [resumenSemanalWeekStartDate, setResumenSemanalWeekStartDate] = useState(new Date());
+  const [ptSubTab, setPtSubTab] = useState('TDiurno');
+  const resumenSemanalWeekDates = useMemo(() => {
+    const weekStart = startOfWeek(resumenSemanalWeekStartDate, { weekStartsOn: 1 });
+    return Array.from({ length: 7 }, (_, index) => format(addDays(weekStart, index), 'yyyy-MM-dd'));
+  }, [resumenSemanalWeekStartDate]);
   useEffect(() => {
-    const fechaReporteKey = reporteDiarioFecha ? format(reporteDiarioFecha, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd');
-    const query = new URLSearchParams({ startDate: fechaReporteKey, endDate: fechaReporteKey });
+    const semanaInicio = startOfWeek(resumenSemanalWeekStartDate, { weekStartsOn: 1 });
+    const semanaFin = addDays(semanaInicio, 6);
+    const fechaReporte = reporteDiarioFecha || new Date();
+    const fechaInicioConsulta = fechaReporte < semanaInicio ? fechaReporte : semanaInicio;
+    const fechaFinConsulta = fechaReporte > semanaFin ? fechaReporte : semanaFin;
+    const query = new URLSearchParams({
+      startDate: format(fechaInicioConsulta, 'yyyy-MM-dd'),
+      endDate: format(fechaFinConsulta, 'yyyy-MM-dd'),
+    });
     const cargarTodo = async () => {
       setReporteDataLoaded(false);
       try {
@@ -2261,15 +2275,12 @@ export default function PlannerPage() {
       }
     };
     void cargarTodo();
-  }, [reporteDiarioFecha]);
+  }, [reporteDiarioFecha, resumenSemanalWeekStartDate]);
   const allTasks = useMemo(() => {
     if (!weeklyData) return tasks || [];
     return Object.values(weeklyData).flatMap(week => week.tasks || []);
   }, [weeklyData, tasks]);
   const [reporteSubTab, setReporteSubTab] = useState('diario');
-  const [resumenSemanalSubTab, setResumenSemanalSubTab] = useState('resumen');
-  const [resumenSemanalWeekStartDate, setResumenSemanalWeekStartDate] = useState(new Date());
-  const [ptSubTab, setPtSubTab] = useState('TDiurno');
   const [turnoSubTab, setTurnoSubTab] = useState<'diurno' | 'nocturno' | 'dt'>('diurno');
   const [dtSubTab, setDtSubTab] = useState<'td' | 'tn'>('td');
   const [printMode, setPrintMode] = useState('');
@@ -5389,7 +5400,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                        resumenSemanalSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                      )}
                                    >
-                                     {subTab === 'resumen' ? 'Resumen' : 'PT'}
+                                     {subTab === 'resumen' ? 'Semana' : 'PT'}
                                    </button>
                                  ))}
                                </div>
@@ -5438,9 +5449,81 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                              </div>
                               <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                                 {resumenSemanalSubTab === 'resumen' && (
-                                  <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
-                                    <CalendarDays className="h-12 w-12 mb-4 opacity-20" />
-                                    Resumen en Desarrollo
+                                  <div className="flex flex-col gap-3">
+                                    <div className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                                      Semana {getISOWeek(resumenSemanalWeekStartDate)} · {format(startOfWeek(resumenSemanalWeekStartDate, { weekStartsOn: 1 }), 'dd/MM/yyyy')} al {format(addDays(startOfWeek(resumenSemanalWeekStartDate, { weekStartsOn: 1 }), 6), 'dd/MM/yyyy')}
+                                    </div>
+                                    <ReporteTurnoTabla
+                                      informesOperacionales={allInformesOperacionales}
+                                      tasks={reporteTasks}
+                                      realProduction={realProduction}
+                                      lineSpeeds={lineSpeeds}
+                                      turno="DIARIO"
+                                      fecha={startOfWeek(resumenSemanalWeekStartDate, { weekStartsOn: 1 })}
+                                      semanaFechas={resumenSemanalWeekDates}
+                                      planificadasPorDia={reportePlanificadasPorDia}
+                                      ordenes={allOrdenesTrabajo}
+                                      velocidadesDt={velocidadesDt}
+                                      allTasks={reporteTasks}
+                                      ordenesSap={allOrdenesSap}
+                                      periodLabel={`Acumulado Semana ${getISOWeek(resumenSemanalWeekStartDate)}`}
+                                    />
+                                    {(() => {
+                                      const row = calcularTotalesDiario(
+                                        allInformesOperacionales,
+                                        reporteTasks,
+                                        realProduction,
+                                        lineSpeeds,
+                                        startOfWeek(resumenSemanalWeekStartDate, { weekStartsOn: 1 }),
+                                        reportePlanificadasPorDia,
+                                        allOrdenesTrabajo,
+                                        resumenSemanalWeekDates,
+                                        allOrdenesSap,
+                                        'DIARIO'
+                                      );
+                                      const totalPlanificado = (Number(row.totalPlanificadoTD) || 0) + (Number(row.totalPlanificadoTN) || 0);
+                                      const totalAlcance = (Number(row.totalAlcanceTD) || 0) + (Number(row.totalAlcanceTN) || 0);
+                                      const cumplimientoTotal = totalPlanificado > 0
+                                        ? `${((totalAlcance / totalPlanificado) * 100).toFixed(2).replace('.', ',')}%`
+                                        : '0,00%';
+                                      return (
+                                        <div className="border border-slate-200 rounded-[2.5rem] bg-slate-50/30 overflow-visible">
+                                          <div className="p-4">
+                                            <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto pointer-events-auto">
+                                              <table className="w-full border-collapse text-center" style={{ minWidth: 700 }}>
+                                                <thead>
+                                                  <tr className="bg-slate-100">
+                                                    <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Planificado</th>
+                                                    <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Alcance</th>
+                                                    <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">% Cumplimiento</th>
+                                                    <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200">Disponibilidad total</th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                  <tr className="even:bg-slate-50/60">
+                                                    <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(totalPlanificado)}</td>
+                                                    <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(totalAlcance)}</td>
+                                                    <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{cumplimientoTotal}</td>
+                                                    <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.disponibilidadTotal)}</td>
+                                                  </tr>
+                                                </tbody>
+                                              </table>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      );
+                                    })()}
+                                    <TablaResumenPorLinea
+                                      informesOperacionales={allInformesOperacionales}
+                                      tasks={reporteTasks}
+                                      realProduction={realProduction}
+                                      lineSpeeds={lineSpeeds}
+                                      fecha={startOfWeek(resumenSemanalWeekStartDate, { weekStartsOn: 1 })}
+                                      semanaFechas={resumenSemanalWeekDates}
+                                      planificadasPorDia={reportePlanificadasPorDia}
+                                      ordenes={allOrdenesTrabajo}
+                                      ordenesSap={allOrdenesSap}
+                                    />
                                   </div>
                                 )}
                                 {resumenSemanalSubTab === 'pt' && (
@@ -5465,17 +5548,65 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                    </div>
                                    <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                                      {ptSubTab === 'TDiurno' && (
-                                       <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
-                                         <Sun className="h-12 w-12 mb-4 opacity-20" />
-                                         T Diurno en Desarrollo
-                                       </div>
-                                     )}
-                                     {ptSubTab === 'TNocturno' && (
-                                       <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
-                                         <Moon className="h-12 w-12 mb-4 opacity-20" />
-                                         T Nocturno en Desarrollo
-                                       </div>
-                                     )}
+                                     <div className="flex flex-col gap-3">
+                                       <ReporteTurnoTabla
+                                         informesOperacionales={allInformesOperacionales}
+                                         tasks={reporteTasks}
+                                         realProduction={realProduction}
+                                         lineSpeeds={lineSpeeds}
+                                         turno="DIURNO"
+                                         fecha={startOfWeek(resumenSemanalWeekStartDate, { weekStartsOn: 1 })}
+                                         semanaFechas={resumenSemanalWeekDates}
+                                         planificadasPorDia={reportePlanificadasPorDia}
+                                         ordenes={allOrdenesTrabajo}
+                                         velocidadesDt={velocidadesDt}
+                                         allTasks={reporteTasks}
+                                         ordenesSap={allOrdenesSap}
+                                         periodLabel={`Acumulado Semana ${getISOWeek(resumenSemanalWeekStartDate)}`}
+                                       />
+                                       <TablaResumenPorLinea
+                                         informesOperacionales={allInformesOperacionales}
+                                         tasks={reporteTasks}
+                                         realProduction={realProduction}
+                                         lineSpeeds={lineSpeeds}
+                                         fecha={startOfWeek(resumenSemanalWeekStartDate, { weekStartsOn: 1 })}
+                                         semanaFechas={resumenSemanalWeekDates}
+                                         planificadasPorDia={reportePlanificadasPorDia}
+                                         ordenes={allOrdenesTrabajo}
+                                         ordenesSap={allOrdenesSap}
+                                       />
+                                     </div>
+                                   )}
+                                   {ptSubTab === 'TNocturno' && (
+                                     <div className="flex flex-col gap-3">
+                                       <ReporteTurnoTabla
+                                         informesOperacionales={allInformesOperacionales}
+                                         tasks={reporteTasks}
+                                         realProduction={realProduction}
+                                         lineSpeeds={lineSpeeds}
+                                         turno="NOCTURNO"
+                                         fecha={startOfWeek(resumenSemanalWeekStartDate, { weekStartsOn: 1 })}
+                                         semanaFechas={resumenSemanalWeekDates}
+                                         planificadasPorDia={reportePlanificadasPorDia}
+                                         ordenes={allOrdenesTrabajo}
+                                         velocidadesDt={velocidadesDt}
+                                         allTasks={reporteTasks}
+                                         ordenesSap={allOrdenesSap}
+                                         periodLabel={`Acumulado Semana ${getISOWeek(resumenSemanalWeekStartDate)}`}
+                                       />
+                                       <TablaResumenPorLinea
+                                         informesOperacionales={allInformesOperacionales}
+                                         tasks={reporteTasks}
+                                         realProduction={realProduction}
+                                         lineSpeeds={lineSpeeds}
+                                         fecha={startOfWeek(resumenSemanalWeekStartDate, { weekStartsOn: 1 })}
+                                         semanaFechas={resumenSemanalWeekDates}
+                                         planificadasPorDia={reportePlanificadasPorDia}
+                                         ordenes={allOrdenesTrabajo}
+                                         ordenesSap={allOrdenesSap}
+                                       />
+                                     </div>
+                                   )}
                                    </div>
                                  </div>
                                )}
@@ -8096,7 +8227,11 @@ function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realP
   let informeDelDia: any[] = [];
   let diaPlanificada: any = {};
   if (semanaFechas && semanaFechas.length > 0) {
-    informeDelDia = (informesOperacionales || []).filter((r: any) => semanaFechas.includes(String(r.fecha || '')));
+    const fechasSemana = new Set(semanaFechas);
+    informeDelDia = (informesOperacionales || []).filter((r: any) =>
+      fechasSemana.has(String(r.fecha || '')) &&
+      (turno === 'DIARIO' || String(r.turno || '').toUpperCase() === turno)
+    );
     semanaFechas.forEach(f => {
       const dia = planificadasPorDia?.[f] || {};
       Object.entries(dia).forEach(([sabor, porLinea]: [string, any]) => {
@@ -8430,7 +8565,7 @@ function ajustarHorasProgramadas(horasProgramadas: number[], cpHours: number[], 
           tiempoMuertoNegativo: tiempoMuertoInexplicableRaw < 0,
         };
     });
-  }, [informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha, planificadasPorDia, ordenes, velocidadesDt, semanaFechas]);
+  }, [informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha, planificadasPorDia, ordenes, velocidadesDt, semanaFechas, hrsPagadasDia, hrsProgramadasDia, allTasks, ordenesSap]);
 }
 
 function getResumenPorLinea(informesOperacionales: any[], tasks: any[], realProduction: any, lineSpeeds: any, fecha?: Date, planificadasPorDia?: Record<string, Record<string, Record<number, { diurno: number, nocturno: number }>>>, ordenes?: any[], semanaFechas?: string[], ordenesSap?: any[]) {
@@ -8734,8 +8869,8 @@ function PlanificadasPorDiaTable({ datosPorDia, fecha, turno }: { datosPorDia: a
   );
 }
 
-function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineSpeeds, turno = 'DIURNO', fecha, planificadasPorDia, ordenes, velocidadesDt, hrsPagadasDia, hrsProgramadasDia, allTasks, ordenesSap }: any) {
-   const data = useReportData(informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha, planificadasPorDia, ordenes, velocidadesDt, hrsPagadasDia, hrsProgramadasDia, undefined, allTasks, ordenesSap);
+function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineSpeeds, turno = 'DIURNO', fecha, planificadasPorDia, ordenes, velocidadesDt, hrsPagadasDia, hrsProgramadasDia, semanaFechas, allTasks, ordenesSap, periodLabel }: any) {
+   const data = useReportData(informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha, planificadasPorDia, ordenes, velocidadesDt, hrsPagadasDia, hrsProgramadasDia, semanaFechas, allTasks, ordenesSap);
    const formatCell = formatReporteNumero;
    const esDiurno = turno === 'DIURNO';
    const esNocturno = turno === 'NOCTURNO';
@@ -8769,7 +8904,7 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
          <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
            <div className="w-2 h-2 rounded-full bg-sky-500" />
            <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-             Reporte {turno === 'DIARIO' ? 'Diario' : turno === 'DIURNO' ? 'por Turno - Diurno' : 'por Turno - Nocturno'}
+             {periodLabel ? `${periodLabel} · ` : ''}Reporte {turno === 'DIARIO' ? 'Diario' : turno === 'DIURNO' ? 'por Turno - Diurno' : 'por Turno - Nocturno'}
            </h4>
          </div>
          <div className="p-4">
