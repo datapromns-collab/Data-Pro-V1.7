@@ -2222,34 +2222,45 @@ export default function PlannerPage() {
   const [allOrdenesSap, setAllOrdenesSap] = useState<any[]>([]);
   const [reporteDataLoaded, setReporteDataLoaded] = useState(false);
   useEffect(() => {
-    if (reporteDataLoaded) return;
+    const fechaReporteKey = reporteDiarioFecha ? format(reporteDiarioFecha, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd');
+    const query = new URLSearchParams({ startDate: fechaReporteKey, endDate: fechaReporteKey });
     const cargarTodo = async () => {
+      setReporteDataLoaded(false);
       try {
         const [infRes, ordRes, sapRes] = await Promise.all([
-          fetch('/api/collection/planta-informes-operacionales', { cache: 'no-store' }),
-          fetch('/api/collection/planta-ordenes-trabajo', { cache: 'no-store' }),
-          fetch('/api/data', { cache: 'no-store' }),
+          fetch(`/api/collection/planta-informes-operacionales?${query.toString()}`, { cache: 'no-store' }),
+          fetch(`/api/collection/planta-ordenes-trabajo?${query.toString()}`, { cache: 'no-store' }),
+          fetch('/api/data?section=ordenesSap', { cache: 'no-store' }),
         ]);
         if (infRes.ok) {
           const inf = await infRes.json();
-          if (Array.isArray(inf)) setAllInformesOperacionales(inf);
+          setAllInformesOperacionales(Array.isArray(inf) ? inf : []);
+        } else {
+          setAllInformesOperacionales([]);
         }
         if (ordRes.ok) {
           const ord = await ordRes.json();
-          if (Array.isArray(ord)) setAllOrdenesTrabajo(ord);
+          setAllOrdenesTrabajo(Array.isArray(ord) ? ord : []);
+        } else {
+          setAllOrdenesTrabajo([]);
         }
         if (sapRes.ok) {
           const sap = await sapRes.json();
-          if (Array.isArray(sap.ordenesSap)) setAllOrdenesSap(sap.ordenesSap);
+          setAllOrdenesSap(Array.isArray(sap?.ordenesSap) ? sap.ordenesSap : []);
+        } else {
+          setAllOrdenesSap([]);
         }
       } catch (e) {
         console.error('Error cargando datos completos para reporte', e);
+        setAllInformesOperacionales([]);
+        setAllOrdenesTrabajo([]);
+        setAllOrdenesSap([]);
       } finally {
         setReporteDataLoaded(true);
       }
     };
-    cargarTodo();
-  }, [reporteDataLoaded]);
+    void cargarTodo();
+  }, [reporteDiarioFecha]);
   const allTasks = useMemo(() => {
     if (!weeklyData) return tasks || [];
     return Object.values(weeklyData).flatMap(week => week.tasks || []);
@@ -5121,32 +5132,31 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                          />
                                         {(() => {
                                                const row = calcularTotalesDiario(allInformesOperacionales, tasks, realProduction, lineSpeeds, reporteDiarioFecha, reportePlanificadasPorDia, allOrdenesTrabajo, undefined, allOrdenesSap, 'DIARIO');
+                                          const totalPlanificado = (Number(row.totalPlanificadoTD) || 0) + (Number(row.totalPlanificadoTN) || 0);
+                                          const totalAlcance = (Number(row.totalAlcanceTD) || 0) + (Number(row.totalAlcanceTN) || 0);
+                                          const cumplimientoTotal = totalPlanificado > 0
+                                            ? `${((totalAlcance / totalPlanificado) * 100).toFixed(2).replace('.', ',')}%`
+                                            : '0,00%';
                                           return (
                                             <div className="border border-slate-200 rounded-[2.5rem] bg-slate-50/30 overflow-visible">
                                               <div className="p-4">
-                                                <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
-                                                  <table className="w-full border-collapse text-center" style={{ minWidth: 1400 }}>
+                                                <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto pointer-events-auto">
+                                                  <table className="w-full border-collapse text-center" style={{ minWidth: 700 }}>
                                                     <thead>
                                                       <tr className="bg-slate-100">
-                                                         <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Planificado TD</th>
-                                                         <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Planificado TN</th>
-                                                         <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Alcance TD</th>
-                                                         <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Alcance TN</th>
-                                                        <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">% CUMPLIMIENTO TD</th>
-                                                        <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">% CUMPLIMIENTO TN</th>
-                 <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">DISPONIBILIDAD TOTAL</th>
-               </tr>
+                                                        <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Planificado</th>
+                                                        <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Alcance</th>
+                                                        <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">% Cumplimiento</th>
+                                                        <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200">Disponibilidad total</th>
+                                                      </tr>
                                                     </thead>
                                                     <tbody>
                                                       <tr className="even:bg-slate-50/60">
-                                                        <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.totalPlanificadoTD}</td>
-                                                        <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.totalPlanificadoTN ?? '0'}</td>
-                                                        <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.totalAlcanceTD}</td>
-                                                        <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.totalAlcanceTN ?? '0'}</td>
-                                                        <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.cumplimientoTD}</td>
-                                                        <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.cumplimientoTN}</td>
-                <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.disponibilidadTotal}</td>
-              </tr>
+                                                        <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{totalPlanificado}</td>
+                                                        <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{totalAlcance}</td>
+                                                        <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{cumplimientoTotal}</td>
+                                                        <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{row.disponibilidadTotal}</td>
+                                                      </tr>
                                                     </tbody>
                                                   </table>
                                                 </div>
@@ -5168,7 +5178,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                         <div className="mt-3">
                                           <div className="border border-slate-200 rounded-[2.5rem] bg-slate-50/30 overflow-visible">
                                             <div className="p-4">
-                                              <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                              <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto pointer-events-auto">
                                                 <table className="w-full border-collapse text-center" style={{ minWidth: 1400 }}>
                                                   <thead>
                                                     <tr className="bg-slate-100">
@@ -5183,6 +5193,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                         <td className="px-2 py-1 border-b border-slate-100 text-left">
                                                           <input
                                                             type="text"
+                                                            disabled={activeModuleReadOnly}
                                                             className="w-full bg-transparent text-[10px] text-slate-700 outline-none focus:bg-slate-50 rounded px-1 py-0.5"
                                                             placeholder="Sin observaciones"
                                                           />
@@ -5244,7 +5255,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                            <div className="mt-3">
                                               <div className="border border-slate-200 rounded-[2.5rem] bg-slate-50/30 overflow-visible">
                                                 <div className="p-4">
-                                                  <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                                  <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto pointer-events-auto">
                                                     <table className="w-full border-collapse text-center" style={{ minWidth: 1400 }}>
                                                       <thead>
                                                         <tr className="bg-slate-100">
@@ -5259,6 +5270,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                             <td className="px-2 py-1 border-b border-slate-100 text-left">
                                                               <input
                                                                 type="text"
+                                                                disabled={activeModuleReadOnly}
                                                                 className="w-full bg-transparent text-[10px] text-slate-700 outline-none focus:bg-slate-50 rounded px-1 py-0.5"
                                                                 placeholder="Sin observaciones"
                                                               />
@@ -5304,7 +5316,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                            <div className="mt-3">
                                               <div className="border border-slate-200 rounded-[2.5rem] bg-slate-50/30 overflow-visible">
                                                 <div className="p-4">
-                                                  <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                                  <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto pointer-events-auto">
                                                     <table className="w-full border-collapse text-center" style={{ minWidth: 1400 }}>
                                                       <thead>
                                                         <tr className="bg-slate-100">
@@ -5319,6 +5331,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                             <td className="px-2 py-1 border-b border-slate-100 text-left">
                                                               <input
                                                                 type="text"
+                                                                disabled={activeModuleReadOnly}
                                                                 className="w-full bg-transparent text-[10px] text-slate-700 outline-none focus:bg-slate-50 rounded px-1 py-0.5"
                                                                 placeholder="Sin observaciones"
                                                               />
@@ -8508,7 +8521,7 @@ function TablaResumenPorLinea({ informesOperacionales, tasks, realProduction, li
   return (
     <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
       <div className="p-4">
-        <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+        <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto pointer-events-auto">
           <table className="w-full border-collapse text-center" style={{ minWidth: 1200 }}>
             <thead>
               <tr className="bg-slate-100">
@@ -8704,11 +8717,19 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
            </h4>
          </div>
          <div className="p-4">
-           <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
-              <table className="w-full border-collapse text-center" style={{ minWidth: esDiurno || esNocturno ? 1870 : 2270 }}>
+           <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto pointer-events-auto">
+              <table
+                className={cn(
+                  "w-full border-collapse text-center",
+                  esDiurno || esNocturno
+                    ? "min-w-[1870px]"
+                    : "table-fixed min-w-full [&_th]:!min-w-0 [&_th]:whitespace-normal [&_th]:break-words [&_th]:leading-tight [&_td]:break-words"
+                )}
+                style={esDiurno || esNocturno ? { minWidth: 1870 } : { minWidth: 0, tableLayout: 'fixed' }}
+              >
                <thead>
                  <tr className="bg-slate-100">
-                   <th rowSpan={2} className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36 text-left">Ubicación</th>
+                   <th rowSpan={2} className="sticky left-0 z-20 bg-slate-100 px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-[76px] text-left">Ubicación</th>
                    {!esDiurno && !esNocturno && <th colSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Planificado</th>}
                    {!esDiurno && !esNocturno && <th colSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Alcance</th>}
                    {!esDiurno && !esNocturno && <th colSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">% Cumplimiento</th>}
@@ -8750,7 +8771,7 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
                <tbody>
                  {data.map((row: any) => (
                    <tr key={row.linea} className="even:bg-slate-50/60">
-                     <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-0.5 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">{row.linea}</td>
+                     <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-1 py-0.5 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">{row.linea}</td>
                      {!esDiurno && !esNocturno && <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.planificadoTD)}</td>}
                      {!esDiurno && !esNocturno && <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.planificadoTN)}</td>}
                      {esDiurno && <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.planificadoTD)}</td>}

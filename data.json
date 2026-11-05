@@ -14588,12 +14588,12 @@
             "name": "GLUP MANZANA ROJA",
             "lineId": "7",
             "loadPerHour": 2500,
-            "quantity": 32190,
-            "durationHours": 12.876,
+            "quantity": 20958,
+            "durationHours": 8.3832,
             "presentation": "1Lt",
-            "tanks": 4,
+            "tanks": 2.6,
             "startTime": "2026-11-03T07:45:00.000Z",
-            "endTime": "2026-11-03T20:37:33.600Z",
+            "endTime": "2026-11-03T16:07:59.520Z",
             "id": "h6wk73g3z",
             "color": "#f59e0b"
           },
@@ -14974,54 +14974,6 @@
           },
           {
             "name": "CS",
-            "lineId": "7",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 0.5,
-            "startTime": "2026-11-03T20:38:00.000Z",
-            "endTime": "2026-11-03T21:08:00.000Z",
-            "id": "myhc4xkj8",
-            "color": "#ec4899"
-          },
-          {
-            "name": "GLUP UVA",
-            "lineId": "7",
-            "loadPerHour": 2500,
-            "quantity": 28450,
-            "durationHours": 11.38,
-            "presentation": "1Lt",
-            "tanks": 4,
-            "startTime": "2026-11-03T21:08:00.000Z",
-            "endTime": "2026-11-04T08:30:48.000Z",
-            "id": "ui8jfapk4",
-            "color": "#ef4444"
-          },
-          {
-            "name": "CS",
-            "lineId": "7",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 0.5,
-            "startTime": "2026-11-04T08:31:00.000Z",
-            "endTime": "2026-11-04T09:01:00.000Z",
-            "id": "lb8zs1ijb",
-            "color": "#ef4444"
-          },
-          {
-            "name": "GLUP KOLITA",
-            "lineId": "7",
-            "loadPerHour": 2500,
-            "quantity": 35580,
-            "durationHours": 14.232,
-            "presentation": "1Lt",
-            "tanks": 4,
-            "startTime": "2026-11-04T09:01:00.000Z",
-            "endTime": "2026-11-04T23:14:55.200Z",
-            "id": "pu8ywparl",
-            "color": "#ef4444"
-          },
-          {
-            "name": "CS",
             "lineId": "1",
             "loadPerHour": 0,
             "quantity": 0,
@@ -15043,17 +14995,6 @@
             "endTime": "2026-11-05T13:01:24.000Z",
             "id": "cjm38nri0",
             "color": "#ec4899"
-          },
-          {
-            "name": "CIP 3P ALCALINO",
-            "lineId": "7",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 2,
-            "startTime": "2026-11-04T23:15:00.000Z",
-            "endTime": "2026-11-05T01:15:00.000Z",
-            "id": "4fwdf5wkp",
-            "color": "#10b981"
           },
           {
             "name": "GLUP UVA",
@@ -15115,6 +15056,102 @@
             "endTime": "2026-11-05T16:25:24.000Z",
             "id": "d1ykc43vc",
             "color": "#f59e0b"
+          },
+          {
+            "name": "CS",
+            "lineId": "7",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-11-03T16:08:00.000Z",
+            "endTime": "2026-11-03T16:38:00.000Z",
+            "id": "s0s3zjhh3",
+            "color": "#ef4444"
+          },
+          {
+            "name": "GLUP KOLITA",
+            "lineId": "7",
+            "loadPerHour": 2500,
+            "quantity": 8916,
+            "durationHours": 3.5664,
+            "presentation": "1Lt",
+            "tanks": 1,
+            "startTime": "2026-11-03T16:38:00.000Z",
+            "endTime": "2026-11-03T20:11:59.040Z",
+            "id": "61ie9kggg",
+            "color": "#ec4899"
+          },
+          {
+            "name": "CS",
+            "lineId": "7",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-11-03T20:12:00.000Z",
+            "endTime": "2026-11-03T20:42:00.000Z",
+            "id": "rqsqc3j0d",
+            "color": "#10b981"
+          },
+          {
+            "name": "GLUP UVA",
+            "lineId": "7",
+            "loadPerHour": 2500,
+            "quantity": 7125,
+            "durationHours": 2.85,
+            "presentation": "1Lt",
+            "tanks": 1,
+            "startTime": "2026-11-03T20:42:00.000Z",
+            "endTime": "2026-11-03T23:33:00.000Z",
+            "id": "tc59z6npz",
+            "color": "#587593"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "7",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-11-03T23:33:00.000Z",
+            "endTime": "2026-11-04T01:33:00.000Z",
+            "id": "xzmevn29a",
+            "color": "#6366f1"
+          },
+          {
+            "name": "GLUP FRESH",
+            "lineId": "7",
+            "loadPerHour": 2500,
+            "quantity": 17250,
+            "durationHours": 6.9,
+            "presentation": "1Lt",
+            "tanks": 2,
+            "startTime": "2026-11-04T01:33:00.000Z",
+            "endTime": "2026-11-04T08:27:00.000Z",
+            "id": "2zel29145",
+            "color": "#ef4444"
+          },
+          {
+            "name": "CS",
+            "lineId": "7",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-11-04T08:27:00.000Z",
+            "endTime": "2026-11-04T08:57:00.000Z",
+            "id": "rkre9gw3n",
+            "color": "#587593"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "7",
+            "loadPerHour": 2500,
+            "quantity": 240125,
+            "durationHours": 96.05,
+            "presentation": "1Lt",
+            "tanks": 27.84,
+            "startTime": "2026-11-04T08:57:00.000Z",
+            "endTime": "2026-11-08T09:00:00.000Z",
+            "id": "o1qvuvgw4",
+            "color": "#ef4444"
           }
         ],
         "realProduction": {},
@@ -15172,7 +15209,12 @@
           "x1vedr5sb",
           "ql48z17wr",
           "demnw3trn",
-          "mndh6jy4c"
+          "mndh6jy4c",
+          "myhc4xkj8",
+          "ui8jfapk4",
+          "lb8zs1ijb",
+          "pu8ywparl",
+          "4fwdf5wkp"
         ]
       }
     },
@@ -27722,7 +27764,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-05T12:22:12.585Z"
+    "updatedAt": "2026-11-05T13:47:18.921Z"
   },
   "ordenesSap": [
     {
@@ -58796,7 +58838,7 @@
         "2026-09-14|2026-09": 1174355.86,
         "2026-09-21|2026-09": 1009476.45,
         "2026-09-28|2026-09": 550986.53,
-        "2026-10-01|2026-10": 479385.1,
+        "2026-10-01|2026-10": 0,
         "2026-04-13|2026-04": 1316706.34,
         "2026-04-27|2026-04": 1059135.18,
         "2026-04-01|2026-04": 0,
@@ -58806,7 +58848,7 @@
         "2026-10-26|2026-10": 1370716.18,
         "2026-11-01|2026-11": 77570.03,
         "2026-12-01|2026-12": 0,
-        "2026-11-02|2026-11": 0,
+        "2026-11-02|2026-11": 664288.81,
         "2026-11-23|2026-11": 0
       }
     },
@@ -269004,7 +269046,7 @@
         "usuario": "Froilan Bolivar"
       },
       {
-        "id": 1793869131623.3923,
+        "id": 1793885853315.8728,
         "fechaOrden": "2026-11-04",
         "orden": "FALLA DE AIRE DE ALTA ",
         "fechaEmision": "2026-11-04",
@@ -301851,8 +301893,7 @@
         "1793695037199",
         "1793742466526.9434",
         "1793742586505.362",
-        "1793742244826.4792",
-        "1793652199628"
+        "1793742244826.4792"
       ]
     },
     "seguimiento-enfardadora": {},
