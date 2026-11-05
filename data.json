@@ -26547,11 +26547,13 @@
         "mtto.mds": [
           "planning",
           "mtto",
-          "management"
+          "management",
+          "planta"
         ],
         "mtto1.mds": [
           "planning",
-          "mtto"
+          "mtto",
+          "planta"
         ],
         "stf": [
           "planning",
@@ -26579,6 +26581,22 @@
         "proc3.mds": [
           "planning",
           "procesos"
+        ],
+        "mtto2.mds": [
+          "planning",
+          "planta"
+        ],
+        "mtto3.mds": [
+          "planta",
+          "planning"
+        ],
+        "mtto4.mds": [
+          "planning",
+          "mtto"
+        ],
+        "mtto5.mds": [
+          "planning",
+          "planta"
         ]
       },
       "planning": {
@@ -26970,7 +26988,8 @@
         "mtto.mds": [
           "planning",
           "mtto",
-          "management"
+          "management",
+          "planta"
         ],
         "prodtg.mds": [],
         "MDS": [
@@ -26989,7 +27008,8 @@
         "jaime.r": [],
         "demon2": [],
         "mtto1.mds": [
-          "planning"
+          "planning",
+          "planta"
         ],
         "stf": [
           "planning",
@@ -27010,6 +27030,21 @@
         ],
         "proc3.mds": [
           "planning"
+        ],
+        "mtto2.mds": [
+          "planning",
+          "planta"
+        ],
+        "mtto3.mds": [
+          "planta",
+          "planning"
+        ],
+        "mtto4.mds": [
+          "planning"
+        ],
+        "mtto5.mds": [
+          "planning",
+          "planta"
         ]
       },
       "sections": {
@@ -27178,6 +27213,23 @@
           "procesos.sala-jarabe": "write",
           "procesos.ptab": "none",
           "procesos.miteco": "none"
+        },
+        "mtto3.mds": {
+          "planning.gantt": "read",
+          "planning.plan-semana": "read",
+          "planning.seguimiento-prodt": "none",
+          "planning.speeds": "none",
+          "planning.calculator": "none",
+          "planning.daily": "read"
+        },
+        "mtto5.mds": {
+          "planning.gantt": "read",
+          "planning.daily": "read",
+          "planning.plan-semana": "none",
+          "planning.seguimiento-prodt": "none",
+          "planning.speeds": "none",
+          "planning.calculator": "none",
+          "planta.production": "none"
         }
       }
     },
@@ -27373,10 +27425,10 @@
       },
       {
         "id": "mtto1.mds",
-        "name": "Eduardo Contreras",
-        "password": "scrypt$3YARKSLlzazDc0ReSVLpgw$vC5GK4NaqzZzmuGDjsdpNioD7qPenTElCA3dsozsLdc6XOaxky7ZP0y7pMIJAwqxMZr4izFghL1Q84lmspMe_A",
+        "name": "Alfredo Zapata",
+        "password": "scrypt$5UmRDWG4CrdZHSMrPZa7JA$9ozJHIeyPYfdUd5v-latErjc9IDmXymZbNdeNNSd61fHU1E4Uexwigk0z7TjvVR-xi0ZsoI1zyHsxhkmmYhroQ",
         "role": "STANDARD",
-        "displayRole": "Técnico sala de Maquinas"
+        "displayRole": "Supervisor MTTO"
       },
       {
         "id": "stf",
@@ -27419,11 +27471,39 @@
         "role": "STANDARD",
         "displayRole": "Técnico de procesos",
         "password": "scrypt$pMn7o9erEuvkhgDys2CmFQ$XDgCpazxnd9qhPWE2bCK1l2NZvmIv_UXlQYhb0KWyu2Vgd6vMnLYP1r13GC0y8ycotfDtwWHQLd5VQcsRi25aA"
+      },
+      {
+        "id": "mtto2.mds",
+        "name": "Santos Salazar",
+        "role": "STANDARD",
+        "displayRole": "Supervisor MTTO",
+        "password": "scrypt$aAV0RsNZABnJlzxvOqsPrQ$nXyOHe5iT3Pwe2-YCYSGYFWToSG4WdFR1bG-4jEVKuTbQnPV4n8Ih7lw7KVaY-4CEZOZiQJXdfaDVfMnm6npvQ"
+      },
+      {
+        "id": "mtto3.mds",
+        "name": "Esteban Filippucci",
+        "role": "STANDARD",
+        "displayRole": "Planificador de MTTO",
+        "password": "scrypt$WXpU5iH0ruBk5Uvftmfjcg$SZpvDHbA6B7boxohaHTWN4O7YhGWDUtojhw_KUKbGjUSFpHrazMxXBbiMvCt-lNYEpQ0ycGK083L7yduU0Nf4w"
+      },
+      {
+        "id": "mtto4.mds",
+        "name": "Eduardo Contreras",
+        "role": "STANDARD",
+        "displayRole": "STANDARD",
+        "password": "scrypt$5oyD4P7oZKWxLPkam5tjWA$GWwWriuhIRW4njfGhWs9fGQL18FGiHEtmPMm3pauJE_6aamIiecdOucrdKKUOQxLAYj0mYqG_zQkYg0O9XMapA"
+      },
+      {
+        "id": "mtto5.mds",
+        "name": "Julio Arcila",
+        "role": "STANDARD",
+        "displayRole": "Supervisor de Mtto",
+        "password": "scrypt$NAGA5S8R1YjJhUr638GwZw$i2cVSaR5ZwKk_kMcXPZoAL0cMJEeTk2GSZ07HIpnwoANcBAcEmoJKoVZrrOfNFOwcVt8UMXVnvEPjJwjCHX3Ag"
       }
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-05T04:51:05.045Z"
+    "updatedAt": "2026-11-05T11:29:49.692Z"
   },
   "ordenesSap": [
     {
@@ -244392,7 +244472,7 @@
         "operador": "",
         "linea": "Línea 1",
         "equipo": "",
-        "tipoParada": "OPERACIONAL",
+        "tipoParada": "FALLA DE E/E",
         "inicioParada": "13:36",
         "finParada": "14:03",
         "totalMin": "27",
@@ -245186,7 +245266,7 @@
       {
         "fecha": "2026-11-04",
         "semana": 45,
-        "turno": "DIURNO",
+        "turno": "NOCTURNO",
         "operador": "",
         "linea": "Línea 1",
         "equipo": "PALETIZADORA",
@@ -245319,7 +245399,7 @@
       {
         "fecha": "2026-11-04",
         "semana": 45,
-        "turno": "DIURNO",
+        "turno": "NOCTURNO",
         "operador": "",
         "linea": "Línea 1",
         "equipo": "PALETIZADORA",
@@ -245737,7 +245817,7 @@
       {
         "fecha": "2026-11-04",
         "semana": 45,
-        "turno": "DIURNO",
+        "turno": "NOCTURNO",
         "operador": "JOHN HERRERA ",
         "linea": "Línea 5",
         "equipo": "TAPADORA",
@@ -245946,7 +246026,7 @@
       {
         "fecha": "2026-11-04",
         "semana": 45,
-        "turno": "DIURNO",
+        "turno": "NOCTURNO",
         "operador": "",
         "linea": "Línea 2",
         "equipo": "",
@@ -268713,7 +268793,7 @@
         "orden": "9943",
         "fechaEmision": "2026-11-04",
         "semana": 45,
-        "turno": "DIURNO",
+        "turno": "NOCTURNO",
         "solicitante": "",
         "linea": "Línea 5",
         "maquina": "TAPADORA",
@@ -268822,24 +268902,24 @@
         "fechaEmision": "2026-11-04",
         "semana": 45,
         "turno": "NOCTURNO",
-        "solicitante": "",
+        "solicitante": "MICHAEL AGRAZ",
         "linea": "Línea 2",
         "maquina": "LLENADORA",
-        "aviso": "",
+        "aviso": "6967",
         "fechaParada": "2026-11-04",
-        "inicioMtto": "",
-        "finMtto": "",
+        "inicioMtto": "06:12",
+        "finMtto": "06:33",
         "inicioParada": "06:12",
         "finParada": "06:38",
         "tMtto": "26",
         "tipoParada": "AVERÍA",
-        "mtto": "",
+        "mtto": "correctivo",
         "falla": "CAMBIO DE CENTRADOR #11",
-        "mttoEsp": "",
-        "descripcionFalla": "",
-        "descripcionAccion": "",
+        "mttoEsp": "FRANCES PEREZ",
+        "descripcionFalla": "TUBO DE VENTEO DOBLADO VALVULA 11",
+        "descripcionAccion": "CAMBIO DE CENTRADOR 11",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Froilan Bolivar"
       }
     ],
@@ -286408,8 +286488,8 @@
           "GLUP COLA": {
             "1": "",
             "2": "",
-            "3": "",
-            "4": "",
+            "3": 9680,
+            "4": 3840,
             "5": "",
             "6": "",
             "7": ""
@@ -286425,7 +286505,7 @@
           },
           "GLUP UVA": {
             "1": "",
-            "2": "",
+            "2": 201,
             "3": "",
             "4": "",
             "5": "",
@@ -286451,13 +286531,13 @@
             "7": ""
           },
           "GLUP KOLITA": {
-            "1": "",
+            "1": 14160,
             "2": "",
             "3": "",
             "4": "",
             "5": "",
-            "6": "",
-            "7": ""
+            "6": 5280,
+            "7": 5928
           },
           "GLUP MANZANA VERDE": {
             "1": "",
@@ -286497,7 +286577,7 @@
           },
           "GLUP MANZANA ROJA": {
             "1": "",
-            "2": "",
+            "2": 16400,
             "3": "",
             "4": "",
             "5": "",
@@ -286518,7 +286598,7 @@
             "2": "",
             "3": "",
             "4": "",
-            "5": "",
+            "5": 3700,
             "6": "",
             "7": ""
           },
@@ -287219,7 +287299,12 @@
       "2026-11-03-suave": "251203",
       "2026-11-03-procesos": "3981360,98",
       "2026-11-03-filtrada": "5705373,78",
-      "2026-11-03-total": "3288360"
+      "2026-11-03-total": "3288360",
+      "2026-11-04-servicio": "18014",
+      "2026-11-04-suave": "176049",
+      "2026-11-04-procesos": "2774368,66",
+      "2026-11-04-filtrada": "4066415",
+      "2026-11-04-total": "3211443,33"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",

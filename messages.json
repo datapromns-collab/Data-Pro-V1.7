@@ -2758,7 +2758,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "mtto1.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
@@ -2769,7 +2769,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "mtto1.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
@@ -2780,7 +2780,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "mtto1.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-10-23T15:02:26.435Z"
     },
     {
@@ -2791,7 +2791,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "mtto1.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-10-23T14:56:06.904Z"
     },
     {
@@ -2802,7 +2802,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "mtto1.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-10-23T14:30:52.494Z"
     },
     {
@@ -2813,7 +2813,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "mtto1.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-10-20T17:14:08.396Z"
     },
     {
@@ -2824,7 +2824,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "mtto1.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-10-19T14:55:51.418Z"
     },
     {
@@ -2835,7 +2835,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "mtto1.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-10-16T14:58:35.653Z"
     },
     {
@@ -2846,7 +2846,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "mtto1.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-10-16T14:54:14.951Z"
     },
     {
@@ -2857,7 +2857,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "mtto1.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-10-12T20:40:46.104Z"
     },
     {

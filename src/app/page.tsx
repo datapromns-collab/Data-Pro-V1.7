@@ -4335,7 +4335,7 @@ export default function PlannerPage() {
                  {activeModule === 'planta' && hasAccess(user.id, 'planta') && (
                    <>
                       <div className="flex items-center gap-2 mb-2 no-print">
-                       <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                       <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 pointer-events-auto">
                               {(user?.id === 'prodtj.mds' || user?.id === 'prodtg.mds' || user?.id === 'prodts.mds' || user?.id === 'prodt.mds' || user?.id === 'prodt1.mds' || user?.id === 'prodt2.mds' || user?.id === 'enf.mds' ? ['paradas-lineas', 'produccion', 'reporte', 'resumen-semanal', 'resumen-mensual'] : ['paradas-lineas', 'produccion', 'reporte', 'resumen-semanal', 'resumen-mensual', 'ciclos']).map((tab) => (
                              <button
                                key={tab}
@@ -4359,7 +4359,7 @@ export default function PlannerPage() {
                        {activeTab === 'paradas-lineas' && (
                          <div className="flex items-center justify-between gap-2 mb-4 no-print">
                            <div className="flex items-center gap-3">
-                             <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
+                             <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 pointer-events-auto">
                                {['informes-operacionales', 'ordenes-trabajo'].map((subTab) => (
                                  <button
                                    key={subTab}
@@ -4375,7 +4375,7 @@ export default function PlannerPage() {
                                  </button>
                                ))}
                              </div>
-                             <div className="flex items-center gap-2">
+                             <div className="flex items-center gap-2 pointer-events-auto">
                                 <Popover>
                                   <PopoverTrigger asChild>
                                     <button className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
@@ -4434,7 +4434,7 @@ export default function PlannerPage() {
                           <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
                             {paradasSubTab === 'informes-operacionales' && (
                               <div className="flex flex-col h-full gap-3">
-                                 <div className="flex items-center gap-3 no-print">
+                                 <div className="flex items-center gap-3 no-print pointer-events-auto">
                                    <Select value={paradaFiltroLinea} onValueChange={setParadaFiltroLinea}>
                                      <SelectTrigger className="h-9 w-44 text-[10px] font-bold uppercase tracking-wider rounded-lg border-slate-200">
                                        <SelectValue placeholder="Todas las líneas" />
@@ -4753,7 +4753,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                               )}
                               {paradasSubTab === 'ordenes-trabajo' && (
                                 <div className="flex flex-col h-full gap-3">
-                                  <div className="flex flex-wrap items-center gap-3 no-print">
+                                  <div className="flex flex-wrap items-center gap-3 no-print pointer-events-auto">
                                     <Select value={ordenFiltroLinea} onValueChange={setOrdenFiltroLinea}>
                                       <SelectTrigger className="h-9 w-44 text-[10px] font-bold uppercase tracking-wider rounded-lg border-slate-200">
                                         <SelectValue placeholder="Todas las líneas" />
@@ -4872,7 +4872,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                <div className="flex flex-col gap-2 mb-4 no-print">
                                  <div className="flex items-center justify-between gap-2">
                                    <div className="flex items-center gap-3">
-                                     <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
+                                     <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 pointer-events-auto">
                                         {['planificadas', 'producidas', 'inventarios'].map((subTab) => (
                                            <button
                                              key={subTab}
@@ -4900,13 +4900,13 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                        const date = new Date(year, month - 1, day);
                                        setProduccionFecha(date);
                                      }}
-                                     className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                                     className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left pointer-events-auto"
                                     />
                                  </div>
                                 </div>
                                {produccionSubTab === 'planificadas' && (
                                 <div className="flex items-center gap-3 mb-4 no-print flex-wrap">
-                                  <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
+                                  <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 pointer-events-auto">
                                     {['porturno', 'diario'].map((subTab) => (
                                       <button
                                         key={subTab}
@@ -4926,7 +4926,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                )}
                              {produccionSubTab === 'producidas' && (
                                <div className="flex items-center gap-3 mb-4 no-print">
-                                 <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
+                                 <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 pointer-events-auto">
                                    {['porturno', 'diarioa'].map((subTab) => (
                                      <button
                                        key={subTab}
@@ -4946,7 +4946,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                              )}
                                {produccionSubTab === 'inventarios' && (
                                  <div className="flex items-center gap-3 mb-4 no-print">
-                                   <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
+                                   <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 pointer-events-auto">
                                      <span className="inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap text-slate-600">
                                        <Package className="h-3.5 w-3.5" />
                                        Inventarios
@@ -4959,7 +4959,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                   {produccionSubTab === 'planificadas' && (
                                    planificadasSubTab === 'porturno' ? (
                                      <div className="flex flex-col gap-3 h-full">
-                                       <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 self-start">
+                                       <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 self-start pointer-events-auto">
                                          {['diurno', 'nocturno'].map((subTab) => (
                                            <button
                                              key={subTab}
@@ -5025,7 +5025,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                     {produccionSubTab === 'producidas' && (
                                       producidasSubTab === 'porturno' ? (
                                         <div className="flex flex-col gap-3 h-full">
-                                          <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 self-start">
+                                          <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 self-start pointer-events-auto">
                                             {['diurno', 'nocturno'].map((subTab) => (
                                               <button
                                                 key={subTab}
@@ -5095,7 +5095,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                        const date = new Date(year, month - 1, day);
                                        setReporteDiarioFecha(date);
                                      }}
-                                     className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                                     className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left pointer-events-auto"
                                    />
                                  </div>
                                )}
@@ -5199,7 +5199,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                      )}
                                     {reporteSubTab === 'por-turno' && (
                                     <div className="flex flex-col gap-3 h-full">
-                                      <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 self-start">
+                                      <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 self-start pointer-events-auto">
                                          {(['diurno', 'nocturno'] as const).map((subTab) => (
                                            <button
                                              key={subTab}
@@ -5350,7 +5350,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                          {activeTab === 'resumen-semanal' && (
                            <div className="flex-1 flex flex-col">
                              <div className="flex items-center gap-3 mb-4 no-print">
-                               <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
+                               <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 pointer-events-auto">
                                  {['resumen', 'pt'].map((subTab) => (
                                    <button
                                      key={subTab}
@@ -5417,7 +5417,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                 {resumenSemanalSubTab === 'pt' && (
                                  <div className="flex-1 flex flex-col">
                                    <div className="flex items-center gap-3 mb-4 no-print">
-                                     <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
+                                     <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 pointer-events-auto">
                                        {['TDiurno', 'TNocturno'].map((subTab) => (
                                          <button
                                            key={subTab}

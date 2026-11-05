@@ -282,7 +282,7 @@ export default function PlantaReporteResumen({ informesOperacionales, tasks, lin
       <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-slate-200 bg-white p-3">
         <label className="flex items-center gap-2 text-[10px] font-black uppercase text-slate-500">
           Período
-          <select value={periodo} onChange={(event) => setPeriodo(event.target.value as PeriodoReporte)} className="h-9 rounded-full border border-slate-200 bg-white px-3 text-xs font-bold text-slate-700">
+          <select value={periodo} onChange={(event) => setPeriodo(event.target.value as PeriodoReporte)} className="h-9 rounded-full border border-slate-200 bg-white px-3 text-xs font-bold text-slate-700 pointer-events-auto">
             <option value="dia">Día</option>
             <option value="semana">Semana</option>
             <option value="mes">Mes</option>
@@ -294,7 +294,7 @@ export default function PlantaReporteResumen({ informesOperacionales, tasks, lin
             if (!event.target.value) return;
             const [year, month, day] = event.target.value.split("-").map(Number);
             setFecha(new Date(year, month - 1, day));
-          }} className="h-9 rounded-full border border-slate-200 px-3 text-xs font-bold text-slate-700" />
+          }} className="h-9 rounded-full border border-slate-200 px-3 text-xs font-bold text-slate-700 pointer-events-auto" />
         </label>
         <span className="ml-auto text-xs font-bold capitalize text-slate-600">{etiquetaPeriodo}</span>
       </div>
