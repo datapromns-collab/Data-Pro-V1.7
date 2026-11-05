@@ -8692,6 +8692,9 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
     const totalAlcanceTN = data.reduce((acc: number, r: any) => acc + (Number(r.alcanceTN) || 0), 0);
     const cumplimientoTD = totalPlanificadoTD > 0 ? ((totalAlcanceTD / totalPlanificadoTD) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
     const cumplimientoTN = totalPlanificadoTN > 0 ? ((totalAlcanceTN / totalPlanificadoTN) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
+    const planificadoTurno = esDiurno ? totalPlanificadoTD : totalPlanificadoTN;
+    const alcanceTurno = esDiurno ? totalAlcanceTD : totalAlcanceTN;
+    const cumplimientoTurno = esDiurno ? cumplimientoTD : cumplimientoTN;
     const totalHorasEfectivas = data.reduce((acc, r) => {
       const cajasH = Number(r.cajasH) || 0;
       const alcanceTD = Number(r.alcanceTD || 0);
@@ -8889,27 +8892,21 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
          <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible mt-3">
            <div className="p-4">
              <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
-               <table className="w-full border-collapse text-center" style={{ minWidth: 1400 }}>
+               <table className="w-full border-collapse text-center" style={{ minWidth: 700 }}>
                  <thead>
                    <tr className="bg-slate-100">
-                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Planificado TD</th>
-                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Planificado TN</th>
-                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Alcance TD</th>
-                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Alcance TN</th>
-                     <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">% CUMPLIMIENTO TD</th>
-                     <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">% CUMPLIMIENTO TN</th>
-                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">DISPONIBILIDAD TOTAL</th>
+                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Planificado {esDiurno ? 'TD' : 'TN'}</th>
+                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Alcance {esDiurno ? 'TD' : 'TN'}</th>
+                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">% Cumplimiento {esDiurno ? 'TD' : 'TN'}</th>
+                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200">Disponibilidad total</th>
                     </tr>
                  </thead>
                  <tbody>
                    <tr className="even:bg-slate-50/60">
-                     <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{totalPlanificadoTD}</td>
-                     <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{totalPlanificadoTN ?? '0'}</td>
-                     <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{totalAlcanceTD}</td>
-                     <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{totalAlcanceTN ?? '0'}</td>
-                     <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{cumplimientoTD}</td>
-                     <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{cumplimientoTN}</td>
-                      <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{disponibilidadTotal}</td>
+                     <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{planificadoTurno}</td>
+                     <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{alcanceTurno}</td>
+                     <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{cumplimientoTurno}</td>
+                     <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{disponibilidadTotal}</td>
                      </tr>
                                                     </tbody>
                                                   </table>
