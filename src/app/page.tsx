@@ -4498,8 +4498,8 @@ export default function PlannerPage() {
                                      {errorValidacion}
                                    </div>
                                  )}
-                                  <div className="rounded-lg border border-slate-200 overflow-auto max-h-[62vh] tabla-ordenes-scroll" style={{ scrollBehavior: 'smooth' }}>
-                                    <div className="min-w-[1200px]">
+                                  <div className="rounded-lg border border-slate-200 overflow-auto max-h-[62vh] tabla-ordenes-scroll pointer-events-auto" style={{ scrollBehavior: 'smooth' }}>
+                                    <div className={cn("min-w-[1200px]", activeModuleReadOnly && "pointer-events-none")}>
                                       <Table>
                                      <TableHeader className="sticky top-0 z-30">
                                         <TableRow className="bg-[#1a3d6b] hover:bg-[#1a3d6b] text-white border-none">
@@ -4785,8 +4785,8 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                         }).length} registros
                                     </span>
                                   </div>
-                                  <div className="rounded-lg border border-slate-200 overflow-auto max-h-[62vh] tabla-ordenes-scroll overscroll-contain" style={{ scrollBehavior: 'smooth' }}>
-                                       <Table className="min-w-[2200px] w-max">
+                                  <div className="rounded-lg border border-slate-200 overflow-auto max-h-[62vh] tabla-ordenes-scroll overscroll-contain pointer-events-auto" style={{ scrollBehavior: 'smooth' }}>
+                                       <Table className={cn("min-w-[2200px] w-max", activeModuleReadOnly && "pointer-events-none")}>
                                      <TableHeader className="sticky top-0 z-30">
                                          <TableRow className="bg-[#1a3d6b] hover:bg-[#1a3d6b] text-white border-none">
                                             <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 sticky left-0 z-40 bg-[#1a3d6b]">I-FECHA</TableHead>
