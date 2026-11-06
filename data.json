@@ -15096,37 +15096,13 @@
             "name": "GLUP FRESH",
             "lineId": "7",
             "loadPerHour": 2500,
-            "quantity": 17250,
-            "durationHours": 6.9,
+            "quantity": 34500,
+            "durationHours": 13.8,
             "presentation": "1Lt",
-            "tanks": 2,
+            "tanks": 4,
             "startTime": "2026-11-04T01:33:00.000Z",
-            "endTime": "2026-11-04T08:27:00.000Z",
+            "endTime": "2026-11-04T15:21:00.000Z",
             "id": "2zel29145",
-            "color": "#ef4444"
-          },
-          {
-            "name": "CS",
-            "lineId": "7",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 0.5,
-            "startTime": "2026-11-04T08:27:00.000Z",
-            "endTime": "2026-11-04T08:57:00.000Z",
-            "id": "rkre9gw3n",
-            "color": "#587593"
-          },
-          {
-            "name": "GLUP COLA",
-            "lineId": "7",
-            "loadPerHour": 2500,
-            "quantity": 240125,
-            "durationHours": 96.05,
-            "presentation": "1Lt",
-            "tanks": 27.84,
-            "startTime": "2026-11-04T08:57:00.000Z",
-            "endTime": "2026-11-08T09:00:00.000Z",
-            "id": "o1qvuvgw4",
             "color": "#ef4444"
           },
           {
@@ -15176,6 +15152,30 @@
             "endTime": "2026-11-08T09:00:12.000Z",
             "id": "uhfeykni9",
             "color": "#f59e0b"
+          },
+          {
+            "name": "CS",
+            "lineId": "7",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-11-04T15:21:00.000Z",
+            "endTime": "2026-11-04T15:51:00.000Z",
+            "id": "b6ay57gxl",
+            "color": "#ef4444"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "7",
+            "loadPerHour": 2500,
+            "quantity": 222875,
+            "durationHours": 89.15,
+            "presentation": "1Lt",
+            "tanks": 25.84,
+            "startTime": "2026-11-04T15:51:00.000Z",
+            "endTime": "2026-11-08T09:00:00.000Z",
+            "id": "97ruxrivt",
+            "color": "#587593"
           }
         ],
         "realProduction": {},
@@ -15240,7 +15240,9 @@
           "pu8ywparl",
           "4fwdf5wkp",
           "d1ykc43vc",
-          "g7tkkjd2e"
+          "g7tkkjd2e",
+          "o1qvuvgw4",
+          "rkre9gw3n"
         ]
       }
     },
@@ -27872,7 +27874,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-06T05:24:35.165Z"
+    "updatedAt": "2026-11-06T12:37:53.934Z"
   },
   "ordenesSap": [
     {
@@ -41698,12 +41700,12 @@
           "fechaInicio": "2026-11-05",
           "ticket1": "16394",
           "cajas1": 2880,
-          "ticket2": "",
+          "ticket2": "16395",
           "cajas2": 6800,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1840,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 5044
         }
       ]
     },
@@ -41800,14 +41802,14 @@
         },
         {
           "fechaInicio": "2026-11-05",
-          "ticket1": "16523",
+          "ticket1": "16525",
           "cajas1": 2240,
-          "ticket2": "",
+          "ticket2": "16526",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1920,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 8173
         }
       ]
     },
@@ -41833,12 +41835,12 @@
           "fechaInicio": "2026-11-05",
           "ticket1": "16558",
           "cajas1": 880,
-          "ticket2": "",
+          "ticket2": "16559",
           "cajas2": 80,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 720,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 23360
         }
       ]
     },
@@ -41864,12 +41866,12 @@
           "fechaInicio": "2026-11-05",
           "ticket1": "16440",
           "cajas1": 3520,
-          "ticket2": "",
+          "ticket2": "16441",
           "cajas2": 2400,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2880,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 23760
         }
       ]
     },
@@ -41895,12 +41897,12 @@
           "fechaInicio": "2026-11-05",
           "ticket1": "15241",
           "cajas1": 1650,
-          "ticket2": "",
+          "ticket2": "15244",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 700,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 12450
         }
       ]
     },
@@ -41926,12 +41928,12 @@
           "fechaInicio": "2026-11-05",
           "ticket1": "16602",
           "cajas1": 14080,
-          "ticket2": "",
+          "ticket2": "16603",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2320,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 18480
         }
       ]
     },
@@ -41963,6 +41965,86 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "1-1793964655549",
+      "linea": 1,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "64734",
+      "semana": 45,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-05",
+          "ticket1": "16395",
+          "cajas1": 7120,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "6-1793966256143",
+      "linea": 6,
+      "sabor": "GLUP MANZANA ROJA",
+      "ordenNumero": "64740",
+      "semana": 45,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-05",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16526",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 2203
+        }
+      ]
+    },
+    {
+      "id": "7-1793968140304",
+      "linea": 7,
+      "sabor": "GLUP UVA",
+      "ordenNumero": "64746",
+      "semana": 45,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-05",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16486",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 1794,
+          "ticket4": "",
+          "cajas4": 4615
+        }
+      ]
+    },
+    {
+      "id": "7-1793968661328",
+      "linea": 7,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "64752",
+      "semana": 45,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-05",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16486",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 8268
         }
       ]
     }
@@ -55624,28 +55706,32 @@
         "2026-11-04": {
           "GLUP COLA": {
             "inicial": "64.40",
-            "preparado": "",
-            "final": ""
+            "preparado": "24",
+            "final": "60.25"
           },
           "GLUP UVA": {
             "inicial": "27.41",
-            "preparado": "",
-            "final": ""
+            "preparado": "11",
+            "final": "11"
           },
           "JUSTY DURAZNO": {
             "inicial": "17",
-            "preparado": "",
-            "final": ""
+            "preparado": "280",
+            "final": "28"
           },
           "GLUP KOLITA": {
             "inicial": "48.70",
-            "preparado": "",
-            "final": ""
+            "preparado": "90",
+            "final": "49.35"
           },
           "GLUP MANZANA ROJA": {
             "inicial": "15.60",
-            "preparado": "",
-            "final": ""
+            "preparado": "24",
+            "final": "12.7"
+          },
+          "GLUP FRESH": {
+            "preparado": "6",
+            "final": "6"
           }
         }
       },
@@ -57332,8 +57418,35 @@
         "2026-11-03": {
           "PORTUGUESA": {
             "invInicialSacos": "4080",
-            "recepcionSacos": "",
+            "recepcionSacos": "6000",
+            "invFinalSacos": "9240"
+          },
+          "PASTORA": {
+            "invInicialSacos": "",
+            "recepcionSacos": "2840",
             "invFinalSacos": ""
+          },
+          "MONTALBAN": {
+            "invInicialSacos": "",
+            "recepcionSacos": "2400",
+            "invFinalSacos": ""
+          }
+        },
+        "2026-11-04": {
+          "PORTUGUESA": {
+            "invInicialSacos": "9240",
+            "recepcionSacos": "",
+            "invFinalSacos": "6040"
+          },
+          "MONTALBAN": {
+            "invInicialSacos": "",
+            "recepcionSacos": "2640",
+            "invFinalSacos": "1840"
+          },
+          "PASTORA": {
+            "invInicialSacos": "",
+            "recepcionSacos": "760",
+            "invFinalSacos": "760"
           }
         }
       },
@@ -58813,11 +58926,21 @@
         "2026-11-03": {
           "JARABE SIMPLE": {
             "invInicialSacos": "599",
-            "invFinalSacos": ""
+            "invFinalSacos": "556"
           },
           "Sala 1": {
             "invInicialSacos": "688",
-            "invFinalSacos": ""
+            "invFinalSacos": "864"
+          }
+        },
+        "2026-11-04": {
+          "JARABE SIMPLE": {
+            "invInicialSacos": "556",
+            "invFinalSacos": "514"
+          },
+          "Sala 1": {
+            "invInicialSacos": "864",
+            "invFinalSacos": "1067"
           }
         }
       },
@@ -248715,7 +248838,7 @@
         "totalMin": "3",
         "zona": "Llenado",
         "falla": "CAMBIO DE FRENO DE VALVULA #32",
-        "orden": "",
+        "orden": "9944",
         "observaciones": "",
         "usuario": "Froilan Bolivar",
         "id": 1793947781939,
@@ -248909,6 +249032,44 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1793960845799,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-05",
+        "semana": 45,
+        "turno": "NOCTURNO",
+        "operador": "FRANKLIN ALVARADO",
+        "linea": "Línea 1",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "06:35",
+        "finParada": "06:41",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "PELICULA ATASCADA EN SALIDA DE MESA DE ELEVACION",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793966066173,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-05",
+        "semana": 45,
+        "turno": "NOCTURNO",
+        "operador": "RIBERTH PEREZ",
+        "linea": "Línea 1",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "06:06",
+        "finParada": "06:12",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "CAJA CAIDA AFECTA PROCESO",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1793966179604,
         "bloqueado": true
       }
     ],
@@ -271550,33 +271711,6 @@
         "usuario": "Richard Marín"
       },
       {
-        "id": 1793907988100.8706,
-        "fechaOrden": "2026-11-04",
-        "orden": "10358",
-        "fechaEmision": "2026-11-04",
-        "semana": 45,
-        "turno": "NOCTURNO",
-        "solicitante": "",
-        "linea": "Línea 1",
-        "maquina": "PALETIZADORA",
-        "aviso": "",
-        "fechaParada": "2026-11-04",
-        "inicioMtto": "",
-        "finMtto": "",
-        "inicioParada": "19:53",
-        "finParada": "19:56",
-        "tMtto": "3",
-        "tipoParada": "AVERÍA",
-        "mtto": "",
-        "falla": "PALETIZADO MANUAL ",
-        "mttoEsp": "",
-        "descripcionFalla": "",
-        "descripcionAccion": "",
-        "observaciones": "",
-        "bloqueado": false,
-        "usuario": "Froilan Bolivar"
-      },
-      {
         "id": 1793942912907,
         "fechaOrden": "2026-11-05",
         "orden": "10149",
@@ -271791,6 +271925,60 @@
         "observaciones": "",
         "bloqueado": true,
         "usuario": "Luis Sanchez"
+      },
+      {
+        "id": 1793907988100.8706,
+        "fechaOrden": "2026-11-04",
+        "orden": "10358",
+        "fechaEmision": "2026-11-04",
+        "semana": 45,
+        "turno": "NOCTURNO",
+        "solicitante": "",
+        "linea": "Línea 1",
+        "maquina": "PALETIZADORA",
+        "aviso": "",
+        "fechaParada": "2026-11-04",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "19:53",
+        "finParada": "19:56",
+        "tMtto": "3",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "PALETIZADO MANUAL ",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": false,
+        "usuario": "Froilan Bolivar"
+      },
+      {
+        "id": 1793966772076,
+        "solicitante": "",
+        "aviso": "",
+        "inicioMtto": "",
+        "finMtto": "",
+        "mtto": "",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "bloqueado": true,
+        "fechaOrden": "2026-11-05",
+        "orden": "9944",
+        "fechaEmision": "2026-11-05",
+        "semana": 45,
+        "turno": "NOCTURNO",
+        "linea": "Línea 6",
+        "maquina": "LLENADORA",
+        "fechaParada": "2026-11-05",
+        "inicioParada": "18:42",
+        "finParada": "18:45",
+        "tMtto": "3",
+        "tipoParada": "AVERÍA",
+        "falla": "CAMBIO DE FRENO DE VALVULA #32",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar"
       }
     ],
     "seguimiento-ordenes": {
@@ -304943,16 +305131,8 @@
       "*": [
         "1793855094345",
         "1793857965626",
-        "1793652199628",
         "1793907988100.3098",
-        "1793695624902",
-        "1793688555246",
-        "1793688740405",
-        "1793691396454",
-        "1793695037199",
-        "1793742466526.9434",
-        "1793742586505.362",
-        "1793742244826.4792"
+        "1793652199628"
       ]
     },
     "seguimiento-enfardadora": {},
@@ -305008,7 +305188,9 @@
     "1-1791811962984",
     "7-1791899489586",
     "6-1793640781925",
-    "5-1793640676516"
+    "5-1793640676516",
+    "7-1793966292181",
+    "7-1793966316036"
   ],
   "logisticsStockFile": {
     "filename": "stock-producto-terminado.xlsx",
