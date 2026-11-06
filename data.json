@@ -14736,12 +14736,12 @@
             "name": "GLUP COLA",
             "lineId": "3",
             "loadPerHour": 2800,
-            "quantity": 92400,
-            "durationHours": 33,
+            "quantity": 159600,
+            "durationHours": 57,
             "presentation": "2Lts",
-            "tanks": 10.71,
+            "tanks": 18.5,
             "startTime": "2026-11-06T00:00:00.000Z",
-            "endTime": "2026-11-07T09:00:00.000Z",
+            "endTime": "2026-11-08T09:00:00.000Z",
             "id": "iodzo1kv4",
             "color": "#ec4899"
           },
@@ -14832,12 +14832,12 @@
             "name": "JUSTY DURAZNO",
             "lineId": "5",
             "loadPerHour": 1210,
-            "quantity": 10890,
-            "durationHours": 9,
+            "quantity": 29040,
+            "durationHours": 24,
             "presentation": "1.5Lts",
-            "tanks": 9.8,
+            "tanks": 26.14,
             "startTime": "2026-11-06T22:00:00.000Z",
-            "endTime": "2026-11-07T07:00:00.000Z",
+            "endTime": "2026-11-07T22:00:00.000Z",
             "id": "9uatz8fqq",
             "color": "#47CCB0"
           },
@@ -14915,12 +14915,12 @@
             "name": "GLUP COLA",
             "lineId": "4",
             "loadPerHour": 2800,
-            "quantity": 163800,
-            "durationHours": 58.5,
+            "quantity": 231000,
+            "durationHours": 82.5,
             "presentation": "2Lts",
-            "tanks": 18.99,
+            "tanks": 26.78,
             "startTime": "2026-11-04T22:30:00.000Z",
-            "endTime": "2026-11-07T09:00:00.000Z",
+            "endTime": "2026-11-08T09:00:00.000Z",
             "id": "xcy76equh",
             "color": "#10b981"
           },
@@ -15176,6 +15176,30 @@
             "endTime": "2026-11-08T09:00:00.000Z",
             "id": "97ruxrivt",
             "color": "#587593"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "5",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-11-07T22:00:00.000Z",
+            "endTime": "2026-11-08T00:00:00.000Z",
+            "id": "z80bqhn02",
+            "color": "#f59e0b"
+          },
+          {
+            "name": "JUSTY DURAZNO",
+            "lineId": "5",
+            "loadPerHour": 1210,
+            "quantity": 9680,
+            "durationHours": 8,
+            "presentation": "1.5Lts",
+            "tanks": 8.71,
+            "startTime": "2026-11-08T00:00:00.000Z",
+            "endTime": "2026-11-08T08:00:00.000Z",
+            "id": "fms8bvqow",
+            "color": "#ec4899"
           }
         ],
         "realProduction": {},
@@ -27874,7 +27898,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-06T12:37:53.934Z"
+    "updatedAt": "2026-11-06T12:45:25.687Z"
   },
   "ordenesSap": [
     {
@@ -305132,7 +305156,15 @@
         "1793855094345",
         "1793857965626",
         "1793907988100.3098",
-        "1793652199628"
+        "1793652199628",
+        "1793695624902",
+        "1793688555246",
+        "1793688740405",
+        "1793691396454",
+        "1793695037199",
+        "1793742466526.9434",
+        "1793742586505.362",
+        "1793742244826.4792"
       ]
     },
     "seguimiento-enfardadora": {},
