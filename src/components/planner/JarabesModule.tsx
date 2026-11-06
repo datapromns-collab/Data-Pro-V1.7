@@ -21,6 +21,17 @@ const SABORES_UBB = [
   'JUSTY TAMARINDO', 'JUSTY PERA', 'JUSTY MANZANA', 'VITA TEA DURAZNO', 'VITA TEA LIMON'
 ];
 
+const SABORES_UBB_10_POR_CIENTO: Record<string, string> = {
+  'GLUP FRESH': 'GLUP FRESH 10%',
+  'GLUP UVA': 'GLUP UVA 10%',
+  'GLUP PIÑA': 'GLUP PIÑA 10%',
+  'GLUP MANZANA ROJA': 'GLUP MANZANA ROJA 10%',
+};
+const SABORES_UBB_ESTANDAR = SABORES_UBB.flatMap((sabor) => [
+  sabor,
+  ...(SABORES_UBB_10_POR_CIENTO[sabor] ? [SABORES_UBB_10_POR_CIENTO[sabor]] : []),
+]);
+
 const SUGAR_PROVEEDORES = ['PORTUGUESA', 'PASTORA', 'MONTALBAN', 'IMPORTADA 1'];
 const TANQUES_SALAS = ['JARABE SIMPLE', 'KITS PREP.', 'Sala 1', 'sala 2'];
 const AZUCAR_POR_SABOR: Record<string, number> = {
@@ -45,6 +56,10 @@ const AZUCAR_POR_SABOR: Record<string, number> = {
   'JUSTY MANZANA': 0,
   'VITA TEA DURAZNO': 101,
   'VITA TEA LIMON': 97,
+  'GLUP FRESH 10%': 1714.178,
+  'GLUP UVA 10%': 992.5,
+  'GLUP PIÑA 10%': 1058.4,
+  'GLUP MANZANA ROJA 10%': 1181.25,
 };
 
 const inputCellClass = "border border-slate-200 px-1 py-0.5 text-[10px] text-slate-700";
@@ -476,7 +491,7 @@ function UbbTable({ mode, selectedFecha, onUpdate }: { mode: 'estandar' | 'prome
           </tr>
         </thead>
         <tbody>
-          {SABORES_UBB.map((sabor, idx) => {
+          {(mode === 'estandar' ? SABORES_UBB_ESTANDAR : SABORES_UBB).map((sabor, idx) => {
             const inicial = getNumber(sabor, 'inicial');
             const preparado = getNumber(sabor, 'preparado');
             const final = getNumber(sabor, 'final');
