@@ -487,6 +487,7 @@ export default function OrdenesSapModule({
     'GLUP PIÑA': { codigo: 'JARA-00013', descripcion: 'JARABE TERMINADO GLUP PIÑA 10%' },
     'GLUP MANZANA ROJA': { codigo: 'JARA-00014', descripcion: 'JARABE TERMINADO GLUP MANZANA ROJA 10%' },
     'GLUP UVA': { codigo: 'JARA-00015', descripcion: 'JARABE TERMINADO GLUP UVA 10%' },
+    'GLUP FRESH': { codigo: 'JARA-00016', descripcion: 'JARABE TERMINADO GLUP  FRESH 10%' },
   };
 
   // Datos de la fila "Bebida" (segunda tabla). Depende solo del sabor (igual para todas las líneas).
