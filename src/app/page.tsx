@@ -545,15 +545,23 @@ export default function PlannerPage() {
   const setOrdenesTrabajo = ordenesTrabajoStore.setData;
   const informesLoading = informesOperacionalesStore.isLoading;
   const ordenesLoading = ordenesTrabajoStore.isLoading;
+  const canWriteOperationalReports = Boolean(
+    user && (isAdmin || getPermissionLevel(user.id, 'planta', 'line-stops.operational-reports') === 'write'),
+  );
+  const canEditPendingWorkOrders = Boolean(
+    user && (isAdmin || getPermissionLevel(user.id, 'planta', 'line-stops.work-orders.edit-pending') === 'write'),
+  );
   const migracionPlantaHechaRef = useRef(false);
   const informesOperacionalesRef = useRef<any[]>([]);
   informesOperacionalesRef.current = informesOperacionales;
 
   useEffect(() => {
     if (migracionPlantaHechaRef.current) return;
+    if (!permissionsLoaded || !user) return;
     if (!informesOperacionalesStore.isLoaded || !ordenesTrabajoStore.isLoaded) return;
     migracionPlantaHechaRef.current = true;
     const migrarInformes = (ns: string) => {
+      if (!canWriteOperationalReports) return;
       try {
         const raw = localStorage.getItem(ns);
         if (!raw) return;
@@ -567,11 +575,13 @@ export default function PlannerPage() {
       }
     };
     migrarInformes('planta-informes-operacionales');
-    informesOperacionalesStore.setData((prev) => {
-      const next = prev.map((r: any) => r.usuario === 'Produccion' ? { ...r, usuario: 'Ronald Valera' } : r);
-      return next === prev ? prev : next;
-    });
-  }, [informesOperacionalesStore, ordenesTrabajoStore]);
+    if (canWriteOperationalReports) {
+      informesOperacionalesStore.setData((prev) => {
+        const next = prev.map((r: any) => r.usuario === 'Produccion' ? { ...r, usuario: 'Ronald Valera' } : r);
+        return next === prev ? prev : next;
+      });
+    }
+  }, [informesOperacionalesStore, ordenesTrabajoStore, permissionsLoaded, user]);
 
    useEffect(() => {
      const informes = informesOperacionalesStore.data || [];
@@ -582,11 +592,11 @@ export default function PlannerPage() {
        vistos.add(key);
        return true;
      });
-     if (limpios.length !== informes.length) {
+     if (canWriteOperationalReports && limpios.length !== informes.length) {
        console.warn('[DEDUP] informes operacionales duplicados detectados', informes.length, '->', limpios.length);
        informesOperacionalesStore.setData(limpios);
      }
-   }, [informesOperacionalesStore.data, informesOperacionalesStore.setData]);
+   }, [canWriteOperationalReports, informesOperacionalesStore.data, informesOperacionalesStore.setData]);
 
    useEffect(() => {
      const ordenes = ordenesTrabajoStore.data || [];
@@ -597,15 +607,15 @@ export default function PlannerPage() {
        vistos.add(key);
        return true;
      });
-     if (limpios.length !== ordenes.length) {
+     if (canEditPendingWorkOrders && limpios.length !== ordenes.length) {
        ordenesTrabajoStore.setData(limpios);
      }
-   }, [ordenesTrabajoStore.data, ordenesTrabajoStore.setData]);
+   }, [canEditPendingWorkOrders, ordenesTrabajoStore.data, ordenesTrabajoStore.setData]);
 
   const informesPrevRef = useRef<any[] | null>(null);
 
   useEffect(() => {
-    if (!ordenesTrabajoStore.isLoaded) return;
+    if (!ordenesTrabajoStore.isLoaded || !canEditPendingWorkOrders) return;
 
     const curr = informesOperacionalesStore.data || [];
     const prev = informesPrevRef.current;
@@ -708,7 +718,7 @@ export default function PlannerPage() {
         return next;
       });
     }
-  }, [informesOperacionalesStore.data, ordenesTrabajoStore.isLoaded]);
+  }, [canEditPendingWorkOrders, informesOperacionalesStore.data, ordenesTrabajoStore.isLoaded]);
 
   const ordenesTrabajoCargadas = useMemo(() => {
     return (ordenesTrabajo || [])
@@ -4453,7 +4463,12 @@ export default function PlannerPage() {
                         </div>
                       )}
                       {activeTab === 'paradas-lineas' && (
-                        <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                        <div className="flex flex-1 flex-col gap-3 bg-white rounded-[2.5rem] p-4">
+                          {(informesOperacionalesStore.loadError || ordenesTrabajoStore.loadError) && (
+                            <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-xs font-semibold text-red-700">
+                              {[informesOperacionalesStore.loadError, ordenesTrabajoStore.loadError].filter(Boolean).join(' ')}
+                            </div>
+                          )}
                           <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
                             {paradasSubTab === 'informes-operacionales' && (
                               <div className="flex flex-col h-full gap-3">
@@ -4862,6 +4877,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                    setOrdenesTrabajo={setOrdenesTrabajo}
                                                    removeOrdenTrabajo={ordenesTrabajoStore.removeItem}
                                                    user={user}
+                                                   canEditPendingOrders={isAdmin || getPermissionLevel(user.id, 'planta', 'line-stops.work-orders.edit-pending') === 'write'}
                                                    onChangeHora={onChangeHora}
                                                    tiempoTranscurrido={tiempoTranscurrido}
                                                    normalizarHora={normalizarHora}
@@ -5404,7 +5420,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                    </button>
                                  ))}
                                </div>
-                               <div className="ml-auto">
+                               <div className="ml-auto pointer-events-auto">
                                  <Popover>
                                    <PopoverTrigger asChild>
                                      <button className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
@@ -9107,15 +9123,14 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
      );
   }
 
-  const OrdenTrabajoRow = memo(({ row, editingRows, setEditingRows, setFilasNoEditables, errorValidacion, setErrorValidacion, ordenesTrabajo, setOrdenesTrabajo, removeOrdenTrabajo, user, onChangeHora, tiempoTranscurrido, normalizarHora, formatearFecha }: any) => {
+  const OrdenTrabajoRow = memo(({ row, editingRows, setEditingRows, setFilasNoEditables, errorValidacion, setErrorValidacion, ordenesTrabajo, setOrdenesTrabajo, removeOrdenTrabajo, user, canEditPendingOrders, onChangeHora, tiempoTranscurrido, normalizarHora, formatearFecha }: any) => {
     const rowEdit = editingRows[row.id] || row;
     const esAdmin = user?.id === 'alex.mds' || user?.id === 'maria.mds';
-    const esUsuarioPlanta = user?.id === 'prodt.mds' || user?.id === 'prodt1.mds' || user?.id === 'prodt2.mds' || user?.id === 'prodt3.mds' || user?.id === 'prodt4.mds';
-    const esUsuarioRestringido = user?.id === 'prodtj.mds' || user?.id === 'prodtg.mds' || user?.id === 'prodts.mds' || user?.id === 'enf.mds';
+    const esUsuarioPlanta = canEditPendingOrders;
     const estaBloqueado = (row as any).bloqueado === true;
     const estaEnEdicion = editingRows[row.id] != null;
-    const enEdicion = (esAdmin || esUsuarioPlanta) && !esUsuarioRestringido && (estaEnEdicion || !estaBloqueado);
-    const puedeEditar = !estaBloqueado && !esUsuarioRestringido;
+    const enEdicion = (esAdmin || esUsuarioPlanta) && (estaEnEdicion || !estaBloqueado);
+    const puedeEditar = (esAdmin || esUsuarioPlanta) && !estaBloqueado;
     const camposEditables = new Set(['fechaEmision','solicitante','aviso','inicioMtto','finMtto','inicioParada','finParada','tMtto','tipoParada','mtto','falla','mttoEsp','descripcionFalla','descripcionAccion','observaciones','fechaParada']);
     const editable = (campo: string) => enEdicion && camposEditables.has(campo);
     const tMttoCalc = tiempoTranscurrido(rowEdit.fechaEmision, rowEdit.inicioMtto, rowEdit.fechaParada, rowEdit.finMtto);

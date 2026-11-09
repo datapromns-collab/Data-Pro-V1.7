@@ -210,7 +210,7 @@ function usePlannerStoreInner() {
   const forceSaveRef = useRef(false);
   const pendingRef = useRef(false);
   const dirtyWeeksRef = useRef<Record<string, Set<keyof WeeklyData>>>({});
-  const dirtyConfigRef = useRef(new Set<'weekStartDate' | 'lineSpeeds'>());
+  const dirtyConfigRef = useRef(new Set<'lineSpeeds'>());
   const dirtyRecipesRef = useRef(new Set<'customRecipes' | 'customPackagingRecipes'>());
   const changeVersionRef = useRef(0);
 
@@ -233,8 +233,6 @@ function usePlannerStoreInner() {
   const week = weeklyData[weekKey] ?? emptyWeek();
 
   const setWeekStartDate = useCallback((value: Date | ((previous: Date) => Date)) => {
-    dirtyConfigRef.current.add('weekStartDate');
-    changeVersionRef.current += 1;
     setWeekStartDateState(value);
   }, []);
 
@@ -779,7 +777,6 @@ function usePlannerStoreInner() {
 
     if (dirtyConfigRef.current.size > 0) {
       const config: NonNullable<PlannerDataPatch['config']> = {};
-      if (dirtyConfigRef.current.has('weekStartDate')) config.weekStartDate = toLocalISO(weekStartDate);
       if (dirtyConfigRef.current.has('lineSpeeds')) config.lineSpeeds = lineSpeeds;
       plan.config = config;
     }

@@ -296,6 +296,14 @@ export async function authorizeModuleWrite(
         return Response.json({ error: `Write permission denied: section "${key}" is read-only for this account.` }, { status: 403 });
       }
     }
+    if (
+      module === 'planta' &&
+      section === 'line-stops.work-orders.edit-pending' &&
+      configuredSections['planta.line-stops.work-orders.edit-pending'] !== 'write' &&
+      !['prodt.mds', 'prodt1.mds', 'prodt2.mds', 'prodt3.mds', 'prodt4.mds'].includes(auth.user.id)
+    ) {
+      return Response.json({ error: 'Write permission denied: no access to edit pending work orders.' }, { status: 403 });
+    }
   }
 
   return null;
@@ -402,12 +410,6 @@ export async function authorizeDataWrite(request: Request, body: unknown): Promi
       JSON.stringify(incomingPlanner.config.lineSpeeds) !== JSON.stringify(currentConfig.lineSpeeds)
     ) {
       checks.push(['planning', 'speeds']);
-    }
-    if (
-      incomingPlanner.config.weekStartDate !== undefined &&
-      incomingPlanner.config.weekStartDate !== currentConfig.weekStartDate
-    ) {
-      checks.push(['planning', 'gantt']);
     }
   }
   if (
@@ -680,6 +682,9 @@ export async function authorizeCollectionRead(request: Request, namespace: strin
 export async function authorizeCollectionWrite(request: Request, namespace: string): Promise<Response | null> {
   const permission = COLLECTION_PERMISSION_MAP[namespace];
   if (!permission) return Response.json({ error: 'Write permission denied for collection' }, { status: 403 });
+  if (namespace === 'planta-ordenes-trabajo') {
+    return authorizeModuleWrite(request, 'planta', 'line-stops.work-orders.edit-pending');
+  }
   return authorizeModuleWrite(request, permission[0], permission[1]);
 }
 

@@ -266,6 +266,14 @@ async function saveSharedPermissionUpdates(updates: PermissionUpdates): Promise<
   if (!response.ok) throw new Error(`Permissions API error: ${response.status}`);
 }
 
+const DEFAULT_PLANTA_WORK_ORDER_EDIT_USERS = new Set([
+  'prodt.mds',
+  'prodt1.mds',
+  'prodt2.mds',
+  'prodt3.mds',
+  'prodt4.mds',
+]);
+
 export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
   planning: [
     { id: 'gantt', label: 'Programación' },
@@ -329,7 +337,9 @@ export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
   planta: [
     { id: 'line-stops', label: 'Paradas de Líneas', children: [
       { id: 'operational-reports', label: 'Informes Operacionales' },
-      { id: 'work-orders', label: 'Órdenes de trabajo' },
+      { id: 'work-orders', label: 'Órdenes de trabajo', children: [
+        { id: 'edit-pending', label: 'Editar órdenes pendientes' },
+      ] },
     ] },
     { id: 'production', label: 'Producción', children: [
       { id: 'planned', label: 'Planificadas' },
@@ -1008,6 +1018,13 @@ export function usePermissionsStore() {
         const configuredLevel = configured[key];
         if (configuredLevel === 'none') return 'none';
         if (configuredLevel === 'read') effectiveLevel = 'read';
+      }
+      if (module === 'planta' && section === 'line-stops.work-orders.edit-pending') {
+        const explicitLevel = configured[`planta.${section}`];
+        if (explicitLevel === 'write') return effectiveLevel === 'read' ? 'read' : 'write';
+        if (explicitLevel === 'read') return 'read';
+        if (explicitLevel === 'none') return 'none';
+        return DEFAULT_PLANTA_WORK_ORDER_EDIT_USERS.has(userId) ? effectiveLevel : 'none';
       }
       if (
         module === 'procesos'

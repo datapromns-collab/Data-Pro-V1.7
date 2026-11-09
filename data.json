@@ -255787,44 +255787,6 @@
         "usuario": "Froilan Bolivar",
         "id": 1794246978623,
         "bloqueado": true
-      },
-      {
-        "fecha": "2026-11-04",
-        "semana": 45,
-        "turno": "DIURNO",
-        "operador": "MAXIMILIAAUS C",
-        "linea": "Línea 1",
-        "equipo": "PALETIZADORA",
-        "tipoParada": "AVERÍA",
-        "inicioParada": "17:18",
-        "finParada": "18:30",
-        "totalMin": "72",
-        "zona": "Llenado",
-        "falla": "FALLA DE MAGAZIN DE PALETAS ",
-        "orden": "10358",
-        "observaciones": "",
-        "usuario": "Froilan Bolivar",
-        "id": 1793855094341,
-        "bloqueado": true
-      },
-      {
-        "fecha": "2026-11-04",
-        "semana": 45,
-        "turno": "NOCTURNO",
-        "operador": "KEVIN MENDOZA",
-        "linea": "Línea 1",
-        "equipo": "PALETIZADORA",
-        "tipoParada": "AVERÍA",
-        "inicioParada": "18:30",
-        "finParada": "18:54",
-        "totalMin": "24",
-        "zona": "Llenado",
-        "falla": "FALLA DE DISPENSADOR DE PALETAS ",
-        "orden": "SV 6959",
-        "observaciones": "SE REALIZA PALETIZADO MANUAL DESDE 18:30 A 23:30 ORDEN DE TRABAJO 10358 DESDE EL TURNO ANTERIOR ",
-        "usuario": "Froilan Bolivar",
-        "id": 1793857965622,
-        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -313976,7 +313938,9 @@
         "1794030258034",
         "1788991023411",
         "1790538581551",
-        "1790371816310"
+        "1790371816310",
+        "1793855094341",
+        "1793857965622"
       ]
     },
     "planta-ordenes-trabajo": {
