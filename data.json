@@ -27839,7 +27839,8 @@
           "planta"
         ],
         "mtto3.mds": [
-          "planning"
+          "planning",
+          "planta"
         ],
         "mtto4.mds": [
           "planning",
@@ -28290,7 +28291,8 @@
           "planta"
         ],
         "mtto3.mds": [
-          "planning"
+          "planning",
+          "planta"
         ],
         "mtto4.mds": [
           "planning"
@@ -28774,7 +28776,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-09T13:08:23.931Z"
+    "updatedAt": "2026-11-09T13:08:43.691Z"
   },
   "ordenesSap": [
     {
