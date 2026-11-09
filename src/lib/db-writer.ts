@@ -45,56 +45,25 @@ function readSync(): DbData {
   return JSON.parse(raw);
 }
 
-function writePayloadSync(payload: DbData): void {
-  const serialized = JSON.stringify(payload, null, 2);
-  const tmpPath = DB_PATH + '.' + Date.now() + '.' + Math.random().toString(36).substr(2, 9) + '.tmp';
-  fs.writeFileSync(tmpPath, serialized, 'utf8');
+function writeFileAtomicallySync(target: string, contents: string): void {
+  const tmpPath = `${target}.${process.pid}.${Date.now()}.${Math.random().toString(36).slice(2)}.tmp`;
   try {
-    fs.renameSync(tmpPath, DB_PATH);
-    return;
-  } catch (error) {
-    const err = error as NodeJS.ErrnoException;
-    if (err.code !== 'EPERM' && err.code !== 'EACCES' && err.code !== 'EBUSY' && err.code !== 'UNKNOWN') {
-      throw error;
-    }
-  }
-
-  try {
-    withRetrySync(() => fs.copyFileSync(tmpPath, DB_PATH), 5);
-    return;
-  } catch (copyError) {
-    console.warn('[DB][WRITE][COPY_FALLBACK][WARN]', copyError);
-  }
-
-  try {
-    fs.writeFileSync(DB_PATH, serialized, 'utf8');
-  } catch (writeError) {
-    console.error('[DB][WRITE][DIRECT][ERROR]', writeError);
-    throw writeError;
+    fs.writeFileSync(tmpPath, contents, { encoding: 'utf8', flag: 'wx' });
+    fs.renameSync(tmpPath, target);
   } finally {
     try {
       if (fs.existsSync(tmpPath)) fs.unlinkSync(tmpPath);
-    } catch {
-      // ignore
+    } catch (cleanupError) {
+      console.warn('[DB][TEMP][CLEANUP][WARN]', cleanupError);
     }
   }
 }
 
-function withRetrySync<T>(fn: () => T, retries = 3): T {
-  let attempt = 0;
-  while (true) {
-    try {
-      return fn();
-    } catch (error) {
-      const err = error as NodeJS.ErrnoException;
-      const isRetryable = err.code === 'EPERM' || err.code === 'EACCES' || err.code === 'EBUSY' || err.code === 'UNKNOWN';
-      if (!isRetryable || attempt >= retries - 1) throw error;
-      attempt++;
-    }
-  }
+function writePayloadSync(payload: DbData): void {
+  writeFileAtomicallySync(DB_PATH, JSON.stringify(payload, null, 2));
 }
 
-function createRotatingBackupSync(): void {
+function createRotatingBackupSync(data: DbData): void {
   const backupDir = getBackupDir();
   try {
     if (!fs.existsSync(backupDir)) {
@@ -102,20 +71,18 @@ function createRotatingBackupSync(): void {
     }
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const backupPath = path.join(backupDir, `data-${timestamp}.json`);
-    if (fs.existsSync(DB_PATH)) {
-      withRetrySync(() => fs.copyFileSync(DB_PATH, backupPath), 3);
-      const files = fs.readdirSync(backupDir)
-        .filter((f) => f.startsWith('data-') && f.endsWith('.json'))
-        .sort();
-      while (files.length > MAX_BACKUPS) {
-        const oldest = files.shift();
-        if (oldest) {
-          try { fs.unlinkSync(path.join(backupDir, oldest)); } catch {}
-        }
+    writeFileAtomicallySync(backupPath, JSON.stringify(data, null, 2));
+    const files = fs.readdirSync(backupDir)
+      .filter((f) => f.startsWith('data-') && f.endsWith('.json'))
+      .sort();
+    while (files.length > MAX_BACKUPS) {
+      const oldest = files.shift();
+      if (oldest) {
+        try { fs.unlinkSync(path.join(backupDir, oldest)); } catch {}
       }
     }
-  } catch (_e) {
-    // ignore backup failures
+  } catch (error) {
+    console.warn('[DB][BACKUP][WARN] Unable to create rotating backup', error);
   }
 }
 
@@ -153,10 +120,12 @@ export function readDb(): DbData {
   }
 
   const tryParse = (raw: string): DbData => {
-    if (!raw || raw.trim().length === 0) {
-      throw new Error('Empty database file');
+    if (!raw || raw.trim().length === 0) throw new Error('Empty database file');
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+      throw new Error('Invalid database root value');
     }
-    return JSON.parse(raw);
+    return parsed;
   };
 
   const tryRead = (target: string): DbData => {
@@ -177,19 +146,18 @@ export function readDb(): DbData {
     return tryRead(DB_PATH);
   } catch (error) {
     console.error('[DB][READ][ERROR]', error);
-    recoverFromBackupSync();
-
-    try {
-      return tryRead(DB_PATH);
-    } catch (recoveryError) {
-      console.error('[DB][RECOVERY][ERROR]', recoveryError);
+    const recovered = recoverFromBackupSync();
+    if (recovered) {
+      const signature = getDbSignature();
+      cachedDb = signature ? { signature, data: recovered } : null;
+      return recovered;
     }
 
     try {
       const raw = fs.readFileSync(DB_PATH, 'utf8');
       const repaired = sanitizeJson(raw);
       if (repaired) {
-        fs.writeFileSync(DB_PATH, repaired, 'utf8');
+        writeFileAtomicallySync(DB_PATH, repaired);
         console.warn('[DB] Repaired corrupted data.json');
         const data = JSON.parse(repaired);
         const signature = getDbSignature();
@@ -200,20 +168,7 @@ export function readDb(): DbData {
       console.error('[DB][REPAIR][ERROR]', repairError);
     }
 
-    return {
-      planner: {
-        config: { weekStartDate: new Date().toISOString(), lineSpeeds: {} },
-        customRecipes: {},
-        customPackagingRecipes: {},
-        weeks: {},
-      },
-      ordenesSap: [],
-      notifications: [],
-      collections: {},
-      cacheVersion: 0,
-      deletedIds: {},
-      _deletedOrdenesSapIds: [],
-    };
+    throw new Error('Unable to read data.json: no valid backup or repair could be restored.', { cause: error });
   }
 }
 
@@ -230,11 +185,7 @@ export function writeDb(mutator: (current: DbData) => DbData): Promise<void> {
         cachedDb = null;
         console.warn('[DB][CACHE][WARN] Unable to refresh database read cache', cacheError);
       }
-      try {
-        createRotatingBackupSync();
-      } catch (backupError) {
-        console.warn('[DB][BACKUP][WARN]', backupError);
-      }
+      createRotatingBackupSync(updated);
     } catch (error) {
       console.error('[DB][WRITE][ERROR]', error);
       throw error;
@@ -267,9 +218,9 @@ function retryWrite(updated: DbData, retries = 6): void {
   }
 }
 
-function recoverFromBackupSync(): void {
+function recoverFromBackupSync(): DbData | null {
   const backupDir = getBackupDir();
-  if (!fs.existsSync(backupDir)) return;
+  if (!fs.existsSync(backupDir)) return null;
   const files = fs.readdirSync(backupDir)
     .filter((f) => f.startsWith('data-') && f.endsWith('.json'))
     .sort()
@@ -279,13 +230,21 @@ function recoverFromBackupSync(): void {
     try {
       const raw = fs.readFileSync(backupPath, 'utf8');
       const data = JSON.parse(raw);
-      if (data && typeof data === 'object') {
-        fs.copyFileSync(backupPath, DB_PATH);
+      if (data && typeof data === 'object' && !Array.isArray(data)) {
+        try {
+          const current = JSON.parse(fs.readFileSync(DB_PATH, 'utf8'));
+          if (current && typeof current === 'object' && !Array.isArray(current)) return current;
+        } catch {
+          // The current file is still unreadable; restore a validated backup.
+        }
+        writeFileAtomicallySync(DB_PATH, raw);
         console.warn('[DB] Recovered data.json from backup', backupPath);
-        return;
+        return data;
       }
-    } catch (_e) {
+    } catch (error) {
+      console.warn('[DB][RECOVERY][BACKUP][WARN] Unable to restore backup', backupPath, error);
       continue;
     }
   }
+  return null;
 }
