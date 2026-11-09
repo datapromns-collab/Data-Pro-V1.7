@@ -580,11 +580,12 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
 
   useEffect(() => {
     const resumeQueueAfterLogin = () => {
+      if (loadError) void load(true);
       if (queueRef.current.length > 0) void flushQueue();
     };
     window.addEventListener(AUTH_SESSION_READY_EVENT, resumeQueueAfterLogin);
     return () => window.removeEventListener(AUTH_SESSION_READY_EVENT, resumeQueueAfterLogin);
-  }, [flushQueue]);
+  }, [flushQueue, load, loadError]);
 
   useEffect(() => {
     if (!isLoaded) return;

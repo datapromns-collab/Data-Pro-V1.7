@@ -750,10 +750,10 @@ function usePlannerStoreInner() {
      refreshFromServer();
    }, [isLoaded, refreshFromServer]);
 
-  useEffect(() => {
-   window.addEventListener(AUTH_SESSION_READY_EVENT, refreshFromServer);
-   return () => window.removeEventListener(AUTH_SESSION_READY_EVENT, refreshFromServer);
-  }, [refreshFromServer]);
+   useEffect(() => {
+     window.addEventListener(AUTH_SESSION_READY_EVENT, refreshFromServer);
+     return () => window.removeEventListener(AUTH_SESSION_READY_EVENT, refreshFromServer);
+   }, [refreshFromServer]);
 
    useEffect(() => {
      if (!isLoaded) return;

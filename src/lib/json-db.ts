@@ -218,19 +218,24 @@ export async function savePlannerData(data: PlannerDataPatch): Promise<void> {
 }
 
 export async function loadOrdenesSapData(): Promise<{ ordenes: OrdenSap[]; deletedIds: string[] } | null> {
+  let res: Response;
   try {
-    const res = await fetchWithRetry(`${API_URL}?section=ordenesSap`);
-    if (res.status === 401) return null;
-    if (!res.ok) throw new Error(`Órdenes SAP API error: HTTP ${res.status}`);
-    const json = await res.json();
-    return {
-      ordenes: Array.isArray(json.ordenesSap) ? json.ordenesSap : [],
-      deletedIds: Array.isArray(json._deletedOrdenesSapIds) ? json._deletedOrdenesSapIds : [],
-    };
+    res = await fetchWithRetry(`${API_URL}?section=ordenesSap`);
   } catch (error) {
     console.warn('[JSON_DB] Fallback to localStorage for ordenesSap', error);
     return null;
   }
+
+  if (res.status === 401) {
+    throw new Error('La sesión del servidor no es válida. Cierra sesión e inicia de nuevo para cargar las órdenes compartidas.');
+  }
+  if (!res.ok) throw new Error(`No se pudieron cargar las órdenes compartidas (HTTP ${res.status}).`);
+
+  const json = await res.json();
+  return {
+    ordenes: Array.isArray(json.ordenesSap) ? json.ordenesSap : [],
+    deletedIds: Array.isArray(json._deletedOrdenesSapIds) ? json._deletedOrdenesSapIds : [],
+  };
 }
 
 export async function saveOrdenesSapData(ordenes: OrdenSap[], deletedIds: string[]): Promise<void> {

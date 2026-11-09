@@ -30,7 +30,7 @@ interface OrdenesReporteResumenMensualProps {
 }
 
 export function OrdenesReporteResumenMensual({ reportMonthDate }: OrdenesReporteResumenMensualProps) {
-  const { ordenes } = useOrdenesSap();
+  const { ordenes, loadError } = useOrdenesSap();
   const seguimiento = useSeguimientoResumenOptimizado();
   const [subsection, setSubsection] = useState<ResumenMensualSubsection>('resumen-por-sabor');
   const month = reportMonthDate.getMonth() + 1;
@@ -343,6 +343,11 @@ export function OrdenesReporteResumenMensual({ reportMonthDate }: OrdenesReporte
         </div>
       </div>
       <div className="p-4">
+        {loadError && (
+          <div role="alert" className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm font-medium text-amber-800">
+            {loadError}
+          </div>
+        )}
         {subsection === 'resumen-por-sabor' && (
           <>
             <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white">

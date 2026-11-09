@@ -55,6 +55,7 @@ function applyDeleted(items: OrdenSap[], deleted: Set<string>): OrdenSap[] {
 export function useOrdenesSap() {
   const [ordenes, setOrdenesState] = useState<OrdenSap[]>(loadLocal);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
   const deletedRef = useRef(loadDeletedLocal());
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -75,6 +76,7 @@ export function useOrdenesSap() {
     try {
       const remote = await loadOrdenesSapData();
       if (remote && Array.isArray(remote.ordenes)) {
+        setLoadError(null);
         setOrdenesState((prev) => {
           if (dirtyRef.current) {
             const remoteDeleted = new Set(remote.deletedIds.map(String));
@@ -99,8 +101,8 @@ export function useOrdenesSap() {
           return remote.ordenes;
         });
       }
-    } catch {
-      // keep local copy if server is unreachable
+    } catch (error) {
+      setLoadError(error instanceof Error ? error.message : 'No se pudieron cargar las órdenes compartidas.');
     } finally {
       migratedRef.current = true;
       loadingRef.current = false;
@@ -198,5 +200,5 @@ export function useOrdenesSap() {
     };
   }, [refresh, flush]);
 
-  return { ordenes, setOrdenes, eliminarOrden, eliminarDia, isLoaded, saveError, retrySave };
+  return { ordenes, setOrdenes, eliminarOrden, eliminarDia, isLoaded, loadError, saveError, retrySave };
 }
