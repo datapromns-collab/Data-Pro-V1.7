@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-11-02T00:00:00.000",
+      "weekStartDate": "2026-11-09T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -15351,12 +15351,12 @@
             "name": "GLUP FRESH",
             "lineId": "1",
             "loadPerHour": 1500,
-            "quantity": 36000,
-            "durationHours": 24,
+            "quantity": 72000,
+            "durationHours": 48,
             "presentation": "2Lts",
-            "tanks": 4.17,
+            "tanks": 8.35,
             "startTime": "2026-11-09T11:00:00.000Z",
-            "endTime": "2026-11-10T11:00:00.000Z",
+            "endTime": "2026-11-11T11:00:00.000Z",
             "id": "rmocm0oro",
             "color": "#f59e0b"
           },
@@ -27839,7 +27839,6 @@
           "planta"
         ],
         "mtto3.mds": [
-          "planta",
           "planning"
         ],
         "mtto4.mds": [
@@ -28291,7 +28290,6 @@
           "planta"
         ],
         "mtto3.mds": [
-          "planta",
           "planning"
         ],
         "mtto4.mds": [
@@ -28776,7 +28774,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-09T12:35:40.645Z"
+    "updatedAt": "2026-11-09T13:08:23.931Z"
   },
   "ordenesSap": [
     {
@@ -254198,20 +254196,20 @@
         "fecha": "2026-11-07",
         "semana": 45,
         "turno": "NOCTURNO",
-        "operador": "DENILSON CADRASCO",
+        "operador": "DENILSON CADRASCO ",
         "linea": "Línea 5",
-        "equipo": "TAPADORA",
-        "tipoParada": "OPERACIONAL",
+        "equipo": "TAPADORA ",
+        "tipoParada": "AVERÍA",
         "inicioParada": "19:40",
         "finParada": "19:46",
         "totalMin": "6",
         "zona": "Llenado",
         "falla": "TAPA VOLTEADA EN TAPADOR 14",
-        "orden": "",
+        "orden": "10553",
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1794114023008,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-11-07",
@@ -254895,6 +254893,25 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1794229724142,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-07",
+        "semana": 45,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 4",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "06:00",
+        "finParada": "06:45",
+        "totalMin": "45",
+        "zona": "Llenado",
+        "falla": "FALLA ELECTRICA EN PLANTA ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1794229976686,
         "bloqueado": true
       }
     ],
@@ -278586,6 +278603,33 @@
         "descripcionAccion": "",
         "observaciones": "",
         "bloqueado": false,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "id": 1794230117782,
+        "solicitante": "",
+        "aviso": "",
+        "inicioMtto": "",
+        "finMtto": "",
+        "mtto": "",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "bloqueado": false,
+        "fechaOrden": "2026-11-07",
+        "orden": "10553",
+        "fechaEmision": "2026-11-07",
+        "semana": 45,
+        "turno": "NOCTURNO",
+        "linea": "Línea 5",
+        "maquina": "TAPADORA ",
+        "fechaParada": "2026-11-07",
+        "inicioParada": "19:40",
+        "finParada": "19:46",
+        "tMtto": "6",
+        "tipoParada": "AVERÍA",
+        "falla": "TAPA VOLTEADA EN TAPADOR 14",
+        "observaciones": "",
         "usuario": "Luis Sanchez"
       }
     ],
