@@ -7251,6 +7251,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                         setInsumosPeriodoSubTab={setInsumosPeriodoSubTab}
                         insumosFecha={insumosFecha}
                         setInsumosFecha={setInsumosFecha}
+                        ordenesSap={ordenes}
                         co2DiarioData={co2DiarioData}
                         aguaDiarioData={aguaDiarioData}
                         aguaConsumoPorDia={aguaConsumoPorDia}
@@ -9109,7 +9110,7 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
   const OrdenTrabajoRow = memo(({ row, editingRows, setEditingRows, setFilasNoEditables, errorValidacion, setErrorValidacion, ordenesTrabajo, setOrdenesTrabajo, removeOrdenTrabajo, user, onChangeHora, tiempoTranscurrido, normalizarHora, formatearFecha }: any) => {
     const rowEdit = editingRows[row.id] || row;
     const esAdmin = user?.id === 'alex.mds' || user?.id === 'maria.mds';
-    const esUsuarioPlanta = user?.id === 'prodt.mds' || user?.id === 'prodt1.mds' || user?.id === 'prodt2.mds';
+    const esUsuarioPlanta = user?.id === 'prodt.mds' || user?.id === 'prodt1.mds' || user?.id === 'prodt2.mds' || user?.id === 'prodt3.mds' || user?.id === 'prodt4.mds';
     const esUsuarioRestringido = user?.id === 'prodtj.mds' || user?.id === 'prodtg.mds' || user?.id === 'prodts.mds' || user?.id === 'enf.mds';
     const estaBloqueado = (row as any).bloqueado === true;
     const estaEnEdicion = editingRows[row.id] != null;

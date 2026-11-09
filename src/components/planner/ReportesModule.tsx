@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type Dispatch, type SetStateAction } from 'react';
+import { useEffect, useMemo, useState, type Dispatch, type SetStateAction } from 'react';
 import { addDays, eachDayOfInterval, endOfMonth, endOfWeek, format, getISOWeek, startOfDay, startOfMonth, startOfWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { BarChart3, Box, Calendar as CalendarIcon, ClipboardList, Droplets, FlaskConical, Package, Recycle, TrendingUp } from 'lucide-react';
@@ -18,7 +18,7 @@ import {
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-import { loadProductionInventoryPeriod, loadProductionReceptions, loadProductionWasteRows } from '@/lib/json-db';
+import { loadProductionInventoryPeriod, loadProductionReceptions, loadProductionWasteRows, type OrdenSap } from '@/lib/json-db';
 import { parseCantidadCajas } from '@/lib/production-tracking-utils';
 import {
   ADHESIVE_FACTORS,
@@ -824,6 +824,175 @@ function ReportesResumenMensual({
   );
 }
 
+type Co2TheoreticalPeriod = 'diario' | 'semanal' | 'mensual';
+type Co2TheoreticalBreakdown = 'linea' | 'sku';
+
+interface Co2TheoreticalConsumptionProps {
+  orders: OrdenSap[];
+  factors: Record<string, number>;
+  selectedDate: Date | undefined;
+  selectedMonth: Date;
+}
+
+function Co2TheoreticalConsumption({ orders, factors, selectedDate, selectedMonth }: Co2TheoreticalConsumptionProps) {
+  const [period, setPeriod] = useState<Co2TheoreticalPeriod>('diario');
+  const [breakdown, setBreakdown] = useState<Co2TheoreticalBreakdown>('linea');
+  const anchorDate = selectedDate ?? selectedMonth;
+
+  const range = useMemo(() => {
+    if (period === 'mensual') {
+      return { start: startOfMonth(selectedMonth), end: endOfMonth(selectedMonth) };
+    }
+    if (period === 'semanal') {
+      const start = startOfWeek(anchorDate, { weekStartsOn: 1 });
+      return { start, end: endOfWeek(start, { weekStartsOn: 1 }) };
+    }
+    const start = startOfDay(anchorDate);
+    return { start, end: start };
+  }, [anchorDate, period, selectedMonth]);
+
+  const chartRows = useMemo(() => {
+    const dateKeys = new Set(eachDayOfInterval(range).map((date) => format(date, 'yyyy-MM-dd')));
+    const totals = new Map<string, number>();
+
+    orders.forEach((order) => {
+      const litersPerCase = order.linea >= 1 && order.linea <= 4
+        ? 12
+        : order.linea === 6
+          ? 6
+          : order.linea === 7
+            ? 12
+            : 0;
+      const factor = Number(factors[order.sabor]) || 0;
+      if (litersPerCase === 0) return;
+
+      order.dias.forEach((day) => {
+        if (!dateKeys.has(day.fechaInicio)) return;
+        const cases = (Number(day.cajas1) || 0) + (Number(day.cajas2) || 0) +
+          (Number(day.cajas3) || 0) + (Number(day.cajas4) || 0);
+        if (cases <= 0) return;
+
+        const name = breakdown === 'linea' ? `Línea ${order.linea}` : order.sabor;
+        const theoreticalKg = cases * litersPerCase * factor;
+        totals.set(name, (totals.get(name) ?? 0) + theoreticalKg);
+      });
+    });
+
+    return Array.from(totals, ([name, consumo]) => ({ name, consumo }))
+      .sort((a, b) => breakdown === 'linea'
+        ? Number(a.name.slice('Línea '.length)) - Number(b.name.slice('Línea '.length))
+        : a.name.localeCompare(b.name, 'es'));
+  }, [breakdown, factors, orders, range]);
+
+  const dateLabel = period === 'diario'
+    ? format(range.start, 'dd/MM/yyyy')
+    : `${format(range.start, 'dd/MM/yyyy')} – ${format(range.end, 'dd/MM/yyyy')}`;
+  const formatKg = (value: number) => value.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  return (
+    <section className="flex min-h-0 flex-col gap-3">
+      <nav aria-label="Periodo de consumo teórico de CO₂" className="pointer-events-auto flex w-fit items-center rounded-full border border-slate-200 bg-slate-100/50 p-1">
+        {([
+          { id: 'diario', label: 'Diario' },
+          { id: 'semanal', label: 'Semana' },
+          { id: 'mensual', label: 'Mensual' },
+        ] as const).map(({ id, label }) => (
+          <button
+            key={id}
+            type="button"
+            onClick={() => setPeriod(id)}
+            aria-pressed={period === id}
+            className={cn(
+              'inline-flex h-9 items-center justify-center rounded-full px-3 sm:px-5 text-[10px] font-bold uppercase tracking-widest',
+              period === id ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700',
+            )}
+          >
+            {label}
+          </button>
+        ))}
+      </nav>
+
+      <nav aria-label="Desglose del consumo teórico de CO₂" className="pointer-events-auto flex w-fit items-center rounded-full border border-slate-200 bg-slate-100/50 p-1">
+        {([
+          { id: 'linea', label: 'Por línea' },
+          { id: 'sku', label: 'Por SKU' },
+        ] as const).map(({ id, label }) => (
+          <button
+            key={id}
+            type="button"
+            onClick={() => setBreakdown(id)}
+            aria-pressed={breakdown === id}
+            className={cn(
+              'inline-flex h-9 items-center justify-center rounded-full px-3 sm:px-5 text-[10px] font-bold uppercase tracking-widest',
+              breakdown === id ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700',
+            )}
+          >
+            {label}
+          </button>
+        ))}
+      </nav>
+
+      <div className="rounded-2xl border border-slate-200 bg-white p-3 sm:p-4">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h2 className="text-sm font-black uppercase tracking-wide text-slate-800">
+              Consumo teórico de CO₂ {breakdown === 'linea' ? 'por línea' : 'por SKU'}
+            </h2>
+            <p className="mt-1 text-[10px] font-semibold text-slate-500">
+              {period === 'diario' ? 'Día' : period === 'semanal' ? 'Semana' : 'Mes'}: {dateLabel} · Factor CO₂ × litros producidos
+            </p>
+          </div>
+          <span className="rounded-full bg-emerald-50 px-3 py-1 text-[10px] font-black text-emerald-700">KG CO₂</span>
+        </div>
+        {chartRows.length > 0 ? (
+          <>
+            <div className="h-[360px] min-w-[620px] sm:h-[420px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <ComposedChart layout="vertical" data={chartRows} margin={{ top: 8, right: 24, bottom: 8, left: 8 }}>
+                  <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+                  <XAxis
+                    type="number"
+                    tickFormatter={(value) => formatKg(Number(value))}
+                    tick={{ fontSize: 10 }}
+                    label={{ value: 'kg CO₂', position: 'insideBottom', offset: -4, fontSize: 10 }}
+                  />
+                  <YAxis type="category" dataKey="name" width={150} tick={{ fontSize: 10 }} />
+                  <Tooltip formatter={(value) => `${formatKg(Number(value))} kg CO₂`} />
+                  <Bar dataKey="consumo" name="Consumo teórico" fill="#0f766e" radius={[0, 6, 6, 0]} barSize={22} />
+                </ComposedChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="mt-3 border-t border-slate-100 pt-3">
+              <h3 className="mb-2 text-[10px] font-black uppercase tracking-widest text-slate-500">Leyenda y acumulado</h3>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                {chartRows.map(({ name, consumo }) => (
+                  <div key={name} className="flex min-w-0 items-center justify-between gap-3 rounded-lg bg-slate-50 px-3 py-2 text-[10px]">
+                    <span className="flex min-w-0 items-center gap-2 font-bold text-slate-600">
+                      <span aria-hidden="true" className="h-2.5 w-2.5 shrink-0 rounded-full bg-teal-700" />
+                      <span className="truncate">{name}</span>
+                    </span>
+                    <span className="shrink-0 font-black tabular-nums text-slate-800">{formatKg(consumo)} kg</span>
+                  </div>
+                ))}
+                <div className="flex items-center justify-between gap-3 rounded-lg bg-teal-50 px-3 py-2 text-[10px]">
+                  <span className="font-black uppercase tracking-wide text-teal-800">Acumulado</span>
+                  <span className="font-black tabular-nums text-teal-900">
+                    {formatKg(chartRows.reduce((total, row) => total + row.consumo, 0))} kg
+                  </span>
+                </div>
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="flex h-[320px] items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-slate-50/50 px-4 text-center text-xs font-black uppercase tracking-widest text-slate-400">
+            Sin producción con factor CO₂ para este periodo
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
 interface ReportesModuleProps {
   insumosSubTab: string;
   setInsumosSubTab: StateSetter<string>;
@@ -831,6 +1000,7 @@ interface ReportesModuleProps {
   setInsumosPeriodoSubTab: StateSetter<string>;
   insumosFecha: Date | undefined;
   setInsumosFecha: StateSetter<Date | undefined>;
+  ordenesSap: OrdenSap[];
   co2DiarioData: Record<string, Co2DailyRow>;
   aguaDiarioData: Record<string, AguaDailyRow>;
   aguaConsumoPorDia: Record<string, string>;
@@ -864,6 +1034,7 @@ export function ReportesModule({
   setInsumosPeriodoSubTab,
   insumosFecha,
   setInsumosFecha,
+  ordenesSap,
   co2DiarioData,
   aguaDiarioData,
   aguaConsumoPorDia,
@@ -976,7 +1147,12 @@ export function ReportesModule({
                               {(['co2', 'agua', 'ordenes', 'rendimiento-azucar', 'producto-no-conforme', 'mermas-botella-envasada', 'mermas-materiales-lineas', 'analisis-ventas', 'consumo-materiales'] as const).map((tab) => (
                                 <button
                                   key={tab}
-                                  onClick={() => setInsumosSubTab(tab)}
+                                  onClick={() => {
+                                    setInsumosSubTab(tab);
+                                    if (tab !== 'co2' && insumosPeriodoSubTab === 'consumo-teorico') {
+                                      setInsumosPeriodoSubTab('diario');
+                                    }
+                                  }}
                                   aria-label={tab === 'co2' ? 'CO2' : tab === 'agua' ? 'Agua' : tab === 'ordenes' ? 'Órdenes' : tab === 'rendimiento-azucar' ? 'Rendimiento de azúcar' : tab === 'producto-no-conforme' ? 'Producto no conforme' : tab === 'mermas-botella-envasada' ? 'Mermas de Botella envasada' : tab === 'mermas-materiales-lineas' ? 'Mermas de materiales en Lineas' : tab === 'consumo-materiales' ? 'Consumo de materiales' : 'Análisis de ventas'}
                                   className={cn(
                                     "pointer-events-auto inline-flex min-h-9 min-w-0 items-center justify-center gap-1.5 rounded-full border-0 px-2 py-1 text-center text-[9px] font-bold uppercase leading-tight tracking-wide outline-none transition-none active:scale-95 select-none focus:ring-0 sm:px-3 sm:text-[10px] sm:tracking-widest",
@@ -1079,7 +1255,7 @@ export function ReportesModule({
                            <>
                            <div className="flex items-center gap-2 mb-2 no-print">
                             <div className="pointer-events-auto flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                                {(['diario', 'resumen-tablas', 'resumen-mensual'] as const).map((tab) => (
+                                {(['diario', 'resumen-tablas', 'consumo-teorico', 'resumen-mensual'] as const).map((tab) => (
                                   <button
                                     key={tab}
                                     onClick={() => setInsumosPeriodoSubTab(tab)}
@@ -1088,8 +1264,8 @@ export function ReportesModule({
                                       insumosPeriodoSubTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                     )}
                                   >
-                                    <span className="hidden sm:inline">{tab === 'diario' ? 'Diario' : tab === 'resumen-tablas' ? 'Resumen Tablas' : 'Resumen mensual'}</span>
-                                    <span className="sm:hidden">{tab === 'diario' ? 'D' : tab === 'resumen-tablas' ? 'RT' : 'RM'}</span>
+                                    <span className="hidden sm:inline">{tab === 'diario' ? 'Diario' : tab === 'resumen-tablas' ? 'Resumen Tablas' : tab === 'consumo-teorico' ? 'Consumo teórico' : 'Resumen mensual'}</span>
+                                    <span className="sm:hidden">{tab === 'diario' ? 'D' : tab === 'resumen-tablas' ? 'RT' : tab === 'consumo-teorico' ? 'CT' : 'RM'}</span>
                                   </button>
                                 ))}
                               </div>
@@ -1122,6 +1298,14 @@ export function ReportesModule({
                                 getAguaConsumoNumber={getAguaConsumoNumber}
                                 calcularLitrosAguaParaFecha={calcularLitrosAguaParaFecha}
                                 formatAguaDisplay={formatAguaDisplay}
+                              />
+                            )}
+                            {insumosPeriodoSubTab === 'consumo-teorico' && (
+                              <Co2TheoreticalConsumption
+                                orders={ordenesSap}
+                                factors={CO2_FACTORS}
+                                selectedDate={insumosFecha}
+                                selectedMonth={reportMonthDate}
                               />
                             )}
                            </>

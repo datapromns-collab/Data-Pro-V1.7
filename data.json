@@ -15377,12 +15377,12 @@
             "name": "GLUP COLA",
             "lineId": "7",
             "loadPerHour": 2500,
-            "quantity": 60375,
-            "durationHours": 24.15,
+            "quantity": 25875,
+            "durationHours": 10.35,
             "presentation": "1Lt",
-            "tanks": 7,
+            "tanks": 3,
             "startTime": "2026-11-09T11:00:00.000Z",
-            "endTime": "2026-11-10T11:09:00.000Z",
+            "endTime": "2026-11-09T21:21:00.000Z",
             "id": "fe6lje84y",
             "color": "#f59e0b"
           },
@@ -15433,30 +15433,6 @@
             "endTime": "2026-11-14T09:00:00.000Z",
             "id": "h5uozyj68",
             "color": "#6366f1"
-          },
-          {
-            "name": "CS",
-            "lineId": "7",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 0.5,
-            "startTime": "2026-11-10T11:09:00.000Z",
-            "endTime": "2026-11-10T11:39:00.000Z",
-            "id": "xi05u5qtl",
-            "color": "#ef4444"
-          },
-          {
-            "name": "GLUP KOLITA",
-            "lineId": "7",
-            "loadPerHour": 2500,
-            "quantity": 53370,
-            "durationHours": 21.348,
-            "presentation": "1Lt",
-            "tanks": 6,
-            "startTime": "2026-11-10T11:39:00.000Z",
-            "endTime": "2026-11-11T08:59:52.800Z",
-            "id": "cnjsyd51t",
-            "color": "#10b981"
           },
           {
             "name": "CS",
@@ -15674,6 +15650,17 @@
             "endTime": "2026-11-14T08:59:48.000Z",
             "id": "ftgq7eapu",
             "color": "#f59e0b"
+          },
+          {
+            "name": "CS",
+            "lineId": "7",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-11-09T21:21:00.000Z",
+            "endTime": "2026-11-09T21:51:00.000Z",
+            "id": "m70f7jr3x",
+            "color": "#ef4444"
           }
         ],
         "deletedTaskIds": [
@@ -15711,7 +15698,9 @@
           "ckka0mid4",
           "1c3vqnaeb",
           "jyawmoqfd",
-          "qs4vsn2d0"
+          "qs4vsn2d0",
+          "cnjsyd51t",
+          "xi05u5qtl"
         ]
       }
     },
@@ -29233,7 +29222,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-09T15:37:46.151Z"
+    "updatedAt": "2026-11-09T17:07:53.262Z"
   },
   "ordenesSap": [
     {
@@ -61160,7 +61149,7 @@
         "2026-10-26|2026-10": 1370716.18,
         "2026-11-01|2026-11": 0,
         "2026-12-01|2026-12": 0,
-        "2026-11-02|2026-11": 1254106.95,
+        "2026-11-02|2026-11": 1248906.95,
         "2026-11-23|2026-11": 0
       }
     },
@@ -255722,6 +255711,120 @@
         "usuario": "Froilan Bolivar",
         "id": 1794237226499,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-09",
+        "semana": 46,
+        "turno": "DIURNO",
+        "operador": "JUAN LOPEZ",
+        "linea": "Línea 2",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "07:00",
+        "finParada": "07:50",
+        "totalMin": "50",
+        "zona": "Llenado",
+        "falla": "AJUSTE Y LIMPIEZA DE LISTON ",
+        "orden": "10306",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1794246681785,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-09",
+        "semana": 46,
+        "turno": "DIURNO",
+        "operador": "ORLANDO TORREALBA ",
+        "linea": "Línea 2",
+        "equipo": "TAPADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "09:25",
+        "finParada": "09:28",
+        "totalMin": "3",
+        "zona": "Llenado",
+        "falla": "TAPA ATASCADA EN CHUCK",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1794246765104,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-09",
+        "semana": 46,
+        "turno": "DIURNO",
+        "operador": "ORLANDO TORREALBA ",
+        "linea": "Línea 2",
+        "equipo": "TAPADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "09:48",
+        "finParada": "09:52",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "TAPA ATASCADA EN CHUCK",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1794246857687,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-09",
+        "semana": 46,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 2",
+        "equipo": "",
+        "tipoParada": "CALIDAD",
+        "inicioParada": "10:32",
+        "finParada": "10:40",
+        "totalMin": "8",
+        "zona": "Llenado",
+        "falla": "PRUEBA DE CONTENIDO NETO POR CAMBIO A N2",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1794246978623,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-04",
+        "semana": 45,
+        "turno": "DIURNO",
+        "operador": "MAXIMILIAAUS C",
+        "linea": "Línea 1",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "17:18",
+        "finParada": "18:30",
+        "totalMin": "72",
+        "zona": "Llenado",
+        "falla": "FALLA DE MAGAZIN DE PALETAS ",
+        "orden": "10358",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1793855094341,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-04",
+        "semana": 45,
+        "turno": "NOCTURNO",
+        "operador": "KEVIN MENDOZA",
+        "linea": "Línea 1",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "18:30",
+        "finParada": "18:54",
+        "totalMin": "24",
+        "zona": "Llenado",
+        "falla": "FALLA DE DISPENSADOR DE PALETAS ",
+        "orden": "SV 6959",
+        "observaciones": "SE REALIZA PALETIZADO MANUAL DESDE 18:30 A 23:30 ORDEN DE TRABAJO 10358 DESDE EL TURNO ANTERIOR ",
+        "usuario": "Froilan Bolivar",
+        "id": 1793857965622,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -277336,7 +277439,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1793729280795.156,
+        "id": 1793734802581.5164,
         "fechaOrden": "2026-11-03",
         "orden": "9936",
         "fechaEmision": "2026-11-03",
@@ -277354,7 +277457,7 @@
         "tMtto": "98",
         "tipoParada": "AVERÍA",
         "mtto": "",
-        "falla": "DESINCRONIZACION DE TAPADORA",
+        "falla": "DESINCRONIZACION DE EQUIPO",
         "mttoEsp": "",
         "descripcionFalla": "",
         "descripcionAccion": "",
@@ -277363,7 +277466,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1793721410131.5422,
+        "id": 1793735623067.3645,
         "fechaOrden": "2026-11-02",
         "orden": "10138",
         "fechaEmision": "2026-11-02",
@@ -277371,7 +277474,7 @@
         "turno": "DIURNO",
         "solicitante": "",
         "linea": "Línea 3",
-        "maquina": "ENFARDADORA",
+        "maquina": "",
         "aviso": "",
         "fechaParada": "2026-11-02",
         "inicioMtto": "",
@@ -277963,23 +278066,23 @@
         "fechaEmision": "2026-11-04",
         "semana": 45,
         "turno": "DIURNO",
-        "solicitante": "JOHN BOLIVAR",
+        "solicitante": "",
         "linea": "Línea 3",
         "maquina": "SOPLADORA",
-        "aviso": "6954",
+        "aviso": "",
         "fechaParada": "2026-11-04",
-        "inicioMtto": "80:20",
-        "finMtto": "08:55",
+        "inicioMtto": "",
+        "finMtto": "",
         "inicioParada": "08:20",
         "finParada": "08:55",
         "tMtto": "35",
         "tipoParada": "AVERÍA",
-        "mtto": "correctivo",
+        "mtto": "",
         "falla": "TRANCAMIENTO DE ELEVADOR DE CESTA DE PREFORMAS",
-        "mttoEsp": "OMAR BARRIOS",
-        "descripcionFalla": "TRANCAMIENTO DE VOLCADOR / ELEVADOR DE CESTAS DE PREFORMAS",
-        "descripcionAccion": "SE REINSALAN CADENAS DE ELEVACION AMBOS LADOS POR EMPATE PARTIDO, RECTIFICACION Y ALINEACION DE EJES DE LSO PATINES DOBLADOS, AJUSTE DE SENSORES DE PARADA DE SEGURIDAD",
-        "observaciones": "LA FALLA DURO MAS TIEMPO SIN EMBARGO SOLO GENERO 35 MIN DE PARADA YA QUE SE COMENZO A REALIZAR RECARGA MANUAL CON MONTACARGAS DE LA TOLVA",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
         "bloqueado": true,
         "usuario": "Luis Blandin"
       },
@@ -278578,12 +278681,12 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1793976111105.118,
+        "id": 1793907988100.8706,
         "fechaOrden": "2026-11-04",
         "orden": "10358",
         "fechaEmision": "2026-11-04",
         "semana": 45,
-        "turno": "NOCTURNO",
+        "turno": "DIURNO",
         "solicitante": "",
         "linea": "Línea 1",
         "maquina": "PALETIZADORA",
@@ -278591,12 +278694,12 @@
         "fechaParada": "2026-11-04",
         "inicioMtto": "",
         "finMtto": "",
-        "inicioParada": "19:53",
-        "finParada": "19:56",
-        "tMtto": "3",
+        "inicioParada": "17:18",
+        "finParada": "18:30",
+        "tMtto": "72",
         "tipoParada": "AVERÍA",
         "mtto": "",
-        "falla": "PALETIZADO MANUAL ",
+        "falla": "FALLA DE MAGAZIN DE PALETAS ",
         "mttoEsp": "",
         "descripcionFalla": "",
         "descripcionAccion": "",
@@ -279465,7 +279568,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Froilan Bolivar"
       },
       {
@@ -279475,24 +279578,24 @@
         "fechaEmision": "2026-11-09",
         "semana": 46,
         "turno": "DIURNO",
-        "solicitante": "",
+        "solicitante": "MICHAEL AGRAZ",
         "linea": "Línea 1",
         "maquina": "SOPLADORA",
-        "aviso": "",
+        "aviso": "7029",
         "fechaParada": "2026-11-09",
-        "inicioMtto": "",
-        "finMtto": "",
+        "inicioMtto": "08:40",
+        "finMtto": "09:04",
         "inicioParada": "08:40",
         "finParada": "09:04",
         "tMtto": "24",
         "tipoParada": "AVERÍA",
-        "mtto": "",
+        "mtto": "correctivo",
         "falla": "CAMBIO DE MANGUERA DE REFRIGERACION DEL MOLDE #4",
-        "mttoEsp": "",
-        "descripcionFalla": "",
-        "descripcionAccion": "",
+        "mttoEsp": "FRANZEL PEREZ",
+        "descripcionFalla": "CAMBIO DE MANGUERA DE REFRIGERACION MOLDE #4",
+        "descripcionAccion": "SE  CAMBIA MANGUERA DE REFRIGERACION MOLDE #4",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Froilan Bolivar"
       },
       {
@@ -279519,6 +279622,60 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
+        "bloqueado": true,
+        "usuario": "Froilan Bolivar"
+      },
+      {
+        "id": 1794247291324.9246,
+        "fechaOrden": "2026-11-09",
+        "orden": "10306",
+        "fechaEmision": "2026-11-09",
+        "semana": 46,
+        "turno": "DIURNO",
+        "solicitante": "",
+        "linea": "Línea 2",
+        "maquina": "ETIQUETADORA",
+        "aviso": "",
+        "fechaParada": "2026-11-09",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "07:00",
+        "finParada": "07:50",
+        "tMtto": "50",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "AJUSTE Y LIMPIEZA DE LISTON ",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": false,
+        "usuario": "Froilan Bolivar"
+      },
+      {
+        "id": 1794247246243.6504,
+        "fechaOrden": "2026-11-04",
+        "orden": "SV 6959",
+        "fechaEmision": "2026-11-04",
+        "semana": 45,
+        "turno": "NOCTURNO",
+        "solicitante": "",
+        "linea": "Línea 1",
+        "maquina": "PALETIZADORA",
+        "aviso": "",
+        "fechaParada": "2026-11-04",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "18:30",
+        "finParada": "18:54",
+        "tMtto": "24",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "FALLA DE DISPENSADOR DE PALETAS ",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "SE REALIZA PALETIZADO MANUAL DESDE 18:30 A 23:30 ORDEN DE TRABAJO 10358 DESDE EL TURNO ANTERIOR ",
         "bloqueado": false,
         "usuario": "Froilan Bolivar"
       }
@@ -279871,7 +280028,8 @@
         "auto-1-1793964655549": {
           "cajasPlanificadas": 72000,
           "jarabeReal": 118512,
-          "ubb": 41.22
+          "ubb": 41.22,
+          "producto": "217"
         }
       },
       "linea-2": {
@@ -280258,7 +280416,8 @@
         "auto-2-1794051463741": {
           "cajasPlanificadas": 55008,
           "jarabeReal": 78239,
-          "ubb": 79.29
+          "ubb": 79.29,
+          "producto": "11"
         }
       },
       "linea-3": {
@@ -280567,7 +280726,8 @@
         "auto-3-1793978601732": {
           "cajasPlanificadas": 128800,
           "jarabeReal": 113200,
-          "ubb": 39.33
+          "ubb": 39.33,
+          "producto": "176"
         }
       },
       "linea-4": {
@@ -280827,7 +280987,8 @@
         "auto-4-1793978619698": {
           "cajasPlanificadas": 128800,
           "jarabeReal": 123094,
-          "ubb": 42.79
+          "ubb": 42.79,
+          "producto": "261"
         }
       },
       "linea-5": {
@@ -281034,7 +281195,8 @@
         "auto-5-1793978633719": {
           "jarabeReal": 196000,
           "ubb": 196,
-          "cajasPlanificadas": 49520
+          "cajasPlanificadas": 49520,
+          "producto": "325"
         }
       },
       "linea-6": {
@@ -281305,7 +281467,8 @@
         },
         "auto-6-1794073590334": {
           "jarabeReal": 15062,
-          "ubb": 5.23
+          "ubb": 5.23,
+          "producto": "38"
         }
       },
       "linea-7": {
@@ -281678,12 +281841,14 @@
         "auto-7-1793968661328": {
           "jarabeReal": 69142,
           "ubb": 24,
-          "cajasPlanificadas": 34500
+          "cajasPlanificadas": 34500,
+          "producto": "39"
         },
         "auto-7-1794227556058": {
           "cajasPlanificadas": 55000,
           "jarabeReal": 10726,
-          "ubb": 3.72
+          "ubb": 3.72,
+          "producto": "0"
         }
       }
     },

@@ -443,6 +443,20 @@ export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
         { id: 'semanal', label: 'Semanal' },
         { id: 'mensual', label: 'Mensual' },
       ] },
+      { id: 'consumo-teorico', label: 'Consumo teórico', children: [
+        { id: 'diario', label: 'Diario', children: [
+          { id: 'por-linea', label: 'Por línea' },
+          { id: 'por-sku', label: 'Por SKU' },
+        ] },
+        { id: 'semanal', label: 'Semana', children: [
+          { id: 'por-linea', label: 'Por línea' },
+          { id: 'por-sku', label: 'Por SKU' },
+        ] },
+        { id: 'mensual', label: 'Mensual', children: [
+          { id: 'por-linea', label: 'Por línea' },
+          { id: 'por-sku', label: 'Por SKU' },
+        ] },
+      ] },
       { id: 'resumen-mensual', label: 'Resumen mensual', children: [
         { id: 'r-semanal', label: 'Semanal' },
         { id: 'r-mensual', label: 'Mensual' },
