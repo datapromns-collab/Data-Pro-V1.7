@@ -58136,23 +58136,27 @@
         "2026-11-09": {
           "GLUP COLA": {
             "inicial": "103.22",
-            "preparado": "",
-            "final": ""
+            "preparado": "36",
+            "final": "69.12"
           },
           "GLUP FRESH 10%": {
             "inicial": "12.78",
-            "preparado": "",
-            "final": ""
+            "preparado": "36",
+            "final": "22.65"
           },
           "GLUP KOLITA": {
             "inicial": "28.71",
             "preparado": "",
-            "final": ""
+            "final": "18"
           },
           "JUSTY MANZANA": {
             "inicial": "40",
-            "preparado": "",
-            "final": ""
+            "preparado": "220",
+            "final": "19"
+          },
+          "GLUP PIÑA PARCHITA": {
+            "preparado": "6",
+            "final": "1.50"
           }
         }
       },
@@ -59917,7 +59921,12 @@
           "PORTUGUESA": {
             "invInicialSacos": "12560",
             "recepcionSacos": "",
-            "invFinalSacos": ""
+            "invFinalSacos": "10040"
+          },
+          "PASTORA": {
+            "invInicialSacos": "",
+            "recepcionSacos": "1800",
+            "invFinalSacos": "240"
           }
         }
       },
@@ -61457,11 +61466,11 @@
         "2026-11-09": {
           "JARABE SIMPLE": {
             "invInicialSacos": "300",
-            "invFinalSacos": ""
+            "invFinalSacos": "325"
           },
           "Sala 1": {
             "invInicialSacos": "737",
-            "invFinalSacos": ""
+            "invFinalSacos": "941"
           }
         }
       },
