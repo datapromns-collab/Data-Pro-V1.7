@@ -57,7 +57,7 @@ const AZUCAR_POR_SABOR: Record<string, number> = {
   'VITA TEA DURAZNO': 101,
   'VITA TEA LIMON': 97,
   'GLUP FRESH 10%': 1714.178,
-  'GLUP UVA 10%': 992.5,
+  'GLUP UVA 10%': 922.5,
   'GLUP PIÑA 10%': 1058.4,
   'GLUP MANZANA ROJA 10%': 1181.25,
 };
