@@ -15327,12 +15327,12 @@
             "name": "GLUP FRESH",
             "lineId": "1",
             "loadPerHour": 1500,
-            "quantity": 95996,
-            "durationHours": 63.99733333333333,
+            "quantity": 113250,
+            "durationHours": 75.5,
             "presentation": "2Lts",
-            "tanks": 11.13,
+            "tanks": 13.13,
             "startTime": "2026-11-09T11:00:00.000Z",
-            "endTime": "2026-11-12T02:59:50.400Z",
+            "endTime": "2026-11-12T14:30:00.000Z",
             "id": "rmocm0oro",
             "color": "#f59e0b"
           },
@@ -15639,16 +15639,65 @@
             "color": "#10b981"
           },
           {
+            "name": "GLUP KOLITA",
+            "lineId": "2",
+            "loadPerHour": 2500,
+            "quantity": 5250,
+            "durationHours": 2.1,
+            "presentation": "2Lts",
+            "tanks": 0.59,
+            "startTime": "2026-11-09T18:24:00.000Z",
+            "endTime": "2026-11-09T20:30:00.000Z",
+            "id": "w8e6599nn",
+            "color": "#10b981"
+          },
+          {
+            "name": "CS",
+            "lineId": "2",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-11-09T20:30:00.000Z",
+            "endTime": "2026-11-09T21:00:00.000Z",
+            "id": "rmrgrcq7a",
+            "color": "#ec4899"
+          },
+          {
             "name": "GLUP PIÑA PARCHITA",
             "lineId": "2",
             "loadPerHour": 2500,
-            "quantity": 13625,
-            "durationHours": 5.45,
+            "quantity": 6833,
+            "durationHours": 2.7332,
             "presentation": "2Lts",
-            "tanks": 2,
-            "startTime": "2026-11-09T18:24:00.000Z",
-            "endTime": "2026-11-09T23:51:00.000Z",
-            "id": "7gf9axtmo",
+            "tanks": 1,
+            "startTime": "2026-11-09T21:00:00.000Z",
+            "endTime": "2026-11-09T23:43:59.520Z",
+            "id": "5ukia0nt1",
+            "color": "#47CCB0"
+          },
+          {
+            "name": "OTROS",
+            "description": "parada para configuración de paletizadora",
+            "lineId": "2",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 22.76,
+            "startTime": "2026-11-09T23:44:00.000Z",
+            "endTime": "2026-11-10T22:29:36.000Z",
+            "id": "8plbf35r8",
+            "color": "#f59e0b"
+          },
+          {
+            "name": "GLUP PIÑA PARCHITA",
+            "lineId": "2",
+            "loadPerHour": 2500,
+            "quantity": 6833,
+            "durationHours": 2.7332,
+            "presentation": "2Lts",
+            "tanks": 1,
+            "startTime": "2026-11-10T22:30:00.000Z",
+            "endTime": "2026-11-11T01:13:59.520Z",
+            "id": "q9diz84sw",
             "color": "#ec4899"
           },
           {
@@ -15657,22 +15706,70 @@
             "loadPerHour": 0,
             "quantity": 0,
             "durationHours": 0.5,
-            "startTime": "2026-11-09T23:51:00.000Z",
-            "endTime": "2026-11-10T00:21:00.000Z",
-            "id": "7kec0kqwb",
-            "color": "#f59e0b"
+            "startTime": "2026-11-11T01:14:00.000Z",
+            "endTime": "2026-11-11T01:44:00.000Z",
+            "id": "ejtugp1ok",
+            "color": "#ef4444"
           },
           {
             "name": "GLUP KOLITA",
             "lineId": "2",
             "loadPerHour": 2500,
-            "quantity": 14143,
-            "durationHours": 5.6572,
+            "quantity": 115635,
+            "durationHours": 46.254,
             "presentation": "2Lts",
-            "tanks": 1.59,
-            "startTime": "2026-11-10T00:21:00.000Z",
-            "endTime": "2026-11-10T06:00:25.920Z",
-            "id": "ru3e22v37",
+            "tanks": 13,
+            "startTime": "2026-11-11T01:44:00.000Z",
+            "endTime": "2026-11-12T23:59:14.400Z",
+            "id": "708ti74m4",
+            "color": "#47CCB0"
+          },
+          {
+            "name": "CS",
+            "lineId": "2",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-11-13T00:00:00.000Z",
+            "endTime": "2026-11-13T00:30:00.000Z",
+            "id": "e2zclmlgb",
+            "color": "#587593"
+          },
+          {
+            "name": "GLUP UVA",
+            "lineId": "2",
+            "loadPerHour": 2500,
+            "quantity": 85350,
+            "durationHours": 34.14,
+            "presentation": "2Lts",
+            "tanks": 12,
+            "startTime": "2026-11-13T00:30:00.000Z",
+            "endTime": "2026-11-14T10:38:24.000Z",
+            "id": "89gmmepty",
+            "color": "#ec4899"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "1",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-11-12T14:30:00.000Z",
+            "endTime": "2026-11-12T16:30:00.000Z",
+            "id": "f6p1esais",
+            "color": "#10b981"
+          },
+          {
+            "name": "GLUP FRESH",
+            "lineId": "1",
+            "loadPerHour": 1500,
+            "quantity": 17250,
+            "durationHours": 11.5,
+            "presentation": "2Lts",
+            "tanks": 2,
+            "startTime": "2026-11-12T16:30:00.000Z",
+            "endTime": "2026-11-13T04:00:00.000Z",
+            "id": "viydcmq1i",
             "color": "#f59e0b"
           }
         ],
@@ -15717,7 +15814,13 @@
           "lqcf3hidn",
           "dzcwhmply",
           "f0hads2i6",
-          "rlh0s81e2"
+          "rlh0s81e2",
+          "ru3e22v37",
+          "7kec0kqwb",
+          "7gf9axtmo",
+          "6gkshvwxm",
+          "akv6vqy2e",
+          "rg9k22onw"
         ]
       }
     },
@@ -21367,6 +21470,80 @@
               "quantity": "39",
               "unit": "UND"
             }
+          ],
+          "2026-11-09": [
+            {
+              "id": "d3eb0055-1664-43fc-9263-90234caa89d6",
+              "line": "Linea 1",
+              "flavor": "GLUP FRESH",
+              "code": "ENV-00013",
+              "material": "BOTELLA ENVASADA GLUP FRESH 2.0.LTS",
+              "quantity": "338",
+              "unit": "UND"
+            },
+            {
+              "id": "6b9e8e6f-fe3e-4700-b20f-ef587f064493",
+              "line": "Linea 2",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00038",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 2.LTS (EN LINEA 2)",
+              "quantity": "225",
+              "unit": "UND"
+            },
+            {
+              "id": "ee4c66c9-f257-487e-8cd9-addb600e01d0",
+              "line": "Linea 2",
+              "flavor": "GLUP PIÑA PARCHITA",
+              "code": "ENV-00090",
+              "material": "BOTELLA ENVASADA PIÑA PARCHITA 2.0 L (LINEA 2)",
+              "quantity": "33",
+              "unit": "UND"
+            },
+            {
+              "id": "43ccbda6-f304-4a83-9ac6-02daec52d68a",
+              "line": "Linea 3",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00063",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 2L (LINEA 3)",
+              "quantity": "507",
+              "unit": "UND"
+            },
+            {
+              "id": "a6898c85-347d-40d9-90f7-cf5f3ec7df52",
+              "line": "Linea 4",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00054",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 2.LTS (LINEA 4)",
+              "quantity": "29",
+              "unit": "UND"
+            },
+            {
+              "id": "859028a9-a654-4f2d-a5cf-2a881a333b04",
+              "line": "Linea 5",
+              "flavor": "JUSTY MANZANA",
+              "code": "ENV-00107",
+              "material": "BOTELLA ENVASADA JUSTY MANZANA 1.5 LTS",
+              "quantity": "295",
+              "unit": "UND"
+            },
+            {
+              "id": "7974d3d2-3f90-4c07-9caa-f9742dc518ca",
+              "line": "Linea 6",
+              "flavor": "GLUP FRESH",
+              "code": "ENV-00060",
+              "material": "BOTELLA ENVASADA GLUP FRESH 400 ML (LINEA 6)",
+              "quantity": "368",
+              "unit": "UND"
+            },
+            {
+              "id": "60c9736b-3d19-47c6-806d-d5ba030c963a",
+              "line": "Linea 7",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00078",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 1.0 L (LINEA 7)",
+              "quantity": "153",
+              "unit": "UND"
+            }
           ]
         },
         "desperdicios": {
@@ -26830,6 +27007,162 @@
               "kind": "termo",
               "preformSize": ""
             }
+          ],
+          "2026-11-09": [
+            {
+              "id": "a87046df-ee69-49f4-8b7d-f9c22f84ec73",
+              "line": "Linea 1",
+              "flavor": "verde",
+              "code": "EMP_0103",
+              "material": "PREFORMA VERDE 42,64 GR-1881",
+              "quantity": "3571",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "70f2210b-92c2-4e93-95f5-1236bd5fc9bf",
+              "line": "Linea 1",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "4,53",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "0edf4ff6-04c9-43b4-9ecf-b4bf343a0593",
+              "line": "Linea 2",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "4285",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "20368638-a3d7-4b73-b685-4d77583434a4",
+              "line": "Linea 2",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "4,57",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "a4ab657e-9e0a-4250-a200-525470422ceb",
+              "line": "Linea 3",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "5261",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "e8578159-222e-4a9b-93e7-6a3c6b7fb336",
+              "line": "Linea 3",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "2,48",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "631e5ce0-9983-4dc9-834c-0bd07df9672b",
+              "line": "Linea 4",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "3095",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "5b727b49-5b00-4a06-b53d-bae5ca9ce5a6",
+              "line": "Linea 4",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "2,40",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "ecfb6d45-d826-4f8c-b7dd-cd0e03c826fb",
+              "line": "Linea 5",
+              "flavor": "transparente",
+              "code": "EMP_0068",
+              "material": "PREFORMA TRANSPARENTE 36 GR-1881",
+              "quantity": "3416",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "9017c180-8198-4ddc-b03c-da93faa7b814",
+              "line": "Linea 5",
+              "flavor": "",
+              "code": "EMP_0017",
+              "material": "POLIETILENO TERMOENCOGIBLE 55 X 0.07",
+              "quantity": "4,80",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "4a7513a4-f10d-4a73-92d1-02472e2eef46",
+              "line": "Linea 6",
+              "flavor": "verde",
+              "code": "EMP_0135",
+              "material": "PREFORMA VERDE 20,5-1881",
+              "quantity": "3750",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "facc06bb-46f6-4bac-aac1-92fd0288befd",
+              "line": "Linea 6",
+              "flavor": "",
+              "code": "EMP_0130",
+              "material": "POLIETILENO TERMOENCOGIBLE 43 x 0.06",
+              "quantity": "0,93",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "805e3a2d-333d-4f66-8eff-8293a6004438",
+              "line": "Linea 7",
+              "flavor": "transparente",
+              "code": "EMP_0166",
+              "material": "PREFORMA TRANSPARENTE 33 GR-1881",
+              "quantity": "2909",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": "33"
+            },
+            {
+              "id": "715cffa5-1ee0-4d71-a826-b42a8f180de0",
+              "line": "Linea 7",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "5,16",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            }
           ]
         }
       },
@@ -29301,7 +29634,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-10T11:53:54.216Z"
+    "updatedAt": "2026-11-10T15:14:47.000Z"
   },
   "ordenesSap": [
     {
@@ -43722,6 +44055,17 @@
           "cajas3": 2160,
           "ticket4": "",
           "cajas4": 13360
+        },
+        {
+          "fechaInicio": "2026-11-10",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -43762,6 +44106,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 13600
+        },
+        {
+          "fechaInicio": "2026-11-10",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -43782,6 +44137,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 6450
+        },
+        {
+          "fechaInicio": "2026-11-10",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -43802,6 +44168,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 7200
+        },
+        {
+          "fechaInicio": "2026-11-10",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -43822,6 +44199,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 12168
+        },
+        {
+          "fechaInicio": "2026-11-10",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -43842,6 +44230,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 12160
+        },
+        {
+          "fechaInicio": "2026-11-10",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -261264,6 +261663,63 @@
         "usuario": "Richard Marín",
         "id": 1794307856697,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-10",
+        "semana": 46,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "TRANSPORTADOR DE CAJAS",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "07:00",
+        "finParada": "07:25",
+        "totalMin": "25",
+        "zona": "Llenado",
+        "falla": "RUPTURA DE BANDA TRANSPORTADORA DE CAJAS ",
+        "orden": "10369",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1794324147565,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-10",
+        "semana": 46,
+        "turno": "DIURNO",
+        "operador": "JOSE RICO ",
+        "linea": "Línea 5",
+        "equipo": "LLENADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "08:10",
+        "finParada": "08:21",
+        "totalMin": "11",
+        "zona": "Llenado",
+        "falla": "AJUSTE DE BASE Y TORNILLO DE ORGANO DE ELEVACION 74",
+        "orden": "10558",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1794324339396,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-10",
+        "semana": 46,
+        "turno": "DIURNO",
+        "operador": "DAVID REYES ",
+        "linea": "Línea 7",
+        "equipo": "SOPLADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "09:30",
+        "finParada": "09:52",
+        "totalMin": "22",
+        "zona": "Llenado",
+        "falla": "CAMBIO DE RESORTE DE EXTRACCION DE LA PINZA DE LOS BRAZOS #5 Y #15",
+        "orden": "10509",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1794324626820,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -286060,8 +286516,89 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
+      },
+      {
+        "id": 1794324147570,
+        "fechaOrden": "2026-11-10",
+        "orden": "10369",
+        "fechaEmision": "2026-11-10",
+        "semana": 46,
+        "turno": "DIURNO",
+        "solicitante": "MICHAEL AGRAZ",
+        "linea": "Línea 1",
+        "maquina": "TRANSPORTADOR DE CAJAS",
+        "aviso": "7059",
+        "fechaParada": "2026-11-10",
+        "inicioMtto": "07:00",
+        "finMtto": "07:25",
+        "inicioParada": "07:00",
+        "finParada": "07:25",
+        "tMtto": "25",
+        "tipoParada": "AVERÍA",
+        "mtto": "correctivo",
+        "falla": "RUPTURA DE BANDA TRANSPORTADORA DE CAJAS ",
+        "mttoEsp": "MARTIN URIBE ",
+        "descripcionFalla": "RUPTURA DE BANDA TRANSPORTADORA DE CAJAS ",
+        "descripcionAccion": "SE REPARA CADENA POR ESTAR TRANCADA ",
+        "observaciones": "",
+        "bloqueado": true,
+        "usuario": "Froilan Bolivar"
+      },
+      {
+        "id": 1794324339401,
+        "fechaOrden": "2026-11-10",
+        "orden": "10558",
+        "fechaEmision": "2026-11-10",
+        "semana": 46,
+        "turno": "DIURNO",
+        "solicitante": "RICARDO DIAZ",
+        "linea": "Línea 5",
+        "maquina": "LLENADORA",
+        "aviso": "7060",
+        "fechaParada": "2026-11-10",
+        "inicioMtto": "08:10",
+        "finMtto": "08:17",
+        "inicioParada": "08:10",
+        "finParada": "08:21",
+        "tMtto": "11",
+        "tipoParada": "AVERÍA",
+        "mtto": "correctivo",
+        "falla": "AJUSTE DE BASE Y TORNILLO DE ORGANO DE ELEVACION 74",
+        "mttoEsp": "ANGEL COLMENARES",
+        "descripcionFalla": "AJUSTE EN ORGANO DE ELEVACION #74",
+        "descripcionAccion": "SE AJUSTA ALTURA DE LOS ORGANOS #9,#74,#48 SE COLOCA TORNILLO FALTANTE EMN EL ORGANO #74 SE AJUSTA TAPA INFERIOR DEL ORGANO",
+        "observaciones": "",
+        "bloqueado": true,
+        "usuario": "Froilan Bolivar"
+      },
+      {
+        "id": 1794324626824,
+        "fechaOrden": "2026-11-10",
+        "orden": "10509",
+        "fechaEmision": "2026-11-10",
+        "semana": 46,
+        "turno": "DIURNO",
+        "solicitante": "RICARDO DIAZ",
+        "linea": "Línea 7",
+        "maquina": "SOPLADORA",
+        "aviso": "7061",
+        "fechaParada": "2026-11-10",
+        "inicioMtto": "09:30",
+        "finMtto": "09:52",
+        "inicioParada": "09:30",
+        "finParada": "09:52",
+        "tMtto": "22",
+        "tipoParada": "AVERÍA",
+        "mtto": "correctivo",
+        "falla": "CAMBIO DE RESORTE DE EXTRACCION DE LA PINZA DE LOS BRAZOS #5 Y #15",
+        "mttoEsp": "ANGEL COLMENARES",
+        "descripcionFalla": "CAMBIO DE RESORTE DE EXTRACCION ",
+        "descripcionAccion": "CAMBIO DE RESORTE DE PINZAS DE LOS BRAZOS #5 Y #15",
+        "observaciones": "",
+        "bloqueado": true,
+        "usuario": "Froilan Bolivar"
       }
     ],
     "seguimiento-ordenes": {
@@ -286802,6 +287339,24 @@
           "jarabeReal": 78239,
           "ubb": 79.29,
           "producto": "11"
+        },
+        "auto-2-1794231851922": {
+          "cajasPlanificadas": 17250,
+          "jarabeReal": 34580,
+          "ubb": 12,
+          "producto": "225"
+        },
+        "auto-2-1794311371224": {
+          "cajasPlanificadas": 5281,
+          "jarabeReal": 10561,
+          "ubb": 10.71,
+          "producto": "0"
+        },
+        "auto-2-1794311380644": {
+          "cajasPlanificadas": 5281,
+          "jarabeReal": 12271,
+          "ubb": 4.5,
+          "producto": "33"
         }
       },
       "linea-3": {
@@ -287111,7 +287666,8 @@
           "cajasPlanificadas": 128800,
           "jarabeReal": 113200,
           "ubb": 39.33,
-          "producto": "176"
+          "producto": "176",
+          "pnc": 80
         }
       },
       "linea-4": {
@@ -287852,7 +288408,8 @@
         "auto-6-1794073590334": {
           "jarabeReal": 15062,
           "ubb": 5.23,
-          "producto": "38"
+          "producto": "38",
+          "cajasPlanificadas": 26396
         }
       },
       "linea-7": {
@@ -306155,11 +306712,11 @@
       "2026-11-05-procesos": "2935592,58",
       "2026-11-05-filtrada": "4421230,17",
       "2026-11-05-total": "3191936,33",
-      "2026-11-09-servicio": "",
-      "2026-11-09-suave": "",
-      "2026-11-09-procesos": "",
-      "2026-11-09-filtrada": "",
-      "2026-11-09-total": "",
+      "2026-11-09-servicio": "21375",
+      "2026-11-09-suave": "193506",
+      "2026-11-09-procesos": "2837399,53",
+      "2026-11-09-filtrada": "4260719,14",
+      "2026-11-09-total": "3085713,33",
       "2026-11-08-servicio": "10512",
       "2026-11-08-suave": "73521",
       "2026-11-08-procesos": "657715",
@@ -313336,6 +313893,16 @@
               "code": "MATP_0001",
               "material": "AZUCAR REFINADA",
               "quantity": "145,5",
+              "unit": "kg"
+            }
+          ],
+          "2026-11-10": [
+            {
+              "id": "416dece1-c07f-449d-a60e-a97a5389d386",
+              "line": "T",
+              "code": "MATP_0001",
+              "material": "AZUCAR REFINADA",
+              "quantity": "357",
               "unit": "kg"
             }
           ]
