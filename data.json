@@ -30024,7 +30024,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-11T14:48:42.774Z"
+    "updatedAt": "2026-11-11T18:01:00.892Z"
   },
   "ordenesSap": [
     {
@@ -44711,6 +44711,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 480
+        },
+        {
+          "fechaInicio": "2026-11-11",
+          "ticket1": "16610",
+          "cajas1": 960,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -44731,6 +44742,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 2080
+        },
+        {
+          "fechaInicio": "2026-11-11",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -44751,6 +44773,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 14352
+        },
+        {
+          "fechaInicio": "2026-11-11",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -44763,6 +44796,17 @@
       "dias": [
         {
           "fechaInicio": "2026-11-11",
+          "ticket1": "16656",
+          "cajas1": 6560,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        },
+        {
+          "fechaInicio": "2026-11-12",
           "ticket1": "",
           "cajas1": 0,
           "ticket2": "",
@@ -44791,6 +44835,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 0
+        },
+        {
+          "fechaInicio": "2026-11-12",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -44811,6 +44866,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 0
+        },
+        {
+          "fechaInicio": "2026-11-12",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -44823,6 +44889,17 @@
       "dias": [
         {
           "fechaInicio": "2026-11-11",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        },
+        {
+          "fechaInicio": "2026-11-12",
           "ticket1": "",
           "cajas1": 0,
           "ticket2": "",
@@ -290610,24 +290687,24 @@
         "fechaEmision": "2026-11-10",
         "semana": 46,
         "turno": "NOCTURNO",
-        "solicitante": "",
+        "solicitante": "RONAL VALERA ",
         "linea": "Línea 1",
         "maquina": "SOPLADORA",
-        "aviso": "",
+        "aviso": "7084",
         "fechaParada": "2026-11-10",
-        "inicioMtto": "",
-        "finMtto": "",
+        "inicioMtto": "06:42",
+        "finMtto": "08:00",
         "inicioParada": "06:42",
         "finParada": "07:00",
         "tMtto": "18",
         "tipoParada": "AVERÍA",
-        "mtto": "",
+        "mtto": "correctivo",
         "falla": "FALLA DE SINCRONIAMO DE PLATO DE CARGA",
-        "mttoEsp": "",
-        "descripcionFalla": "",
-        "descripcionAccion": "",
+        "mttoEsp": "LUIS MANRIQUE ",
+        "descripcionFalla": "MAQUINA DESENCROCHADA",
+        "descripcionAccion": "LA MAQUINA ENTRA EN FALLA POR DAÑO EN SENSOR, CONECTOR Y BASE, PERTENECIENTE AL EMBRAGUE PARTE INFERIOR DE LA TRANSFERENCIA DE PREFORMA, PLATO GIRATORIO HORNO ANOMALIA CAUSADA POR PREFORMA ATASCADA EN ENGRANE INFERIOR DEL PLATO",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Richard Marín"
       },
       {
@@ -291008,6 +291085,12 @@
           "jarabeReal": 118512,
           "ubb": 41.22,
           "producto": "217"
+        },
+        "auto-1-1794231724476": {
+          "cajasPlanificadas": 72000,
+          "producto": "610",
+          "jarabeReal": 105698,
+          "ubb": 36.78
         }
       },
       "linea-2": {
@@ -291414,6 +291497,12 @@
           "jarabeReal": 12271,
           "ubb": 4.5,
           "producto": "33"
+        },
+        "auto-2-1794397002311": {
+          "cajasPlanificadas": 6833,
+          "producto": "13",
+          "jarabeReal": 20510,
+          "ubb": 7.5
         }
       },
       "linea-3": {
@@ -291725,6 +291814,12 @@
           "ubb": 39.33,
           "producto": "176",
           "pnc": 80
+        },
+        "auto-3-1794260105663": {
+          "cajasPlanificadas": 134400,
+          "producto": "593",
+          "jarabeReal": 120343,
+          "ubb": 41.92
         }
       },
       "linea-4": {
@@ -291986,6 +292081,12 @@
           "jarabeReal": 123094,
           "ubb": 42.79,
           "producto": "261"
+        },
+        "auto-4-1794232565486": {
+          "cajasPlanificadas": 134400,
+          "producto": "124",
+          "jarabeReal": 120189,
+          "ubb": 41.74
         }
       },
       "linea-5": {
@@ -292197,7 +292298,9 @@
         },
         "auto-5-1794232580549": {
           "jarabeReal": 482000,
-          "ubb": 498
+          "ubb": 482,
+          "cajasPlanificadas": 55660,
+          "producto": "585"
         }
       },
       "linea-6": {
@@ -292471,6 +292574,12 @@
           "ubb": 5.23,
           "producto": "38",
           "cajasPlanificadas": 26396
+        },
+        "auto-6-1794232591991": {
+          "cajasPlanificadas": 34500,
+          "producto": "574",
+          "jarabeReal": 34536,
+          "ubb": 12
         }
       },
       "linea-7": {
@@ -292851,6 +292960,12 @@
           "jarabeReal": 10726,
           "ubb": 3.72,
           "producto": "0"
+        },
+        "auto-7-1794232602575": {
+          "cajasPlanificadas": 60375,
+          "producto": "163",
+          "jarabeReal": 63067,
+          "ubb": 21.91
         }
       }
     },
