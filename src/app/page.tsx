@@ -2607,6 +2607,145 @@ export default function PlannerPage() {
   const [ordenFiltroLinea, setOrdenFiltroLinea] = useState('all');
   const [ordenBusqueda, setOrdenBusqueda] = useState('');
   const [paradaFiltroFecha, setParadaFiltroFecha] = useState('');
+  const [operationalReportPdfStatus, setOperationalReportPdfStatus] = useState<'idle' | 'generating' | 'error'>('idle');
+  const filteredOperationalReports = useMemo(() => {
+    const weekStart = plantaWeekQuery.startDate;
+    const weekEnd = plantaWeekQuery.endDate;
+    return informesOperacionales.filter((row) => {
+      const date = String(row.fecha || '');
+      return date >= weekStart &&
+        date <= weekEnd &&
+        (paradaFiltroLinea === 'all' || row.linea === paradaFiltroLinea) &&
+        (paradaFiltroTurno === 'all' || row.turno === paradaFiltroTurno) &&
+        (paradaFiltroEquipo === 'all' || row.equipo === paradaFiltroEquipo) &&
+        (!paradaFiltroFecha || date === paradaFiltroFecha);
+    });
+  }, [
+    informesOperacionales,
+    plantaWeekQuery,
+    paradaFiltroLinea,
+    paradaFiltroTurno,
+    paradaFiltroEquipo,
+    paradaFiltroFecha,
+  ]);
+  const generateOperationalReportsPdf = async () => {
+    if (operationalReportPdfStatus === 'generating' || filteredOperationalReports.length === 0) return;
+    setOperationalReportPdfStatus('generating');
+    try {
+      const [{ default: jsPDF }, { autoTable }] = await Promise.all([
+        import('jspdf'),
+        import('jspdf-autotable'),
+      ]);
+      const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+      const weekNumber = getISOWeek(plantaWeekStartDate);
+      const weekStart = plantaWeekQuery.startDate;
+      const weekEnd = plantaWeekQuery.endDate;
+      const lineOrder = (line: unknown) => {
+        const index = LINES.findIndex((value) => value === line);
+        return index < 0 ? Number.MAX_SAFE_INTEGER : index;
+      };
+      const rows = [...filteredOperationalReports].sort((a, b) =>
+        lineOrder(a.linea) - lineOrder(b.linea) ||
+        String(a.linea || '').localeCompare(String(b.linea || ''), 'es', { numeric: true, sensitivity: 'base' }) ||
+        String(a.fecha || '').localeCompare(String(b.fecha || '')) ||
+        String(a.inicioParada || '').localeCompare(String(b.inicioParada || ''))
+      );
+      const appliedFilters = [
+        `Línea: ${paradaFiltroLinea === 'all' ? 'Todas' : paradaFiltroLinea}`,
+        `Turno: ${paradaFiltroTurno === 'all' ? 'Todos' : paradaFiltroTurno}`,
+        `Equipo: ${paradaFiltroEquipo === 'all' ? 'Todos' : paradaFiltroEquipo}`,
+        `Fecha: ${paradaFiltroFecha || 'Toda la semana'}`,
+      ].join('   |   ');
+
+      doc.setFontSize(15);
+      doc.setFont('helvetica', 'bold');
+      doc.text('INFORMES OPERACIONALES', 8, 11);
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`Semana ${weekNumber}   |   ${format(new Date(`${weekStart}T12:00:00`), 'dd/MM/yyyy')} - ${format(new Date(`${weekEnd}T12:00:00`), 'dd/MM/yyyy')}`, 8, 17);
+      doc.setFontSize(7);
+      doc.text(appliedFilters, 8, 22);
+      doc.text(`Registros: ${rows.length}`, doc.internal.pageSize.getWidth() - 8, 22, { align: 'right' });
+
+      autoTable(doc, {
+        startY: 26,
+        margin: { left: 8, right: 8, bottom: 10 },
+        head: [[
+          'Fecha',
+          'Sem.',
+          'Turno',
+          'Operador',
+          'Línea',
+          'Equipo',
+          'Tipo de parada',
+          'Inicio',
+          'Fin',
+          'Minutos',
+          'Motivo de parada',
+          'Orden',
+          'Observaciones',
+        ]],
+        body: rows.map((row) => [
+          row.fecha || '',
+          String(row.semana || ''),
+          row.turno || '',
+          row.operador || '',
+          row.linea || '',
+          row.equipo || '',
+          row.tipoParada || '',
+          row.inicioParada || '',
+          row.finParada || '',
+          row.totalMin || '',
+          row.falla || '',
+          row.orden || '',
+          row.observaciones || '',
+        ]),
+        styles: {
+          font: 'helvetica',
+          fontSize: 6,
+          cellPadding: 1.3,
+          overflow: 'linebreak',
+          valign: 'top',
+        },
+        headStyles: {
+          fillColor: [26, 61, 107],
+          textColor: [255, 255, 255],
+          fontStyle: 'bold',
+        },
+        alternateRowStyles: { fillColor: [245, 248, 252] },
+        columnStyles: {
+          0: { cellWidth: 17 },
+          1: { cellWidth: 9 },
+          2: { cellWidth: 14 },
+          3: { cellWidth: 22 },
+          4: { cellWidth: 17 },
+          5: { cellWidth: 25 },
+          6: { cellWidth: 22 },
+          7: { cellWidth: 13 },
+          8: { cellWidth: 13 },
+          9: { cellWidth: 12 },
+          10: { cellWidth: 42 },
+          11: { cellWidth: 21 },
+          12: { cellWidth: 43 },
+        },
+        didDrawPage: () => {
+          const pageCount = doc.getNumberOfPages();
+          doc.setFontSize(7);
+          doc.text(
+            `Página ${doc.getCurrentPageInfo().pageNumber} de ${pageCount}`,
+            doc.internal.pageSize.getWidth() - 8,
+            doc.internal.pageSize.getHeight() - 4,
+            { align: 'right' },
+          );
+        },
+      });
+      doc.save(`Informes_Operacionales_Semana_${weekNumber}_${weekStart}_${weekEnd}.pdf`);
+      setOperationalReportPdfStatus('idle');
+    } catch (error) {
+      console.error('[PLANTA] Failed to generate operational reports PDF', error);
+      setOperationalReportPdfStatus('error');
+    }
+  };
    const [plantaFormData, setPlantaFormData] = useState({
     fecha: format(new Date(), 'yyyy-MM-dd'),
     semana: getISOWeek(new Date()),
@@ -4530,6 +4669,20 @@ export default function PlannerPage() {
                                          return matchLine && matchTurno && matchEquipo && matchDate;
                                        }).length} registros
                                    </span>
+                                    <Button
+                                       type="button"
+                                       onClick={() => void generateOperationalReportsPdf()}
+                                       disabled={informesLoading || operationalReportPdfStatus === 'generating' || filteredOperationalReports.length === 0}
+                                       className="h-9 shrink-0 rounded-lg bg-slate-800 px-3 text-[10px] font-black uppercase tracking-wider text-white hover:bg-slate-900 disabled:opacity-50"
+                                    >
+                                       <FileDown className="mr-1.5 h-3.5 w-3.5" />
+                                       {operationalReportPdfStatus === 'generating' ? 'Generando?' : 'PDF'}
+                                    </Button>
+                                    {operationalReportPdfStatus === 'error' && (
+                                       <span role="alert" className="text-[10px] font-bold text-red-600">
+                                         No se pudo generar el PDF.
+                                       </span>
+                                    )}
                                  </div>
                                  {errorValidacion && (
                                    <div role="alert" className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-[10px] font-bold text-red-700">
