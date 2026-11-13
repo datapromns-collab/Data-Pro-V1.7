@@ -15314,12 +15314,12 @@
             "name": "JUSTY MANZANA",
             "lineId": "5",
             "loadPerHour": 1210,
-            "quantity": 31117,
-            "durationHours": 25.716528925619834,
+            "quantity": 29040,
+            "durationHours": 24,
             "presentation": "1.5Lts",
-            "tanks": 28.01,
+            "tanks": 26.14,
             "startTime": "2026-11-09T11:00:00.000Z",
-            "endTime": "2026-11-10T12:42:59.504Z",
+            "endTime": "2026-11-10T11:00:00.000Z",
             "id": "v5dx1x0ry",
             "color": "#6366f1"
           },
@@ -15409,79 +15409,6 @@
             "endTime": "2026-11-15T09:00:00.000Z",
             "id": "h5uozyj68",
             "color": "#6366f1"
-          },
-          {
-            "name": "CIP 3P ALCALINO",
-            "lineId": "5",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 2,
-            "startTime": "2026-11-10T12:43:00.000Z",
-            "endTime": "2026-11-10T14:43:00.000Z",
-            "id": "ow623auo3",
-            "color": "#ec4899"
-          },
-          {
-            "name": "JUSTY MANZANA",
-            "lineId": "5",
-            "loadPerHour": 1210,
-            "quantity": 31117,
-            "durationHours": 25.716528925619834,
-            "presentation": "1.5Lts",
-            "tanks": 28.01,
-            "startTime": "2026-11-10T14:43:00.000Z",
-            "endTime": "2026-11-11T16:25:59.504Z",
-            "id": "3x4rkqqfx",
-            "color": "#ef4444"
-          },
-          {
-            "name": "OTROS",
-            "description": "cambio de sabor a Justy Durazno",
-            "lineId": "5",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 10,
-            "startTime": "2026-11-11T16:26:00.000Z",
-            "endTime": "2026-11-12T02:26:00.000Z",
-            "id": "7gihoprua",
-            "color": "#10b981"
-          },
-          {
-            "name": "JUSTY DURAZNO",
-            "lineId": "5",
-            "loadPerHour": 1210,
-            "quantity": 29040,
-            "durationHours": 24,
-            "presentation": "1.5Lts",
-            "tanks": 26.14,
-            "startTime": "2026-11-12T02:26:00.000Z",
-            "endTime": "2026-11-13T02:26:00.000Z",
-            "id": "kzbgt64pa",
-            "color": "#ec4899"
-          },
-          {
-            "name": "CIP 3P ALCALINO",
-            "lineId": "5",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 2,
-            "startTime": "2026-11-13T02:26:00.000Z",
-            "endTime": "2026-11-13T04:26:00.000Z",
-            "id": "7gj28i6o6",
-            "color": "#587593"
-          },
-          {
-            "name": "JUSTY DURAZNO",
-            "lineId": "5",
-            "loadPerHour": 1210,
-            "quantity": 61952,
-            "durationHours": 51.2,
-            "presentation": "1.5Lts",
-            "tanks": 55.76,
-            "startTime": "2026-11-13T04:26:00.000Z",
-            "endTime": "2026-11-15T07:38:00.000Z",
-            "id": "co1g5vxb6",
-            "color": "#ef4444"
           },
           {
             "name": "CS",
@@ -15878,6 +15805,126 @@
             "endTime": "2026-11-15T08:59:48.000Z",
             "id": "omnpzlgis",
             "color": "#10b981"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "5",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-11-10T11:00:00.000Z",
+            "endTime": "2026-11-10T13:00:00.000Z",
+            "id": "2m1vu3kz7",
+            "color": "#f59e0b"
+          },
+          {
+            "name": "JUSTY MANZANA",
+            "lineId": "5",
+            "loadPerHour": 1210,
+            "quantity": 29040,
+            "durationHours": 24,
+            "presentation": "1.5Lts",
+            "tanks": 26.14,
+            "startTime": "2026-11-10T13:00:00.000Z",
+            "endTime": "2026-11-11T13:00:00.000Z",
+            "id": "aun7dfx30",
+            "color": "#10b981"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "5",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-11-11T13:00:00.000Z",
+            "endTime": "2026-11-11T15:00:00.000Z",
+            "id": "ce138o71o",
+            "color": "#587593"
+          },
+          {
+            "name": "JUSTY MANZANA",
+            "lineId": "5",
+            "loadPerHour": 1210,
+            "quantity": 29040,
+            "durationHours": 24,
+            "presentation": "1.5Lts",
+            "tanks": 26.14,
+            "startTime": "2026-11-11T15:00:00.000Z",
+            "endTime": "2026-11-12T15:00:00.000Z",
+            "id": "5ddxoysvm",
+            "color": "#47CCB0"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "5",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-11-12T15:00:00.000Z",
+            "endTime": "2026-11-12T17:00:00.000Z",
+            "id": "4n4bn4u1t",
+            "color": "#ec4899"
+          },
+          {
+            "name": "JUSTY MANZANA",
+            "lineId": "5",
+            "loadPerHour": 1210,
+            "quantity": 29040,
+            "durationHours": 24,
+            "presentation": "1.5Lts",
+            "tanks": 26.14,
+            "startTime": "2026-11-12T17:00:00.000Z",
+            "endTime": "2026-11-13T17:00:00.000Z",
+            "id": "ds8n61mti",
+            "color": "#ef4444"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "5",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-11-13T17:00:00.000Z",
+            "endTime": "2026-11-13T19:00:00.000Z",
+            "id": "8gcmmdxb9",
+            "color": "#47CCB0"
+          },
+          {
+            "name": "JUSTY MANZANA",
+            "lineId": "5",
+            "loadPerHour": 1210,
+            "quantity": 29040,
+            "durationHours": 24,
+            "presentation": "1.5Lts",
+            "tanks": 26.14,
+            "startTime": "2026-11-13T19:00:00.000Z",
+            "endTime": "2026-11-14T19:00:00.000Z",
+            "id": "iamcp96ic",
+            "color": "#587593"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "5",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-11-14T19:00:00.000Z",
+            "endTime": "2026-11-14T21:00:00.000Z",
+            "id": "f1bg3649h",
+            "color": "#6366f1"
+          },
+          {
+            "name": "JUSTY MANZANA",
+            "lineId": "5",
+            "loadPerHour": 1210,
+            "quantity": 12100,
+            "durationHours": 10,
+            "presentation": "2Lts",
+            "tanks": 0,
+            "startTime": "2026-11-14T21:00:00.000Z",
+            "endTime": "2026-11-15T07:00:00.000Z",
+            "id": "rka6aswta",
+            "color": "#587593"
           }
         ],
         "deletedTaskIds": [
@@ -15946,7 +15993,146 @@
           "6eis4xtau",
           "eul4jalrd",
           "gpi7wsb49",
-          "hwt4dvbdt"
+          "hwt4dvbdt",
+          "co1g5vxb6",
+          "kzbgt64pa",
+          "7gj28i6o6",
+          "7gihoprua",
+          "3x4rkqqfx",
+          "ow623auo3"
+        ]
+      },
+      "2026-11-16": {
+        "tasks": [
+          {
+            "name": "GLUP FRESH",
+            "lineId": "1",
+            "loadPerHour": 1500,
+            "quantity": 36000,
+            "durationHours": 24,
+            "presentation": "2Lts",
+            "tanks": 4.17,
+            "startTime": "2026-11-16T11:00:00.000Z",
+            "endTime": "2026-11-17T11:00:00.000Z",
+            "id": "zzv5ggkzw",
+            "color": "#10b981"
+          },
+          {
+            "name": "GLUP KOLITA",
+            "lineId": "2",
+            "loadPerHour": 2500,
+            "quantity": 115666,
+            "durationHours": 46.2664,
+            "presentation": "2Lts",
+            "tanks": 13,
+            "startTime": "2026-11-16T11:00:00.000Z",
+            "endTime": "2026-11-18T09:15:59.040Z",
+            "id": "wktonjc2l",
+            "color": "#ec4899"
+          },
+          {
+            "name": "CS",
+            "lineId": "2",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-11-18T09:16:00.000Z",
+            "endTime": "2026-11-18T09:46:00.000Z",
+            "id": "mqnijoss5",
+            "color": "#587593"
+          },
+          {
+            "name": "GLUP UVA",
+            "lineId": "2",
+            "loadPerHour": 2500,
+            "quantity": 64041,
+            "durationHours": 25.6164,
+            "presentation": "2Lts",
+            "tanks": 9,
+            "startTime": "2026-11-18T09:46:00.000Z",
+            "endTime": "2026-11-19T11:22:59.040Z",
+            "id": "vdcegb8l6",
+            "color": "#f59e0b"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "2",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-11-19T11:23:00.000Z",
+            "endTime": "2026-11-19T13:23:00.000Z",
+            "id": "rqau94k1f",
+            "color": "#47CCB0"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "3",
+            "loadPerHour": 2800,
+            "quantity": 67200,
+            "durationHours": 24,
+            "presentation": "2Lts",
+            "tanks": 7.79,
+            "startTime": "2026-11-16T11:00:00.000Z",
+            "endTime": "2026-11-17T11:00:00.000Z",
+            "id": "t89u75kts",
+            "color": "#f59e0b"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "4",
+            "loadPerHour": 2800,
+            "quantity": 67200,
+            "durationHours": 24,
+            "presentation": "2Lts",
+            "tanks": 7.79,
+            "startTime": "2026-11-16T11:00:00.000Z",
+            "endTime": "2026-11-17T11:00:00.000Z",
+            "id": "wgeheevng",
+            "color": "#ec4899"
+          },
+          {
+            "name": "JUSTY DURAZNO",
+            "lineId": "5",
+            "loadPerHour": 1210,
+            "quantity": 29040,
+            "durationHours": 24,
+            "presentation": "1.5Lts",
+            "tanks": 26.14,
+            "startTime": "2026-11-16T11:00:00.000Z",
+            "endTime": "2026-11-17T11:00:00.000Z",
+            "id": "hgri5t65z",
+            "color": "#ec4899"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "6",
+            "loadPerHour": 1200,
+            "quantity": 34500,
+            "durationHours": 28.75,
+            "presentation": "0.4Lts",
+            "tanks": 2,
+            "startTime": "2026-11-16T11:00:00.000Z",
+            "endTime": "2026-11-17T15:45:00.000Z",
+            "id": "qik5i1w0j",
+            "color": "#f59e0b"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "7",
+            "loadPerHour": 2500,
+            "quantity": 60000,
+            "durationHours": 24,
+            "presentation": "",
+            "tanks": 0,
+            "startTime": "2026-11-16T11:00:00.000Z",
+            "endTime": "2026-11-17T11:00:00.000Z",
+            "id": "ktpcs4ur9",
+            "color": "#f59e0b"
+          }
+        ],
+        "deletedTaskIds": [
+          "rv5vn6fsx"
         ]
       }
     },
@@ -27930,6 +28116,173 @@
               "kind": "termo",
               "preformSize": ""
             }
+          ],
+          "2026-11-12": [
+            {
+              "id": "254e2e13-56b9-4d89-b93f-bb3e096c5c9e",
+              "line": "Linea 1",
+              "flavor": "verde",
+              "code": "EMP_0103",
+              "material": "PREFORMA VERDE 42,64 GR-1881",
+              "quantity": "2714",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "90d09cef-91a8-421c-a9e9-f079359aa25d",
+              "line": "Linea 1",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "3,35",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "f75feb6d-c821-4d61-b889-b5b8ccd2a33d",
+              "line": "Linea 2",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "4404",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "e24ea1df-26d1-4e0b-ae4f-83d537c05079",
+              "line": "Linea 2",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "3,70",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "a59dba71-2c24-4e15-b278-e156df42f7bb",
+              "line": "Linea 3",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "1666",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "1a419911-cbc6-431d-a0a5-1d244250dae3",
+              "line": "Linea 3",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "2,00",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "b0c79969-ed50-4342-8dc7-2205887f003a",
+              "line": "Linea 4",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "2000",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "34f1dfcb-84cb-49cc-b624-5c4c4591ecdd",
+              "line": "Linea 4",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "3,00",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "dd71ff45-37de-4e77-8606-8199feee31f7",
+              "line": "Linea 5",
+              "flavor": "transparente",
+              "code": "EMP_0068",
+              "material": "PREFORMA TRANSPARENTE 36 GR-1881",
+              "quantity": "5277",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "7358aeb6-1d68-4b2a-8586-002e0c0475c2",
+              "line": "Linea 5",
+              "flavor": "",
+              "code": "EMP_0017",
+              "material": "POLIETILENO TERMOENCOGIBLE 55 X 0.07",
+              "quantity": "3,20",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "8c254c2d-49f4-4214-a2bf-5235c69369fc",
+              "line": "Linea 6",
+              "flavor": "transparente",
+              "code": "EMP_0126",
+              "material": "PREFORMA TRANSPARENTE 20,55GR-1881",
+              "quantity": "4950",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "fc94b8c2-2009-4b9b-8cca-cb8f4caca6b5",
+              "line": "Linea 6",
+              "flavor": "",
+              "code": "EMP_0130",
+              "material": "POLIETILENO TERMOENCOGIBLE 43 x 0.06",
+              "quantity": "0,75",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "e5470ba3-2a5e-4005-82f0-dffdb98b7da8",
+              "line": "Linea 7",
+              "flavor": "transparente",
+              "code": "EMP_0068",
+              "material": "PREFORMA TRANSPARENTE 36 GR-1881",
+              "quantity": "611",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": "36"
+            },
+            {
+              "id": "7bbe9a33-419c-4a9f-af31-7e1069cbfd76",
+              "line": "Linea 7",
+              "flavor": "verde",
+              "code": "EMP_0171",
+              "material": "PREFORMA VERDE 33 GR-1881",
+              "quantity": "1696",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "e824e509-4613-48cf-854f-754a450e45d0",
+              "line": "Linea 7",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "3,25",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            }
           ]
         }
       },
@@ -30425,7 +30778,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-13T12:59:49.433Z"
+    "updatedAt": "2026-11-13T14:16:48.681Z"
   },
   "ordenesSap": [
     {

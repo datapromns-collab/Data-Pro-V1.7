@@ -4570,7 +4570,7 @@ export default function PlannerPage() {
                                              return matchLine && matchTurno && matchEquipo && matchDate;
                                            })
                                            .map((row) => (
-                                              <TableRow key={row.id} className={cn("border-b border-slate-100 transition-all duration-200", row.bloqueado !== false ? "bg-emerald-50/30" : "bg-amber-50/20 hover:bg-amber-50/30 cursor-pointer")} onClick={(e) => { const target = e.target as HTMLElement; if (target.tagName === 'INPUT' || target.tagName === 'BUTTON' || target.tagName === 'SELECT' || target.closest('button')) return; if (editingId !== row.id && row.bloqueado === false && user?.id !== 'prodtj.mds' && user?.id !== 'prodtg.mds' && user?.id !== 'prodts.mds' && user?.id !== 'enf.mds') { setEditingId(row.id); setEditForm(row); } }}>
+                                              <TableRow key={row.id} className={cn("border-b-2 border-slate-300 transition-all duration-200", row.bloqueado !== false ? "bg-emerald-50/30" : "bg-amber-50/20 hover:bg-amber-50/30 cursor-pointer")} onClick={(e) => { const target = e.target as HTMLElement; if (target.tagName === 'INPUT' || target.tagName === 'BUTTON' || target.tagName === 'SELECT' || target.closest('button')) return; if (editingId !== row.id && row.bloqueado === false && user?.id !== 'prodtj.mds' && user?.id !== 'prodtg.mds' && user?.id !== 'prodts.mds' && user?.id !== 'enf.mds') { setEditingId(row.id); setEditForm(row); } }}>
                                                {editingId === row.id ? (
                                               <>
                                                  <TableCell className="px-2 py-2"><Input type="date" value={editForm.fecha ?? row.fecha ?? ''} onChange={(e) => setEditForm({...editForm, fecha: e.target.value})} className="h-8 text-[10px]" /></TableCell>
@@ -4583,7 +4583,15 @@ export default function PlannerPage() {
                                                     <TableCell className="px-2 py-2 whitespace-nowrap"><Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={editForm.inicioParada ?? row.inicioParada ?? ''} onChange={onChangeHora((v) => setEditForm({...editForm, inicioParada: v}))} className="h-8 text-[10px] w-24" /></TableCell>
                                                     <TableCell className="px-2 py-2 whitespace-nowrap"><Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={editForm.finParada ?? row.finParada ?? ''} onChange={onChangeHora((v) => setEditForm({...editForm, finParada: v}))} className="h-8 text-[10px] w-24" /></TableCell>
                                                   <TableCell className="px-2 py-2 whitespace-nowrap"><Input type="text" value={editForm.totalMin ?? row.totalMin ?? ''} readOnly className="h-8 text-[10px] w-16 bg-slate-100" /></TableCell>
-                                                  <TableCell className="px-2 py-2 max-w-[180px]"><Input value={editForm.falla ?? row.falla ?? ''} onChange={(e) => setEditForm({...editForm, falla: e.target.value})} className="h-8 text-[10px] w-full" /></TableCell>
+                                                  <TableCell className="px-2 py-2 max-w-[180px]">
+                                                    <textarea
+                                                      value={editForm.falla ?? row.falla ?? ''}
+                                                      onChange={(e) => setEditForm({...editForm, falla: e.target.value})}
+                                                      rows={2}
+                                                      className="w-full max-w-[180px] resize-y whitespace-pre-wrap break-words rounded-md border border-input bg-background px-2 py-1 text-[10px] [overflow-wrap:anywhere]"
+                                                      aria-label="Motivo de Parada"
+                                                    />
+                                                  </TableCell>
                                                  <TableCell className="px-2 py-2"><Input value={editForm.orden ?? row.orden ?? ''} onChange={(e) => setEditForm({...editForm, orden: e.target.value})} className="h-8 text-[10px]" /></TableCell>
                                                  <TableCell className="px-2 py-2 max-w-[200px]"><Input value={editForm.observaciones ?? row.observaciones ?? ''} onChange={(e) => setEditForm({...editForm, observaciones: e.target.value})} className="h-8 text-[10px] w-full" /></TableCell>
                                                   <TableCell className="px-2 py-2 flex items-center gap-1">
@@ -4716,7 +4724,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                   <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums whitespace-nowrap">{normalizarHora(row.inicioParada)}</TableCell>
                                                   <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums whitespace-nowrap">{normalizarHora(row.finParada)}</TableCell>
                                                   <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-800 text-center tabular-nums whitespace-nowrap">{row.totalMin} min</TableCell>
-                                                 <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[180px] truncate" title={row.falla}>{row.falla}</TableCell>
+                                                 <TableCell className="px-2 py-2 max-w-[180px] whitespace-pre-wrap break-words text-[11px] text-slate-600 [overflow-wrap:anywhere]" title={row.falla}>{row.falla}</TableCell>
                                                  <TableCell className="px-2 py-2 text-[11px] font-mono text-slate-600 whitespace-nowrap">
                                                    {row.orden}
                                                    {row.bloqueado !== false && (
@@ -4832,7 +4840,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                             <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">F-FECHA</TableHead>
                                             <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">SEM</TableHead>
                                             <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">TURNO</TableHead>
-                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">SOLICITANTE</TableHead>
+                                            <TableHead className="w-[90px] min-w-[90px] max-w-[90px] whitespace-normal text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">SOLICITANTE</TableHead>
                                             <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 sticky left-[150px] z-40 bg-[#1a3d6b]">LÍNEA</TableHead>
                                             <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">AVISO</TableHead>
                                             <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">MÁQUINA</TableHead>
@@ -4843,10 +4851,10 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                             <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">T-MTTO</TableHead>
                                              <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">T-PARADA</TableHead>
                                               <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">MTTO</TableHead>
-                                              <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">FALLA</TableHead>
+                                              <TableHead className="w-[180px] min-w-[180px] max-w-[180px] text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">FALLA</TableHead>
                                               <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">MTTO / ESP</TableHead>
-                                              <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">DESCRIPCIÓN DE LA FALLA POR EL SOLICITANTE</TableHead>
-                                               <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">DESCRIPCIÓN DE LA ACCIÓN DE MANTENIMIENTO</TableHead>
+                                              <TableHead className="w-[180px] min-w-[180px] max-w-[180px] text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 whitespace-normal">DESCRIPCIÓN DE LA FALLA POR EL SOLICITANTE</TableHead>
+                                               <TableHead className="w-[180px] min-w-[180px] max-w-[180px] text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 whitespace-normal">DESCRIPCIÓN DE LA ACCIÓN DE MANTENIMIENTO</TableHead>
                                                <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">OBSERVACIONES</TableHead>
                                                 {(user?.id === 'alex.mds' || user?.id === 'maria.mds') && (
                                                   <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Usuario</TableHead>
@@ -9180,7 +9188,7 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
     };
 
     return (
-      <TableRow className={cn("border-b border-slate-100 transition-all duration-200", estaBloqueado ? "bg-emerald-50/30" : (esUsuarioPlanta ? "bg-amber-50/20 hover:bg-amber-50/30" : "hover:bg-slate-50/60"))}>
+      <TableRow className={cn("border-b-2 border-slate-300 transition-all duration-200", estaBloqueado ? "bg-emerald-50/30" : (esUsuarioPlanta ? "bg-amber-50/20 hover:bg-amber-50/30" : "hover:bg-slate-50/60"))}>
         <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap sticky left-0 z-20 bg-white even:bg-slate-50/60">{formatearFecha(rowEdit.fechaOrden)}</TableCell>
         <TableCell className="px-2 py-2 text-[11px] font-mono font-bold text-slate-900 whitespace-nowrap sticky left-[72px] z-20 bg-white even:bg-slate-50/60">
           {rowEdit.orden}
@@ -9198,7 +9206,13 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
         {editable('fechaEmision') ? <TableCell className="px-2 py-2"><Input type="date" value={rowEdit.fechaEmision || ''} onChange={(e) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, fechaEmision: e.target.value } })} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap">{rowEdit.fechaEmision}</TableCell>}
         <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-500 text-center">Sem {rowEdit.semana}</TableCell>
         <TableCell className="px-2 py-2 text-[11px] font-bold uppercase text-slate-600 text-center">{rowEdit.turno}</TableCell>
-        {editable('solicitante') ? <TableCell className="px-2 py-2"><Input value={rowEdit.solicitante || ''} onChange={(e) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, solicitante: e.target.value } })} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] font-semibold text-slate-800 whitespace-nowrap">{rowEdit.solicitante}</TableCell>}
+        {editable('solicitante') ? (
+          <TableCell className="w-[90px] min-w-[90px] max-w-[90px] px-2 py-2">
+            <Input value={rowEdit.solicitante || ''} onChange={(e) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, solicitante: e.target.value } })} className="h-8 w-full px-1 text-[10px]" />
+          </TableCell>
+        ) : (
+          <TableCell className="w-[90px] min-w-[90px] max-w-[90px] whitespace-normal break-words px-2 py-2 text-[11px] font-semibold text-slate-800">{rowEdit.solicitante}</TableCell>
+        )}
         <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-900 whitespace-nowrap sticky left-[150px] z-20 bg-white even:bg-slate-50/60">{rowEdit.linea}</TableCell>
         {editable('aviso') ? <TableCell className="px-2 py-2"><Input value={rowEdit.aviso || ''} onChange={(e) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, aviso: e.target.value } })} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.aviso}</TableCell>}
         <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.maquina}</TableCell>
@@ -9222,10 +9236,10 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
             <span className="text-[11px] text-slate-600 capitalize">{rowEdit.mtto}</span>
           )}
         </TableCell>
-        <TableCell className="px-2 py-2">
+        <TableCell className="w-[180px] min-w-[180px] max-w-[180px] px-2 py-2">
           {editable('falla') ? (
             <Select value={rowEdit.falla || ''} onValueChange={(v: string) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, falla: v } })}>
-              <SelectTrigger className="h-8 text-[10px] w-36 border-slate-200">
+              <SelectTrigger className="h-8 w-full max-w-[180px] text-[10px] border-slate-200">
                 <SelectValue placeholder="FALLA" />
               </SelectTrigger>
               <SelectContent>
@@ -9233,12 +9247,38 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
               </SelectContent>
             </Select>
           ) : (
-            <span className="text-[11px] text-slate-600 capitalize">{rowEdit.falla}</span>
+            <span className="block max-w-[180px] whitespace-pre-wrap break-words text-[11px] text-slate-600 capitalize [overflow-wrap:anywhere]">{rowEdit.falla}</span>
           )}
         </TableCell>
         {editable('mttoEsp') ? <TableCell className="px-2 py-2"><Input value={rowEdit.mttoEsp || ''} onChange={(e) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, mttoEsp: e.target.value } })} className="h-8 text-[10px] w-28" placeholder="MTTO / ESP" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600">{rowEdit.mttoEsp}</TableCell>}
-        {editable('descripcionFalla') ? <TableCell className="px-2 py-2"><Input value={rowEdit.descripcionFalla || ''} onChange={(e) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, descripcionFalla: e.target.value } })} className="h-8 text-[10px] w-52" placeholder="Desc. falla" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[200px] truncate" title={rowEdit.descripcionFalla}>{rowEdit.descripcionFalla}</TableCell>}
-        {editable('descripcionAccion') ? <TableCell className="px-2 py-2"><Input value={rowEdit.descripcionAccion || ''} onChange={(e) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, descripcionAccion: e.target.value } })} className="h-8 text-[10px] w-52" placeholder="Desc. acción" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[200px] truncate" title={rowEdit.descripcionAccion}>{rowEdit.descripcionAccion}</TableCell>}
+        {editable('descripcionFalla') ? (
+          <TableCell className="w-[180px] min-w-[180px] max-w-[180px] px-2 py-2">
+            <textarea
+              value={rowEdit.descripcionFalla || ''}
+              onChange={(e) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, descripcionFalla: e.target.value } })}
+              rows={2}
+              className="w-full max-w-[180px] resize-y whitespace-pre-wrap break-words rounded-md border border-input bg-background px-2 py-1 text-[10px] [overflow-wrap:anywhere]"
+              placeholder="Desc. falla"
+              aria-label="Descripción de la falla por el solicitante"
+            />
+          </TableCell>
+        ) : (
+          <TableCell className="w-[180px] min-w-[180px] max-w-[180px] whitespace-pre-wrap break-words px-2 py-2 text-[11px] text-slate-600 [overflow-wrap:anywhere]" title={rowEdit.descripcionFalla}>{rowEdit.descripcionFalla}</TableCell>
+        )}
+        {editable('descripcionAccion') ? (
+          <TableCell className="w-[180px] min-w-[180px] max-w-[180px] px-2 py-2">
+            <textarea
+              value={rowEdit.descripcionAccion || ''}
+              onChange={(e) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, descripcionAccion: e.target.value } })}
+              rows={2}
+              className="w-full max-w-[180px] resize-y whitespace-pre-wrap break-words rounded-md border border-input bg-background px-2 py-1 text-[10px] [overflow-wrap:anywhere]"
+              placeholder="Desc. acción"
+              aria-label="Descripción de la acción de mantenimiento"
+            />
+          </TableCell>
+        ) : (
+          <TableCell className="w-[180px] min-w-[180px] max-w-[180px] whitespace-pre-wrap break-words px-2 py-2 text-[11px] text-slate-600 [overflow-wrap:anywhere]" title={rowEdit.descripcionAccion}>{rowEdit.descripcionAccion}</TableCell>
+        )}
         {editable('observaciones') ? <TableCell className="px-2 py-2"><Input value={rowEdit.observaciones || ''} onChange={(e) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, observaciones: e.target.value } })} className="h-8 text-[10px] w-52" placeholder="Observaciones" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[200px] truncate" title={rowEdit.observaciones}>{rowEdit.observaciones}</TableCell>}
         {(user?.id === 'alex.mds' || user?.id === 'maria.mds') && (
           <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.usuario || ''}</TableCell>

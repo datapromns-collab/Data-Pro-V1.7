@@ -30,6 +30,7 @@ type WasteTableRow = {
   material: string;
   quantity: string;
   unit: string;
+  observation: string;
   generated?: boolean;
 };
 type WasteProduct = { code: string; material: string };
@@ -388,6 +389,7 @@ const normalizeWasteRows = (value: unknown): WasteTableRow[] => {
         material: product?.material || (typeof row.material === 'string' ? row.material : ''),
         quantity: typeof row.quantity === 'string' ? row.quantity : '',
         unit: kind === 'termo' ? 'Kg' : kind === 'preformas' || kind === 'tapas' ? 'UND' : typeof row.unit === 'string' ? row.unit : '',
+        observation: typeof row.observation === 'string' ? row.observation : '',
       };
     })
     .filter((row) => row.id);
@@ -456,6 +458,9 @@ const wasteProductForOperation = (
     if (flavor === 'transparente' && preformSize === '33') {
       return { code: 'EMP_0166', material: 'PREFORMA TRANSPARENTE 33 GR-1881' };
     }
+    if (flavor === 'transparente' && preformSize === '36') {
+      return { code: 'EMP_0068', material: 'PREFORMA TRANSPARENTE 36 GR-1881' };
+    }
     if (flavor === 'verde') return { code: 'EMP_0171', material: 'PREFORMA VERDE 33 GR-1881' };
   }
   return undefined;
@@ -480,6 +485,7 @@ const REJECT_OPERATION_MATERIALS = [
   createRejectOperationMaterial('Linea 6', 'preformas', 'verde', '', 'UND'),
   createRejectOperationMaterial('Linea 7', 'preformas', 'transparente', '29', 'UND'),
   createRejectOperationMaterial('Linea 7', 'preformas', 'transparente', '33', 'UND'),
+  createRejectOperationMaterial('Linea 7', 'preformas', 'transparente', '36', 'UND'),
   createRejectOperationMaterial('Linea 7', 'preformas', 'verde', '', 'UND'),
   createRejectOperationMaterial('Linea 1', 'termo', '', '', 'Kg'),
   createRejectOperationMaterial('Linea 5', 'termo', '', '', 'Kg'),
@@ -493,7 +499,11 @@ const REJECT_MATERIALS_BY_CODE = new Map(
 );
 
 const getWasteRowsWithGeneratedCapsForProduction = (rows: WasteTableRow[]): WasteTableRow[] => (
-  getWasteRowsWithGeneratedCaps(rows).map((row) => ({ ...row, quantity: String(row.quantity) }))
+  getWasteRowsWithGeneratedCaps(rows).map((row) => ({
+    ...row,
+    quantity: String(row.quantity),
+    observation: 'observation' in row && typeof row.observation === 'string' ? row.observation : '',
+  }))
 );
 
 const hasWasteTableContent = (rows: WasteTableRow[]): boolean => rows.some((row) => (
@@ -1365,7 +1375,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
     if (!activeWasteKey || !wasteSectionKey) return;
     setWasteDraftRows(activeWasteRows.length > 0
       ? activeWasteRows.map((row) => ({ ...row, unit: wasteSectionKey === 'mermas' ? 'UND' : row.unit }))
-      : [{ id: crypto.randomUUID(), line: '', flavor: '', code: '', material: '', quantity: '', unit: wasteSectionKey === 'mermas' ? 'UND' : '' }]);
+      : [{ id: crypto.randomUUID(), line: '', flavor: '', code: '', material: '', quantity: '', unit: wasteSectionKey === 'mermas' ? 'UND' : '', observation: '' }]);
     setWasteEditingKey(activeWasteKey);
     setWasteSaveStatus('idle');
     setWasteSaveStatusKey(activeWasteKey);
@@ -1460,6 +1470,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
       material: '',
       quantity: '',
       unit: wasteSectionKey === 'mermas' ? 'UND' : '',
+      observation: '',
     }]);
   };
 
@@ -1527,22 +1538,29 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
       const pageHeight = 297;
       const halfHeight = pageHeight / 2;
       const margin = 8;
+      const hasObservations = section === 'rechazos' || section === 'devoluciones';
       const columns = [
         { title: 'N°', width: 10 },
-        { title: 'LINEA', width: 20 },
-        { title: 'CODIGO', width: 30 },
-        { title: 'MATERIAL', width: 94 },
-        { title: 'CANTIDAD', width: 24 },
-        { title: 'UM', width: 16 },
+        { title: 'LINEA', width: hasObservations ? 17 : 20 },
+        { title: 'CODIGO', width: hasObservations ? 25 : 30 },
+        { title: 'MATERIAL', width: hasObservations ? 57 : 94 },
+        { title: 'CANTIDAD', width: hasObservations ? 21 : 24 },
+        { title: 'UM', width: hasObservations ? 14 : 16 },
+        ...(hasObservations ? [{ title: 'OBSERVACIONES', width: 50 }] : []),
       ];
       const measurementPdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
       measurementPdf.setFont('helvetica', 'normal');
       measurementPdf.setFontSize(7);
       const materialWidth = columns[3].width - 2;
+      const observationWidth = hasObservations ? columns[6].width - 2 : 0;
       const measuredRows = rows.map((row, index) => {
         const materialLines = measurementPdf.splitTextToSize(row.material || '', materialWidth);
-        const rowHeight = Math.max(5.5, materialLines.length * 3 + 1.5);
-        return { row, index, materialLines, rowHeight };
+        const observationLines = hasObservations
+          ? measurementPdf.splitTextToSize(row.observation || '', observationWidth)
+          : [];
+        const lineCount = Math.max(materialLines.length, observationLines.length, 1);
+        const rowHeight = Math.max(5.5, lineCount * 3 + 1.5);
+        return { row, index, materialLines, observationLines, rowHeight };
       });
       const tableTopOffset = 36;
       const tableHeaderHeight = 8;
@@ -1616,16 +1634,16 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
         pdf.setTextColor(15, 23, 42);
         pdf.setDrawColor(100, 116, 139);
         pdf.setLineWidth(0.3);
-        measuredRows.forEach(({ row, index, rowHeight }) => {
+        measuredRows.forEach(({ row, index, materialLines, observationLines, rowHeight }) => {
           const fittedRowHeight = rowHeight * rowScale;
-          const fittedLines = measurementPdf.splitTextToSize(row.material || '', materialWidth);
           const values = [
             String(index + 1),
             row.line,
             row.code,
-            fittedLines,
+            materialLines,
             row.quantity,
             section === 'mermas' ? 'UND' : row.unit,
+            ...(hasObservations ? [observationLines] : []),
           ];
           x = margin;
           columns.forEach((column, columnIndex) => {
@@ -3505,6 +3523,9 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                             <th className="px-3 py-3 font-black uppercase tracking-widest">MATERIAL</th>
                             <th className="w-36 px-3 py-3 text-center font-black uppercase tracking-widest">CANTIDAD</th>
                             <th className="w-24 px-3 py-3 font-black uppercase tracking-widest">UM</th>
+                            {(section === 'rechazos' || section === 'devoluciones') && (
+                              <th className="min-w-56 px-3 py-3 font-black uppercase tracking-widest">Observaciones</th>
+                            )}
                             {isWasteEditing && <th className="w-28 px-4 py-3 font-black uppercase tracking-widest">Acciones</th>}
                           </tr>
                         </thead>
@@ -3632,6 +3653,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                         <option value="">Seleccionar tamaño</option>
                                         <option value="29">29</option>
                                         <option value="33">33</option>
+                                        <option value="36">36</option>
                                       </select>
                                     )}
                                     {row.code && <span className="block px-1 text-[10px] text-slate-500">{row.code}</span>}
@@ -3692,6 +3714,18 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                   />
                                 )}
                               </td>
+                              {(section === 'rechazos' || section === 'devoluciones') && (
+                                <td className="px-3 py-2">
+                                  <textarea
+                                    value={row.observation}
+                                    onChange={(event) => updateWasteDraftRow(row.id, 'observation', event.target.value)}
+                                    readOnly={!isWasteEditing}
+                                    rows={2}
+                                    className="w-full min-w-48 resize-y bg-transparent px-1 py-1 outline-none read-only:text-slate-700"
+                                    aria-label="Observaciones"
+                                  />
+                                </td>
+                              )}
                               {isWasteEditing && (
                                 <td className="px-3 py-2 text-center">
                                   {!row.generated && (
@@ -3733,6 +3767,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                 </button>
                               </td>
                               <td />
+                              {(section === 'rechazos' || section === 'devoluciones') && <td />}
                             </tr>
                           </tfoot>
                         )}
@@ -3802,7 +3837,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                       <table className="w-full border-collapse text-left text-xs">
                         <thead>
                           <tr className={headerColor}>
-                            {['Fecha', 'Línea', 'Código', 'Material', 'Cantidad', 'UM'].map((heading) => (
+                            {['Fecha', 'Línea', 'Código', 'Material', 'Cantidad', 'UM', 'Observaciones'].map((heading) => (
                               <th key={heading} className="px-3 py-3 font-black uppercase tracking-widest">{heading}</th>
                             ))}
                           </tr>
@@ -3816,9 +3851,10 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                               <td className="px-3 py-2">{row.material}</td>
                               <td className="px-3 py-2">{row.quantity}</td>
                               <td className="px-3 py-2">{row.unit}</td>
+                              <td className="px-3 py-2 whitespace-pre-wrap">{row.observation}</td>
                             </tr>
                           )) : (
-                            <tr><td colSpan={6} className="px-3 py-8 text-center text-slate-500">No hay registros para este mes.</td></tr>
+                            <tr><td colSpan={7} className="px-3 py-8 text-center text-slate-500">No hay registros para este mes.</td></tr>
                           )}
                         </tbody>
                       </table>
