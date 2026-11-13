@@ -2605,6 +2605,7 @@ export default function PlannerPage() {
   const [paradaFiltroLinea, setParadaFiltroLinea] = useState('all');
   const [paradaFiltroTurno, setParadaFiltroTurno] = useState('all');
   const [paradaFiltroEquipo, setParadaFiltroEquipo] = useState('all');
+  const [paradaFiltroTipo, setParadaFiltroTipo] = useState('all');
   const [ordenFiltroLinea, setOrdenFiltroLinea] = useState('all');
   const [ordenBusqueda, setOrdenBusqueda] = useState('');
   const [paradaFiltroFecha, setParadaFiltroFecha] = useState('');
@@ -2619,6 +2620,7 @@ export default function PlannerPage() {
         (paradaFiltroLinea === 'all' || row.linea === paradaFiltroLinea) &&
         (paradaFiltroTurno === 'all' || row.turno === paradaFiltroTurno) &&
         (paradaFiltroEquipo === 'all' || row.equipo === paradaFiltroEquipo) &&
+        (paradaFiltroTipo === 'all' || row.tipoParada === paradaFiltroTipo) &&
         (!paradaFiltroFecha || date === paradaFiltroFecha);
     });
   }, [
@@ -2627,6 +2629,7 @@ export default function PlannerPage() {
     paradaFiltroLinea,
     paradaFiltroTurno,
     paradaFiltroEquipo,
+    paradaFiltroTipo,
     paradaFiltroFecha,
   ]);
   const generateOperationalReportsPdf = async () => {
@@ -2655,6 +2658,7 @@ export default function PlannerPage() {
         `Línea: ${paradaFiltroLinea === 'all' ? 'Todas' : paradaFiltroLinea}`,
         `Turno: ${paradaFiltroTurno === 'all' ? 'Todos' : paradaFiltroTurno}`,
         `Equipo: ${paradaFiltroEquipo === 'all' ? 'Todos' : paradaFiltroEquipo}`,
+        `Tipo de parada: ${paradaFiltroTipo === 'all' ? 'Todos' : paradaFiltroTipo}`,
         `Fecha: ${paradaFiltroFecha || 'Toda la semana'}`,
       ].join('   |   ');
 
@@ -2662,14 +2666,15 @@ export default function PlannerPage() {
       doc.setFont('helvetica', 'bold');
       doc.text('INFORMES OPERACIONALES', 8, 11);
       doc.setFontSize(9);
-      doc.setFont('helvetica', 'normal');
+      doc.setFont('helvetica', 'bold');
       doc.text(`Semana ${weekNumber}   |   ${format(new Date(`${weekStart}T12:00:00`), 'dd/MM/yyyy')} - ${format(new Date(`${weekEnd}T12:00:00`), 'dd/MM/yyyy')}`, 8, 17);
       doc.setFontSize(7);
-      doc.text(appliedFilters, 8, 22);
-      doc.text(`Registros: ${rows.length}`, doc.internal.pageSize.getWidth() - 8, 22, { align: 'right' });
+      const filterLines = doc.splitTextToSize(appliedFilters, doc.internal.pageSize.getWidth() - 16);
+      doc.text(filterLines, 8, 22);
+      doc.text(`Registros: ${rows.length}`, doc.internal.pageSize.getWidth() - 8, 11, { align: 'right' });
 
       autoTable(doc, {
-        startY: 26,
+        startY: 22 + filterLines.length * 4,
         margin: { left: 8, right: 8, bottom: 10 },
         head: [[
           'Fecha',
@@ -2703,6 +2708,7 @@ export default function PlannerPage() {
         ]),
         styles: {
           font: 'helvetica',
+          fontStyle: 'bold',
           fontSize: 6,
           cellPadding: 1.3,
           overflow: 'linebreak',
@@ -2731,6 +2737,7 @@ export default function PlannerPage() {
         },
         didDrawPage: () => {
           const pageCount = doc.getNumberOfPages();
+          doc.setFont('helvetica', 'bold');
           doc.setFontSize(7);
           doc.text(
             `Página ${doc.getCurrentPageInfo().pageNumber} de ${pageCount}`,
@@ -2766,7 +2773,7 @@ export default function PlannerPage() {
       return matchesLine && matchesDate && matchesSearch;
     });
   }, [ordenesTrabajoCargadas, ordenFiltroLinea, paradaFiltroFecha, ordenBusqueda]);
-  const generateWorkOrdersPdf = async () => {
+  const generateWorkOrdersPdf = async (reportType: 'full' | 'summary' = 'full') => {
     if (workOrdersPdfStatus === 'generating' || filteredWorkOrders.length === 0) return;
     setWorkOrdersPdfStatus('generating');
     try {
@@ -2795,44 +2802,56 @@ export default function PlannerPage() {
         `Búsqueda: ${ordenBusqueda.trim() || 'Sin búsqueda'}`,
       ].join('   |   ');
 
-      doc.setFontSize(15);
+      doc.setFontSize(reportType === 'summary' ? 18 : 15);
       doc.setFont('helvetica', 'bold');
       doc.text('ÓRDENES DE TRABAJO', 8, 11);
-      doc.setFontSize(9);
-      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(reportType === 'summary' ? 11 : 9);
+      doc.setFont('helvetica', 'bold');
       doc.text(`Semana ${weekNumber}   |   ${format(new Date(`${weekStart}T12:00:00`), 'dd/MM/yyyy')} - ${format(new Date(`${weekEnd}T12:00:00`), 'dd/MM/yyyy')}`, 8, 17);
-      doc.setFontSize(7);
+      doc.setFontSize(reportType === 'summary' ? 9 : 7);
       doc.text(appliedFilters, 8, 22);
       doc.text(`Registros: ${rows.length}`, doc.internal.pageSize.getWidth() - 8, 22, { align: 'right' });
 
-      const headers = [
-        'I-Fecha',
-        'Orden',
-        'F-Fecha',
-        'Sem.',
-        'Turno',
-        'Solicitante',
-        'Línea',
-        'Aviso',
-        'Máquina',
-        'I-Parada',
-        'I-Mtto',
-        'F-Mtto',
-        'F-Parada',
-        'T-Mtto',
-        'T-Parada',
-        'Mtto',
-        'Falla',
-        'Mtto / Esp.',
-        'Descripción de la falla por el solicitante',
-        'Descripción de la acción de mantenimiento',
-        'Observaciones',
+      const columns = [
+        { key: 'fechaOrden', header: 'I-Fecha', width: 15 },
+        { key: 'orden', header: 'Orden', width: 16 },
+        { key: 'fechaEmision', header: 'F-Fecha', width: 15 },
+        { key: 'semana', header: 'Sem.', width: 9 },
+        { key: 'turno', header: 'Turno', width: 12 },
+        { key: 'solicitante', header: 'Solicitante', width: 18 },
+        { key: 'linea', header: 'Línea', width: 14 },
+        { key: 'aviso', header: 'Aviso', width: 17 },
+        { key: 'maquina', header: 'Máquina', width: 18 },
+        { key: 'fechaParada', header: 'I-Parada', width: 15 },
+        { key: 'inicioMtto', header: 'I-Mtto', width: 12 },
+        { key: 'finMtto', header: 'F-Mtto', width: 12 },
+        { key: 'finParada', header: 'F-Parada', width: 15 },
+        { key: 'maintenanceTime', header: 'T-Mtto', width: 12 },
+        { key: 'stopTime', header: 'T-Parada', width: 12 },
+        { key: 'mtto', header: 'Mtto', width: 15 },
+        { key: 'falla', header: 'Falla', width: 20 },
+        { key: 'mttoEsp', header: 'Mtto / Esp.', width: 20 },
+        { key: 'descripcionFalla', header: 'Descripción de la falla por el solicitante', width: 28 },
+        { key: 'descripcionAccion', header: 'Descripción de la acción de mantenimiento', width: 28 },
+        { key: 'observaciones', header: 'Observaciones', width: 28 },
       ];
-      const widths = [15, 16, 15, 9, 12, 18, 14, 17, 18, 15, 12, 12, 15, 12, 12, 15, 20, 20, 28, 28, 28];
+      const summaryExcludedColumns = new Set([
+        'fechaEmision',
+        'semana',
+        'aviso',
+        'mtto',
+        'mttoEsp',
+        'descripcionAccion',
+        'observaciones',
+      ]);
+      const reportColumns = columns.filter((column) =>
+        reportType === 'full' || !summaryExcludedColumns.has(column.key)
+      );
       if (showUser) {
-        headers.push('Usuario');
-        widths.push(16);
+        reportColumns.push({ key: 'usuario', header: 'Usuario', width: 16 });
       }
+      const headers = reportColumns.map((column) => column.header);
+      const widths = reportColumns.map((column) => column.width);
       const availableWidth = doc.internal.pageSize.getWidth() - 16;
       const widthScale = availableWidth / widths.reduce((total, width) => total + width, 0);
 
@@ -2843,36 +2862,18 @@ export default function PlannerPage() {
         body: rows.map((row) => {
           const maintenanceTime = tiempoTranscurrido(row.fechaEmision, row.inicioMtto, row.fechaParada, row.finMtto) || row.tMtto;
           const stopTime = tiempoTranscurrido(row.fechaEmision, row.inicioParada, row.fechaParada, row.finParada) || row.tParada;
-          const values = [
-            row.fechaOrden,
-            row.orden,
-            row.fechaEmision,
-            row.semana,
-            row.turno,
-            row.solicitante,
-            row.linea,
-            row.aviso,
-            row.maquina,
-            row.fechaParada,
-            row.inicioMtto,
-            row.finMtto,
-            row.finParada,
+          const values: Record<string, unknown> = {
+            ...row,
             maintenanceTime,
             stopTime,
-            row.mtto,
-            row.falla,
-            row.mttoEsp,
-            row.descripcionFalla,
-            row.descripcionAccion,
-            row.observaciones,
-          ].map((value) => String(value || ''));
-          if (showUser) values.push(String(row.usuario || ''));
-          return values;
+          };
+          return reportColumns.map((column) => String(values[column.key] || ''));
         }),
         styles: {
           font: 'helvetica',
-          fontSize: 6,
-          cellPadding: 1.3,
+          fontStyle: 'bold',
+          fontSize: reportType === 'summary' ? 9 : 6,
+          cellPadding: reportType === 'summary' ? 1.8 : 1.3,
           overflow: 'linebreak',
           valign: 'top',
         },
@@ -2880,12 +2881,14 @@ export default function PlannerPage() {
           fillColor: [26, 61, 107],
           textColor: [255, 255, 255],
           fontStyle: 'bold',
+          fontSize: reportType === 'summary' ? 9 : 6,
         },
         alternateRowStyles: { fillColor: [245, 248, 252] },
         columnStyles: Object.fromEntries(widths.map((cellWidth, index) => [index, { cellWidth: cellWidth * widthScale }])),
         didDrawPage: () => {
           const pageCount = doc.getNumberOfPages();
-          doc.setFontSize(7);
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(reportType === 'summary' ? 9 : 7);
           doc.text(
             `Página ${doc.getCurrentPageInfo().pageNumber} de ${pageCount}`,
             doc.internal.pageSize.getWidth() - 8,
@@ -2894,7 +2897,8 @@ export default function PlannerPage() {
           );
         },
       });
-      doc.save(`Ordenes_de_Trabajo_Semana_${weekNumber}_${weekStart}_${weekEnd}.pdf`);
+      const reportSuffix = reportType === 'summary' ? '_Resumen' : '';
+      doc.save(`Ordenes_de_Trabajo${reportSuffix}_Semana_${weekNumber}_${weekStart}_${weekEnd}.pdf`);
       setWorkOrdersPdfStatus('idle');
     } catch (error) {
       console.error('[PLANTA] Failed to generate work orders PDF', error);
@@ -4815,15 +4819,18 @@ export default function PlannerPage() {
                                         ))}
                                       </SelectContent>
                                     </Select>
-                                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                                       {informesOperacionales.filter((r) => {
-                                         const matchLine = paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea;
-                                         const matchTurno = paradaFiltroTurno === 'all' || r.turno === paradaFiltroTurno;
-                                         const matchEquipo = paradaFiltroEquipo === 'all' || r.equipo === paradaFiltroEquipo;
-                                         const matchDate = !paradaFiltroFecha || r.fecha === paradaFiltroFecha;
-                                         return matchLine && matchTurno && matchEquipo && matchDate;
-                                       }).length} registros
-                                   </span>
+                                    <Select value={paradaFiltroTipo} onValueChange={setParadaFiltroTipo}>
+                                      <SelectTrigger className="h-9 w-56 text-[10px] font-bold uppercase tracking-wider rounded-lg border-slate-200">
+                                        <SelectValue placeholder="Todos los tipos de parada" />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        <SelectItem value="all">Todos los tipos de parada</SelectItem>
+                                        {TIPOS_PARADA_INFORME_OPERACIONAL.map((tipo) => (
+                                          <SelectItem key={tipo} value={tipo}>{tipo}</SelectItem>
+                                        ))}
+                                      </SelectContent>
+                                    </Select>
+                                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{filteredOperationalReports.length} registros</span>
                                     <Button
                                        type="button"
                                        onClick={() => void generateOperationalReportsPdf()}
@@ -4869,15 +4876,7 @@ export default function PlannerPage() {
                                         </TableRow>
                                      </TableHeader>
                                       <TableBody>
-                                        {informesOperacionales
-                                           .filter((r) => {
-                                             const matchLine = paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea;
-                                             const matchTurno = paradaFiltroTurno === 'all' || r.turno === paradaFiltroTurno;
-                                             const matchEquipo = paradaFiltroEquipo === 'all' || r.equipo === paradaFiltroEquipo;
-                                             const matchDate = !paradaFiltroFecha || r.fecha === paradaFiltroFecha;
-                                             return matchLine && matchTurno && matchEquipo && matchDate;
-                                           })
-                                           .map((row) => (
+                                        {filteredOperationalReports.map((row) => (
                                               <TableRow key={row.id} className={cn("border-b-2 border-slate-300 transition-all duration-200", row.bloqueado !== false ? "bg-emerald-50/30" : "bg-amber-50/20 hover:bg-amber-50/30 cursor-pointer")} onClick={(e) => { const target = e.target as HTMLElement; if (target.tagName === 'INPUT' || target.tagName === 'BUTTON' || target.tagName === 'SELECT' || target.closest('button')) return; if (editingId !== row.id && row.bloqueado === false && user?.id !== 'prodtj.mds' && user?.id !== 'prodtg.mds' && user?.id !== 'prodts.mds' && user?.id !== 'enf.mds') { setEditingId(row.id); setEditForm(row); } }}>
                                                {editingId === row.id ? (
                                               <>
@@ -5088,11 +5087,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                             )}
                                           </TableRow>
                                        ))}
-                                        {informesOperacionales.filter((r) => {
-                                          const matchLine = paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea;
-                                          const matchDate = !paradaFiltroFecha || r.fecha === paradaFiltroFecha;
-                                          return matchLine && matchDate;
-                                        }).length === 0 && (
+                                        {filteredOperationalReports.length === 0 && (
                                         <TableRow>
                                            <TableCell colSpan={(user?.id === 'alex.mds' || user?.id === 'maria.mds') ? 16 : 15} className="text-center py-10 text-slate-400 font-bold uppercase text-[11px] tracking-wider">
                                              Sin registros para el filtro seleccionado
@@ -5139,6 +5134,15 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                      >
                                        <FileDown className="mr-1.5 h-3.5 w-3.5" />
                                        {workOrdersPdfStatus === 'generating' ? 'Generando?' : 'PDF'}
+                                     </Button>
+                                     <Button
+                                       type="button"
+                                       onClick={() => void generateWorkOrdersPdf('summary')}
+                                       disabled={ordenesLoading || workOrdersPdfStatus === 'generating' || filteredWorkOrders.length === 0}
+                                       className="h-9 shrink-0 rounded-lg bg-blue-700 px-3 text-[10px] font-black uppercase tracking-wider text-white hover:bg-blue-800 disabled:opacity-50"
+                                     >
+                                       <FileDown className="mr-1.5 h-3.5 w-3.5" />
+                                       {workOrdersPdfStatus === 'generating' ? 'Generando...' : 'PDF resumen'}
                                      </Button>
                                      {workOrdersPdfStatus === 'error' && (
                                        <span role="alert" className="text-[10px] font-bold text-red-600">
@@ -5517,7 +5521,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                       <tr className="even:bg-slate-50/60">
                                                         <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(totalPlanificado)}</td>
                                                         <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(totalAlcance)}</td>
-                                                        <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{cumplimientoTotal}</td>
+                                                        <td style={getCumplimientoCellStyle(totalAlcance, totalPlanificado)} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{cumplimientoTotal}</td>
                                                         <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.disponibilidadTotal)}</td>
                                                       </tr>
                                                     </tbody>
