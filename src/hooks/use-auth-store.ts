@@ -60,24 +60,40 @@ export function useAuthStore() {
 
   useEffect(() => {
     let sessionRefreshPromise: Promise<void> | null = null;
+    let usersRefreshPromise: Promise<void> | null = null;
 
-    const refreshUsers = async () => {
-      try {
-        const response = await fetch('/api/data?section=users', { cache: 'no-store' });
-        if (!response.ok) throw new Error(`Users API error: ${response.status}`);
-        const payload = await response.json();
-        const remoteUsers = Array.isArray(payload?.planner?.users)
-          ? payload.planner.users
-          : Array.isArray(payload?.users)
-            ? payload.users
-            : null;
+    const refreshUsers = () => {
+      if (usersRefreshPromise) return usersRefreshPromise;
 
-        if (remoteUsers?.length) {
-          syncUsersList(remoteUsers);
+      usersRefreshPromise = (async () => {
+        let lastError: unknown;
+        for (let attempt = 0; attempt < 3; attempt += 1) {
+          try {
+            const response = await fetch('/api/data?section=users', { cache: 'no-store' });
+            if (!response.ok) throw new Error(`Users API error: ${response.status}`);
+            const payload = await response.json();
+            const remoteUsers = Array.isArray(payload?.planner?.users)
+              ? payload.planner.users
+              : Array.isArray(payload?.users)
+                ? payload.users
+                : null;
+
+            if (remoteUsers?.length) syncUsersList(remoteUsers);
+            return;
+          } catch (error) {
+            lastError = error;
+            if (attempt < 2) {
+              await new Promise((resolve) => setTimeout(resolve, 250 * (attempt + 1)));
+            }
+          }
         }
-      } catch (error) {
-        console.error('[AuthStore] Unable to load public user profiles', error);
-      }
+
+        console.warn('[AuthStore] Unable to refresh public user profiles; keeping the current list.', lastError);
+      })().finally(() => {
+        usersRefreshPromise = null;
+      });
+
+      return usersRefreshPromise;
     };
 
     const refreshSession = () => {
