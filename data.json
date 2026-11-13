@@ -30778,7 +30778,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-13T14:16:48.681Z"
+    "updatedAt": "2026-11-13T18:05:03.036Z"
   },
   "ordenesSap": [
     {
@@ -45695,17 +45695,6 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 7150
-        },
-        {
-          "fechaInicio": "2026-11-13",
-          "ticket1": "",
-          "cajas1": 0,
-          "ticket2": "",
-          "cajas2": 0,
-          "ticket3": "",
-          "cajas3": 0,
-          "ticket4": "",
-          "cajas4": 0
         }
       ]
     },
@@ -45726,6 +45715,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 2160
+        },
+        {
+          "fechaInicio": "2026-11-13",
+          "ticket1": "16614",
+          "cajas1": 7680,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -45746,6 +45746,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 2400
+        },
+        {
+          "fechaInicio": "2026-11-13",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -45787,6 +45798,86 @@
           "ticket4": "",
           "cajas4": 4680
         },
+        {
+          "fechaInicio": "2026-11-13",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "1-1794592961173",
+      "linea": 1,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "64923",
+      "semana": 46,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-13",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "3-1794593065344",
+      "linea": 3,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "64929",
+      "semana": 46,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-13",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "4-1794593078598",
+      "linea": 4,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "64935",
+      "semana": 46,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-13",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "5-1794593096522",
+      "linea": 5,
+      "sabor": "JUSTY MANZANA",
+      "ordenNumero": "64940",
+      "semana": 46,
+      "dias": [
         {
           "fechaInicio": "2026-11-13",
           "ticket1": "",
@@ -273802,6 +273893,25 @@
         "usuario": "Luis Blandin",
         "id": 1794566935569,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-13",
+        "semana": 46,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 5",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "07:00",
+        "finParada": "07:12",
+        "totalMin": "12",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES PARA EL ARRANQUE ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1794591258386,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -301523,6 +301633,12 @@
           "producto": "610",
           "jarabeReal": 105698,
           "ubb": 36.78
+        },
+        "auto-1-1794404920201": {
+          "cajasPlanificadas": 70500,
+          "producto": "378",
+          "jarabeReal": 93497,
+          "ubb": 32.5
         }
       },
       "linea-2": {
@@ -301935,6 +302051,12 @@
           "producto": "13",
           "jarabeReal": 20510,
           "ubb": 7.5
+        },
+        "auto-2-1794397030446": {
+          "cajasPlanificadas": 115608,
+          "producto": "213",
+          "jarabeReal": 106560,
+          "ubb": 108
         }
       },
       "linea-3": {
@@ -302252,6 +302374,13 @@
           "producto": "593",
           "jarabeReal": 120343,
           "ubb": 41.92
+        },
+        "auto-3-1794404931125": {
+          "cajasPlanificadas": 128800,
+          "producto": "252",
+          "jarabeReal": 134705,
+          "ubb": 46.81,
+          "pnc": 78
         }
       },
       "linea-4": {
@@ -302519,6 +302648,12 @@
           "producto": "124",
           "jarabeReal": 120189,
           "ubb": 41.74
+        },
+        "auto-4-1794404941846": {
+          "cajasPlanificadas": 128800,
+          "producto": "210",
+          "ubb": 35.9,
+          "jarabeReal": 103326
         }
       },
       "linea-5": {
@@ -302733,6 +302868,12 @@
           "ubb": 482,
           "cajasPlanificadas": 55660,
           "producto": "585"
+        },
+        "auto-5-1794404960109": {
+          "cajasPlanificadas": 35834,
+          "producto": "501",
+          "jarabeReal": 497000,
+          "ubb": 497
         }
       },
       "linea-6": {
@@ -303011,6 +303152,12 @@
           "cajasPlanificadas": 34500,
           "producto": "574",
           "jarabeReal": 34536,
+          "ubb": 12
+        },
+        "auto-6-1794397127802": {
+          "cajasPlanificadas": 34500,
+          "producto": "382",
+          "jarabeReal": 34540,
           "ubb": 12
         }
       },
@@ -303398,6 +303545,18 @@
           "producto": "163",
           "jarabeReal": 63067,
           "ubb": 21.91
+        },
+        "auto-7-1794397152584": {
+          "cajasPlanificadas": 60375,
+          "producto": "529",
+          "jarabeReal": 120851,
+          "ubb": 42
+        },
+        "auto-7-1794571706443": {
+          "cajasPlanificadas": 5708,
+          "producto": "50",
+          "jarabeReal": 11822,
+          "ubb": 4.1
         }
       }
     },
@@ -337215,7 +337374,8 @@
     "7-1793966292181",
     "7-1793966316036",
     "6-1794052703784",
-    "3-1794232555062"
+    "3-1794232555062",
+    "5-1794592946708"
   ],
   "logisticsStockFile": {
     "filename": "stock-producto-terminado.xlsx",
