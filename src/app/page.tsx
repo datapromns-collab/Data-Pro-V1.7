@@ -2833,6 +2833,8 @@ export default function PlannerPage() {
         headers.push('Usuario');
         widths.push(16);
       }
+      const availableWidth = doc.internal.pageSize.getWidth() - 16;
+      const widthScale = availableWidth / widths.reduce((total, width) => total + width, 0);
 
       autoTable(doc, {
         startY: 26,
@@ -2869,8 +2871,8 @@ export default function PlannerPage() {
         }),
         styles: {
           font: 'helvetica',
-          fontSize: 5,
-          cellPadding: 1.1,
+          fontSize: 6,
+          cellPadding: 1.3,
           overflow: 'linebreak',
           valign: 'top',
         },
@@ -2880,7 +2882,7 @@ export default function PlannerPage() {
           fontStyle: 'bold',
         },
         alternateRowStyles: { fillColor: [245, 248, 252] },
-        columnStyles: Object.fromEntries(widths.map((cellWidth, index) => [index, { cellWidth }])),
+        columnStyles: Object.fromEntries(widths.map((cellWidth, index) => [index, { cellWidth: cellWidth * widthScale }])),
         didDrawPage: () => {
           const pageCount = doc.getNumberOfPages();
           doc.setFontSize(7);
