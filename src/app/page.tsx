@@ -747,6 +747,7 @@ export default function PlannerPage() {
         finMtto: r.finMtto || '',
         inicioParada: r.inicioParada || r.otInicioParada || '',
         tMtto: r.tMtto || '',
+        tParada: r.tParada || '',
         finParada: r.finParada || r.otFinParada || '',
         tipoParada: r.tipoParada || '',
         mtto: r.mtto || '',
@@ -2744,6 +2745,158 @@ export default function PlannerPage() {
     } catch (error) {
       console.error('[PLANTA] Failed to generate operational reports PDF', error);
       setOperationalReportPdfStatus('error');
+    }
+  };
+  const [workOrdersPdfStatus, setWorkOrdersPdfStatus] = useState<'idle' | 'generating' | 'error'>('idle');
+  const filteredWorkOrders = useMemo(() => {
+    const query = ordenBusqueda.trim().toLowerCase();
+    return ordenesTrabajoCargadas.filter((row) => {
+      const matchesLine = ordenFiltroLinea === 'all' || row.linea === ordenFiltroLinea;
+      const matchesDate = !paradaFiltroFecha || row.fechaOrden === paradaFiltroFecha;
+      const matchesSearch = !query || [
+        row.orden,
+        row.solicitante,
+        row.falla,
+        row.maquina,
+        row.aviso,
+        row.observaciones,
+        row.descripcionFalla,
+        row.descripcionAccion,
+      ].filter(Boolean).some((value) => String(value).toLowerCase().includes(query));
+      return matchesLine && matchesDate && matchesSearch;
+    });
+  }, [ordenesTrabajoCargadas, ordenFiltroLinea, paradaFiltroFecha, ordenBusqueda]);
+  const generateWorkOrdersPdf = async () => {
+    if (workOrdersPdfStatus === 'generating' || filteredWorkOrders.length === 0) return;
+    setWorkOrdersPdfStatus('generating');
+    try {
+      const [{ default: jsPDF }, { autoTable }] = await Promise.all([
+        import('jspdf'),
+        import('jspdf-autotable'),
+      ]);
+      const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a3' });
+      const weekNumber = getISOWeek(plantaWeekStartDate);
+      const weekStart = plantaWeekQuery.startDate;
+      const weekEnd = plantaWeekQuery.endDate;
+      const lineOrder = (line: unknown) => {
+        const index = LINES.findIndex((value) => value === line);
+        return index < 0 ? Number.MAX_SAFE_INTEGER : index;
+      };
+      const rows = [...filteredWorkOrders].sort((a, b) =>
+        lineOrder(a.linea) - lineOrder(b.linea) ||
+        String(a.linea || '').localeCompare(String(b.linea || ''), 'es', { numeric: true, sensitivity: 'base' }) ||
+        String(a.fechaOrden || '').localeCompare(String(b.fechaOrden || '')) ||
+        String(a.orden || '').localeCompare(String(b.orden || ''), 'es', { numeric: true, sensitivity: 'base' })
+      );
+      const showUser = user?.id === 'alex.mds' || user?.id === 'maria.mds';
+      const appliedFilters = [
+        `Línea: ${ordenFiltroLinea === 'all' ? 'Todas' : ordenFiltroLinea}`,
+        `Fecha: ${paradaFiltroFecha || 'Toda la semana'}`,
+        `Búsqueda: ${ordenBusqueda.trim() || 'Sin búsqueda'}`,
+      ].join('   |   ');
+
+      doc.setFontSize(15);
+      doc.setFont('helvetica', 'bold');
+      doc.text('ÓRDENES DE TRABAJO', 8, 11);
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`Semana ${weekNumber}   |   ${format(new Date(`${weekStart}T12:00:00`), 'dd/MM/yyyy')} - ${format(new Date(`${weekEnd}T12:00:00`), 'dd/MM/yyyy')}`, 8, 17);
+      doc.setFontSize(7);
+      doc.text(appliedFilters, 8, 22);
+      doc.text(`Registros: ${rows.length}`, doc.internal.pageSize.getWidth() - 8, 22, { align: 'right' });
+
+      const headers = [
+        'I-Fecha',
+        'Orden',
+        'F-Fecha',
+        'Sem.',
+        'Turno',
+        'Solicitante',
+        'Línea',
+        'Aviso',
+        'Máquina',
+        'I-Parada',
+        'I-Mtto',
+        'F-Mtto',
+        'F-Parada',
+        'T-Mtto',
+        'T-Parada',
+        'Mtto',
+        'Falla',
+        'Mtto / Esp.',
+        'Descripción de la falla por el solicitante',
+        'Descripción de la acción de mantenimiento',
+        'Observaciones',
+      ];
+      const widths = [15, 16, 15, 9, 12, 18, 14, 17, 18, 15, 12, 12, 15, 12, 12, 15, 20, 20, 28, 28, 28];
+      if (showUser) {
+        headers.push('Usuario');
+        widths.push(16);
+      }
+
+      autoTable(doc, {
+        startY: 26,
+        margin: { left: 8, right: 8, bottom: 10 },
+        head: [headers],
+        body: rows.map((row) => {
+          const maintenanceTime = tiempoTranscurrido(row.fechaEmision, row.inicioMtto, row.fechaParada, row.finMtto) || row.tMtto;
+          const stopTime = tiempoTranscurrido(row.fechaEmision, row.inicioParada, row.fechaParada, row.finParada) || row.tParada;
+          const values = [
+            row.fechaOrden,
+            row.orden,
+            row.fechaEmision,
+            row.semana,
+            row.turno,
+            row.solicitante,
+            row.linea,
+            row.aviso,
+            row.maquina,
+            row.fechaParada,
+            row.inicioMtto,
+            row.finMtto,
+            row.finParada,
+            maintenanceTime,
+            stopTime,
+            row.mtto,
+            row.falla,
+            row.mttoEsp,
+            row.descripcionFalla,
+            row.descripcionAccion,
+            row.observaciones,
+          ].map((value) => String(value || ''));
+          if (showUser) values.push(String(row.usuario || ''));
+          return values;
+        }),
+        styles: {
+          font: 'helvetica',
+          fontSize: 5,
+          cellPadding: 1.1,
+          overflow: 'linebreak',
+          valign: 'top',
+        },
+        headStyles: {
+          fillColor: [26, 61, 107],
+          textColor: [255, 255, 255],
+          fontStyle: 'bold',
+        },
+        alternateRowStyles: { fillColor: [245, 248, 252] },
+        columnStyles: Object.fromEntries(widths.map((cellWidth, index) => [index, { cellWidth }])),
+        didDrawPage: () => {
+          const pageCount = doc.getNumberOfPages();
+          doc.setFontSize(7);
+          doc.text(
+            `Página ${doc.getCurrentPageInfo().pageNumber} de ${pageCount}`,
+            doc.internal.pageSize.getWidth() - 8,
+            doc.internal.pageSize.getHeight() - 4,
+            { align: 'right' },
+          );
+        },
+      });
+      doc.save(`Ordenes_de_Trabajo_Semana_${weekNumber}_${weekStart}_${weekEnd}.pdf`);
+      setWorkOrdersPdfStatus('idle');
+    } catch (error) {
+      console.error('[PLANTA] Failed to generate work orders PDF', error);
+      setWorkOrdersPdfStatus('error');
     }
   };
    const [plantaFormData, setPlantaFormData] = useState({
@@ -4974,15 +5127,22 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                       <button onClick={() => setOrdenBusqueda('')} className="h-9 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider text-slate-500 hover:bg-slate-100">Limpiar</button>
                                     )}
                                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-auto">
-                                        {ordenesTrabajoCargadas.filter((r) => {
-                                          const matchLine = ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea;
-                                          const matchDate = !paradaFiltroFecha || r.fechaOrden === paradaFiltroFecha;
-                                          const q = ordenBusqueda.trim().toLowerCase();
-                                          const matchQ = !q || [r.orden, r.solicitante, r.falla, r.maquina, r.aviso, r.observaciones, r.descripcionFalla, r.descripcionAccion]
-                                            .filter(Boolean).some((v) => String(v).toLowerCase().includes(q));
-                                          return matchLine && matchDate && matchQ;
-                                        }).length} registros
+                                        {filteredWorkOrders.length} registros
                                     </span>
+                                     <Button
+                                       type="button"
+                                       onClick={() => void generateWorkOrdersPdf()}
+                                       disabled={ordenesLoading || workOrdersPdfStatus === 'generating' || filteredWorkOrders.length === 0}
+                                       className="h-9 shrink-0 rounded-lg bg-slate-800 px-3 text-[10px] font-black uppercase tracking-wider text-white hover:bg-slate-900 disabled:opacity-50"
+                                     >
+                                       <FileDown className="mr-1.5 h-3.5 w-3.5" />
+                                       {workOrdersPdfStatus === 'generating' ? 'Generando?' : 'PDF'}
+                                     </Button>
+                                     {workOrdersPdfStatus === 'error' && (
+                                       <span role="alert" className="text-[10px] font-bold text-red-600">
+                                         No se pudo generar el PDF.
+                                       </span>
+                                     )}
                                   </div>
                                   <div className="rounded-lg border border-slate-200 overflow-auto max-h-[62vh] tabla-ordenes-scroll overscroll-contain pointer-events-auto" style={{ scrollBehavior: 'smooth' }}>
                                        <Table className={cn("min-w-[2200px] w-max", activeModuleReadOnly && "pointer-events-none")}>
