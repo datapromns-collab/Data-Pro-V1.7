@@ -15798,12 +15798,12 @@
             "name": "GLUP COLA",
             "lineId": "7",
             "loadPerHour": 2500,
-            "quantity": 25875,
-            "durationHours": 10.35,
+            "quantity": 5708,
+            "durationHours": 2.2832,
             "presentation": "1Lt",
-            "tanks": 3,
+            "tanks": 0.66,
             "startTime": "2026-11-11T00:00:00.000Z",
-            "endTime": "2026-11-11T10:21:00.000Z",
+            "endTime": "2026-11-11T02:16:59.520Z",
             "id": "veawou166",
             "color": "#6366f1"
           },
@@ -15813,9 +15813,9 @@
             "loadPerHour": 0,
             "quantity": 0,
             "durationHours": 0.5,
-            "startTime": "2026-11-11T10:21:00.000Z",
-            "endTime": "2026-11-11T10:51:00.000Z",
-            "id": "hwt4dvbdt",
+            "startTime": "2026-11-11T02:17:00.000Z",
+            "endTime": "2026-11-11T02:47:00.000Z",
+            "id": "rqjgpy7s0",
             "color": "#f59e0b"
           },
           {
@@ -15826,9 +15826,9 @@
             "durationHours": 10.6832,
             "presentation": "1Lt",
             "tanks": 3,
-            "startTime": "2026-11-11T10:51:00.000Z",
-            "endTime": "2026-11-11T21:31:59.520Z",
-            "id": "gpi7wsb49",
+            "startTime": "2026-11-11T02:47:00.000Z",
+            "endTime": "2026-11-11T13:27:59.520Z",
+            "id": "03xe7hlax",
             "color": "#587593"
           },
           {
@@ -15837,23 +15837,23 @@
             "loadPerHour": 0,
             "quantity": 0,
             "durationHours": 0.5,
-            "startTime": "2026-11-11T21:32:00.000Z",
-            "endTime": "2026-11-11T22:02:00.000Z",
-            "id": "eul4jalrd",
-            "color": "#587593"
+            "startTime": "2026-11-11T13:28:00.000Z",
+            "endTime": "2026-11-11T13:58:00.000Z",
+            "id": "j22ktfh73",
+            "color": "#ec4899"
           },
           {
             "name": "GLUP UVA",
             "lineId": "7",
             "loadPerHour": 2500,
-            "quantity": 7125,
-            "durationHours": 2.85,
+            "quantity": 14250,
+            "durationHours": 5.7,
             "presentation": "1Lt",
-            "tanks": 1,
-            "startTime": "2026-11-11T22:02:00.000Z",
-            "endTime": "2026-11-12T00:53:00.000Z",
-            "id": "6eis4xtau",
-            "color": "#6366f1"
+            "tanks": 2,
+            "startTime": "2026-11-11T13:58:00.000Z",
+            "endTime": "2026-11-11T19:40:00.000Z",
+            "id": "5sitgyc1z",
+            "color": "#10b981"
           },
           {
             "name": "CIP 3P ALCALINO",
@@ -15861,23 +15861,23 @@
             "loadPerHour": 0,
             "quantity": 0,
             "durationHours": 2,
-            "startTime": "2026-11-12T00:53:00.000Z",
-            "endTime": "2026-11-12T02:53:00.000Z",
-            "id": "ssspba91o",
-            "color": "#f59e0b"
+            "startTime": "2026-11-11T19:40:00.000Z",
+            "endTime": "2026-11-11T21:40:00.000Z",
+            "id": "rn3jdkvxv",
+            "color": "#ec4899"
           },
           {
             "name": "GLUP COLA",
             "lineId": "7",
             "loadPerHour": 2500,
-            "quantity": 195300,
-            "durationHours": 78.12,
+            "quantity": 208325,
+            "durationHours": 83.33,
             "presentation": "2Lts",
-            "tanks": 22.64,
-            "startTime": "2026-11-12T02:53:00.000Z",
-            "endTime": "2026-11-15T09:00:12.000Z",
-            "id": "0b29iiaqw",
-            "color": "#ef4444"
+            "tanks": 24.15,
+            "startTime": "2026-11-11T21:40:00.000Z",
+            "endTime": "2026-11-15T08:59:48.000Z",
+            "id": "omnpzlgis",
+            "color": "#10b981"
           }
         ],
         "deletedTaskIds": [
@@ -15940,7 +15940,13 @@
           "3kbih48je",
           "mlnp0m3j9",
           "3kymbflg1",
-          "sjqfq5ni0"
+          "sjqfq5ni0",
+          "0b29iiaqw",
+          "ssspba91o",
+          "6eis4xtau",
+          "eul4jalrd",
+          "gpi7wsb49",
+          "hwt4dvbdt"
         ]
       }
     },
@@ -21906,6 +21912,80 @@
               "code": "ENV-00081",
               "material": "BOTELLA ENVASADA GLUP FRESH 1.0 L (LINEA 7)",
               "quantity": "340",
+              "unit": "UND"
+            }
+          ],
+          "2026-11-12": [
+            {
+              "id": "d5bacfa1-6e4f-4fd1-9cd8-59a06f5fbbc7",
+              "line": "Linea 1",
+              "flavor": "GLUP FRESH",
+              "code": "ENV-00013",
+              "material": "BOTELLA ENVASADA GLUP FRESH 2.0.LTS",
+              "quantity": "183",
+              "unit": "UND"
+            },
+            {
+              "id": "2f8fbf0b-dc39-443f-987b-5a25e6d7b76e",
+              "line": "Linea 2",
+              "flavor": "GLUP KOLITA",
+              "code": "ENV-00040",
+              "material": "BOTELLA ENVASADA GLUP KOLITA 2.0.LTS  (EN LINEA 2)",
+              "quantity": "93",
+              "unit": "UND"
+            },
+            {
+              "id": "d4ec33d6-14b5-43e7-a2a8-832064ec1631",
+              "line": "Linea 3",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00063",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 2L (LINEA 3)",
+              "quantity": "53",
+              "unit": "UND"
+            },
+            {
+              "id": "95b80f8b-b8f2-43ec-bcd4-30d35d314690",
+              "line": "Linea 4",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00054",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 2.LTS (LINEA 4)",
+              "quantity": "154",
+              "unit": "UND"
+            },
+            {
+              "id": "002539f4-ee39-4c07-aa18-6e4d69af88b0",
+              "line": "Linea 5",
+              "flavor": "JUSTY MANZANA",
+              "code": "ENV-00107",
+              "material": "BOTELLA ENVASADA JUSTY MANZANA 1.5 LTS",
+              "quantity": "262",
+              "unit": "UND"
+            },
+            {
+              "id": "5b1e17a8-e7d5-47ed-b342-eae2ae13ebe1",
+              "line": "Linea 6",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00048",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 400 ML (LINEA 6)",
+              "quantity": "200",
+              "unit": "UND"
+            },
+            {
+              "id": "062aa29a-547b-4e41-912e-837819186aa5",
+              "line": "Linea 7",
+              "flavor": "GLUP FRESH",
+              "code": "ENV-00081",
+              "material": "BOTELLA ENVASADA GLUP FRESH 1.0 L (LINEA 7)",
+              "quantity": "102",
+              "unit": "UND"
+            },
+            {
+              "id": "d524bc84-71f7-4401-a202-367e41fb03bf",
+              "line": "Linea 7",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00078",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 1.0 L (LINEA 7)",
+              "quantity": "50",
               "unit": "UND"
             }
           ]
@@ -30345,7 +30425,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-13T11:02:14.048Z"
+    "updatedAt": "2026-11-13T12:09:28.173Z"
   },
   "ordenesSap": [
     {
@@ -45048,12 +45128,12 @@
           "fechaInicio": "2026-11-12",
           "ticket1": "16612",
           "cajas1": 10400,
-          "ticket2": "",
+          "ticket2": "16613",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1920,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 18554
         }
       ]
     },
@@ -45090,12 +45170,12 @@
           "fechaInicio": "2026-11-12",
           "ticket1": "16536",
           "cajas1": 7840,
-          "ticket2": "",
+          "ticket2": "16537",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 5014
         }
       ]
     },
@@ -45132,12 +45212,12 @@
           "fechaInicio": "2026-11-12",
           "ticket1": "16497",
           "cajas1": 11076,
-          "ticket2": "",
+          "ticket2": "16498",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 4729
         }
       ]
     },
@@ -45163,12 +45243,12 @@
           "fechaInicio": "2026-11-12",
           "ticket1": "16658",
           "cajas1": 8320,
-          "ticket2": "",
+          "ticket2": "16659",
           "cajas2": 1840,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1680,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 11314
         }
       ]
     },
@@ -45194,12 +45274,12 @@
           "fechaInicio": "2026-11-12",
           "ticket1": "16570",
           "cajas1": 10880,
-          "ticket2": "",
+          "ticket2": "16571",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 19760
         }
       ]
     },
@@ -45225,12 +45305,12 @@
           "fechaInicio": "2026-11-12",
           "ticket1": "16752",
           "cajas1": 10800,
-          "ticket2": "",
+          "ticket2": "16753",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 17440
         }
       ]
     },
@@ -45256,12 +45336,103 @@
           "fechaInicio": "2026-11-12",
           "ticket1": "16704",
           "cajas1": 6000,
+          "ticket2": "16705",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 7150
+        },
+        {
+          "fechaInicio": "2026-11-13",
+          "ticket1": "",
+          "cajas1": 0,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "2-1794571636323",
+      "linea": 2,
+      "sabor": "GLUP UVA",
+      "ordenNumero": "64899",
+      "semana": 46,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-12",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16613",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 2160
+        }
+      ]
+    },
+    {
+      "id": "6-1794571680252",
+      "linea": 6,
+      "sabor": "GLUP MANZANA ROJA",
+      "ordenNumero": "64905",
+      "semana": 46,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-12",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16537",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 2400
+        }
+      ]
+    },
+    {
+      "id": "7-1794571706443",
+      "linea": 7,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "64911",
+      "semana": 46,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-12",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16498",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 4680
+        }
+      ]
+    },
+    {
+      "id": "7-1794571743583",
+      "linea": 7,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "64917",
+      "semana": 46,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-12",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16498",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 4680
         }
       ]
     }
@@ -59211,6 +59382,36 @@
             "final": "11",
             "preparado": "240"
           }
+        },
+        "2026-11-12": {
+          "GLUP COLA": {
+            "inicial": "67.50",
+            "preparado": "48",
+            "final": "66.84"
+          },
+          "GLUP FRESH 10%": {
+            "inicial": "28.94",
+            "preparado": "12",
+            "final": "13.32"
+          },
+          "GLUP KOLITA": {
+            "inicial": "38.43",
+            "preparado": "54",
+            "final": "25.59"
+          },
+          "JUSTY MANZANA": {
+            "inicial": "11",
+            "preparado": "260",
+            "final": "31"
+          },
+          "GLUP UVA 10%": {
+            "preparado": "33",
+            "final": "29.26"
+          },
+          "GLUP MANZANA ROJA 10%": {
+            "preparado": "8",
+            "final": "6.48"
+          }
         }
       },
       "sugar": {
@@ -61005,6 +61206,18 @@
             "recepcionSacos": "3000",
             "invFinalSacos": ""
           }
+        },
+        "2026-11-12": {
+          "PORTUGUESA": {
+            "invInicialSacos": "11040",
+            "recepcionSacos": "2200",
+            "invFinalSacos": "11440"
+          },
+          "MONTALBAN": {
+            "invInicialSacos": "",
+            "recepcionSacos": "2640",
+            "invFinalSacos": ""
+          }
         }
       },
       "tanques": {
@@ -62568,6 +62781,16 @@
           "Sala 1": {
             "invInicialSacos": "931",
             "invFinalSacos": "917"
+          }
+        },
+        "2026-11-12": {
+          "JARABE SIMPLE": {
+            "invInicialSacos": "434",
+            "invFinalSacos": "555"
+          },
+          "Sala 1": {
+            "invInicialSacos": "917",
+            "invFinalSacos": "865"
           }
         }
       },
@@ -321906,7 +322129,12 @@
       "2026-11-11-suave": "165280",
       "2026-11-11-procesos": "2836058",
       "2026-11-11-filtrada": "4177257,45",
-      "2026-11-11-total": "2769140"
+      "2026-11-11-total": "2769140",
+      "2026-11-12-servicio": "17918",
+      "2026-11-12-suave": "168878",
+      "2026-11-12-procesos": "3093735,01",
+      "2026-11-12-filtrada": "4517957,87",
+      "2026-11-12-total": "3314790"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
