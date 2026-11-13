@@ -5522,7 +5522,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                         <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(totalPlanificado)}</td>
                                                         <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(totalAlcance)}</td>
                                                         <td style={getCumplimientoCellStyle(totalAlcance, totalPlanificado)} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{cumplimientoTotal}</td>
-                                                        <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.disponibilidadTotal)}</td>
+                                                        <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.disponibilidadPorAveria)}</td>
                                                       </tr>
                                                     </tbody>
                                                   </table>
@@ -5846,8 +5846,8 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                   <tr className="even:bg-slate-50/60">
                                                     <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(totalPlanificado)}</td>
                                                     <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(totalAlcance)}</td>
-                                                    <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{cumplimientoTotal}</td>
-                                                    <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.disponibilidadTotal)}</td>
+                                                    <td style={getCumplimientoCellStyle(totalAlcance, totalPlanificado)} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{cumplimientoTotal}</td>
+                                                    <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.disponibilidadPorAveria)}</td>
                                                   </tr>
                                                 </tbody>
                                               </table>
@@ -8605,6 +8605,9 @@ function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realP
   let totalAlcanceTN = 0;
   let totalHorasProgramadasReales = 0;
   let totalHorasEfectivas = 0;
+  const totalParadasAveriaHoras = informeDelDia
+    .filter((r: any) => ['AVERIA', 'AVERÍA'].includes(String(r.tipoParada || '').toUpperCase()))
+    .reduce((acc: number, r: any) => acc + (Number(r.totalMin) || 0), 0) / 60;
   let count = 0;
 
   lineas.forEach((lineaNombre, idx) => {
@@ -8654,6 +8657,9 @@ function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realP
   const cumplimientoTD = totalPlanificadoTD > 0 ? ((totalAlcanceTD / totalPlanificadoTD) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
   const cumplimientoTN = totalPlanificadoTN > 0 ? ((totalAlcanceTN / totalPlanificadoTN) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
   const disponibilidadTotal = count > 0 && totalHorasProgramadasReales > 0 ? (totalHorasEfectivas / totalHorasProgramadasReales * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
+  const disponibilidadPorAveria = totalHorasProgramadasReales > 0
+    ? (((totalHorasProgramadasReales - totalParadasAveriaHoras) / totalHorasProgramadasReales) * 100).toFixed(2).replace('.', ',') + '%'
+    : '0,00%';
 
   return {
     totalPlanificadoTD: String(Math.round(totalPlanificadoTD)),
@@ -8663,6 +8669,7 @@ function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realP
     cumplimientoTD,
     cumplimientoTN,
     disponibilidadTotal,
+    disponibilidadPorAveria,
   };
 }
 
@@ -8959,6 +8966,10 @@ function getResumenPorLinea(informesOperacionales: any[], tasks: any[], realProd
     const averiaLinea = minutosAHorasDecimal(porTipo.averia || 0);
     const operacionalesLinea = minutosAHorasDecimal(porTipo.operacionales || 0);
     const paradasProgramadasLinea = minutosAHorasDecimal(porTipo.programadas || 0);
+    const horasProgramadasRealesLinea = Math.max(
+      0,
+      horasProgramadasLinea - (Number.parseFloat(String(paradasProgramadasLinea || '0').replace(',', '.')) || 0)
+    );
     const disponibilidadRealHrs = Math.max(0, horasProgramadasLinea - (Number.parseFloat(String(serviciosLinea || '0').replace(',', '.')) + Number.parseFloat(String(ausentismoLinea || '0').replace(',', '.')) + Number.parseFloat(String(externasLinea || '0').replace(',', '.')) + Number.parseFloat(String(adecuacionesLinea || '0').replace(',', '.')) + Number.parseFloat(String(averiaLinea || '0').replace(',', '.')) + Number.parseFloat(String(operacionalesLinea || '0').replace(',', '.')) + Number.parseFloat(String(paradasProgramadasLinea || '0').replace(',', '.'))));
     const cajasH = Number(lineSpeeds?.[lineaNum] || 0);
     const produccionTeorica = cajasH * disponibilidadRealHrs;
@@ -8989,7 +9000,12 @@ function getResumenPorLinea(informesOperacionales: any[], tasks: any[], realProd
       const horasNum = Number.parseFloat(horas.replace(',', '.')) || 0;
       return String(Math.round(horasNum * cajasHNum));
     };
-    const disponibilidad = planificado > 0 ? ((produccionTeorica / planificado) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
+    const horasAveria = paradasLinea
+      .filter((r: any) => ['AVERIA', 'AVERÍA'].includes(String(r.tipoParada || '').toUpperCase()))
+      .reduce((acc: number, r: any) => acc + (Number(r.totalMin) || 0), 0) / 60;
+    const disponibilidad = horasProgramadasRealesLinea > 0
+      ? (((horasProgramadasRealesLinea - horasAveria) / horasProgramadasRealesLinea) * 100).toFixed(2).replace('.', ',') + '%'
+      : '0,00%';
 
     const alcance = alcanceTD + alcanceTN;
     const cumplimiento = planificado > 0 ? ((alcance / planificado) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
@@ -9227,20 +9243,19 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
     const planificadoTurno = esDiurno ? totalPlanificadoTD : totalPlanificadoTN;
     const alcanceTurno = esDiurno ? totalAlcanceTD : totalAlcanceTN;
     const cumplimientoTurno = esDiurno ? cumplimientoTD : cumplimientoTN;
-    const totalHorasEfectivas = data.reduce((acc, r) => {
-      const cajasH = Number(r.cajasH) || 0;
-      const alcanceTD = Number(r.alcanceTD || 0);
-      const alcanceTN = Number(r.alcanceTN || 0);
-      const alcance = esDiurno ? alcanceTD : esNocturno ? alcanceTN : alcanceTD + alcanceTN;
-      return acc + (cajasH > 0 ? alcance / cajasH : 0);
-    }, 0);
     const totalHorasProgramadasReales = data.reduce((acc, r) => {
       const toNum = (v: any) => Number.parseFloat(String(v || '0').replace(',', '.')) || 0;
       const hp = toNum(r.horasProgramadas);
       const pp = toNum(r.paradasProgramadas);
       return acc + Math.max(0, hp - pp);
     }, 0);
-    const disponibilidadTotal = totalHorasProgramadasReales > 0 ? (totalHorasEfectivas / totalHorasProgramadasReales * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
+    const totalParadasAveria = data.reduce((acc, r) => {
+      const horasAveria = Number.parseFloat(String(r.averia || '0').replace(',', '.')) || 0;
+      return acc + horasAveria;
+    }, 0);
+    const disponibilidadTotal = totalHorasProgramadasReales > 0
+      ? (((totalHorasProgramadasReales - totalParadasAveria) / totalHorasProgramadasReales) * 100).toFixed(2).replace('.', ',') + '%'
+      : '0,00%';
    const tiempoMuertoDesbordado = data.some((r: any) => Number.parseFloat(String(r.tiempoMuertoInexplicableRaw ?? '0').replace(',', '.')) < 0);
    return (
      <div className="flex flex-col gap-3">
