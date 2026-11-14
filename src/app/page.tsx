@@ -9056,41 +9056,44 @@ function TablaResumenPorLinea({ informesOperacionales, tasks, realProduction, li
   return (
     <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
       <div className="p-4">
-        <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto pointer-events-auto">
-          <table className="w-full border-collapse text-center" style={{ minWidth: 1870 }}>
+        <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden pointer-events-auto">
+          <table
+            className="w-full table-fixed border-collapse text-center [&_th]:!min-w-0 [&_th]:whitespace-normal [&_th]:break-all [&_th]:leading-tight [&_td]:!min-w-0 [&_td]:break-all"
+            style={{ width: '100%', maxWidth: '100%', tableLayout: 'fixed' }}
+          >
             <thead>
               <tr className="bg-slate-100">
-                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Línea</th>
-                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Planificado</th>
-                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Alcance</th>
-                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Cumplimiento</th>
-                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">OT (Cajas)</th>
-                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[100px]">Adecuaciones (Cajas)</th>
-                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[110px]">Tiempo Muerto (Cajas)</th>
-                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[100px]">Ausentismo (Cajas)</th>
-                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[100px]">Servicios (Cajas)</th>
-                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[110px]">Fallas Eléctricas (Cajas)</th>
-                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[110px]">Operacionales (Cajas)</th>
-                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[100px]">Acumulado</th>
-                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[80px]">Disponibilidad de Máquina</th>
+                <th className="px-0.5 py-1 text-[9px] font-black text-slate-500 uppercase tracking-wide border-b border-r border-slate-200">Línea</th>
+                <th className="px-0.5 py-1 text-[9px] font-black text-slate-500 uppercase tracking-wide border-b border-r border-slate-200">Planificado</th>
+                <th className="px-0.5 py-1 text-[9px] font-black text-slate-500 uppercase tracking-wide border-b border-r border-slate-200">Alcance</th>
+                <th className="px-0.5 py-1 text-[9px] font-black text-slate-500 uppercase tracking-wide border-b border-r border-slate-200">Cumplimiento</th>
+                <th className="px-0.5 py-1 text-[9px] font-black text-slate-500 uppercase tracking-wide border-b border-r border-slate-200">OT (Cajas)</th>
+                <th className="px-0.5 py-1 text-[9px] font-black text-slate-500 uppercase tracking-wide border-b border-r border-slate-200">Adecuaciones (Cajas)</th>
+                <th className="px-0.5 py-1 text-[9px] font-black text-slate-500 uppercase tracking-wide border-b border-r border-slate-200">Tiempo Muerto (Cajas)</th>
+                <th className="px-0.5 py-1 text-[9px] font-black text-slate-500 uppercase tracking-wide border-b border-r border-slate-200">Ausentismo (Cajas)</th>
+                <th className="px-0.5 py-1 text-[9px] font-black text-slate-500 uppercase tracking-wide border-b border-r border-slate-200">Servicios (Cajas)</th>
+                <th className="px-0.5 py-1 text-[9px] font-black text-slate-500 uppercase tracking-wide border-b border-r border-slate-200">Fallas Eléctricas (Cajas)</th>
+                <th className="px-0.5 py-1 text-[9px] font-black text-slate-500 uppercase tracking-wide border-b border-r border-slate-200">Operacionales (Cajas)</th>
+                <th className="px-0.5 py-1 text-[9px] font-black text-slate-500 uppercase tracking-wide border-b border-r border-slate-200">Acumulado</th>
+                <th className="px-0.5 py-1 text-[9px] font-black text-slate-500 uppercase tracking-wide border-b border-slate-200">Disponibilidad de Máquina</th>
               </tr>
             </thead>
             <tbody>
               {datos.map((row, idx) => (
                 <tr key={row.linea} className={idx % 2 === 0 ? 'even:bg-slate-50/60' : ''}>
-                  <td className="px-1 py-0.5 text-[10px] font-bold text-slate-900 border-r border-b border-slate-100 text-left">{row.linea}</td>
-                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.planificado)}</td>
-                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.alcance)}</td>
-                  <td style={getCumplimientoCellStyle(row.alcance, row.planificado)} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.cumplimiento}</td>
-                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.ot)}</td>
-                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.adecuaciones)}</td>
-                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.tiempoMuerto)}</td>
-                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.ausentismo)}</td>
-                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.servicios)}</td>
-                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.fallasElectricas)}</td>
-                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.operacionales)}</td>
-                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.acumulado)}</td>
-                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.disponibilidad)}</td>
+                  <td className="px-0.5 py-0.5 text-[9px] font-bold text-slate-900 border-r border-b border-slate-100 text-left">{row.linea}</td>
+                  <td className="px-0.5 py-0.5 text-[9px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.planificado)}</td>
+                  <td className="px-0.5 py-0.5 text-[9px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.alcance)}</td>
+                  <td style={getCumplimientoCellStyle(row.alcance, row.planificado)} className="px-0.5 py-0.5 text-[9px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.cumplimiento}</td>
+                  <td className="px-0.5 py-0.5 text-[9px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.ot)}</td>
+                  <td className="px-0.5 py-0.5 text-[9px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.adecuaciones)}</td>
+                  <td className="px-0.5 py-0.5 text-[9px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.tiempoMuerto)}</td>
+                  <td className="px-0.5 py-0.5 text-[9px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.ausentismo)}</td>
+                  <td className="px-0.5 py-0.5 text-[9px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.servicios)}</td>
+                  <td className="px-0.5 py-0.5 text-[9px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.fallasElectricas)}</td>
+                  <td className="px-0.5 py-0.5 text-[9px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.operacionales)}</td>
+                  <td className="px-0.5 py-0.5 text-[9px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.acumulado)}</td>
+                  <td className="px-0.5 py-0.5 text-[9px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.disponibilidad)}</td>
                 </tr>
               ))}
             </tbody>

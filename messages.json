@@ -1,6 +1,39 @@
 {
   "messages": [
     {
+      "id": "2026-11-14T14:09:41.196Z-82kdr9t",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "jaime.r",
+      "read": false,
+      "createdAt": "2026-11-14T14:09:41.196Z"
+    },
+    {
+      "id": "2026-11-14T13:48:44.118Z-zopnlb1",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "jaime.r",
+      "read": false,
+      "createdAt": "2026-11-14T13:48:44.118Z"
+    },
+    {
+      "id": "2026-11-14T13:46:47.735Z-5ax1nul",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "jaime.r",
+      "read": false,
+      "createdAt": "2026-11-14T13:46:47.735Z"
+    },
+    {
       "id": "2026-11-14T12:19:40.786Z-dbykxgf",
       "title": "Actualización 2",
       "message": "Culminada",
@@ -78,37 +111,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-5iesx26",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-ep969q0",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "jaime.r",
+      "recipient": "demon2",
       "read": false,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-iwksc1u",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-exnp3q8",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "jaime.r",
-      "read": false,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "recipient": "demon2",
+      "read": true,
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:30:52.494Z-k3cb7rg",
-      "title": "Actualización",
-      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-k0okkvh",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "jaime.r",
-      "read": false,
-      "createdAt": "2026-10-23T14:30:52.494Z"
+      "recipient": "demon2",
+      "read": true,
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-kv0rc5a",
@@ -188,37 +221,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-6dmnmmu",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-r0p7c53",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "demon2",
-      "read": true,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "recipient": "maria.mds",
+      "read": false,
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-ynvhtgu",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-do2cnpl",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "demon2",
-      "read": true,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "recipient": "maria.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:30:52.494Z-uq3z5ka",
-      "title": "Actualización",
-      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-yqq3w5i",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "demon2",
-      "read": true,
-      "createdAt": "2026-10-23T14:30:52.494Z"
+      "recipient": "maria.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-xdfhlg4",
@@ -228,7 +261,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "maria.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-14T12:19:40.786Z"
     },
     {
@@ -239,7 +272,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "maria.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
@@ -250,7 +283,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "maria.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-14T12:09:06.392Z"
     },
     {
@@ -261,7 +294,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "maria.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
@@ -272,7 +305,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "maria.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
@@ -298,37 +331,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-iz46n1o",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-qu7gcld",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "recipient": "alex.mds",
+      "read": false,
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-mx4ma0m",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-bmr2ddh",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "recipient": "alex.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:30:52.494Z-alz9rx7",
-      "title": "Actualización",
-      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-abkysg3",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-10-23T14:30:52.494Z"
+      "recipient": "alex.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-oxt944l",
@@ -408,37 +441,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-tj7j7uu",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-q466mqf",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "recipient": "anto.mds",
+      "read": false,
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-7el35fu",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-3dlyztv",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "recipient": "anto.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:30:52.494Z-rjaq9u0",
-      "title": "Actualización",
-      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-kdvvz7n",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-10-23T14:30:52.494Z"
+      "recipient": "anto.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-98bl6r2",
@@ -518,37 +551,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-o3tqq4m",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-2nvtrua",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "anto.mds",
+      "recipient": "prodtj.mds",
       "read": false,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-sp70x5w",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-a9slqpr",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "anto.mds",
+      "recipient": "prodtj.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:30:52.494Z-bdj97pv",
-      "title": "Actualización",
-      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-snomnmm",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "anto.mds",
+      "recipient": "prodtj.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:30:52.494Z"
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-egtgm1i",
@@ -628,37 +661,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-9hlydwi",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-jxephj0",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtj.mds",
-      "read": true,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "recipient": "prodtg.mds",
+      "read": false,
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-xn9u65z",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-w2osze9",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtj.mds",
-      "read": true,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "recipient": "prodtg.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:30:52.494Z-gtpc4m2",
-      "title": "Actualización",
-      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-0rd9a16",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtj.mds",
-      "read": true,
-      "createdAt": "2026-10-23T14:30:52.494Z"
+      "recipient": "prodtg.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-fcizawi",
@@ -738,37 +771,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-0atq097",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-4wprgi5",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtg.mds",
+      "recipient": "prodts.mds",
       "read": false,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-90detlh",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-5xihsyw",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtg.mds",
+      "recipient": "prodts.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:30:52.494Z-hf9m5zt",
-      "title": "Actualización",
-      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-dfgksv7",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtg.mds",
+      "recipient": "prodts.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:30:52.494Z"
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-7jq78oc",
@@ -848,37 +881,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-2zmk2s8",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-mznw11e",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodts.mds",
+      "recipient": "procj.mds",
       "read": false,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-nqn121u",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-o4g8bh2",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodts.mds",
+      "recipient": "procj.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:30:52.494Z-r09njuw",
-      "title": "Actualización",
-      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-32sq0of",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodts.mds",
+      "recipient": "procj.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:30:52.494Z"
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-ew0kjqg",
@@ -958,37 +991,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-l6rn0ak",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-0zj6uev",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procj.mds",
-      "read": true,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "recipient": "cald.mds",
+      "read": false,
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-s4zqqux",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-wv2g7eb",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procj.mds",
-      "read": true,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "recipient": "cald.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:30:52.494Z-b2rl2v2",
-      "title": "Actualización",
-      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-or384ka",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procj.mds",
-      "read": true,
-      "createdAt": "2026-10-23T14:30:52.494Z"
+      "recipient": "cald.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-98qlzx2",
@@ -1068,37 +1101,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-vtp56ce",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-fejnr4m",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "cald.mds",
+      "recipient": "prodt.mds",
       "read": false,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-eqwmnat",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-73pcuwh",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "cald.mds",
+      "recipient": "prodt.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:30:52.494Z-4m8mbzi",
-      "title": "Actualización",
-      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-7c5efgm",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "cald.mds",
+      "recipient": "prodt.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:30:52.494Z"
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-2kc10gv",
@@ -1178,37 +1211,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-pvx4rvt",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-fsn0m80",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt.mds",
+      "recipient": "prodt1.mds",
       "read": false,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-vyzcoby",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-gd9vhur",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt.mds",
+      "recipient": "prodt1.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:30:52.494Z-wn3m6kf",
-      "title": "Actualización",
-      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-z7wambd",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt.mds",
+      "recipient": "prodt1.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:30:52.494Z"
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-xqfkimv",
@@ -1288,37 +1321,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-m1y4w3q",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-dr7q23j",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt1.mds",
-      "read": true,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "recipient": "prodt2.mds",
+      "read": false,
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-8h1ku1y",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-g0dt5qn",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt1.mds",
-      "read": true,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "recipient": "prodt2.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:52:48.962Z-lclgeax",
-      "title": "Aviso",
-      "message": "Fue agregados los códigos de film en la sección de rechazos y devoluciones",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-gauskki",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt1.mds",
-      "read": true,
-      "createdAt": "2026-10-23T14:52:48.962Z"
+      "recipient": "prodt2.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-npv1zcp",
@@ -1398,37 +1431,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-i7n6i35",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-ngmoo3o",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt2.mds",
-      "read": true,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "recipient": "proc.mds",
+      "read": false,
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-5a1re8r",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-mrw46rk",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt2.mds",
-      "read": true,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "recipient": "proc.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:30:52.494Z-qy3bt09",
-      "title": "Actualización",
-      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-ugit2xc",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt2.mds",
-      "read": true,
-      "createdAt": "2026-10-23T14:30:52.494Z"
+      "recipient": "proc.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-l29gqln",
@@ -1508,37 +1541,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-cr1y9oe",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-e4gt623",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc.mds",
+      "recipient": "proc1.mds",
       "read": false,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-um18fax",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-ygzwtw2",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc.mds",
+      "recipient": "proc1.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:30:52.494Z-fjhxj7a",
-      "title": "Actualización",
-      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-f3hbdds",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc.mds",
+      "recipient": "proc1.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:30:52.494Z"
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-069a6zz",
@@ -1618,37 +1651,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-4dqyc78",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-o783dp9",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc1.mds",
+      "recipient": "proc2.mds",
       "read": false,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-74kmefx",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-v60bs2s",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc1.mds",
+      "recipient": "proc2.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:30:52.494Z-6m0iwsw",
-      "title": "Actualización",
-      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-watosum",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc1.mds",
+      "recipient": "proc2.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:30:52.494Z"
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-f8ize49",
@@ -1728,37 +1761,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-823qr0x",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-d85eipe",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc2.mds",
+      "recipient": "procs1.mds",
       "read": false,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-kt2g10r",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-nh0ub0h",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc2.mds",
+      "recipient": "procs1.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:30:52.494Z-359k15f",
-      "title": "Actualización",
-      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-s5ead6q",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc2.mds",
+      "recipient": "procs1.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:30:52.494Z"
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-vdwxd8g",
@@ -1838,37 +1871,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-vxh2dfj",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-jh4m5ie",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procs1.mds",
-      "read": true,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "recipient": "procs2.mds",
+      "read": false,
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-5gs8y9b",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-5oac2rz",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procs1.mds",
-      "read": true,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "recipient": "procs2.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:30:52.494Z-snukvfk",
-      "title": "Actualización",
-      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-0z181l6",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procs1.mds",
-      "read": true,
-      "createdAt": "2026-10-23T14:30:52.494Z"
+      "recipient": "procs2.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-fho0xip",
@@ -1948,37 +1981,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-10p6tg6",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "procs2.mds",
-      "read": false,
-      "createdAt": "2026-10-23T15:02:26.435Z"
-    },
-    {
-      "id": "2026-10-23T14:56:06.904Z-hnlmfk7",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "procs2.mds",
-      "read": false,
-      "createdAt": "2026-10-23T14:56:06.904Z"
-    },
-    {
-      "id": "2026-10-23T14:51:22.415Z-v52hjkx",
-      "title": "Aviso",
-      "message": "Corregido las visualizaciones del modulo de procesos y se agrego las vistas de gestión con resumen semanal y mensual de la producción",
+      "id": "2026-11-14T14:09:41.196Z-rjzbfb2",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
       "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procs2.mds",
+      "recipient": "finan.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:51:22.415Z"
+      "createdAt": "2026-11-14T14:09:41.196Z"
+    },
+    {
+      "id": "2026-11-14T13:48:44.118Z-l5rlwyq",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "finan.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:48:44.118Z"
+    },
+    {
+      "id": "2026-11-14T13:46:47.735Z-kz9f9c7",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "finan.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-uzavjy9",
@@ -2058,37 +2091,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-vpjffax",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-xez9k2r",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "finan.mds",
+      "recipient": "g.tec.mds",
       "read": false,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-427rzfg",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-pzlnlmk",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "finan.mds",
+      "recipient": "g.tec.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:30:52.494Z-avc1rkv",
-      "title": "Actualización",
-      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-z7isut0",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "finan.mds",
+      "recipient": "g.tec.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:30:52.494Z"
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-u6oe3tk",
@@ -2168,37 +2201,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-4tlxq0u",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-j3nfhol",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "g.tec.mds",
-      "read": true,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "recipient": "enf.mds",
+      "read": false,
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-j23lgzu",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-iyqbwdp",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "g.tec.mds",
-      "read": true,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "recipient": "enf.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:30:52.494Z-1e12f7h",
-      "title": "Actualización",
-      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-d1xrk8e",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "g.tec.mds",
-      "read": true,
-      "createdAt": "2026-10-23T14:30:52.494Z"
+      "recipient": "enf.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-yru1n1x",
@@ -2278,37 +2311,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-ksyhmwq",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-81zdxvz",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "enf.mds",
+      "recipient": "etq.mds",
       "read": false,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-2xjx037",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-t2x8i79",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "enf.mds",
+      "recipient": "etq.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:30:52.494Z-v9c3uuq",
-      "title": "Actualización",
-      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-n5n3rce",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "enf.mds",
+      "recipient": "etq.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:30:52.494Z"
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-h0uq3eu",
@@ -2388,37 +2421,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-bir617y",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-mx065kx",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "etq.mds",
+      "recipient": "logg.mds",
       "read": false,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-atogkw0",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-rhjecgc",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "etq.mds",
+      "recipient": "logg.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:30:52.494Z-h84ospy",
-      "title": "Actualización",
-      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-gocyoav",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "etq.mds",
+      "recipient": "logg.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:30:52.494Z"
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-793reu6",
@@ -2498,37 +2531,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-lki9bb1",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-b2lxtpf",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "logg.mds",
+      "recipient": "mtto.mds",
       "read": false,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-pzff48q",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-59u047b",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "logg.mds",
+      "recipient": "mtto.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:30:52.494Z-s586qx2",
-      "title": "Actualización",
-      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-zjwz4jk",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "logg.mds",
+      "recipient": "mtto.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:30:52.494Z"
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-8azbbfp",
@@ -2608,37 +2641,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-oudzg35",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-wyom0i4",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto.mds",
+      "recipient": "MDS",
       "read": false,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-p64ykz3",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-t95c9br",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto.mds",
+      "recipient": "MDS",
       "read": false,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:30:52.494Z-1okao81",
-      "title": "Actualización",
-      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-6sq1nxe",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto.mds",
+      "recipient": "MDS",
       "read": false,
-      "createdAt": "2026-10-23T14:30:52.494Z"
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-5ajlk55",
@@ -2718,37 +2751,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-po1xftz",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-les5irm",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "MDS",
+      "recipient": "mtto1.mds",
       "read": false,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-k5hjdat",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-58t9csx",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "MDS",
+      "recipient": "mtto1.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:30:52.494Z-1b3m7fh",
-      "title": "Actualización",
-      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-czk15j7",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "MDS",
+      "recipient": "mtto1.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:30:52.494Z"
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-4qoyk1c",
@@ -2828,37 +2861,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-s95gym2",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-e7oa5av",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto1.mds",
-      "read": true,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "recipient": "stf",
+      "read": false,
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-6dhz2u5",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-dicyuct",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto1.mds",
-      "read": true,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "recipient": "stf",
+      "read": false,
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:30:52.494Z-nv4zk6v",
-      "title": "Actualización",
-      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-zt3cm9m",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto1.mds",
-      "read": true,
-      "createdAt": "2026-10-23T14:30:52.494Z"
+      "recipient": "stf",
+      "read": false,
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-gmb1g8m",
@@ -2938,37 +2971,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-z5xwd6s",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-y1annty",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "stf",
+      "recipient": "prodt3.mds",
       "read": false,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-ujlht3t",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-98nbg00",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "stf",
+      "recipient": "prodt3.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:30:52.494Z-mh0rm9z",
-      "title": "Actualización",
-      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-to4xtax",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "stf",
+      "recipient": "prodt3.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:30:52.494Z"
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-vvre20s",
@@ -3048,37 +3081,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-ryv95pf",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-uzx2tuo",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt3.mds",
-      "read": true,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "recipient": "prodt4.mds",
+      "read": false,
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-hnrb7po",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-8550b44",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt3.mds",
-      "read": true,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "recipient": "prodt4.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:30:52.494Z-d9xyi5x",
-      "title": "Actualización",
-      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-6jremd0",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt3.mds",
-      "read": true,
-      "createdAt": "2026-10-23T14:30:52.494Z"
+      "recipient": "prodt4.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-yq3ckn4",
@@ -3158,37 +3191,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-dttdqur",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-fmh61fb",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt4.mds",
-      "read": true,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "recipient": "alc.mds",
+      "read": false,
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-peei97w",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-mtvh4l3",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt4.mds",
-      "read": true,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "recipient": "alc.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:52:48.962Z-zpob4rj",
-      "title": "Aviso",
-      "message": "Fue agregados los códigos de film en la sección de rechazos y devoluciones",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-wlgchqm",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt4.mds",
-      "read": true,
-      "createdAt": "2026-10-23T14:52:48.962Z"
+      "recipient": "alc.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-zm44hh1",
@@ -3268,37 +3301,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-mwk2vua",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-m1sbqki",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alc.mds",
+      "recipient": "alc1.mds",
       "read": false,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-ugq9aun",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-owidvzh",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alc.mds",
+      "recipient": "alc1.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:30:52.494Z-u3mm0yf",
-      "title": "Actualización",
-      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-27gbhsy",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alc.mds",
+      "recipient": "alc1.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:30:52.494Z"
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-e9w6gjb",
@@ -3378,37 +3411,37 @@
       "createdAt": "2026-10-27T18:59:09.353Z"
     },
     {
-      "id": "2026-10-23T15:02:26.435Z-thqxef2",
-      "title": "Avisó",
-      "message": "Data pro en línea actualizaciones compilan sin errores",
-      "type": "warning",
+      "id": "2026-11-14T14:09:41.196Z-1ggyajx",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alc1.mds",
+      "recipient": "proc3.mds",
       "read": false,
-      "createdAt": "2026-10-23T15:02:26.435Z"
+      "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-10-23T14:56:06.904Z-bmjdu6l",
-      "title": "Actualizaciones",
-      "message": "Las actualizaciones ya fueron cargadas, se realizará reinicio de la terminal para asegurar la compilación correcta te los códigos cargados",
-      "type": "success",
+      "id": "2026-11-14T13:48:44.118Z-16wjc24",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alc1.mds",
+      "recipient": "proc3.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:56:06.904Z"
+      "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-10-23T14:30:52.494Z-tmzn04b",
-      "title": "Actualización",
-      "message": "Se subirán actualizaciones al data pro de 10:40 a 11:00 lo que puede generar refresco de la plicacion o pantallas de error tomar previsión",
-      "type": "warning",
+      "id": "2026-11-14T13:46:47.735Z-tuvtfo0",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alc1.mds",
+      "recipient": "proc3.mds",
       "read": false,
-      "createdAt": "2026-10-23T14:30:52.494Z"
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-cmgbu6p",
@@ -3477,6 +3510,39 @@
       "createdAt": "2026-11-03T12:17:51.828Z"
     },
     {
+      "id": "2026-11-14T14:09:41.196Z-tpnxtb9",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto2.mds",
+      "read": false,
+      "createdAt": "2026-11-14T14:09:41.196Z"
+    },
+    {
+      "id": "2026-11-14T13:48:44.118Z-vh293yl",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto2.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:48:44.118Z"
+    },
+    {
+      "id": "2026-11-14T13:46:47.735Z-flipj3t",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto2.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:46:47.735Z"
+    },
+    {
       "id": "2026-11-14T12:19:40.786Z-qcsldv5",
       "title": "Actualización 2",
       "message": "Culminada",
@@ -3530,6 +3596,39 @@
       "recipient": "mtto2.mds",
       "read": false,
       "createdAt": "2026-11-14T12:06:05.834Z"
+    },
+    {
+      "id": "2026-11-14T14:09:41.196Z-vzfhiuv",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto3.mds",
+      "read": false,
+      "createdAt": "2026-11-14T14:09:41.196Z"
+    },
+    {
+      "id": "2026-11-14T13:48:44.118Z-zza8l2x",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto3.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:48:44.118Z"
+    },
+    {
+      "id": "2026-11-14T13:46:47.735Z-jn87evv",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto3.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-g2ieqmn",
@@ -3587,6 +3686,39 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
+      "id": "2026-11-14T14:09:41.196Z-hohsuc0",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto4.mds",
+      "read": false,
+      "createdAt": "2026-11-14T14:09:41.196Z"
+    },
+    {
+      "id": "2026-11-14T13:48:44.118Z-5iyxuh7",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto4.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:48:44.118Z"
+    },
+    {
+      "id": "2026-11-14T13:46:47.735Z-tg3zmuu",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto4.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:46:47.735Z"
+    },
+    {
       "id": "2026-11-14T12:19:40.786Z-v4ztt12",
       "title": "Actualización 2",
       "message": "Culminada",
@@ -3640,6 +3772,39 @@
       "recipient": "mtto4.mds",
       "read": false,
       "createdAt": "2026-11-14T12:06:05.834Z"
+    },
+    {
+      "id": "2026-11-14T14:09:41.196Z-085rup5",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto5.mds",
+      "read": false,
+      "createdAt": "2026-11-14T14:09:41.196Z"
+    },
+    {
+      "id": "2026-11-14T13:48:44.118Z-tj88cya",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto5.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:48:44.118Z"
+    },
+    {
+      "id": "2026-11-14T13:46:47.735Z-ucnj2mk",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto5.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-lakg5p1",
@@ -3697,6 +3862,39 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
+      "id": "2026-11-14T14:09:41.196Z-g1dte0l",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto6.mds",
+      "read": false,
+      "createdAt": "2026-11-14T14:09:41.196Z"
+    },
+    {
+      "id": "2026-11-14T13:48:44.118Z-epxyctt",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto6.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:48:44.118Z"
+    },
+    {
+      "id": "2026-11-14T13:46:47.735Z-78d17y0",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto6.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:46:47.735Z"
+    },
+    {
       "id": "2026-11-14T12:19:40.786Z-zo5g82e",
       "title": "Actualización 2",
       "message": "Culminada",
@@ -3750,6 +3948,39 @@
       "recipient": "mtto6.mds",
       "read": false,
       "createdAt": "2026-11-14T12:06:05.834Z"
+    },
+    {
+      "id": "2026-11-14T14:09:41.196Z-8rbps45",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto7.mds",
+      "read": false,
+      "createdAt": "2026-11-14T14:09:41.196Z"
+    },
+    {
+      "id": "2026-11-14T13:48:44.118Z-o0ndamb",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto7.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:48:44.118Z"
+    },
+    {
+      "id": "2026-11-14T13:46:47.735Z-5q1hc2y",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto7.mds",
+      "read": false,
+      "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
       "id": "2026-11-14T12:19:40.786Z-h9kadb0",

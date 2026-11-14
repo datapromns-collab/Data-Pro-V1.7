@@ -88,9 +88,6 @@ export default function PlantaReporteTendencias({ ordenesSap, tasks }: Props) {
       });
     }
 
-    filas.forEach((fila) => {
-      fila.tendencia = Number(fila.produccion) || 0;
-    });
     return filas;
   }, [fechaInicio, fechaFin, lineaSeleccionada, ordenesSap, rangoValido, tasks]);
 
@@ -153,13 +150,20 @@ export default function PlantaReporteTendencias({ ordenesSap, tasks }: Props) {
       ) : (
         <section aria-label="Producción diaria por línea" className="rounded-2xl border border-slate-200 bg-white p-4">
           <h3 className="text-xs font-black uppercase tracking-wide text-slate-700">Producción diaria · Línea {lineaSeleccionada}</h3>
-          <p className="mt-1 text-xs text-slate-500">La línea roja sigue las variaciones de producción; cada punto indica el cumplimiento diario frente a lo planificado.</p>
+          <p className="mt-1 text-xs text-slate-500">Las barras muestran la producción diaria y la línea roja indica el cumplimiento porcentual frente a lo planificado, según el eje derecho.</p>
           <div className="mt-3 h-[420px] min-w-0">
             <ResponsiveContainer width="100%" height="100%">
               <ComposedChart data={datos} margin={{ top: 12, right: 16, left: 8, bottom: 12 }}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} />
                 <XAxis dataKey="etiquetaFecha" minTickGap={20} tick={{ fontSize: 10 }} />
-                <YAxis tick={{ fontSize: 10 }} tickFormatter={(value) => formatearMiles(Number(value))} />
+                <YAxis yAxisId="left" tick={{ fontSize: 10 }} tickFormatter={(value) => formatearMiles(Number(value))} />
+                <YAxis
+                  yAxisId="right"
+                  orientation="right"
+                  domain={[0, "auto"]}
+                  tick={{ fontSize: 10 }}
+                  tickFormatter={(value) => formatearPorcentaje(Number(value))}
+                />
                 <Tooltip
                   content={({ active, payload, label }) => {
                     if (!active || !payload?.length) return null;
@@ -180,15 +184,17 @@ export default function PlantaReporteTendencias({ ordenesSap, tasks }: Props) {
                 />
                 <Legend />
                 <Bar
+                  yAxisId="left"
                   dataKey={`linea${lineaSeleccionada}`}
                   name={`Línea ${lineaSeleccionada}`}
                   fill={COLORES[lineaSeleccionada - 1]}
                   maxBarSize={32}
                 />
                 <Line
+                  yAxisId="right"
                   type="linear"
-                  dataKey="tendencia"
-                  name="Tendencia"
+                  dataKey="cumplimiento"
+                  name="Cumplimiento"
                   legendType="none"
                   stroke="#dc2626"
                   strokeWidth={4}
@@ -197,12 +203,9 @@ export default function PlantaReporteTendencias({ ordenesSap, tasks }: Props) {
                   activeDot={{ r: 6, fill: "#dc2626", stroke: "#fff", strokeWidth: 2 }}
                 >
                   <LabelList
-                    dataKey="tendencia"
+                    dataKey="cumplimiento"
                     position="top"
-                    formatter={(_value: unknown, index: number) => {
-                      const cumplimiento = datos[index]?.cumplimiento;
-                      return cumplimiento == null ? "" : formatearPorcentaje(Number(cumplimiento));
-                    }}
+                    formatter={(value: unknown) => value == null ? "" : formatearPorcentaje(Number(value))}
                     style={{ fill: "#b91c1c", fontSize: 10, fontWeight: 700 }}
                   />
                 </Line>

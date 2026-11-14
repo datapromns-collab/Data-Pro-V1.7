@@ -22209,6 +22209,78 @@
               "quantity": "50",
               "unit": "UND"
             }
+          ],
+          "2026-11-13": [
+            {
+              "id": "7fa74716-870f-4c9d-85c4-56350cc06b67",
+              "line": "Linea 1",
+              "flavor": "GLUP FRESH",
+              "code": "ENV-00013",
+              "material": "BOTELLA ENVASADA GLUP FRESH 2.0.LTS",
+              "quantity": "129",
+              "unit": "UND",
+              "observation": ""
+            },
+            {
+              "id": "72c75b4c-3416-4a6e-9d40-fd48ddfe9569",
+              "line": "Linea 2",
+              "flavor": "GLUP UVA",
+              "code": "ENV-00039",
+              "material": "BOTELLA ENVASADA GLUP UVA  2.0.LTS  (EN LINEA 2)",
+              "quantity": "105",
+              "unit": "UND",
+              "observation": ""
+            },
+            {
+              "id": "4e0cedf8-4bc0-467f-9a06-6b0963252e50",
+              "line": "Linea 3",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00063",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 2L (LINEA 3)",
+              "quantity": "60",
+              "unit": "UND",
+              "observation": ""
+            },
+            {
+              "id": "a6317138-a798-49da-8129-01e21c647ea0",
+              "line": "Linea 4",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00054",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 2.LTS (LINEA 4)",
+              "quantity": "193",
+              "unit": "UND",
+              "observation": ""
+            },
+            {
+              "id": "9100f506-f70e-47c5-beeb-51ac781008b1",
+              "line": "Linea 5",
+              "flavor": "JUSTY MANZANA",
+              "code": "ENV-00107",
+              "material": "BOTELLA ENVASADA JUSTY MANZANA 1.5 LTS",
+              "quantity": "285",
+              "unit": "UND",
+              "observation": ""
+            },
+            {
+              "id": "64e3af2b-680a-4649-830b-af5a559a808f",
+              "line": "Linea 6",
+              "flavor": "GLUP MANZANA ROJA",
+              "code": "ENV-00099",
+              "material": "BOTELLA ENVASADA GLUP MANZANA ROJA 400 ML (LINEA 6)",
+              "quantity": "353",
+              "unit": "UND",
+              "observation": ""
+            },
+            {
+              "id": "74e2870f-4add-4a55-9bf7-db1607c65c59",
+              "line": "Linea 7",
+              "flavor": "GLUP KOLITA",
+              "code": "ENV-00080",
+              "material": "BOTELLA ENVASADA GLUP KOLITA 1.0 L (LINEA 7)",
+              "quantity": "297",
+              "unit": "UND",
+              "observation": ""
+            }
           ]
         },
         "desperdicios": {
@@ -28318,6 +28390,176 @@
               "kind": "termo",
               "preformSize": ""
             }
+          ],
+          "2026-11-13": [
+            {
+              "id": "d542fc53-1222-4092-a60a-c466c18af8a2",
+              "line": "Linea 1",
+              "flavor": "verde",
+              "code": "EMP_0103",
+              "material": "PREFORMA VERDE 42,64 GR-1881",
+              "quantity": "1261",
+              "unit": "UND",
+              "observation": "",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "7d15a88f-bfab-45c7-b625-48452673ac75",
+              "line": "Linea 1",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "2,00",
+              "unit": "Kg",
+              "observation": "",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "cd423ae7-ebc3-4018-9f34-d74eb26e34bc",
+              "line": "Linea 2",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "2785",
+              "unit": "UND",
+              "observation": "",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "ac3833fa-e107-4745-ba04-55148c64c6e5",
+              "line": "Linea 2",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "2,18",
+              "unit": "Kg",
+              "observation": "",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "bf91aa60-cd11-48d0-9b81-764ff1415c7d",
+              "line": "Linea 3",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "4500",
+              "unit": "UND",
+              "observation": "",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "20693c0d-b952-4111-a658-a7f7d4c3f4c1",
+              "line": "Linea 3",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "2,19",
+              "unit": "Kg",
+              "observation": "",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "31c650c1-18d4-4d71-af16-a58b7346c3d8",
+              "line": "Linea 4",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "1972",
+              "unit": "UND",
+              "observation": "",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "86ed4ec1-20b3-4e94-bd24-b7305aefb2f5",
+              "line": "Linea 4",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "3,92",
+              "unit": "Kg",
+              "observation": "",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "91b26296-7a23-4ac4-9b59-ac38b60789ad",
+              "line": "Linea 5",
+              "flavor": "transparente",
+              "code": "EMP_0068",
+              "material": "PREFORMA TRANSPARENTE 36 GR-1881",
+              "quantity": "3694",
+              "unit": "UND",
+              "observation": "",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "51b339e9-61c8-4a19-83de-325e68de0200",
+              "line": "Linea 5",
+              "flavor": "",
+              "code": "EMP_0017",
+              "material": "POLIETILENO TERMOENCOGIBLE 55 X 0.07",
+              "quantity": "1,62",
+              "unit": "Kg",
+              "observation": "",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "93a979fc-aa1d-4080-8867-4ab7d98b579a",
+              "line": "Linea 6",
+              "flavor": "transparente",
+              "code": "EMP_0126",
+              "material": "PREFORMA TRANSPARENTE 20,55GR-1881",
+              "quantity": "1950",
+              "unit": "UND",
+              "observation": "",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "92ce3705-8376-44be-b7d8-7fc5ab7aab35",
+              "line": "Linea 6",
+              "flavor": "",
+              "code": "EMP_0130",
+              "material": "POLIETILENO TERMOENCOGIBLE 43 x 0.06",
+              "quantity": "0,42",
+              "unit": "Kg",
+              "observation": "",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "04d7fa52-f76b-4e4c-b084-a6f277e72a0b",
+              "line": "Linea 7",
+              "flavor": "transparente",
+              "code": "EMP_0068",
+              "material": "PREFORMA TRANSPARENTE 36 GR-1881",
+              "quantity": "2277",
+              "unit": "UND",
+              "observation": "",
+              "kind": "preformas",
+              "preformSize": "36"
+            },
+            {
+              "id": "f0da5ff3-db3a-41c6-9039-6f1fdcbbaabe",
+              "line": "Linea 7",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "2,19",
+              "unit": "Kg",
+              "observation": "",
+              "kind": "termo",
+              "preformSize": ""
+            }
           ]
         }
       },
@@ -30824,7 +31066,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-14T11:47:00.123Z"
+    "updatedAt": "2026-11-14T12:46:44.716Z"
   },
   "ordenesSap": [
     {
@@ -276352,6 +276594,44 @@
         "usuario": "Luis Blandin",
         "id": 1794653461456,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-14",
+        "semana": 46,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 5",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "07:00",
+        "finParada": "07:05",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES PARA EL ARRANQUE ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1794664864120,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-14",
+        "semana": 46,
+        "turno": "DIURNO",
+        "operador": "ABRAHAN CARRILLO",
+        "linea": "Línea 5",
+        "equipo": "LLENADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "07:32",
+        "finParada": "07:38",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "TAPA VOLTEADA EN CHUCK #15",
+        "orden": "10570",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1794665001831,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -304147,6 +304427,33 @@
         "observaciones": "",
         "bloqueado": true,
         "usuario": "Luis Blandin"
+      },
+      {
+        "id": 1794664573338.3455,
+        "fechaOrden": "2026-11-14",
+        "orden": "10570",
+        "fechaEmision": "2026-11-14",
+        "semana": 46,
+        "turno": "DIURNO",
+        "solicitante": "",
+        "linea": "Línea 5",
+        "maquina": "LLENADORA",
+        "aviso": "",
+        "fechaParada": "2026-11-14",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "07:32",
+        "finParada": "07:38",
+        "tMtto": "6",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "TAPA VOLTEADA EN CHUCK #15",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": false,
+        "usuario": "Froilan Bolivar"
       }
     ],
     "seguimiento-ordenes": {
@@ -324868,7 +325175,7 @@
         "diurno": {
           "GLUP COLA": {
             "1": "",
-            "2": 15920,
+            "2": "",
             "3": 6800,
             "4": 8720,
             "5": "",
@@ -324886,7 +325193,7 @@
           },
           "GLUP UVA": {
             "1": "",
-            "2": "",
+            "2": 15920,
             "3": "",
             "4": "",
             "5": "",
@@ -325216,6 +325523,390 @@
             "3": "",
             "4": "",
             "5": 4250,
+            "6": "",
+            "7": ""
+          },
+          "JUSTY PERA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "VITA TEA DURAZNO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "VITA TEA LIMON": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          }
+        }
+      },
+      "2026-11-14": {
+        "diurno": {
+          "GLUP COLA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP FRESH": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP UVA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP PIÑA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP NARANJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP KOLITA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": 1897
+          },
+          "GLUP MANZANA VERDE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP PONCHE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP CHICLE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP PIÑA PARCHITA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP MANZANA ROJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": 1943,
+            "7": ""
+          },
+          "JUSTY NARANJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY DURAZNO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY MANDARINA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY SANDIA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY LIMON": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY TAMARINDO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY MANZANA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY PERA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "VITA TEA DURAZNO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "VITA TEA LIMON": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          }
+        },
+        "nocturno": {
+          "GLUP COLA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP FRESH": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP UVA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP PIÑA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP NARANJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP KOLITA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP MANZANA VERDE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP PONCHE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP CHICLE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP PIÑA PARCHITA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP MANZANA ROJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY NARANJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY DURAZNO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY MANDARINA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY SANDIA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY LIMON": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY TAMARINDO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY MANZANA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
             "6": "",
             "7": ""
           },
@@ -325916,7 +326607,12 @@
       "2026-11-12-suave": "168878",
       "2026-11-12-procesos": "3093735,01",
       "2026-11-12-filtrada": "4517957,87",
-      "2026-11-12-total": "3314790"
+      "2026-11-12-total": "3314790",
+      "2026-11-13-servicio": "31801",
+      "2026-11-13-suave": "143313",
+      "2026-11-13-procesos": "1960432,2",
+      "2026-11-13-filtrada": "3007504,82",
+      "2026-11-13-total": "2957070"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
