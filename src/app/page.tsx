@@ -8991,6 +8991,10 @@ function getResumenPorLinea(informesOperacionales: any[], tasks: any[], realProd
     const diferenciaTeoricaReal = Number.isFinite(produccionTeorica) ? String(Math.round(produccionTeorica - (alcanceTD + alcanceTN))) : '0';
     const ot = minutosAHorasDecimal(paradasLinea.filter((r: any) => String(r.tipoParada || '').toUpperCase() === 'AVERIA' || String(r.tipoParada || '').toUpperCase() === 'AVERÍA').reduce((acc: number, r: any) => acc + (Number(r.totalMin) || 0), 0));
     const adecuaciones = minutosAHorasDecimal(paradasLinea.filter((r: any) => String(r.tipoParada || '').toUpperCase() === 'ADECUACIONES').reduce((acc: number, r: any) => acc + (Number(r.totalMin) || 0), 0));
+    const serviciosTiposParada = ['SALA DE MAQUINAS', 'SALA DE JARABE', 'PTAB', 'INSUMOS', 'CALIDAD'];
+    const servicios = minutosAHorasDecimal(paradasLinea.filter((r: any) => serviciosTiposParada.includes(String(r.tipoParada || '').toUpperCase())).reduce((acc: number, r: any) => acc + (Number(r.totalMin) || 0), 0));
+    const fallasElectricas = minutosAHorasDecimal(paradasLinea.filter((r: any) => String(r.tipoParada || '').toUpperCase() === 'FALLA DE E/E').reduce((acc: number, r: any) => acc + (Number(r.totalMin) || 0), 0));
+    const operacionales = minutosAHorasDecimal(paradasLinea.filter((r: any) => String(r.tipoParada || '').toUpperCase() === 'OPERACIONAL').reduce((acc: number, r: any) => acc + (Number(r.totalMin) || 0), 0));
     const cajasHNum = Number(cajasH) || 0;
     const horasEfectivasLinea = cajasHNum > 0 ? (alcanceTD + alcanceTN) / cajasHNum : 0;
     const tiempoMuertoInexplicableRaw = disponibilidadRealHrs - horasEfectivasLinea;
@@ -9000,6 +9004,22 @@ function getResumenPorLinea(informesOperacionales: any[], tasks: any[], realProd
       const horasNum = Number.parseFloat(horas.replace(',', '.')) || 0;
       return String(Math.round(horasNum * cajasHNum));
     };
+    const otCajas = horasACajas(ot);
+    const adecuacionesCajas = horasACajas(adecuaciones);
+    const tiempoMuertoCajas = horasACajas(tiempoMuerto);
+    const ausentismoCajas = horasACajas(ausentismo);
+    const serviciosCajas = horasACajas(servicios);
+    const fallasElectricasCajas = horasACajas(fallasElectricas);
+    const operacionalesCajas = horasACajas(operacionales);
+    const acumulado = [
+      otCajas,
+      adecuacionesCajas,
+      tiempoMuertoCajas,
+      ausentismoCajas,
+      serviciosCajas,
+      fallasElectricasCajas,
+      operacionalesCajas,
+    ].reduce((total, cajas) => total + Number(cajas || 0), 0);
     const horasAveria = paradasLinea
       .filter((r: any) => ['AVERIA', 'AVERÍA'].includes(String(r.tipoParada || '').toUpperCase()))
       .reduce((acc: number, r: any) => acc + (Number(r.totalMin) || 0), 0) / 60;
@@ -9017,10 +9037,14 @@ function getResumenPorLinea(informesOperacionales: any[], tasks: any[], realProd
       cumplimiento,
       produccionTeorica: Number.isFinite(produccionTeorica) ? produccionTeorica.toFixed(0) : '0',
       diferenciaTeoricaReal,
-      ot: horasACajas(ot),
-      adecuaciones: horasACajas(adecuaciones),
-      tiempoMuerto: horasACajas(tiempoMuerto),
-      ausentismo: horasACajas(ausentismo),
+      ot: otCajas,
+      adecuaciones: adecuacionesCajas,
+      tiempoMuerto: tiempoMuertoCajas,
+      ausentismo: ausentismoCajas,
+      servicios: serviciosCajas,
+      fallasElectricas: fallasElectricasCajas,
+      operacionales: operacionalesCajas,
+      acumulado: String(acumulado),
       disponibilidad,
     };
   });
@@ -9033,7 +9057,7 @@ function TablaResumenPorLinea({ informesOperacionales, tasks, realProduction, li
     <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
       <div className="p-4">
         <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto pointer-events-auto">
-          <table className="w-full border-collapse text-center" style={{ minWidth: 1200 }}>
+          <table className="w-full border-collapse text-center" style={{ minWidth: 1870 }}>
             <thead>
               <tr className="bg-slate-100">
                 <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Línea</th>
@@ -9044,6 +9068,10 @@ function TablaResumenPorLinea({ informesOperacionales, tasks, realProduction, li
                 <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[100px]">Adecuaciones (Cajas)</th>
                 <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[110px]">Tiempo Muerto (Cajas)</th>
                 <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[100px]">Ausentismo (Cajas)</th>
+                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[100px]">Servicios (Cajas)</th>
+                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[110px]">Fallas Eléctricas (Cajas)</th>
+                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[110px]">Operacionales (Cajas)</th>
+                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[100px]">Acumulado</th>
                 <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[80px]">Disponibilidad de Máquina</th>
               </tr>
             </thead>
@@ -9058,6 +9086,10 @@ function TablaResumenPorLinea({ informesOperacionales, tasks, realProduction, li
                   <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.adecuaciones)}</td>
                   <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.tiempoMuerto)}</td>
                   <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.ausentismo)}</td>
+                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.servicios)}</td>
+                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.fallasElectricas)}</td>
+                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.operacionales)}</td>
+                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.acumulado)}</td>
                   <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.disponibilidad)}</td>
                 </tr>
               ))}
@@ -9385,8 +9417,7 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
                    const totalAdecuaciones = sumarHorasDecimal(...data.map((r: any) => r.adecuaciones || '0'));
                    const totalAveria = sumarHorasDecimal(...data.map((r: any) => r.averia || '0'));
                    const totalOperacionales = sumarHorasDecimal(...data.map((r: any) => r.operacionales || '0'));
-                    const disponibilidades = data.map((r: any) => { const v = String(r.disponibilidad || '').replace(',', '.'); const n = parseFloat(v); return Number.isFinite(n) ? n : 0; });
-                   const totalDisponibilidadPromedio = disponibilidades.length > 0 ? (disponibilidades.reduce((a, b) => a + b, 0) / disponibilidades.length).toFixed(2).replace('.', ',') + '%' : '0,00%';
+                   const totalDisponibilidadReal = sumarHorasDecimal(...data.map((r: any) => r.disponibilidad || '0'));
                    const totalProduccionTeorica = data.reduce((acc: number, r: any) => acc + Number(r.produccionTeorica || 0), 0);
                    const totalHorasEfectivas = sumarHorasDecimal(...data.map((r: any) => r.horasEfectivas || '0'));
                     const totalTiempoMuerto = (() => {
@@ -9423,7 +9454,7 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
                        <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{formatReporteNumero(totalAdecuaciones)}</td>
                        <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{formatReporteNumero(totalAveria)}</td>
                        <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{formatReporteNumero(totalOperacionales)}</td>
-                        <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalDisponibilidadPromedio}</td>
+                        <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{formatReporteNumero(totalDisponibilidadReal)}</td>
                        <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{formatReporteNumero(totalProduccionTeorica)}</td>
                        <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{formatReporteNumero(totalHorasEfectivas)}</td>
                        <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums">{formatReporteNumero(totalTiempoMuerto)}</td>
