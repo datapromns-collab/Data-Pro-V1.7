@@ -1,6 +1,28 @@
 {
   "messages": [
     {
+      "id": "2026-11-14T15:35:25.107Z-t0jsv9u",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "jaime.r",
+      "read": false,
+      "createdAt": "2026-11-14T15:35:25.107Z"
+    },
+    {
+      "id": "2026-11-14T15:03:53.664Z-q8j7fv7",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "jaime.r",
+      "read": false,
+      "createdAt": "2026-11-14T15:03:53.664Z"
+    },
+    {
       "id": "2026-11-14T14:09:41.196Z-82kdr9t",
       "title": "Actualización 4",
       "message": "Iniciando actualización",
@@ -89,26 +111,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-5o1piml",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-v0rkwnf",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "jaime.r",
+      "recipient": "demon2",
       "read": false,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-01mnf5q",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-098429x",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "jaime.r",
+      "recipient": "demon2",
       "read": false,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-ep969q0",
@@ -199,26 +221,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-c3bblwo",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-jga2c5r",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "demon2",
-      "read": true,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "recipient": "maria.mds",
+      "read": false,
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-viwb6ys",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-2n61n47",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "demon2",
-      "read": true,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "recipient": "maria.mds",
+      "read": false,
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-r0p7c53",
@@ -309,26 +331,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-3uvq34r",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-3oozf7v",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "recipient": "alex.mds",
+      "read": false,
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-q8scw6o",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-7vvakn4",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "recipient": "alex.mds",
+      "read": false,
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-qu7gcld",
@@ -419,26 +441,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-b5pczfj",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-hrvzq9a",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "recipient": "anto.mds",
+      "read": false,
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-a4xvgiz",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-m2ug6xb",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "recipient": "anto.mds",
+      "read": false,
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-q466mqf",
@@ -529,26 +551,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-u9lleg8",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-pzm2l1m",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "anto.mds",
+      "recipient": "prodtj.mds",
       "read": false,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-j2yc8c4",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-c9hmiz2",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "anto.mds",
+      "recipient": "prodtj.mds",
       "read": false,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-2nvtrua",
@@ -639,26 +661,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-06wyfez",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-2lptye5",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtj.mds",
-      "read": true,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "recipient": "prodtg.mds",
+      "read": false,
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-ys03qdh",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-0bojtyw",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtj.mds",
-      "read": true,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "recipient": "prodtg.mds",
+      "read": false,
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-jxephj0",
@@ -749,26 +771,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-eq029mx",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-w8bmjeo",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtg.mds",
+      "recipient": "prodts.mds",
       "read": false,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-jbe4vbs",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-ikapmsl",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtg.mds",
+      "recipient": "prodts.mds",
       "read": false,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-4wprgi5",
@@ -859,26 +881,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-d71qfk5",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-e0pp2iu",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodts.mds",
+      "recipient": "procj.mds",
       "read": false,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-j1xzgii",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-frhvbg6",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodts.mds",
+      "recipient": "procj.mds",
       "read": false,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-mznw11e",
@@ -969,26 +991,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-l163wh7",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-3f1os9n",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procj.mds",
-      "read": true,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "recipient": "cald.mds",
+      "read": false,
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-h853dan",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-eloyc3k",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procj.mds",
-      "read": true,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "recipient": "cald.mds",
+      "read": false,
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-0zj6uev",
@@ -1079,26 +1101,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-1kj7zmy",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-qkn5phs",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "cald.mds",
+      "recipient": "prodt.mds",
       "read": false,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-ysubbmm",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-tzrx39b",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "cald.mds",
+      "recipient": "prodt.mds",
       "read": false,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-fejnr4m",
@@ -1189,26 +1211,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-pmsiawv",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-0fea1bk",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt.mds",
+      "recipient": "prodt1.mds",
       "read": false,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-bmxsckj",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-2qe3jqo",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt.mds",
+      "recipient": "prodt1.mds",
       "read": false,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-fsn0m80",
@@ -1299,26 +1321,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-al206x5",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-kjjvllw",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt1.mds",
+      "recipient": "prodt2.mds",
       "read": true,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-6y4bx9s",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-a0wznv2",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt1.mds",
+      "recipient": "prodt2.mds",
       "read": true,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-dr7q23j",
@@ -1328,7 +1350,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "prodt2.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
@@ -1339,7 +1361,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "prodt2.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
@@ -1350,7 +1372,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "prodt2.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
@@ -1361,7 +1383,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "prodt2.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-14T12:19:40.786Z"
     },
     {
@@ -1372,7 +1394,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "prodt2.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
@@ -1383,7 +1405,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "prodt2.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-14T12:09:06.392Z"
     },
     {
@@ -1394,7 +1416,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "prodt2.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
@@ -1405,30 +1427,30 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "prodt2.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-vjipuen",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-9skw597",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt2.mds",
-      "read": true,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "recipient": "proc.mds",
+      "read": false,
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-6ggn22w",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-ipyh3ts",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt2.mds",
-      "read": true,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "recipient": "proc.mds",
+      "read": false,
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-ngmoo3o",
@@ -1519,26 +1541,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-rw4e1eh",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-hhgsfyd",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc.mds",
+      "recipient": "proc1.mds",
       "read": false,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-vf51km6",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-x68la9c",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc.mds",
+      "recipient": "proc1.mds",
       "read": false,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-e4gt623",
@@ -1629,26 +1651,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-19hkq7k",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-8vrttrc",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc1.mds",
+      "recipient": "proc2.mds",
       "read": false,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-ux5nrkk",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-evfxvl5",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc1.mds",
+      "recipient": "proc2.mds",
       "read": false,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-o783dp9",
@@ -1739,26 +1761,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-p5eqykk",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-880fs80",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc2.mds",
+      "recipient": "procs1.mds",
       "read": false,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-8al5i3k",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-r5trrpo",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc2.mds",
+      "recipient": "procs1.mds",
       "read": false,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-d85eipe",
@@ -1849,26 +1871,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-ya6janl",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-a2mwj08",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procs1.mds",
+      "recipient": "procs2.mds",
       "read": false,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-z4a5nmn",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-uveqgvg",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procs1.mds",
+      "recipient": "procs2.mds",
       "read": false,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-jh4m5ie",
@@ -1959,26 +1981,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-ck9lpkb",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-0xwk97a",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procs2.mds",
+      "recipient": "finan.mds",
       "read": false,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-3vpne2x",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-hg98tk3",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procs2.mds",
+      "recipient": "finan.mds",
       "read": false,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-rjzbfb2",
@@ -2069,26 +2091,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-4cyvl5m",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-nrtt63p",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "finan.mds",
+      "recipient": "g.tec.mds",
       "read": false,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-5gksp3e",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-7mms5hj",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "finan.mds",
+      "recipient": "g.tec.mds",
       "read": false,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-xez9k2r",
@@ -2179,26 +2201,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-w1x8uog",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-thawmv7",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "g.tec.mds",
+      "recipient": "enf.mds",
       "read": false,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-f4iwm5x",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-4frjlls",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "g.tec.mds",
-      "read": true,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "recipient": "enf.mds",
+      "read": false,
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-j3nfhol",
@@ -2289,26 +2311,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-7oiqr83",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-gt3d3dy",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "enf.mds",
+      "recipient": "etq.mds",
       "read": false,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-kc8ubfo",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-viztm13",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "enf.mds",
+      "recipient": "etq.mds",
       "read": false,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-81zdxvz",
@@ -2399,26 +2421,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-uxywq87",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-mzac2mu",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "etq.mds",
+      "recipient": "logg.mds",
       "read": false,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-mqxjbr8",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-001k29o",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "etq.mds",
+      "recipient": "logg.mds",
       "read": false,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-mx065kx",
@@ -2509,26 +2531,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-y4n75vm",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-5mx9m8b",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "logg.mds",
+      "recipient": "mtto.mds",
       "read": false,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-8huhh3t",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-cidovlx",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "logg.mds",
+      "recipient": "mtto.mds",
       "read": false,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-b2lxtpf",
@@ -2619,26 +2641,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-7zforqp",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-95fqpex",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto.mds",
+      "recipient": "MDS",
       "read": false,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-faomjeq",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-z5c83wr",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto.mds",
+      "recipient": "MDS",
       "read": false,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-wyom0i4",
@@ -2729,26 +2751,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-ubxy5b0",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-sa9cy09",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "MDS",
+      "recipient": "mtto1.mds",
       "read": false,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-shn4xj9",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-fnkhy2s",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "MDS",
+      "recipient": "mtto1.mds",
       "read": false,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-les5irm",
@@ -2839,26 +2861,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-fkn60cw",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-bf5krl7",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto1.mds",
-      "read": true,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "recipient": "stf",
+      "read": false,
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-8cdcdse",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-s1hf96v",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto1.mds",
-      "read": true,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "recipient": "stf",
+      "read": false,
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-e7oa5av",
@@ -2949,26 +2971,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-6yzmzho",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-szry6no",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "stf",
+      "recipient": "prodt3.mds",
       "read": false,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-mzysq5m",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-hwpejwj",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "stf",
+      "recipient": "prodt3.mds",
       "read": false,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-y1annty",
@@ -3059,26 +3081,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-fngiv0x",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-2q6cm7m",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt3.mds",
-      "read": true,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "recipient": "prodt4.mds",
+      "read": false,
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-yi1bt0t",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-u6xah3s",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt3.mds",
-      "read": true,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "recipient": "prodt4.mds",
+      "read": false,
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-uzx2tuo",
@@ -3169,26 +3191,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-8ig7to4",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-0zbs0df",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt4.mds",
-      "read": true,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "recipient": "alc.mds",
+      "read": false,
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-oc4118k",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-ojfzrep",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt4.mds",
-      "read": true,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "recipient": "alc.mds",
+      "read": false,
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-fmh61fb",
@@ -3279,26 +3301,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-myrqi2b",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-7vui55p",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alc.mds",
+      "recipient": "alc1.mds",
       "read": false,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-dzny2fz",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-u5pd538",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alc.mds",
+      "recipient": "alc1.mds",
       "read": false,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-m1sbqki",
@@ -3389,26 +3411,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-9g40bmo",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-sx1iwsz",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alc1.mds",
+      "recipient": "proc3.mds",
       "read": false,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-10-27T18:59:09.353Z-zks16uc",
-      "title": "Avisó",
-      "message": "Realizaré reinicio a mi computadora por que el SAP se quefo colgado luego de la falla eléctrica, esto mantendrá la terminal del data pro por unos minutos",
-      "type": "warning",
+      "id": "2026-11-14T15:03:53.664Z-lq7w632",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alc1.mds",
+      "recipient": "proc3.mds",
       "read": false,
-      "createdAt": "2026-10-27T18:59:09.353Z"
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-1ggyajx",
@@ -3499,15 +3521,26 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
-      "id": "2026-11-03T12:17:51.828Z-pgzk950",
-      "title": "Aviso",
-      "message": "Se hará un reinicio a la PC para revisar conexiones de red",
-      "type": "warning",
+      "id": "2026-11-14T15:35:25.107Z-75al8zy",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc3.mds",
+      "recipient": "mtto2.mds",
       "read": false,
-      "createdAt": "2026-11-03T12:17:51.828Z"
+      "createdAt": "2026-11-14T15:35:25.107Z"
+    },
+    {
+      "id": "2026-11-14T15:03:53.664Z-tv5ip8y",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto2.mds",
+      "read": false,
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-tpnxtb9",
@@ -3598,6 +3631,28 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
+      "id": "2026-11-14T15:35:25.107Z-huwwgsy",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto3.mds",
+      "read": false,
+      "createdAt": "2026-11-14T15:35:25.107Z"
+    },
+    {
+      "id": "2026-11-14T15:03:53.664Z-uvgnkmw",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto3.mds",
+      "read": false,
+      "createdAt": "2026-11-14T15:03:53.664Z"
+    },
+    {
       "id": "2026-11-14T14:09:41.196Z-vzfhiuv",
       "title": "Actualización 4",
       "message": "Iniciando actualización",
@@ -3684,6 +3739,28 @@
       "recipient": "mtto3.mds",
       "read": false,
       "createdAt": "2026-11-14T12:06:05.834Z"
+    },
+    {
+      "id": "2026-11-14T15:35:25.107Z-g42ace9",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto4.mds",
+      "read": false,
+      "createdAt": "2026-11-14T15:35:25.107Z"
+    },
+    {
+      "id": "2026-11-14T15:03:53.664Z-dzskhsd",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto4.mds",
+      "read": false,
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-hohsuc0",
@@ -3774,6 +3851,28 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
+      "id": "2026-11-14T15:35:25.107Z-t4iy0h8",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto5.mds",
+      "read": false,
+      "createdAt": "2026-11-14T15:35:25.107Z"
+    },
+    {
+      "id": "2026-11-14T15:03:53.664Z-olxrf2d",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto5.mds",
+      "read": false,
+      "createdAt": "2026-11-14T15:03:53.664Z"
+    },
+    {
       "id": "2026-11-14T14:09:41.196Z-085rup5",
       "title": "Actualización 4",
       "message": "Iniciando actualización",
@@ -3862,6 +3961,28 @@
       "createdAt": "2026-11-14T12:06:05.834Z"
     },
     {
+      "id": "2026-11-14T15:35:25.107Z-x9rlvfn",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto6.mds",
+      "read": false,
+      "createdAt": "2026-11-14T15:35:25.107Z"
+    },
+    {
+      "id": "2026-11-14T15:03:53.664Z-89msg8n",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto6.mds",
+      "read": false,
+      "createdAt": "2026-11-14T15:03:53.664Z"
+    },
+    {
       "id": "2026-11-14T14:09:41.196Z-g1dte0l",
       "title": "Actualización 4",
       "message": "Iniciando actualización",
@@ -3948,6 +4069,28 @@
       "recipient": "mtto6.mds",
       "read": false,
       "createdAt": "2026-11-14T12:06:05.834Z"
+    },
+    {
+      "id": "2026-11-14T15:35:25.107Z-orbhs5g",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto7.mds",
+      "read": false,
+      "createdAt": "2026-11-14T15:35:25.107Z"
+    },
+    {
+      "id": "2026-11-14T15:03:53.664Z-oqcohy3",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto7.mds",
+      "read": false,
+      "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
       "id": "2026-11-14T14:09:41.196Z-8rbps45",

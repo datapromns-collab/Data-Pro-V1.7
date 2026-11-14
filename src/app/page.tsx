@@ -2292,6 +2292,7 @@ export default function PlannerPage() {
     return Object.values(weeklyData).flatMap(week => week.tasks || []);
   }, [weeklyData, tasks]);
   const [reporteSubTab, setReporteSubTab] = useState('diario');
+  const [reporteTendenciasSubTab, setReporteTendenciasSubTab] = useState<'alcance' | 'paradas'>('alcance');
   const [turnoSubTab, setTurnoSubTab] = useState<'diurno' | 'nocturno' | 'dt'>('diurno');
   const [dtSubTab, setDtSubTab] = useState<'td' | 'tn'>('td');
   const [printMode, setPrintMode] = useState('');
@@ -5471,10 +5472,26 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                  <button
                                    type="button"
                                    role="tab"
-                                   aria-selected="true"
-                                   className="inline-flex h-8 items-center justify-center rounded-full bg-white px-5 text-[10px] font-bold uppercase tracking-widest text-slate-900 shadow-sm"
+                                   aria-selected={reporteTendenciasSubTab === 'alcance'}
+                                   onClick={() => setReporteTendenciasSubTab('alcance')}
+                                   className={cn(
+                                     "inline-flex h-8 items-center justify-center rounded-full px-5 text-[10px] font-bold uppercase tracking-widest",
+                                     reporteTendenciasSubTab === 'alcance' ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                   )}
                                  >
                                    Alcance
+                                 </button>
+                                 <button
+                                   type="button"
+                                   role="tab"
+                                   aria-selected={reporteTendenciasSubTab === 'paradas'}
+                                   onClick={() => setReporteTendenciasSubTab('paradas')}
+                                   className={cn(
+                                     "inline-flex h-8 items-center justify-center rounded-full px-5 text-[10px] font-bold uppercase tracking-widest",
+                                     reporteTendenciasSubTab === 'paradas' ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                   )}
+                                 >
+                                   Paradas
                                  </button>
                                </div>
                             )}
@@ -5724,7 +5741,12 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                        />
                                      )}
                                      {reporteSubTab === 'tendencias' && (
-                                       <PlantaReporteTendencias ordenesSap={allOrdenesSap} tasks={reporteTasks} />
+                                       <PlantaReporteTendencias
+                                         ordenesSap={allOrdenesSap}
+                                         tasks={reporteTasks}
+                                         informesOperacionales={allInformesOperacionales}
+                                         subseccion={reporteTendenciasSubTab}
+                                       />
                                      )}
                                </div>
                             </div>
