@@ -276727,6 +276727,25 @@
         "usuario": "Froilan Bolivar",
         "id": 1794684653447,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-14",
+        "semana": 46,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 6",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "08:40",
+        "finParada": "09:30",
+        "totalMin": "50",
+        "zona": "Llenado",
+        "falla": "CAMBIO DE SABOR GLUP MANZANA ROJA A GLUP UVA, CAMBIO DE PLACA,ENJUAGUE, MEZCLADO PRUEBA DE CALIDAD ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Froilan Bolivar",
+        "id": 1794685790487,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [

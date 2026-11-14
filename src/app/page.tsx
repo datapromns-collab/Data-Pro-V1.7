@@ -2236,40 +2236,65 @@ export default function PlannerPage() {
   const [resumenSemanalSubTab, setResumenSemanalSubTab] = useState('resumen');
   const [resumenSemanalWeekStartDate, setResumenSemanalWeekStartDate] = useState(new Date());
   const [ptSubTab, setPtSubTab] = useState('TDiurno');
+  const [resumenMensualDate, setResumenMensualDate] = useState(() => new Date());
+  const [resumenMensualSubTab, setResumenMensualSubTab] = useState<'mes' | 'pt'>('mes');
+  const [resumenMensualPtSubTab, setResumenMensualPtSubTab] = useState<'TDiurno' | 'TNocturno'>('TDiurno');
   const resumenSemanalWeekDates = useMemo(() => {
     const weekStart = startOfWeek(resumenSemanalWeekStartDate, { weekStartsOn: 1 });
     return Array.from({ length: 7 }, (_, index) => format(addDays(weekStart, index), 'yyyy-MM-dd'));
   }, [resumenSemanalWeekStartDate]);
+  const resumenMensualFechas = useMemo(() => {
+    const inicio = startOfMonth(resumenMensualDate);
+    return eachDayOfInterval({ start: inicio, end: endOfMonth(resumenMensualDate) })
+      .map((day) => format(day, 'yyyy-MM-dd'));
+  }, [resumenMensualDate]);
   useEffect(() => {
     const semanaInicio = startOfWeek(resumenSemanalWeekStartDate, { weekStartsOn: 1 });
     const semanaFin = addDays(semanaInicio, 6);
     const fechaReporte = reporteDiarioFecha || new Date();
     const fechaInicioConsulta = fechaReporte < semanaInicio ? fechaReporte : semanaInicio;
     const fechaFinConsulta = fechaReporte > semanaFin ? fechaReporte : semanaFin;
-    const query = new URLSearchParams({
+    const queryActual = new URLSearchParams({
       startDate: format(fechaInicioConsulta, 'yyyy-MM-dd'),
       endDate: format(fechaFinConsulta, 'yyyy-MM-dd'),
+    });
+    const mesInicio = startOfMonth(resumenMensualDate);
+    const queryMensual = new URLSearchParams({
+      startDate: format(mesInicio, 'yyyy-MM-dd'),
+      endDate: format(endOfMonth(resumenMensualDate), 'yyyy-MM-dd'),
     });
     const cargarTodo = async () => {
       setReporteDataLoaded(false);
       try {
-        const [infRes, ordRes, sapRes] = await Promise.all([
-          fetch(`/api/collection/planta-informes-operacionales?${query.toString()}`, { cache: 'no-store' }),
-          fetch(`/api/collection/planta-ordenes-trabajo?${query.toString()}`, { cache: 'no-store' }),
+        const [infActualRes, ordActualRes, infMensualRes, ordMensualRes, sapRes] = await Promise.all([
+          fetch(`/api/collection/planta-informes-operacionales?${queryActual.toString()}`, { cache: 'no-store' }),
+          fetch(`/api/collection/planta-ordenes-trabajo?${queryActual.toString()}`, { cache: 'no-store' }),
+          fetch(`/api/collection/planta-informes-operacionales?${queryMensual.toString()}`, { cache: 'no-store' }),
+          fetch(`/api/collection/planta-ordenes-trabajo?${queryMensual.toString()}`, { cache: 'no-store' }),
           fetch('/api/data?section=ordenesSap', { cache: 'no-store' }),
         ]);
-        if (infRes.ok) {
-          const inf = await infRes.json();
-          setAllInformesOperacionales(Array.isArray(inf) ? inf : []);
-        } else {
-          setAllInformesOperacionales([]);
-        }
-        if (ordRes.ok) {
-          const ord = await ordRes.json();
-          setAllOrdenesTrabajo(Array.isArray(ord) ? ord : []);
-        } else {
-          setAllOrdenesTrabajo([]);
-        }
+        const [infActual, ordActual, infMensual, ordMensual] = await Promise.all([
+          infActualRes.ok ? infActualRes.json() : [],
+          ordActualRes.ok ? ordActualRes.json() : [],
+          infMensualRes.ok ? infMensualRes.json() : [],
+          ordMensualRes.ok ? ordMensualRes.json() : [],
+        ]);
+        const combinarPorId = (actual: unknown, mensual: unknown) => {
+          const filas = [
+            ...(Array.isArray(actual) ? actual : []),
+            ...(Array.isArray(mensual) ? mensual : []),
+          ];
+          const unicos = new Map<string, any>();
+          filas.forEach((fila) => {
+            const key = fila && typeof fila.id === 'string'
+              ? fila.id
+              : JSON.stringify(fila);
+            unicos.set(key, fila);
+          });
+          return Array.from(unicos.values());
+        };
+        setAllInformesOperacionales(combinarPorId(infActual, infMensual));
+        setAllOrdenesTrabajo(combinarPorId(ordActual, ordMensual));
         if (sapRes.ok) {
           const sap = await sapRes.json();
           setAllOrdenesSap(Array.isArray(sap?.ordenesSap) ? sap.ordenesSap : []);
@@ -2286,7 +2311,7 @@ export default function PlannerPage() {
       }
     };
     void cargarTodo();
-  }, [reporteDiarioFecha, resumenSemanalWeekStartDate]);
+  }, [reporteDiarioFecha, resumenSemanalWeekStartDate, resumenMensualDate]);
   const allTasks = useMemo(() => {
     if (!weeklyData) return tasks || [];
     return Object.values(weeklyData).flatMap(week => week.tasks || []);
@@ -4671,7 +4696,7 @@ export default function PlannerPage() {
                               {(user?.id === 'prodtj.mds' || user?.id === 'prodtg.mds' || user?.id === 'prodts.mds' || user?.id === 'prodt.mds' || user?.id === 'prodt1.mds' || user?.id === 'prodt2.mds' || user?.id === 'enf.mds' ? ['paradas-lineas', 'produccion', 'reporte', 'resumen-semanal', 'resumen-mensual'] : ['paradas-lineas', 'produccion', 'reporte', 'resumen-semanal', 'resumen-mensual', 'ciclos']).map((tab) => (
                              <button
                                key={tab}
-                               onClick={() => { setActiveTab(tab); if (tab === 'paradas-lineas') setParadasSubTab('informes-operacionales'); if (tab === 'produccion') setProduccionSubTab('planificadas'); if (tab === 'reporte') setReporteSubTab('diario'); if (tab === 'resumen-semanal') { setResumenSemanalSubTab('resumen'); setPtSubTab('TDiurno'); setResumenSemanalWeekStartDate(new Date()); } }}
+                               onClick={() => { setActiveTab(tab); if (tab === 'paradas-lineas') setParadasSubTab('informes-operacionales'); if (tab === 'produccion') setProduccionSubTab('planificadas'); if (tab === 'reporte') setReporteSubTab('diario'); if (tab === 'resumen-semanal') { setResumenSemanalSubTab('resumen'); setPtSubTab('TDiurno'); setResumenSemanalWeekStartDate(new Date()); } if (tab === 'resumen-mensual') { setResumenMensualSubTab('mes'); setResumenMensualPtSubTab('TDiurno'); } }}
                                className={cn(
                                  "inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
                                  activeTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
@@ -5979,10 +6004,164 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                            </div>
                          )}
                        {activeTab === 'resumen-mensual' && (
-                         <div className="flex-1 bg-white rounded-[2.5rem] p-4">
-                           <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
-                             <CalendarRange className="h-12 w-12 mb-4 opacity-20" />
-                             Resumen Mensual en Desarrollo
+                         <div className="flex-1 flex flex-col gap-3">
+                           <div className="flex flex-wrap items-center gap-3 no-print">
+                             <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 pointer-events-auto">
+                               {(['mes', 'pt'] as const).map((subTab) => (
+                                 <button
+                                   key={subTab}
+                                   onClick={() => setResumenMensualSubTab(subTab)}
+                                   className={cn(
+                                     "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                     resumenMensualSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                   )}
+                                 >
+                                   {subTab === 'mes' ? 'Mes' : 'PT'}
+                                 </button>
+                               ))}
+                             </div>
+                             <label className="ml-auto flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                               Mes y año
+                               <input
+                                 type="month"
+                                 value={format(resumenMensualDate, 'yyyy-MM')}
+                                 onChange={(event) => {
+                                   if (!event.target.value) return;
+                                   const [year, month] = event.target.value.split('-').map(Number);
+                                   if (year && month >= 1 && month <= 12) setResumenMensualDate(new Date(year, month - 1, 1));
+                                 }}
+                                 className="h-9 rounded-full border border-slate-200 bg-white px-3 text-xs font-bold text-slate-700 pointer-events-auto"
+                               />
+                             </label>
+                           </div>
+                           <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                             {resumenMensualSubTab === 'mes' && (
+                               <div className="flex flex-col gap-3">
+                                 <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 capitalize">
+                                   {format(resumenMensualDate, 'MMMM yyyy', { locale: es })}
+                                 </div>
+                                 <ReporteTurnoTabla
+                                   informesOperacionales={allInformesOperacionales}
+                                   tasks={reporteTasks}
+                                   realProduction={realProduction}
+                                   lineSpeeds={lineSpeeds}
+                                   turno="DIARIO"
+                                   fecha={startOfMonth(resumenMensualDate)}
+                                   semanaFechas={resumenMensualFechas}
+                                   planificadasPorDia={reportePlanificadasPorDia}
+                                   ordenes={allOrdenesTrabajo}
+                                   velocidadesDt={velocidadesDt}
+                                   allTasks={reporteTasks}
+                                   ordenesSap={allOrdenesSap}
+                                   periodLabel={`Acumulado ${format(resumenMensualDate, 'MMMM yyyy', { locale: es })}`}
+                                 />
+                                 {(() => {
+                                   const row = calcularTotalesDiario(
+                                     allInformesOperacionales,
+                                     reporteTasks,
+                                     realProduction,
+                                     lineSpeeds,
+                                     startOfMonth(resumenMensualDate),
+                                     reportePlanificadasPorDia,
+                                     allOrdenesTrabajo,
+                                     resumenMensualFechas,
+                                     allOrdenesSap,
+                                     'DIARIO'
+                                   );
+                                   const totalPlanificado = (Number(row.totalPlanificadoTD) || 0) + (Number(row.totalPlanificadoTN) || 0);
+                                   const totalAlcance = (Number(row.totalAlcanceTD) || 0) + (Number(row.totalAlcanceTN) || 0);
+                                   const cumplimientoTotal = totalPlanificado > 0
+                                     ? `${((totalAlcance / totalPlanificado) * 100).toFixed(2).replace('.', ',')}%`
+                                     : '0,00%';
+                                   return (
+                                     <div className="border border-slate-200 rounded-[2.5rem] bg-slate-50/30 overflow-visible">
+                                       <div className="p-4">
+                                         <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto pointer-events-auto">
+                                           <table className="w-full border-collapse text-center" style={{ minWidth: 700 }}>
+                                             <thead>
+                                               <tr className="bg-slate-100">
+                                                 <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Planificado</th>
+                                                 <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Alcance</th>
+                                                 <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">% Cumplimiento</th>
+                                                 <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200">Disponibilidad total</th>
+                                               </tr>
+                                             </thead>
+                                             <tbody>
+                                               <tr className="even:bg-slate-50/60">
+                                                 <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(totalPlanificado)}</td>
+                                                 <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(totalAlcance)}</td>
+                                                 <td style={getCumplimientoCellStyle(totalAlcance, totalPlanificado)} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{cumplimientoTotal}</td>
+                                                 <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{formatReporteNumero(row.disponibilidadPorAveria)}</td>
+                                               </tr>
+                                             </tbody>
+                                           </table>
+                                         </div>
+                                       </div>
+                                     </div>
+                                   );
+                                 })()}
+                                 <TablaResumenPorLinea
+                                   informesOperacionales={allInformesOperacionales}
+                                   tasks={reporteTasks}
+                                   realProduction={realProduction}
+                                   lineSpeeds={lineSpeeds}
+                                   fecha={startOfMonth(resumenMensualDate)}
+                                   semanaFechas={resumenMensualFechas}
+                                   planificadasPorDia={reportePlanificadasPorDia}
+                                   ordenes={allOrdenesTrabajo}
+                                   ordenesSap={allOrdenesSap}
+                                 />
+                               </div>
+                             )}
+                             {resumenMensualSubTab === 'pt' && (
+                               <div className="flex flex-col gap-3">
+                                 <div className="flex items-center gap-3 no-print">
+                                   <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 pointer-events-auto">
+                                     {(['TDiurno', 'TNocturno'] as const).map((subTab) => (
+                                       <button
+                                         key={subTab}
+                                         onClick={() => setResumenMensualPtSubTab(subTab)}
+                                         className={cn(
+                                           "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                           resumenMensualPtSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                         )}
+                                       >
+                                         {subTab === 'TDiurno' ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
+                                         {subTab === 'TDiurno' ? 'T Diurno' : 'T Nocturno'}
+                                       </button>
+                                     ))}
+                                   </div>
+                                 </div>
+                                 <div className="flex flex-col gap-3">
+                                   <ReporteTurnoTabla
+                                     informesOperacionales={allInformesOperacionales}
+                                     tasks={reporteTasks}
+                                     realProduction={realProduction}
+                                     lineSpeeds={lineSpeeds}
+                                     turno={resumenMensualPtSubTab === 'TDiurno' ? 'DIURNO' : 'NOCTURNO'}
+                                     fecha={startOfMonth(resumenMensualDate)}
+                                     semanaFechas={resumenMensualFechas}
+                                     planificadasPorDia={reportePlanificadasPorDia}
+                                     ordenes={allOrdenesTrabajo}
+                                     velocidadesDt={velocidadesDt}
+                                     allTasks={reporteTasks}
+                                     ordenesSap={allOrdenesSap}
+                                     periodLabel={`Acumulado ${format(resumenMensualDate, 'MMMM yyyy', { locale: es })}`}
+                                   />
+                                   <TablaResumenPorLinea
+                                     informesOperacionales={allInformesOperacionales}
+                                     tasks={reporteTasks}
+                                     realProduction={realProduction}
+                                     lineSpeeds={lineSpeeds}
+                                     fecha={startOfMonth(resumenMensualDate)}
+                                     semanaFechas={resumenMensualFechas}
+                                     planificadasPorDia={reportePlanificadasPorDia}
+                                     ordenes={allOrdenesTrabajo}
+                                     ordenesSap={allOrdenesSap}
+                                   />
+                                 </div>
+                               </div>
+                             )}
                            </div>
                          </div>
                        )}
