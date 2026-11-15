@@ -491,7 +491,7 @@ function UbbTable({ mode, selectedFecha, onUpdate }: { mode: 'estandar' | 'prome
           </tr>
         </thead>
         <tbody>
-          {(mode === 'estandar' ? SABORES_UBB_ESTANDAR : SABORES_UBB).map((sabor, idx) => {
+          {SABORES_UBB_ESTANDAR.map((sabor, idx) => {
             const inicial = getNumber(sabor, 'inicial');
             const preparado = getNumber(sabor, 'preparado');
             const final = getNumber(sabor, 'final');

@@ -411,6 +411,12 @@ export async function authorizeDataWrite(request: Request, body: unknown): Promi
     ) {
       checks.push(['planning', 'speeds']);
     }
+    if (
+      incomingPlanner.config.lineSpeedHistory !== undefined &&
+      !samePlannerValue(incomingPlanner.config.lineSpeedHistory, currentConfig.lineSpeedHistory ?? {})
+    ) {
+      checks.push(['planning', 'speeds']);
+    }
   }
   if (
     incomingPlanner.customRecipes !== undefined &&

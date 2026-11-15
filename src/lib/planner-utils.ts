@@ -18,6 +18,20 @@ export const PRODUCT_LIST = [
 export const weekMonthKey = (weekStart: Date, monthRef: Date) =>
   `${format(weekStart, 'yyyy-MM-dd')}|${format(monthRef, 'yyyy-MM')}`;
 
+export type LineSpeedHistory = Record<string, Record<string, number>>;
+
+export function getLineSpeedsForDate(
+  date: Date | string,
+  baseSpeeds: Record<string, number>,
+  history: LineSpeedHistory = {},
+): Record<string, number> {
+  const dateKey = typeof date === 'string' ? date.slice(0, 10) : format(date, 'yyyy-MM-dd');
+  return Object.keys(history)
+    .filter((effectiveDate) => effectiveDate <= dateKey)
+    .sort()
+    .reduce((speeds, effectiveDate) => ({ ...speeds, ...history[effectiveDate] }), { ...baseSpeeds });
+}
+
 export const ALL_LINES_SUMMARY = ["1", "2", "3", "4", "5", "6", "7", "8"];
 
 // --- DATOS MAESTROS DE MATERIALES ---

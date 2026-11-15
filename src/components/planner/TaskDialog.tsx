@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Trash2, Clock, Info, ShieldAlert, AlignLeft, Copy } from 'lucide-react';
 import { ScheduledTask } from '@/lib/types';
-import { getWeekDays, PRODUCT_FACTORS, formatTime, PRODUCTION_END_SUN_HOUR, PRODUCTION_END_SUN_MINUTE } from '@/lib/planner-utils';
+import { getLineSpeedsForDate, getWeekDays, PRODUCT_FACTORS, formatTime, PRODUCTION_END_SUN_HOUR, PRODUCTION_END_SUN_MINUTE } from '@/lib/planner-utils';
 import { useToast } from '@/hooks/use-toast';
 import {
   Select,
@@ -44,6 +44,7 @@ interface TaskDialogProps {
   weekStartDate: Date;
   allTasks: ScheduledTask[];
   lineSpeeds: Record<string, number>;
+  lineSpeedHistory: Record<string, Record<string, number>>;
   readOnly?: boolean;
   onWeekChange?: (date: Date) => void;
 }
@@ -58,6 +59,7 @@ export function TaskDialog({
   weekStartDate, 
   allTasks,
   lineSpeeds,
+  lineSpeedHistory,
   readOnly = false,
   onWeekChange
 }: TaskDialogProps) {
@@ -170,6 +172,14 @@ export function TaskDialog({
       positionNewTask(defaultLineId);
     }
   }, [isOpen, initialTask, defaultLineId, weekStartDate]);
+
+  useEffect(() => {
+    if (!isOpen || initialTask || lastEdited === 'load') return;
+    const selectedDay = weekDays[Number(selectedDayIdx)];
+    if (!selectedDay) return;
+    const effectiveSpeeds = getLineSpeedsForDate(selectedDay, lineSpeeds, lineSpeedHistory);
+    setLoadPerHour(effectiveSpeeds[lineId] || 0);
+  }, [isOpen, initialTask, lastEdited, selectedDayIdx, weekDays, lineId, lineSpeeds, lineSpeedHistory]);
 
   // Efecto 1: Tanques <-> Cantidad
   useEffect(() => {

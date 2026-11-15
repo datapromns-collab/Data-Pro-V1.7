@@ -202,6 +202,7 @@ function usePlannerStoreInner() {
   const [lineSpeeds, setLineSpeeds] = useState<Record<string, number>>({
     "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0
   });
+  const [lineSpeedHistory, setLineSpeedHistory] = useState<Record<string, Record<string, number>>>({});
   const [customRecipes, setCustomRecipes] = useState<NestedRecord>(RECIPES);
   const [customPackagingRecipes, setCustomPackagingRecipes] = useState<Record<string, Record<string, Record<string, number>>>>(DEFAULT_PACKAGING_RECIPES);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -392,10 +393,13 @@ function usePlannerStoreInner() {
       try {
         const parsed = JSON.parse(savedWeeks);
         const normalized: Record<string, WeeklyData> = {};
-        for (const [wk, data] of Object.entries(parsed)) {
+        const savedWeekData = parsed.weeks && typeof parsed.weeks === 'object' ? parsed.weeks : parsed;
+        for (const [wk, data] of Object.entries(savedWeekData)) {
           normalized[wk] = legacyToWeeklyData(data);
         }
         setWeeklyData(normalized);
+        if (parsed.config?.lineSpeeds) setLineSpeeds(parsed.config.lineSpeeds);
+        if (parsed.config?.lineSpeedHistory) setLineSpeedHistory(parsed.config.lineSpeedHistory);
         loadedFromWeeks = true;
         return;
       } catch (e) {}
@@ -412,6 +416,7 @@ function usePlannerStoreInner() {
           return { ...prev, [targetWeekKey]: deepMergeWeeklyData(current, week) };
         });
         if (parsed.config?.lineSpeeds) setLineSpeeds(parsed.config.lineSpeeds);
+        if (parsed.config?.lineSpeedHistory) setLineSpeedHistory(parsed.config.lineSpeedHistory);
         localStorage.removeItem('planner_autosave_v1');
         localStorage.removeItem(STORAGE_KEY_TASKS);
         localStorage.removeItem(STORAGE_KEY_CONFIG);
@@ -481,7 +486,7 @@ function usePlannerStoreInner() {
         if (config.lineSpeeds) setLineSpeeds(config.lineSpeeds);
       } catch (e) {}
     }
-  }, [weekKey, setLineSpeeds]);
+  }, [weekKey, setLineSpeeds, setLineSpeedHistory]);
 
    const applyRemoteToState = useCallback((remote: any, authoritative = false) => {
     if (!remote) return;
@@ -564,6 +569,13 @@ function usePlannerStoreInner() {
 
     if (remote.config) {
       setLineSpeeds((prev) => ({ ...prev, ...(remote.config.lineSpeeds ?? {}) }));
+      setLineSpeedHistory((prev) => {
+        const next = { ...prev };
+        Object.entries(remote.config.lineSpeedHistory ?? {}).forEach(([date, speeds]: [string, any]) => {
+          next[date] = { ...(next[date] ?? {}), ...speeds };
+        });
+        return next;
+      });
     }
     setCustomRecipes((prev) => ({ ...prev, ...(remote.customRecipes ?? {}) }));
     const remotePackagingRecipes = remote.customPackagingRecipes ?? {};
@@ -603,10 +615,10 @@ function usePlannerStoreInner() {
 
   const computePlannerSnapshot = useCallback(() => JSON.stringify({
     weeks: weeklyData,
-    config: { weekStartDate: toLocalISO(weekStartDate), lineSpeeds },
+    config: { weekStartDate: toLocalISO(weekStartDate), lineSpeeds, lineSpeedHistory },
     customRecipes,
     customPackagingRecipes,
-  }), [weeklyData, weekStartDate, lineSpeeds, customRecipes, customPackagingRecipes]);
+  }), [weeklyData, weekStartDate, lineSpeeds, lineSpeedHistory, customRecipes, customPackagingRecipes]);
 
   useEffect(() => {
     if (!isLoaded) return;
@@ -641,6 +653,7 @@ function usePlannerStoreInner() {
               return { ...prev, [targetWeekKey]: deepMergeWeeklyData(current, week) };
             });
             if (parsed.config?.lineSpeeds) setLineSpeeds(parsed.config.lineSpeeds);
+            if (parsed.config?.lineSpeedHistory) setLineSpeedHistory(parsed.config.lineSpeedHistory);
             localStorage.removeItem('planner_autosave_v1');
             localStorage.removeItem(STORAGE_KEY_TASKS);
             localStorage.removeItem(STORAGE_KEY_CONFIG);
@@ -699,7 +712,7 @@ function usePlannerStoreInner() {
 
   const saveToLocalStorage = useCallback(() => {
     const basePlan = {
-      config: { weekStartDate: toLocalISO(weekStartDate), lineSpeeds },
+      config: { weekStartDate: toLocalISO(weekStartDate), lineSpeeds, lineSpeedHistory },
       customRecipes,
       customPackagingRecipes,
     };
@@ -738,7 +751,7 @@ function usePlannerStoreInner() {
       weeks: weeklyData,
       ...basePlan,
     });
-  }, [weeklyData, weekStartDate, lineSpeeds, customRecipes, customPackagingRecipes]);
+  }, [weeklyData, weekStartDate, lineSpeeds, lineSpeedHistory, customRecipes, customPackagingRecipes]);
 
   const saveToLocalStorageRef = useRef(saveToLocalStorage);
   saveToLocalStorageRef.current = saveToLocalStorage;
@@ -806,7 +819,7 @@ function usePlannerStoreInner() {
     }, 100);
 
     return () => clearTimeout(timer);
-  }, [isLoaded, weeklyData, weekStartDate, lineSpeeds, customRecipes, customPackagingRecipes, saveRetryCount]);
+  }, [isLoaded, weeklyData, weekStartDate, lineSpeeds, lineSpeedHistory, customRecipes, customPackagingRecipes, saveRetryCount]);
 
   useEffect(() => {
     if (!isLoaded) return;
@@ -815,7 +828,7 @@ function usePlannerStoreInner() {
     } catch (error) {
       console.warn('[PlannerStore] localStorage save failed', error);
     }
-  }, [isLoaded, weeklyData, weekStartDate, lineSpeeds, customRecipes, customPackagingRecipes]);
+  }, [isLoaded, weeklyData, weekStartDate, lineSpeeds, lineSpeedHistory, customRecipes, customPackagingRecipes]);
 
   useEffect(() => {
     if (!isLoaded) return;
@@ -886,6 +899,21 @@ function usePlannerStoreInner() {
     dirtyConfigRef.current.add('lineSpeeds');
     changeVersionRef.current += 1;
     setLineSpeeds((prev) => ({ ...prev, [lineId]: speed }));
+  }, []);
+
+  const saveLineSpeedsForDate = useCallback(async (date: string, speeds: Record<string, number>) => {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || Number.isNaN(Date.parse(`${date}T00:00:00`))) {
+      throw new Error('Selecciona una fecha válida para guardar las velocidades.');
+    }
+    const savedSpeeds = Object.fromEntries(
+      Object.entries(speeds).map(([lineId, speed]) => [lineId, Number.isFinite(speed) ? speed : 0]),
+    );
+    await savePlannerData({ config: { lineSpeedHistory: { [date]: savedSpeeds } } });
+    setLineSpeedHistory((previous) => ({
+      ...previous,
+      [date]: { ...(previous[date] ?? {}), ...savedSpeeds },
+    }));
+    setSaveError(null);
   }, []);
 
   const updateRealProduction = useCallback((lineId: string, flavor: string, dateKey: string, quantity: number) => {
@@ -1122,6 +1150,7 @@ function usePlannerStoreInner() {
     setWeeklyData,
     lineSpeeds,
     setLineSpeeds,
+    lineSpeedHistory,
     realProduction,
     setRealProduction,
     customRecipes,
@@ -1169,6 +1198,7 @@ function usePlannerStoreInner() {
     removeTask,
     clearAll,
     updateLineSpeed,
+    saveLineSpeedsForDate,
     updateRealProduction,
     updateRecipe,
     removeMaterialFromRecipe,

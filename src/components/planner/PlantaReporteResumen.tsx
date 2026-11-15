@@ -5,6 +5,7 @@ import { addDays, endOfMonth, format, startOfMonth, startOfWeek } from "date-fns
 import { es } from "date-fns/locale";
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import type { ScheduledTask } from "@/lib/types";
+import { getLineSpeedsForDate, type LineSpeedHistory } from "@/lib/planner-utils";
 
 type PeriodoReporte = "dia" | "semana" | "mes";
 type Parada = Record<string, unknown>;
@@ -17,6 +18,7 @@ type Props = {
   informesOperacionales: Parada[];
   tasks: ScheduledTask[];
   lineSpeeds: Record<string, number>;
+  lineSpeedHistory: LineSpeedHistory;
   ordenesSap: OrdenSap[];
 };
 
@@ -182,7 +184,7 @@ function Grafica({ data, bars, height = 260 }: { data: Array<Record<string, stri
   );
 }
 
-export default function PlantaReporteResumen({ informesOperacionales, tasks, lineSpeeds, ordenesSap }: Props) {
+export default function PlantaReporteResumen({ informesOperacionales, tasks, lineSpeeds, lineSpeedHistory, ordenesSap }: Props) {
   const [periodo, setPeriodo] = useState<PeriodoReporte>("dia");
   const [fecha, setFecha] = useState(() => new Date());
   const { inicio, fin } = useMemo(() => getFechasPeriodo(fecha, periodo), [fecha, periodo]);
@@ -196,7 +198,6 @@ export default function PlantaReporteResumen({ informesOperacionales, tasks, lin
 
   const datos = useMemo(() => {
     const registros = informesOperacionales.filter((registro) => fechas.has(String(registro.fecha ?? "")));
-    const horasPlanificadas = getHorasPlanificadas(tasks, fechas);
     const planificados = getPlanificado(tasks, fechas);
     const rows = LINEAS.map((linea, index) => {
       const lineaRegistros = registros.filter((registro) => String(registro.linea ?? "").trim() === linea);
@@ -209,10 +210,16 @@ export default function PlantaReporteResumen({ informesOperacionales, tasks, lin
           return subtotal + ["cajas1", "cajas2", "cajas3", "cajas4"].reduce((suma, key) => suma + numero(dia[key]), 0);
         }, 0);
       }, 0);
-      const paradasTotales = horasParada(lineaRegistros);
-      const disponibilidadHoras = Math.max(0, horasPlanificadas[index] - paradasTotales);
-      const velocidad = numero(lineSpeeds[String(index + 1)]);
-      const capacidad = disponibilidadHoras * velocidad;
+      let disponibilidadHoras = 0;
+      let capacidad = 0;
+      fechas.forEach((fecha) => {
+        const horasProgramadas = getHorasPlanificadas(tasks, new Set([fecha]))[index];
+        const registrosDia = lineaRegistros.filter((registro) => String(registro.fecha ?? "") === fecha);
+        const horasDisponibles = Math.max(0, horasProgramadas - horasParada(registrosDia));
+        const velocidad = numero(getLineSpeedsForDate(fecha, lineSpeeds, lineSpeedHistory)[String(index + 1)]);
+        disponibilidadHoras += horasDisponibles;
+        capacidad += horasDisponibles * velocidad;
+      });
       return {
         linea,
         planificado: planificados[index],
@@ -249,7 +256,7 @@ export default function PlantaReporteResumen({ informesOperacionales, tasks, lin
         capacidad: rows.reduce((total, row) => total + row.capacidad, 0),
       },
     };
-  }, [informesOperacionales, tasks, lineSpeeds, ordenesSap, fechas]);
+  }, [informesOperacionales, tasks, lineSpeeds, lineSpeedHistory, ordenesSap, fechas]);
 
   const porLinea = datos.rows.map((row) => ({
     nombre: row.linea,

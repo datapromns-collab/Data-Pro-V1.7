@@ -382,7 +382,19 @@ export async function POST(request: Request) {
       }
 
       if (incomingPlanner.config) {
-        merged.config = { ...(merged.config || {}), ...incomingPlanner.config };
+        const existingConfig = merged.config || {};
+        merged.config = {
+          ...existingConfig,
+          ...incomingPlanner.config,
+          ...(incomingPlanner.config.lineSpeedHistory
+            ? {
+                lineSpeedHistory: deepMerge(
+                  existingConfig.lineSpeedHistory ?? {},
+                  incomingPlanner.config.lineSpeedHistory,
+                ),
+              }
+            : {}),
+        };
       }
       if (incomingPlanner.customRecipes) {
         merged.customRecipes = deepMerge(merged.customRecipes, incomingPlanner.customRecipes);
