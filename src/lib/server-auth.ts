@@ -495,6 +495,7 @@ const COLLECTION_PERMISSION_MAP: Record<string, [string, string?]> = {
     'calidad-seguimiento-tanques': ['calidad', 'seguimiento-tanques'],
     'planta-informes-operacionales': ['planta', 'line-stops.operational-reports'],
     'planta-ordenes-trabajo': ['planta', 'line-stops.work-orders'],
+    'planta-ciclos-dias': ['planta', 'line-stops.operational-reports'],
     'planta-produccion-producidas': ['planta', 'production.produced'],
     'planta-pnc': ['planta', 'production'],
     'planta-hrs-pagadas': ['planta', 'daily-report'],

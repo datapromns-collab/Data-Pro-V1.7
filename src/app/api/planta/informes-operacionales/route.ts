@@ -98,6 +98,18 @@ export async function PATCH(request: Request) {
         result = { status: 409, error: 'La edición de este registro ya fue cerrada. Actualiza la lista e inténtalo de nuevo.' };
         return db;
       }
+      const currentDate = String(items[index]?.fecha ?? '');
+      const updatedDate = String(safeUpdates.fecha ?? currentDate);
+      if (
+        updatedDate !== currentDate &&
+        db.collections?.['planta-ciclos-dias']?.[updatedDate] === true
+      ) {
+        result = {
+          status: 409,
+          error: `La fecha ${updatedDate} está desactivada en Ciclos. Actívala antes de guardar el informe.`,
+        };
+        return db;
+      }
 
       const duplicateOrder = safeUpdates.orden && String(safeUpdates.orden).trim()
         ? items.some((item: any, itemIndex: number) =>

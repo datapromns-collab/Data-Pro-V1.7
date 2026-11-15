@@ -280,6 +280,16 @@ export async function POST(request: Request) {
   try {
     const incoming = await request.json();
     const incomingItems = incoming && Array.isArray(incoming.items) ? incoming.items : incoming;
+    if (ns === 'planta-ciclos-dias') {
+      if (!incomingItems || typeof incomingItems !== 'object' || Array.isArray(incomingItems)) {
+        return Response.json({ error: 'El calendario de Ciclos debe ser un objeto de fechas.' }, { status: 400 });
+      }
+      for (const [date, active] of Object.entries(incomingItems)) {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || typeof active !== 'boolean') {
+          return Response.json({ error: 'El calendario de Ciclos contiene una fecha o estado inválido.' }, { status: 400 });
+        }
+      }
+    }
     const incomingDeleted = Array.isArray(incoming?._deletedIds)
       ? { '*': incoming!._deletedIds }
       : (incoming?._deletedIds ?? {});
@@ -297,6 +307,30 @@ export async function POST(request: Request) {
           return copy;
         });
         const currentArr = Array.isArray(current) ? current : [];
+        if (ns === 'planta-informes-operacionales' || ns === 'planta-ordenes-trabajo') {
+          const inactiveDays = db.collections['planta-ciclos-dias'] || {};
+          const getRecordDates = (item: any): string[] => ns === 'planta-informes-operacionales'
+            ? [item?.fecha].filter((date): date is string => typeof date === 'string')
+            : [item?.fechaOrden, item?.fechaEmision, item?.fechaParada, item?.otFechaParada, item?.fecha]
+              .filter((date): date is string => typeof date === 'string');
+
+          for (const item of incomingData) {
+            const existingItem = item?.id != null
+              ? currentArr.find((candidate: any) => String(candidate?.id) === String(item.id))
+              : currentArr.find((candidate: any) =>
+                DEDUP_KEYS[ns].every((key) => String(candidate?.[key] ?? '') === String(item?.[key] ?? '')),
+              );
+            const existingDates = existingItem ? getRecordDates(existingItem) : [];
+            const newInactiveDate = getRecordDates(item).find((date) =>
+              /^\d{4}-\d{2}-\d{2}$/.test(date) &&
+              inactiveDays[date] === true &&
+              !existingDates.includes(date),
+            );
+            if (newInactiveDate) {
+              throw new Error(`La fecha ${newInactiveDate} está desactivada en Ciclos. Actívala antes de guardar datos.`);
+            }
+          }
+        }
         const merged = mergeCollection(currentArr, incomingData, ns);
         const existingDeleted = getDeletedIds(db, ns);
         const deletedIds = mergeDeletedIds(existingDeleted, incomingDeleted);
@@ -350,6 +384,7 @@ export async function POST(request: Request) {
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error';
     console.error('[API][POST][ERROR]', ns, message, error);
-    return new Response(JSON.stringify({ error: message }), { status: 500, headers: { 'content-type': 'application/json' } });
+    const status = message.includes('está desactivada en Ciclos') ? 409 : 500;
+    return new Response(JSON.stringify({ error: message }), { status, headers: { 'content-type': 'application/json' } });
   }
 }

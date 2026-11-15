@@ -537,17 +537,21 @@ export default function PlannerPage() {
 
   const informesOperacionalesStore = useRemoteCollection<any[]>('planta-informes-operacionales', [], plantaWeekQuery);
   const ordenesTrabajoStore = useRemoteCollection<any[]>('planta-ordenes-trabajo', [], plantaWeekQuery);
+  const ciclosDiasStore = useRemoteCollection<Record<string, boolean>>('planta-ciclos-dias', {});
   const informesOperacionales = informesOperacionalesStore.data;
   const setInformesOperacionales = informesOperacionalesStore.setData;
   const setInformesOperacionalesLocal = informesOperacionalesStore.setDataLocal;
   const removeInformeOperacional = informesOperacionalesStore.removeItem;
   const ordenesTrabajo = ordenesTrabajoStore.data;
   const setOrdenesTrabajo = ordenesTrabajoStore.setData;
+  const ciclosDias = ciclosDiasStore.data;
   const informesLoading = informesOperacionalesStore.isLoading;
   const ordenesLoading = ordenesTrabajoStore.isLoading;
   const canWriteOperationalReports = Boolean(
     user && (isAdmin || getPermissionLevel(user.id, 'planta', 'line-stops.operational-reports') === 'write'),
   );
+  const isCicloDateBlocked = (date: string, existingDate?: string) =>
+    Boolean(date && ciclosDias?.[date] === true && date !== existingDate);
   const canEditPendingWorkOrders = Boolean(
     user && (isAdmin || getPermissionLevel(user.id, 'planta', 'line-stops.work-orders.edit-pending') === 'write'),
   );
@@ -2635,6 +2639,19 @@ export default function PlannerPage() {
   const [ordenFiltroLinea, setOrdenFiltroLinea] = useState('all');
   const [ordenBusqueda, setOrdenBusqueda] = useState('');
   const [paradaFiltroFecha, setParadaFiltroFecha] = useState('');
+  const [ciclosMes, setCiclosMes] = useState(format(new Date(), 'yyyy-MM'));
+  const ciclosCalendario = useMemo(() => {
+    const [year, month] = ciclosMes.split('-').map(Number);
+    if (!year || !month) return { days: [] as string[], leadingDays: 0 };
+    const firstDay = new Date(year, month - 1, 1);
+    const daysInMonth = new Date(year, month, 0).getDate();
+    return {
+      days: Array.from({ length: daysInMonth }, (_, index) =>
+        format(new Date(year, month - 1, index + 1), 'yyyy-MM-dd'),
+      ),
+      leadingDays: (firstDay.getDay() + 6) % 7,
+    };
+  }, [ciclosMes]);
   const [operationalReportPdfStatus, setOperationalReportPdfStatus] = useState<'idle' | 'generating' | 'error'>('idle');
   const filteredOperationalReports = useMemo(() => {
     const weekStart = plantaWeekQuery.startDate;
@@ -4906,7 +4923,14 @@ export default function PlannerPage() {
                                               <TableRow key={row.id} className={cn("border-b-2 border-slate-300 transition-all duration-200", row.bloqueado !== false ? "bg-emerald-50/30" : "bg-amber-50/20 hover:bg-amber-50/30 cursor-pointer")} onClick={(e) => { const target = e.target as HTMLElement; if (target.tagName === 'INPUT' || target.tagName === 'BUTTON' || target.tagName === 'SELECT' || target.closest('button')) return; if (editingId !== row.id && row.bloqueado === false && user?.id !== 'prodtj.mds' && user?.id !== 'prodtg.mds' && user?.id !== 'prodts.mds' && user?.id !== 'enf.mds') { setEditingId(row.id); setEditForm(row); } }}>
                                                {editingId === row.id ? (
                                               <>
-                                                 <TableCell className="px-2 py-2"><Input type="date" value={editForm.fecha ?? row.fecha ?? ''} onChange={(e) => setEditForm({...editForm, fecha: e.target.value})} className="h-8 text-[10px]" /></TableCell>
+                                                 <TableCell className="px-2 py-2"><Input type="date" value={editForm.fecha ?? row.fecha ?? ''} onChange={(e) => {
+                                                   if (isCicloDateBlocked(e.target.value, row.fecha)) {
+                                                     setErrorValidacion('Ese día está desactivado en Ciclos. Actívalo antes de asignar esa fecha.');
+                                                     return;
+                                                   }
+                                                   setEditForm({...editForm, fecha: e.target.value});
+                                                   setErrorValidacion('');
+                                                 }} className="h-8 text-[10px]" /></TableCell>
                                                 <TableCell className="px-2 py-2"><Input type="number" value={editForm.semana ?? row.semana ?? ''} onChange={(e) => setEditForm({...editForm, semana: parseInt(e.target.value) || 0})} className="h-8 text-[10px] w-16" /></TableCell>
                                                  <TableCell className="px-2 py-2"><Input value={editForm.turno ?? row.turno ?? ''} onChange={(e) => setEditForm({...editForm, turno: e.target.value})} className="h-8 text-[10px]" /></TableCell>
                                                   <TableCell className="px-2 py-2"><Input value={editForm.operador ?? row.operador ?? ''} onChange={(e) => setEditForm({...editForm, operador: e.target.value})} disabled={!EQUIPO_ACTIVO_POR_TIPO.has(editForm.tipoParada || row.tipoParada || '')} className="h-8 text-[10px] disabled:opacity-50 disabled:cursor-not-allowed" /></TableCell>
@@ -4932,6 +4956,10 @@ export default function PlannerPage() {
                                                        <>
                                                          <Button size="icon" variant="ghost" className="h-7 w-7 text-emerald-600 hover:text-emerald-700" onClick={async () => {
                                                            const formData = { ...row, ...editForm };
+                                                            if (isCicloDateBlocked(String(formData.fecha || ''), String(row.fecha || ''))) {
+                                                              setErrorValidacion('Ese día está desactivado en Ciclos. Actívalo antes de guardar el informe.');
+                                                              return;
+                                                            }
                                                             if (!editForm.inicioParada || !editForm.finParada) {
                                                              setErrorValidacion('Ingrese hora de inicio y fin de la parada.');
                                                              return;
@@ -5226,6 +5254,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                    setFilasNoEditables={setFilasNoEditables}
                                                    errorValidacion={errorValidacion}
                                                    setErrorValidacion={setErrorValidacion}
+                                                   isCicloDateBlocked={isCicloDateBlocked}
                                                    ordenesTrabajo={ordenesTrabajo}
                                                    setOrdenesTrabajo={setOrdenesTrabajo}
                                                    removeOrdenTrabajo={ordenesTrabajoStore.removeItem}
@@ -6166,10 +6195,87 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                          </div>
                        )}
                           {activeTab === 'ciclos' && user?.id !== 'prodtj.mds' && user?.id !== 'prodtg.mds' && user?.id !== 'prodt.mds' && user?.id !== 'prodt1.mds' && user?.id !== 'prodt2.mds' && user?.id !== 'prodts.mds' && user?.id !== 'enf.mds' && (
-                         <div className="flex-1 bg-white rounded-[2.5rem] p-4">
-                           <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
-                             <RefreshCw className="h-12 w-12 mb-4 opacity-20" />
-                             Ciclos en Desarrollo
+                         <div className="flex-1 bg-white rounded-[2.5rem] p-5 overflow-y-auto">
+                           <div className="mx-auto max-w-5xl space-y-5">
+                             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                               <div>
+                                 <h2 className="text-lg font-black uppercase tracking-wider text-slate-800">Ciclos</h2>
+                                 <p className="mt-1 text-xs text-slate-500">Activa o desactiva los días en que se permite registrar paradas de líneas.</p>
+                               </div>
+                               <Input
+                                 type="month"
+                                 value={ciclosMes}
+                                 onChange={(event) => setCiclosMes(event.target.value)}
+                                 className="w-full sm:w-48"
+                                 aria-label="Mes y año de Ciclos"
+                               />
+                             </div>
+                             <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                               <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3">
+                                 <div className="text-[10px] font-black uppercase tracking-widest text-emerald-700">Días activos</div>
+                                 <div className="mt-1 text-2xl font-black text-emerald-800">
+                                   {ciclosCalendario.days.filter((day) => ciclosDias?.[day] !== true).length}
+                                 </div>
+                               </div>
+                               <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3">
+                                 <div className="text-[10px] font-black uppercase tracking-widest text-red-700">Días desactivados</div>
+                                 <div className="mt-1 text-2xl font-black text-red-800">
+                                   {ciclosCalendario.days.filter((day) => ciclosDias?.[day] === true).length}
+                                 </div>
+                               </div>
+                               <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs font-medium leading-5 text-slate-600">
+                                 Los registros ya existentes se conservan. Desactivar un día bloquea nuevos registros con esa fecha.
+                               </div>
+                             </div>
+                             <div className="rounded-2xl border border-slate-200 bg-white p-3 sm:p-5">
+                               <div className="grid grid-cols-7 gap-2">
+                                 {['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'].map((weekday) => (
+                                   <div key={weekday} className="py-2 text-center text-[10px] font-black uppercase tracking-wider text-slate-400">{weekday}</div>
+                                 ))}
+                                 {Array.from({ length: ciclosCalendario.leadingDays }, (_, index) => (
+                                   <div key={`empty-${index}`} aria-hidden="true" />
+                                 ))}
+                                 {ciclosCalendario.days.map((day) => {
+                                   const desactivado = ciclosDias?.[day] === true;
+                                   return (
+                                     <button
+                                       key={day}
+                                       type="button"
+                                       disabled={!canWriteOperationalReports || !ciclosDiasStore.isLoaded}
+                                       onClick={() => ciclosDiasStore.setData((previous) => ({
+                                         ...previous,
+                                         [day]: !previous[day],
+                                       }))}
+                                       aria-pressed={!desactivado}
+                                       aria-label={`${format(new Date(`${day}T00:00:00`), 'd MMMM yyyy', { locale: es })}: ${desactivado ? 'desactivado' : 'activo'}`}
+                                       className={cn(
+                                         'min-h-16 rounded-xl border p-2 text-left transition-colors disabled:cursor-not-allowed disabled:opacity-60 sm:min-h-20',
+                                         desactivado
+                                           ? 'border-red-200 bg-red-50 text-red-800 hover:bg-red-100'
+                                           : 'border-emerald-200 bg-emerald-50 text-emerald-800 hover:bg-emerald-100',
+                                       )}
+                                     >
+                                       <span className="block text-lg font-black">{Number(day.slice(-2))}</span>
+                                       <span className="mt-1 block text-[9px] font-black uppercase tracking-widest">
+                                         {desactivado ? 'Inactivo' : 'Activo'}
+                                       </span>
+                                     </button>
+                                   );
+                                 })}
+                               </div>
+                             </div>
+                             {!canWriteOperationalReports && (
+                               <p className="text-sm font-semibold text-amber-700">No tienes permiso para modificar los ciclos.</p>
+                             )}
+                             {ciclosDiasStore.loadError && (
+                               <p role="alert" className="text-sm font-semibold text-red-700">{ciclosDiasStore.loadError}</p>
+                             )}
+                             {ciclosDiasStore.syncError && (
+                               <p role="alert" className="text-sm font-semibold text-red-700">{ciclosDiasStore.syncError}</p>
+                             )}
+                             {ciclosDiasStore.hasPendingChanges && !ciclosDiasStore.syncError && (
+                               <p role="status" className="text-xs font-semibold text-amber-700">Guardando cambios de Ciclos…</p>
+                             )}
                            </div>
                          </div>
                        )}
@@ -8160,7 +8266,14 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                 <div className="grid grid-cols-2 gap-4 py-4">
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fecha</label>
-                    <Input type="date" value={plantaFormData.fecha} onChange={(e) => setPlantaFormData({...plantaFormData, fecha: e.target.value})} className="h-9 text-[11px]" />
+                    <Input type="date" value={plantaFormData.fecha} onChange={(e) => {
+                      if (isCicloDateBlocked(e.target.value)) {
+                        setErrorValidacion('Ese día está desactivado en Ciclos. Actívalo antes de registrar datos.');
+                        return;
+                      }
+                      setPlantaFormData({...plantaFormData, fecha: e.target.value});
+                      setErrorValidacion('');
+                    }} className="h-9 text-[11px]" />
                   </div>
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Semana</label>
@@ -8257,7 +8370,14 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
               <div className="grid grid-cols-2 gap-4 py-4">
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fecha Orden</label>
-                  <Input type="date" value={ordenFormData.fechaOrden} onChange={(e) => setOrdenFormData({...ordenFormData, fechaOrden: e.target.value})} className="h-9 text-[11px]" />
+                  <Input type="date" value={ordenFormData.fechaOrden} onChange={(e) => {
+                    if (isCicloDateBlocked(e.target.value)) {
+                      setErrorValidacion('Ese día está desactivado en Ciclos. Actívalo antes de registrar datos.');
+                      return;
+                    }
+                    setOrdenFormData({...ordenFormData, fechaOrden: e.target.value});
+                    setErrorValidacion('');
+                  }} className="h-9 text-[11px]" />
                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Número Orden</label>
@@ -8265,7 +8385,14 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fecha Emisión</label>
-                  <Input type="date" value={ordenFormData.fechaEmision} onChange={(e) => setOrdenFormData({...ordenFormData, fechaEmision: e.target.value})} className="h-9 text-[11px]" />
+                  <Input type="date" value={ordenFormData.fechaEmision} onChange={(e) => {
+                    if (isCicloDateBlocked(e.target.value)) {
+                      setErrorValidacion('Ese día está desactivado en Ciclos. Actívalo antes de registrar datos.');
+                      return;
+                    }
+                    setOrdenFormData({...ordenFormData, fechaEmision: e.target.value});
+                    setErrorValidacion('');
+                  }} className="h-9 text-[11px]" />
                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Semana</label>
@@ -8301,7 +8428,14 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                   </div>
                  <div className="space-y-2">
                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fecha Parada</label>
-                   <Input type="date" value={ordenFormData.fechaParada} onChange={(e) => setOrdenFormData({...ordenFormData, fechaParada: e.target.value})} className="h-9 text-[11px]" />
+                   <Input type="date" value={ordenFormData.fechaParada} onChange={(e) => {
+                     if (isCicloDateBlocked(e.target.value)) {
+                       setErrorValidacion('Ese día está desactivado en Ciclos. Actívalo antes de registrar datos.');
+                       return;
+                     }
+                     setOrdenFormData({...ordenFormData, fechaParada: e.target.value});
+                     setErrorValidacion('');
+                   }} className="h-9 text-[11px]" />
                  </div>
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Inicio Mantenimiento</label>
@@ -8369,6 +8503,10 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
               </Button>
                <Button onClick={() => {
                  if (paradasSubTab === 'informes-operacionales') {
+                   if (isCicloDateBlocked(plantaFormData.fecha)) {
+                     setErrorValidacion('Ese día está desactivado en Ciclos. Actívalo antes de registrar el informe.');
+                     return;
+                   }
                    if (!plantaFormData.inicioParada || !plantaFormData.finParada) {
                      setErrorValidacion('Ingrese hora de inicio y fin de la parada.');
                      return;
@@ -8438,6 +8576,11 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                     });
                    setErrorValidacion('');
                    } else {
+                      const fechasOrden = [ordenFormData.fechaOrden, ordenFormData.fechaEmision, ordenFormData.fechaParada];
+                      if (fechasOrden.some((date) => isCicloDateBlocked(date))) {
+                        setErrorValidacion('Una de las fechas seleccionadas está desactivada en Ciclos. Actívala antes de guardar la orden.');
+                        return;
+                      }
                       if (ordenFormData.orden && String(ordenFormData.orden).trim() !== '') {
                         const duplicado = ordenesTrabajo.find((o: any) => String(o.orden).trim() === String(ordenFormData.orden).trim());
                         if (duplicado) {
@@ -9700,7 +9843,7 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
      );
   }
 
-  const OrdenTrabajoRow = memo(({ row, editingRows, setEditingRows, setFilasNoEditables, errorValidacion, setErrorValidacion, ordenesTrabajo, setOrdenesTrabajo, removeOrdenTrabajo, user, canEditPendingOrders, onChangeHora, tiempoTranscurrido, normalizarHora, formatearFecha }: any) => {
+  const OrdenTrabajoRow = memo(({ row, editingRows, setEditingRows, setFilasNoEditables, errorValidacion, setErrorValidacion, isCicloDateBlocked, ordenesTrabajo, setOrdenesTrabajo, removeOrdenTrabajo, user, canEditPendingOrders, onChangeHora, tiempoTranscurrido, normalizarHora, formatearFecha }: any) => {
     const rowEdit = editingRows[row.id] || row;
     const esAdmin = user?.id === 'alex.mds' || user?.id === 'maria.mds';
     const esUsuarioPlanta = canEditPendingOrders;
@@ -9717,6 +9860,13 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
       e.stopPropagation();
       const originalId = row.id;
       console.log('[OT] guardar click', originalId, rowEdit.orden);
+      if (
+        isCicloDateBlocked(rowEdit.fechaEmision, row.fechaEmision) ||
+        isCicloDateBlocked(rowEdit.fechaParada, row.fechaParada)
+      ) {
+        setErrorValidacion('Una de las fechas seleccionadas está desactivada en Ciclos. Actívala antes de guardar la orden.');
+        return;
+      }
       if (rowEdit.orden && String(rowEdit.orden).trim() !== '') {
         const duplicado = ordenesTrabajo.find((o: any) => String(o.orden).trim() === String(rowEdit.orden).trim() && String(o.id) !== String(originalId));
         if (duplicado) {
@@ -9772,7 +9922,14 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
             </span>
           )}
         </TableCell>
-        {editable('fechaEmision') ? <TableCell className="px-2 py-2"><Input type="date" value={rowEdit.fechaEmision || ''} onChange={(e) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, fechaEmision: e.target.value } })} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap">{rowEdit.fechaEmision}</TableCell>}
+        {editable('fechaEmision') ? <TableCell className="px-2 py-2"><Input type="date" value={rowEdit.fechaEmision || ''} onChange={(e) => {
+          if (isCicloDateBlocked(e.target.value, row.fechaEmision)) {
+            setErrorValidacion('Ese día está desactivado en Ciclos. Actívalo antes de asignar esa fecha.');
+            return;
+          }
+          setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, fechaEmision: e.target.value } });
+          setErrorValidacion('');
+        }} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap">{rowEdit.fechaEmision}</TableCell>}
         <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-500 text-center">Sem {rowEdit.semana}</TableCell>
         <TableCell className="px-2 py-2 text-[11px] font-bold uppercase text-slate-600 text-center">{rowEdit.turno}</TableCell>
         {editable('solicitante') ? (

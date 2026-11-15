@@ -177,6 +177,7 @@ export function writeDb(mutator: (current: DbData) => DbData): Promise<void> {
     try {
       const current = structuredClone(readDb());
       const updated = mutator(current);
+      assertPlantaCycleDates(current, updated);
       retryWrite(updated, 6);
       try {
         const signature = getDbSignature();
@@ -214,6 +215,45 @@ function retryWrite(updated: DbData, retries = 6): void {
       const isRetryable = err.code === 'EPERM' || err.code === 'EACCES' || err.code === 'EBUSY' || err.code === 'UNKNOWN';
       if (!isRetryable || attempt >= retries - 1) throw error;
       attempt++;
+    }
+  }
+  }
+
+  function assertPlantaCycleDates(current: DbData, updated: DbData): void {
+    const inactiveDays = updated.collections?.['planta-ciclos-dias'];
+    if (!inactiveDays || typeof inactiveDays !== 'object' || Array.isArray(inactiveDays)) return;
+
+    for (const namespace of ['planta-informes-operacionales', 'planta-ordenes-trabajo']) {
+      const previousItems = Array.isArray(current.collections?.[namespace])
+        ? current.collections[namespace]
+        : [];
+      const updatedItems = Array.isArray(updated.collections?.[namespace])
+        ? updated.collections[namespace]
+        : [];
+      const identityKeys = namespace === 'planta-informes-operacionales'
+        ? ['fecha', 'linea', 'equipo', 'inicioParada', 'finParada', 'turno', 'tipoParada']
+        : ['orden', 'fechaOrden'];
+
+      const getDates = (item: any): string[] => namespace === 'planta-informes-operacionales'
+        ? [item?.fecha].filter((date): date is string => typeof date === 'string')
+        : [item?.fechaOrden, item?.fechaEmision, item?.fechaParada, item?.otFechaParada, item?.fecha]
+          .filter((date): date is string => typeof date === 'string');
+
+      for (const item of updatedItems) {
+        const previousItem = item?.id != null
+          ? previousItems.find((candidate: any) => String(candidate?.id) === String(item.id))
+          : previousItems.find((candidate: any) =>
+            identityKeys.every((key) => String(candidate?.[key] ?? '') === String(item?.[key] ?? '')),
+          );
+        const previousDates = previousItem ? getDates(previousItem) : [];
+        const blockedDate = getDates(item).find((date) =>
+          /^\d{4}-\d{2}-\d{2}$/.test(date) &&
+          inactiveDays[date] === true &&
+          !previousDates.includes(date),
+        );
+      if (blockedDate) {
+        throw new Error(`La fecha ${blockedDate} está desactivada en Ciclos. Actívala antes de guardar datos.`);
+      }
     }
   }
 }
