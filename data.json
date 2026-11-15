@@ -31102,7 +31102,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-15T11:25:19.549Z"
+    "updatedAt": "2026-11-15T11:38:57.352Z"
   },
   "ordenesSap": [
     {
@@ -46061,6 +46061,17 @@
           "cajas3": 2400,
           "ticket4": "",
           "cajas4": 19440
+        },
+        {
+          "fechaInicio": "2026-11-15",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -46196,6 +46207,17 @@
           "cajas3": 1760,
           "ticket4": "",
           "cajas4": 11600
+        },
+        {
+          "fechaInicio": "2026-11-15",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -46329,6 +46351,46 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "6-1794742282490",
+      "linea": 6,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "64958",
+      "semana": 46,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-14",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16541",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 3449
+        }
+      ]
+    },
+    {
+      "id": "7-1794742294725",
+      "linea": 7,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "64964",
+      "semana": 46,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-14",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16802",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 8129
         }
       ]
     }
@@ -278796,6 +278858,120 @@
         "usuario": "Richard Marín",
         "id": 1794739484435,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-14",
+        "semana": 46,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "17:52",
+        "finParada": "18:04",
+        "totalMin": "12",
+        "zona": "Llenado",
+        "falla": "FALLA DE SERVICIOS. ALTO VOLTAJE ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1794742573704,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-14",
+        "semana": 46,
+        "turno": "DIURNO",
+        "operador": "JOSE CORDERO",
+        "linea": "Línea 1",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "18:04",
+        "finParada": "18:20",
+        "totalMin": "16",
+        "zona": "Llenado",
+        "falla": "FALLA EN PINZA ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1794742635981,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-14",
+        "semana": 46,
+        "turno": "DIURNO",
+        "operador": "PABLO GUANCHEZ",
+        "linea": "Línea 2",
+        "equipo": "LLENADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "16:36",
+        "finParada": "16:38",
+        "totalMin": "2",
+        "zona": "Llenado",
+        "falla": "MAL LLENADO VALVULA 70",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1794742781276,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-14",
+        "semana": 46,
+        "turno": "DIURNO",
+        "operador": "PABLO GUANCHEZ",
+        "linea": "Línea 2",
+        "equipo": "TAPADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "17:03",
+        "finParada": "17:10",
+        "totalMin": "7",
+        "zona": "Llenado",
+        "falla": "TAPA ATASCADA EN ESTRELLA ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1794742850485,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-14",
+        "semana": 46,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 2",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "17:52",
+        "finParada": "18:04",
+        "totalMin": "12",
+        "zona": "Llenado",
+        "falla": "FALLA DE SERVICIOS, ALTO VOLTAJE ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1794742928445,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-14",
+        "semana": 46,
+        "turno": "DIURNO",
+        "operador": "JOSE GUDIÑO ",
+        "linea": "Línea 2",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "08:53",
+        "finParada": "08:59",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "COLISION DE BOTELLAS EN TORNILLO SIN FIN ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1794743006764,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -329100,7 +329276,12 @@
       "2026-11-13-suave": "143313",
       "2026-11-13-procesos": "1960432,2",
       "2026-11-13-filtrada": "3007504,82",
-      "2026-11-13-total": "2957070"
+      "2026-11-13-total": "2957070",
+      "2026-11-14-servicio": "28134",
+      "2026-11-14-suave": "236620",
+      "2026-11-14-procesos": "3015960,07",
+      "2026-11-14-filtrada": "4525692,01",
+      "2026-11-14-total": "3365195"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
