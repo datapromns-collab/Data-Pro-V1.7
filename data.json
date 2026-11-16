@@ -31939,7 +31939,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-16T20:02:32.602Z"
+    "updatedAt": "2026-11-16T21:37:13.606Z"
   },
   "ordenesSap": [
     {
@@ -47240,8 +47240,8 @@
       "dias": [
         {
           "fechaInicio": "2026-11-16",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16664",
+          "cajas1": 3280,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -47271,8 +47271,8 @@
       "dias": [
         {
           "fechaInicio": "2026-11-16",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16619",
+          "cajas1": 5255,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -47291,8 +47291,8 @@
       "dias": [
         {
           "fechaInicio": "2026-11-16",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16576",
+          "cajas1": 6800,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -47322,8 +47322,8 @@
       "dias": [
         {
           "fechaInicio": "2026-11-16",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16758",
+          "cajas1": 6000,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -47353,7 +47353,7 @@
       "dias": [
         {
           "fechaInicio": "2026-11-16",
-          "ticket1": "16716",
+          "ticket1": "16710",
           "cajas1": 600,
           "ticket2": "",
           "cajas2": 0,
@@ -47387,7 +47387,7 @@
           "ticket1": "16542",
           "cajas1": 960,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 960,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -47415,8 +47415,8 @@
       "dias": [
         {
           "fechaInicio": "2026-11-16",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16803",
+          "cajas1": 2652,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -47446,8 +47446,8 @@
       "dias": [
         {
           "fechaInicio": "2026-11-16",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16619",
+          "cajas1": 2720,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -281381,6 +281381,120 @@
         "usuario": "Richard Marín",
         "id": 1794859577787,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-16",
+        "semana": 47,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "12:00",
+        "finParada": "13:22",
+        "totalMin": "82",
+        "zona": "Llenado",
+        "falla": "FALLA EN RINSER NO ENCIENDEN",
+        "orden": "10389",
+        "observaciones": "",
+        "usuario": "Richard Marín",
+        "id": 1794864533818,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-16",
+        "semana": 47,
+        "turno": "DIURNO",
+        "operador": "JUAN LARA",
+        "linea": "Línea 1",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "14:45",
+        "finParada": "14:55",
+        "totalMin": "10",
+        "zona": "Llenado",
+        "falla": "FILM ATASCADO EN MESA DE ELEVACION",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Richard Marín",
+        "id": 1794864786952,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-16",
+        "semana": 47,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "14:56",
+        "finParada": "15:10",
+        "totalMin": "14",
+        "zona": "Llenado",
+        "falla": "FALLA DE E/E, RETORNO DE E/E EXTERNA, CAMBIO DE ALIMENTACION",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Richard Marín",
+        "id": 1794864897045,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-16",
+        "semana": 47,
+        "turno": "DIURNO",
+        "operador": "JUAN LARA",
+        "linea": "Línea 1",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "13:38",
+        "finParada": "13:42",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "FILM ATASCADO EN MESA DE ELEVACION",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Richard Marín",
+        "id": 1794864953141,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-16",
+        "semana": 47,
+        "turno": "DIURNO",
+        "operador": "JUAN LARA",
+        "linea": "Línea 1",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "15:17",
+        "finParada": "15:25",
+        "totalMin": "8",
+        "zona": "Llenado",
+        "falla": "FILM ATASCADO EN MESA DE ELEVACION",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Richard Marín",
+        "id": 1794864995429,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-16",
+        "semana": 47,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "16:20",
+        "finParada": "16:50",
+        "totalMin": "30",
+        "zona": "Llenado",
+        "falla": "FALLA DE E/E",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Richard Marín",
+        "id": 1794865064348,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -309848,6 +309962,33 @@
         "mttoEsp": "JOSE SANCHEZ",
         "descripcionFalla": "FALLA EN SISTEMA DE MODULOS DE LAMPARAS",
         "descripcionAccion": "SE REEMPLAZAN 4 LAMPARAS EN EL MODULO 1B ZONAS 4,,5,6,7 Y 1 LAMPARA EN EL MODULO 2A ZONA 2. CAMBIO DE BORNERA DE CONEXION CERAMICA EN EL MODULO 2B DE LAS ZONAS 3,4",
+        "observaciones": "",
+        "bloqueado": true,
+        "usuario": "Richard Marín"
+      },
+      {
+        "id": 1794864533822,
+        "fechaOrden": "2026-11-16",
+        "orden": "10389",
+        "fechaEmision": "2026-11-16",
+        "semana": 47,
+        "turno": "DIURNO",
+        "solicitante": "VICTOR CARVALLO",
+        "linea": "Línea 1",
+        "maquina": "",
+        "aviso": "7214",
+        "fechaParada": "2026-11-16",
+        "inicioMtto": "12:00",
+        "finMtto": "13:05",
+        "inicioParada": "12:00",
+        "finParada": "13:22",
+        "tMtto": "82",
+        "tipoParada": "AVERÍA",
+        "mtto": "correctivo",
+        "falla": "FALLA EN RINSER NO ENCIENDEN",
+        "mttoEsp": "OMAR BARRIOS",
+        "descripcionFalla": "ENVASES CON DEFORMIDAD RINSER NO ACTIVA",
+        "descripcionAccion": "VALVULA DE ACCIONAMIENTO DE APERTURA DE AGUA (NO SE ACTIVA) POR TORNILLOS FALTANTES SE DESMONTA SE COLOCAN LOS TORNILLOS Y SE POSICIONA ",
         "observaciones": "",
         "bloqueado": true,
         "usuario": "Richard Marín"
