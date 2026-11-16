@@ -18364,6 +18364,41 @@
           "aditivosCantidad": {},
           "solidosCantidad": {},
           "quimicosInsumosCantidad": {}
+        },
+        "2026-11-16": {
+          "tapas": {
+            "EMP_0095-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0095-Importada": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaEW": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaTipo2": {
+              "totalCajas": "",
+              "total": ""
+            }
+          },
+          "separadores": {},
+          "preformas": {},
+          "plasticos": {},
+          "adhesivoCantidad": "",
+          "etiquetasCantidad": {},
+          "azucarCantidad": {},
+          "concentradosCantidad": {},
+          "concentradosJustyCantidad": {},
+          "aditivosCantidad": {},
+          "solidosCantidad": {},
+          "quimicosInsumosCantidad": {}
         }
       },
       "semanal": {
@@ -19329,8 +19364,8 @@
             }
           },
           "separadores": {
-            "EMP_0134": "4950",
-            "EMP_0138": "2750"
+            "EMP_0134": "5100",
+            "EMP_0138": "3000"
           },
           "preformas": {
             "EMP_0009": "0",
@@ -19352,7 +19387,7 @@
             "EMP_0084": "3504",
             "EMP_0130": "8396"
           },
-          "adhesivoCantidad": "126",
+          "adhesivoCantidad": "155.68",
           "etiquetasCantidad": {
             "EMP_0022": "665.72",
             "EMP_0026": "514.42",
@@ -19381,6 +19416,50 @@
             "EMP_0157": "480.10",
             "EMP_0158": "889.20"
           },
+          "azucarCantidad": {},
+          "concentradosCantidad": {},
+          "concentradosJustyCantidad": {},
+          "aditivosCantidad": {},
+          "solidosCantidad": {},
+          "quimicosInsumosCantidad": {}
+        },
+        "2026-11-16": {
+          "tapas": {
+            "EMP_0095-Alpla": {
+              "totalCajas": "924000",
+              "total": ""
+            },
+            "EMP_0095-Importada": {
+              "totalCajas": "1464000",
+              "total": ""
+            },
+            "EMP_0105-Alpla": {
+              "totalCajas": "1183000",
+              "total": ""
+            },
+            "EMP_0105-ImportadaEW": {
+              "totalCajas": "2592000",
+              "total": ""
+            },
+            "EMP_0105-ImportadaTipo2": {
+              "totalCajas": "1435200",
+              "total": ""
+            }
+          },
+          "separadores": {},
+          "preformas": {
+            "EMP_0009": "232200",
+            "EMP_0068": "706500",
+            "EMP_0093-Ultrapack": "781886",
+            "EMP_0103-Ultrapack": "484320",
+            "EMP_0120-Ultrapack": "455800",
+            "EMP_0126-Ultrapack": "751080",
+            "EMP_0135-Alpla": "450360",
+            "EMP_0166": "911600"
+          },
+          "plasticos": {},
+          "adhesivoCantidad": "",
+          "etiquetasCantidad": {},
           "azucarCantidad": {},
           "concentradosCantidad": {},
           "concentradosJustyCantidad": {},
@@ -22785,6 +22864,28 @@
               "code": "ENV-00079",
               "material": "BOTELLA ENVASADA GLUP UVA 1.0 L (LINEA 7)",
               "quantity": "40",
+              "unit": "UND",
+              "observation": ""
+            }
+          ],
+          "2026-11-15": [
+            {
+              "id": "d3c95967-0b14-450d-8ac0-a6c27bce7c5e",
+              "line": "Linea 1",
+              "flavor": "GLUP FRESH",
+              "code": "ENV-00013",
+              "material": "BOTELLA ENVASADA GLUP FRESH 2.0.LTS",
+              "quantity": "210",
+              "unit": "UND",
+              "observation": ""
+            },
+            {
+              "id": "1a420c9a-a7c9-4321-a906-29b68e356c85",
+              "line": "Linea 2",
+              "flavor": "GLUP UVA",
+              "code": "ENV-00039",
+              "material": "BOTELLA ENVASADA GLUP UVA  2.0.LTS  (EN LINEA 2)",
+              "quantity": "63",
               "unit": "UND",
               "observation": ""
             }
@@ -29237,6 +29338,56 @@
               "kind": "termo",
               "preformSize": ""
             }
+          ],
+          "2026-11-15": [
+            {
+              "id": "19c38ad3-fe96-4a6d-ac20-2d6334212434",
+              "line": "Linea 1",
+              "flavor": "verde",
+              "code": "EMP_0103",
+              "material": "PREFORMA VERDE 42,64 GR-1881",
+              "quantity": "1786",
+              "unit": "UND",
+              "observation": "",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "df582592-c00d-4245-9461-77cb2cc77eda",
+              "line": "Linea 1",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "2,8",
+              "unit": "Kg",
+              "observation": "",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "a1b63c90-08dd-429d-b535-034f5f8050d8",
+              "line": "Linea 2",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "390",
+              "unit": "UND",
+              "observation": "",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "2d25e844-c8dd-41c8-872d-d183ff24ca37",
+              "line": "Linea 2",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "0,5",
+              "unit": "Kg",
+              "observation": "",
+              "kind": "termo",
+              "preformSize": ""
+            }
           ]
         }
       },
@@ -31788,7 +31939,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-15T22:04:04.617Z"
+    "updatedAt": "2026-11-16T11:32:09.818Z"
   },
   "ordenesSap": [
     {
@@ -276239,7 +276390,7 @@
         "bloqueado": true
       },
       {
-        "fecha": "2026-11-14",
+        "fecha": "2026-11-13",
         "semana": 46,
         "turno": "NOCTURNO",
         "operador": "ISRAEL RICO",
@@ -279057,13 +279208,13 @@
         "operador": "ALBERTO TORO",
         "linea": "Línea 7",
         "equipo": "ENFARDADORA",
-        "tipoParada": "OPERACIONAL",
+        "tipoParada": "AVERÍA",
         "inicioParada": "02:30",
         "finParada": "02:45",
         "totalMin": "15",
         "zona": "Llenado",
         "falla": "SALTO DE BOTELLAS EN DIENTES DE SEPARACION",
-        "orden": "",
+        "orden": "10525",
         "observaciones": "",
         "usuario": "Richard Marín",
         "id": 1794730630996,
@@ -280435,6 +280586,25 @@
         "observaciones": "ORDEN DE TRABAJO 10387 V- 7204",
         "usuario": "Luis Sanchez",
         "id": 1794779613381,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-14",
+        "semana": 46,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 7",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "18:30",
+        "finParada": "01:10",
+        "totalMin": "400",
+        "zona": "Llenado",
+        "falla": "FALLA DE E/E PAC",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Richard Marín",
+        "id": 1794828357402,
         "bloqueado": true
       }
     ],
@@ -308744,6 +308914,33 @@
         "observaciones": "",
         "bloqueado": true,
         "usuario": "Luis Sanchez"
+      },
+      {
+        "id": 1794828208272,
+        "solicitante": "VICTOR CARVALLO",
+        "aviso": "7203",
+        "inicioMtto": "02:31",
+        "finMtto": "02:42",
+        "mtto": "correctivo",
+        "mttoEsp": "JUNIOR CABALLERO",
+        "descripcionFalla": "SALTO DE BOTELLAS EN CONJUNTO DE DIENTES DE SEPARACION",
+        "descripcionAccion": "SE REALIZA SEPARACION DE DEDOS SEPARADORES DE BOTELLAS",
+        "bloqueado": true,
+        "fechaOrden": "2026-11-14",
+        "orden": "10525",
+        "fechaEmision": "2026-11-14",
+        "semana": 46,
+        "turno": "NOCTURNO",
+        "linea": "Línea 7",
+        "maquina": "ENFARDADORA",
+        "fechaParada": "2026-11-14",
+        "inicioParada": "02:30",
+        "finParada": "02:45",
+        "tMtto": "15",
+        "tipoParada": "AVERÍA",
+        "falla": "SALTO DE BOTELLAS EN DIENTES DE SEPARACION",
+        "observaciones": "",
+        "usuario": "Richard Marín"
       }
     ],
     "seguimiento-ordenes": {
@@ -331351,7 +331548,12 @@
       "2026-11-14-suave": "236620",
       "2026-11-14-procesos": "3015960,07",
       "2026-11-14-filtrada": "4525692,01",
-      "2026-11-14-total": "3365195"
+      "2026-11-14-total": "3365195",
+      "2026-11-15-servicio": "22544",
+      "2026-11-15-suave": "81211",
+      "2026-11-15-procesos": "1183354,29",
+      "2026-11-15-filtrada": "1944193,46",
+      "2026-11-15-total": "2659577,67"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
@@ -345994,7 +346196,9 @@
         "1794030258034",
         "1788991023411",
         "1790538581551",
-        "1790371816310"
+        "1790371816310",
+        "1793855094341",
+        "1793857965622"
       ]
     },
     "planta-ordenes-trabajo": {
