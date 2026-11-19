@@ -23264,6 +23264,88 @@
               "unit": "UND",
               "observation": ""
             }
+          ],
+          "2026-11-18": [
+            {
+              "id": "102ea1b3-96fc-436c-bdc5-55a0a30a02f5",
+              "line": "Linea 1",
+              "flavor": "GLUP FRESH",
+              "code": "ENV-00013",
+              "material": "BOTELLA ENVASADA GLUP FRESH 2.0.LTS",
+              "quantity": "396",
+              "unit": "UND",
+              "observation": ""
+            },
+            {
+              "id": "f9a1a253-b3e7-4657-a908-ad2ff055fdd2",
+              "line": "Linea 2",
+              "flavor": "GLUP KOLITA",
+              "code": "ENV-00040",
+              "material": "BOTELLA ENVASADA GLUP KOLITA 2.0.LTS  (EN LINEA 2)",
+              "quantity": "90",
+              "unit": "UND",
+              "observation": ""
+            },
+            {
+              "id": "a3c09f62-e991-4090-8371-208fb15fdb98",
+              "line": "Linea 3",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00063",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 2L (LINEA 3)",
+              "quantity": "72",
+              "unit": "UND",
+              "observation": ""
+            },
+            {
+              "id": "eb71393e-c70d-44ae-ad18-c9d7b8180ba9",
+              "line": "Linea 4",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00054",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 2.LTS (LINEA 4)",
+              "quantity": "99",
+              "unit": "UND",
+              "observation": ""
+            },
+            {
+              "id": "3793d4c0-6f30-4474-8806-b63026509294",
+              "line": "Linea 5",
+              "flavor": "JUSTY DURAZNO",
+              "code": "ENV-00095",
+              "material": "BOTELLA ENVASADA JUSTY DURAZNO 1.5 LTS",
+              "quantity": "138",
+              "unit": "UND",
+              "observation": ""
+            },
+            {
+              "id": "11931801-70c7-46b8-80b2-41c0129e8baa",
+              "line": "Linea 6",
+              "flavor": "GLUP KOLITA",
+              "code": "ENV-00061",
+              "material": "BOTELLA ENVASADA GLUP KOLITA 400 ML (LINEA 6)",
+              "quantity": "84",
+              "unit": "UND",
+              "observation": ""
+            },
+            {
+              "id": "9340de72-dd12-4d05-a6a4-89c0e6b09666",
+              "line": "Linea 7",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00078",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 1.0 L (LINEA 7)",
+              "quantity": "85",
+              "unit": "UND",
+              "observation": ""
+            },
+            {
+              "id": "d263829c-e622-4213-a942-9ee1d124d332",
+              "line": "Linea 7",
+              "flavor": "GLUP KOLITA",
+              "code": "ENV-00080",
+              "material": "BOTELLA ENVASADA GLUP KOLITA 1.0 L (LINEA 7)",
+              "quantity": "148",
+              "unit": "UND",
+              "observation": ""
+            }
           ]
         },
         "desperdicios": {
@@ -30103,6 +30185,176 @@
               "kind": "termo",
               "preformSize": ""
             }
+          ],
+          "2026-11-18": [
+            {
+              "id": "26f6674a-8a25-4903-b386-e6820d1f149e",
+              "line": "Linea 1",
+              "flavor": "verde",
+              "code": "EMP_0103",
+              "material": "PREFORMA VERDE 42,64 GR-1881",
+              "quantity": "4643",
+              "unit": "UND",
+              "observation": "",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "e4f3e0bf-dc2e-48d8-841e-d7ee4f55d6d5",
+              "line": "Linea 1",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "2,3",
+              "unit": "Kg",
+              "observation": "",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "77fccb4c-3977-47da-9aed-7e9f92161fe5",
+              "line": "Linea 2",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "4929",
+              "unit": "UND",
+              "observation": "",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "2fa045e5-4f70-4ce2-876a-2c975ac954bf",
+              "line": "Linea 2",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "3,6",
+              "unit": "Kg",
+              "observation": "",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "95d1fcc9-238e-4389-84d3-ddb473407e72",
+              "line": "Linea 3",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "643",
+              "unit": "UND",
+              "observation": "",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "9efa9f09-cce8-47cd-9d3f-dfc0051c3f99",
+              "line": "Linea 3",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "1,7",
+              "unit": "Kg",
+              "observation": "",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "a121ea37-87df-4dee-ac09-621278323ecf",
+              "line": "Linea 4",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "3071",
+              "unit": "UND",
+              "observation": "",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "60ae599d-b97b-436e-87ae-3cc0399e4ae5",
+              "line": "Linea 4",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "1.7",
+              "unit": "Kg",
+              "observation": "",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "7e1ff523-417f-4e0c-8558-75fc0a055cd5",
+              "line": "Linea 5",
+              "flavor": "transparente",
+              "code": "EMP_0068",
+              "material": "PREFORMA TRANSPARENTE 36 GR-1881",
+              "quantity": "1889",
+              "unit": "UND",
+              "observation": "",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "acb95893-25b7-4cce-9681-b6b7eedd5db7",
+              "line": "Linea 5",
+              "flavor": "",
+              "code": "EMP_0017",
+              "material": "POLIETILENO TERMOENCOGIBLE 55 X 0.07",
+              "quantity": "1,5",
+              "unit": "Kg",
+              "observation": "",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "7fde43ad-6e8b-4809-9487-6580c700b9c5",
+              "line": "Linea 6",
+              "flavor": "transparente",
+              "code": "EMP_0126",
+              "material": "PREFORMA TRANSPARENTE 20,55GR-1881",
+              "quantity": "2000",
+              "unit": "UND",
+              "observation": "",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "8186d216-d757-49fa-bfe4-7df59a75f522",
+              "line": "Linea 6",
+              "flavor": "",
+              "code": "EMP_0130",
+              "material": "POLIETILENO TERMOENCOGIBLE 43 x 0.06",
+              "quantity": "0,4",
+              "unit": "Kg",
+              "observation": "",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "9c0ca912-9803-4edc-9c4c-003c1abd2ec2",
+              "line": "Linea 7",
+              "flavor": "transparente",
+              "code": "EMP_0166",
+              "material": "PREFORMA TRANSPARENTE 33 GR-1881",
+              "quantity": "3636",
+              "unit": "UND",
+              "observation": "",
+              "kind": "preformas",
+              "preformSize": "33"
+            },
+            {
+              "id": "f0ab5164-cc85-4ed4-8ccc-29b1fe8edb45",
+              "line": "Linea 7",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "0,3",
+              "unit": "Kg",
+              "observation": "",
+              "kind": "termo",
+              "preformSize": ""
+            }
           ]
         }
       },
@@ -32687,7 +32939,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-19T11:31:58.285Z"
+    "updatedAt": "2026-11-19T11:50:19.537Z"
   },
   "ordenesSap": [
     {
@@ -48193,6 +48445,17 @@
           "cajas3": 2960,
           "ticket4": "",
           "cajas4": 21360
+        },
+        {
+          "fechaInicio": "2026-11-19",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -48244,6 +48507,17 @@
           "cajas3": 2080,
           "ticket4": "",
           "cajas4": 16880
+        },
+        {
+          "fechaInicio": "2026-11-19",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -48264,6 +48538,17 @@
           "cajas3": 2640,
           "ticket4": "",
           "cajas4": 27280
+        },
+        {
+          "fechaInicio": "2026-11-19",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -48284,6 +48569,17 @@
           "cajas3": 1680,
           "ticket4": "",
           "cajas4": 19680
+        },
+        {
+          "fechaInicio": "2026-11-19",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -48304,6 +48600,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 8150
+        },
+        {
+          "fechaInicio": "2026-11-19",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -288387,25 +288694,6 @@
         "fecha": "2026-11-18",
         "semana": 47,
         "turno": "NOCTURNO",
-        "operador": "JOSE RICO ",
-        "linea": "Línea 3",
-        "equipo": "SOPLADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "23:35",
-        "finParada": "23:40",
-        "totalMin": "5",
-        "zona": "Llenado",
-        "falla": "MAL ENMANGADO, PREFORMA FUERA DE ESPECIFICACIONES",
-        "orden": "",
-        "observaciones": "",
-        "usuario": "Froilan Bolivar",
-        "id": 1795063521618,
-        "bloqueado": true
-      },
-      {
-        "fecha": "2026-11-18",
-        "semana": 47,
-        "turno": "NOCTURNO",
         "operador": "GABRIEL MOLINA ",
         "linea": "Línea 6",
         "equipo": "LLENADORA",
@@ -288441,28 +288729,9 @@
         "bloqueado": true
       },
       {
-        "fecha": "2026-11-19",
-        "semana": 47,
-        "turno": "NOCTURNO",
-        "operador": "ORLANDO TORREALBA",
-        "linea": "Línea 4",
-        "equipo": "LLENADORA",
-        "tipoParada": "AVERÍA",
-        "inicioParada": "18:30",
-        "finParada": "19:27",
-        "totalMin": "57",
-        "zona": "Llenado",
-        "falla": "BOMBA DE REFUERZO NO ARRANCA ",
-        "orden": "10609",
-        "observaciones": "ELECTRICISTA RESETEA BOMBA DE RETORNO DISPARADA ",
-        "usuario": "Luis Sanchez",
-        "id": 1795067009150,
-        "bloqueado": true
-      },
-      {
         "fecha": "2026-11-18",
         "semana": 47,
-        "turno": "DIURNO",
+        "turno": "NOCTURNO",
         "operador": "",
         "linea": "Línea 4",
         "equipo": "",
@@ -318462,7 +318731,7 @@
         "usuario": "Richard Marín"
       },
       {
-        "id": 1794956823636.4502,
+        "id": 1795088533461.8745,
         "fechaOrden": "2026-11-17",
         "orden": "10605",
         "fechaEmision": "2026-11-17",
@@ -343138,7 +343407,12 @@
       "2026-11-18-suave": "168738",
       "2026-11-18-procesos": "2804501,33",
       "2026-11-18-filtrada": "4268847,72",
-      "2026-11-18-total": "3385978"
+      "2026-11-18-total": "3385978",
+      "2026-11-17-servicio": "23789",
+      "2026-11-17-suave": "152074",
+      "2026-11-17-procesos": "3057786,97",
+      "2026-11-17-filtrada": "4495868,59",
+      "2026-11-17-total": "3386520"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
@@ -358099,7 +358373,9 @@
         "1794893398479",
         "1793855094341",
         "1793857965622",
-        "1794030258034"
+        "1794030258034",
+        "1795063521618",
+        "1795067009150"
       ]
     },
     "planta-ordenes-trabajo": {
