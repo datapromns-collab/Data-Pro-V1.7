@@ -2803,7 +2803,6 @@ export default function PlannerPage() {
     const query = ordenBusqueda.trim().toLowerCase();
     return ordenesTrabajoCargadas.filter((row) => {
       const matchesLine = ordenFiltroLinea === 'all' || row.linea === ordenFiltroLinea;
-      const matchesDate = !paradaFiltroFecha || row.fechaOrden === paradaFiltroFecha;
       const matchesSearch = !query || [
         row.orden,
         row.solicitante,
@@ -2814,9 +2813,9 @@ export default function PlannerPage() {
         row.descripcionFalla,
         row.descripcionAccion,
       ].filter(Boolean).some((value) => String(value).toLowerCase().includes(query));
-      return matchesLine && matchesDate && matchesSearch;
+      return matchesLine && matchesSearch;
     });
-  }, [ordenesTrabajoCargadas, ordenFiltroLinea, paradaFiltroFecha, ordenBusqueda]);
+  }, [ordenesTrabajoCargadas, ordenFiltroLinea, ordenBusqueda]);
   const generateWorkOrdersPdf = async (reportType: 'full' | 'summary' = 'full') => {
     if (workOrdersPdfStatus === 'generating' || filteredWorkOrders.length === 0) return;
     setWorkOrdersPdfStatus('generating');
@@ -2842,7 +2841,6 @@ export default function PlannerPage() {
       const showUser = user?.id === 'alex.mds' || user?.id === 'maria.mds';
       const appliedFilters = [
         `Línea: ${ordenFiltroLinea === 'all' ? 'Todas' : ordenFiltroLinea}`,
-        `Fecha: ${paradaFiltroFecha || 'Toda la semana'}`,
         `Búsqueda: ${ordenBusqueda.trim() || 'Sin búsqueda'}`,
       ].join('   |   ');
 
@@ -9924,8 +9922,8 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
     const esUsuarioPlanta = canEditPendingOrders;
     const estaBloqueado = (row as any).bloqueado === true;
     const estaEnEdicion = editingRows[row.id] != null;
-    const enEdicion = (esAdmin || esUsuarioPlanta) && (estaEnEdicion || !estaBloqueado);
-    const puedeEditar = (esAdmin || esUsuarioPlanta) && !estaBloqueado;
+    const enEdicion = estaEnEdicion || (!esAdmin && esUsuarioPlanta && !estaBloqueado);
+    const puedeEditar = esAdmin && !estaEnEdicion;
     const camposEditables = new Set(['fechaEmision','solicitante','aviso','inicioMtto','finMtto','inicioParada','finParada','tMtto','tipoParada','mtto','falla','mttoEsp','descripcionFalla','descripcionAccion','observaciones','fechaParada']);
     const editable = (campo: string) => enEdicion && camposEditables.has(campo);
     const tMttoCalc = tiempoTranscurrido(rowEdit.fechaEmision, rowEdit.inicioMtto, rowEdit.fechaParada, rowEdit.finMtto);

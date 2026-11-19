@@ -39,7 +39,7 @@ export const getRmMultiplier = (sabor: string): number | null => {
     'GLUP PIÑA': 5,
     'GLUP NARANJA': 5,
     'GLUP PIÑA PARCHITA': 5,
-    'GLUP MANZANA ROJA': 5.8,
+    'GLUP MANZANA ROJA': 6,
   };
   const upper = sabor.toUpperCase();
   if (upper.startsWith('JUSTY')) return null;
