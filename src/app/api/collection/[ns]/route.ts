@@ -250,7 +250,18 @@ export async function GET(request: Request) {
     const deletedIds = getDeletedIds(db, ns);
     let col = applyDeletedIds(raw, deletedIds);
 
-    if (hasDateFilter && col.length > 0 && col[0] && 'fecha' in col[0]) {
+    if (hasDateFilter && ns === 'planta-ordenes-trabajo') {
+      const start = startDate ? new Date(startDate + 'T00:00:00') : new Date('1970-01-01');
+      const end = endDate ? new Date(endDate + 'T23:59:59') : new Date('2099-12-31');
+      const isInRange = (value: unknown) => {
+        if (typeof value !== 'string' || !value) return false;
+        const itemDate = new Date(value + 'T00:00:00');
+        return !isNaN(itemDate.getTime()) && itemDate >= start && itemDate <= end;
+      };
+      col = col.filter((item: any) =>
+        [item.fechaOrden, item.fechaParada, item.otFechaParada, item.fecha].some(isInRange),
+      );
+    } else if (hasDateFilter && col.length > 0 && col[0] && 'fecha' in col[0]) {
       const start = startDate ? new Date(startDate + 'T00:00:00') : new Date('1970-01-01');
       const end = endDate ? new Date(endDate + 'T23:59:59') : new Date('2099-12-31');
       col = col.filter((item: any) => {

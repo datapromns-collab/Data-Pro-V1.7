@@ -729,18 +729,18 @@ export default function PlannerPage() {
     return (ordenesTrabajo || [])
       .filter((r) => {
         const orden = r.orden && String(r.orden).trim() !== '';
-        const fecha = r.fechaOrden && String(r.fechaOrden).trim() !== '';
-        if (!orden || !fecha) return false;
+        if (!orden) return false;
         const start = plantaWeekQuery.startDate;
         const end = plantaWeekQuery.endDate;
         const inWeek = (d: string) => d >= start && d <= end;
-        return inWeek(r.fechaOrden) || inWeek(r.fechaParada) || inWeek(r.otFechaParada);
+        return [r.fechaOrden, r.fechaParada, r.otFechaParada, r.fecha]
+          .some((date) => typeof date === 'string' && date.trim() !== '' && inWeek(date));
       })
       .map((r) => ({
         id: r.id,
-        fechaOrden: r.fechaOrden || r.fecha || '',
+        fechaOrden: r.fechaOrden || r.fecha || r.fechaParada || r.otFechaParada || '',
         orden: r.orden || '',
-        fechaEmision: r.fechaEmision || r.fecha || '',
+        fechaEmision: r.fechaEmision || r.fecha || r.fechaOrden || '',
         semana: r.semana || '',
         turno: r.turno || '',
         solicitante: r.solicitante || '',
