@@ -16608,12 +16608,12 @@
             "name": "GLUP FRESH",
             "lineId": "1",
             "loadPerHour": 1500,
-            "quantity": 36000,
-            "durationHours": 24,
+            "quantity": 112500,
+            "durationHours": 75,
             "presentation": "2Lts",
-            "tanks": 4.17,
+            "tanks": 13.04,
             "startTime": "2026-11-23T11:00:00.000Z",
-            "endTime": "2026-11-24T11:00:00.000Z",
+            "endTime": "2026-11-26T14:00:00.000Z",
             "id": "lqang54c3",
             "color": "#ec4899"
           },
@@ -16621,12 +16621,12 @@
             "name": "GLUP COLA",
             "lineId": "3",
             "loadPerHour": 2800,
-            "quantity": 67200,
-            "durationHours": 24,
+            "quantity": 224000,
+            "durationHours": 80,
             "presentation": "2Lts",
-            "tanks": 7.79,
+            "tanks": 25.97,
             "startTime": "2026-11-23T11:00:00.000Z",
-            "endTime": "2026-11-24T11:00:00.000Z",
+            "endTime": "2026-11-26T19:00:00.000Z",
             "id": "40wz9slk1",
             "color": "#10b981"
           },
@@ -16634,12 +16634,12 @@
             "name": "GLUP COLA",
             "lineId": "4",
             "loadPerHour": 2800,
-            "quantity": 67200,
-            "durationHours": 24,
+            "quantity": 266000,
+            "durationHours": 95,
             "presentation": "2Lts",
-            "tanks": 7.79,
+            "tanks": 30.84,
             "startTime": "2026-11-23T11:00:00.000Z",
-            "endTime": "2026-11-24T11:00:00.000Z",
+            "endTime": "2026-11-27T10:00:00.000Z",
             "id": "2jhhiib0l",
             "color": "#47CCB0"
           },
@@ -16670,89 +16670,207 @@
             "color": "#f59e0b"
           },
           {
-            "name": "GLUP FRESH",
-            "lineId": "7",
-            "loadPerHour": 2500,
-            "quantity": 43125,
-            "durationHours": 17.25,
-            "presentation": "1Lt",
-            "tanks": 5,
-            "startTime": "2026-11-23T11:00:00.000Z",
-            "endTime": "2026-11-24T04:15:00.000Z",
-            "id": "jwzq6k7ny",
-            "color": "#6366f1"
-          },
-          {
-            "name": "CS",
-            "lineId": "7",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 0.5,
-            "startTime": "2026-11-24T04:15:00.000Z",
-            "endTime": "2026-11-24T04:45:00.000Z",
-            "id": "gvfznweip",
-            "color": "#587593"
-          },
-          {
-            "name": "GLUP COLA",
-            "lineId": "7",
-            "loadPerHour": 2500,
-            "quantity": 43125,
-            "durationHours": 17.25,
-            "presentation": "1Lt",
-            "tanks": 5,
-            "startTime": "2026-11-24T04:45:00.000Z",
-            "endTime": "2026-11-24T22:00:00.000Z",
-            "id": "ue4l26hkg",
-            "color": "#47CCB0"
-          },
-          {
             "name": "GLUP KOLITA",
             "lineId": "2",
             "loadPerHour": 2500,
-            "quantity": 71166,
-            "durationHours": 28.4664,
+            "quantity": 53375,
+            "durationHours": 21.35,
             "presentation": "2Lts",
-            "tanks": 8,
+            "tanks": 6,
             "startTime": "2026-11-23T11:00:00.000Z",
-            "endTime": "2026-11-24T15:27:59.040Z",
+            "endTime": "2026-11-24T08:21:00.000Z",
             "id": "kovul1qh7",
             "color": "#ef4444"
           },
           {
-            "name": "CS",
-            "lineId": "2",
+            "name": "CIP 3P ALCALINO",
+            "lineId": "1",
             "loadPerHour": 0,
             "quantity": 0,
-            "durationHours": 0.5,
-            "startTime": "2026-11-24T15:28:00.000Z",
-            "endTime": "2026-11-24T15:58:00.000Z",
-            "id": "7ilb5q6xx",
+            "durationHours": 2,
+            "startTime": "2026-11-26T14:00:00.000Z",
+            "endTime": "2026-11-26T16:00:00.000Z",
+            "id": "d96jnaabv",
+            "color": "#ec4899"
+          },
+          {
+            "name": "GLUP FRESH",
+            "lineId": "1",
+            "loadPerHour": 1500,
+            "quantity": 61500,
+            "durationHours": 41,
+            "presentation": "2Lts",
+            "tanks": 7.13,
+            "startTime": "2026-11-26T16:00:00.000Z",
+            "endTime": "2026-11-28T09:00:00.000Z",
+            "id": "l4jqhciq3",
             "color": "#6366f1"
           },
           {
-            "name": "GLUP MANZANA VERDE",
-            "lineId": "2",
-            "loadPerHour": 2500,
-            "quantity": 16541,
-            "durationHours": 6.6164,
+            "name": "CIP 3P ALCALINO",
+            "lineId": "3",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-11-26T19:00:00.000Z",
+            "endTime": "2026-11-26T21:00:00.000Z",
+            "id": "l459ze7l2",
+            "color": "#6366f1"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "3",
+            "loadPerHour": 2800,
+            "quantity": 100800,
+            "durationHours": 36,
             "presentation": "2Lts",
-            "tanks": 2,
-            "startTime": "2026-11-24T15:58:00.000Z",
-            "endTime": "2026-11-24T22:34:59.040Z",
-            "id": "nl9yr729j",
+            "tanks": 11.69,
+            "startTime": "2026-11-26T21:00:00.000Z",
+            "endTime": "2026-11-28T09:00:00.000Z",
+            "id": "0wl06tvzp",
+            "color": "#47CCB0"
+          },
+          {
+            "name": "MTTO",
+            "lineId": "4",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 10.5,
+            "startTime": "2026-11-27T10:00:00.000Z",
+            "endTime": "2026-11-27T20:30:00.000Z",
+            "id": "zm89niw77",
+            "color": "#f59e0b"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "4",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-11-27T20:30:00.000Z",
+            "endTime": "2026-11-27T22:30:00.000Z",
+            "id": "ap9y5wm8f",
             "color": "#ef4444"
           },
           {
+            "name": "GLUP COLA",
+            "lineId": "4",
+            "loadPerHour": 2800,
+            "quantity": 29400,
+            "durationHours": 10.5,
+            "presentation": "2Lts",
+            "tanks": 3.41,
+            "startTime": "2026-11-27T22:30:00.000Z",
+            "endTime": "2026-11-28T09:00:00.000Z",
+            "id": "0r4dmbjgp",
+            "color": "#ef4444"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "5",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-11-24T11:00:00.000Z",
+            "endTime": "2026-11-24T13:00:00.000Z",
+            "id": "67yt8yr3a",
+            "color": "#ef4444"
+          },
+          {
+            "name": "JUSTY NARANJA",
+            "lineId": "5",
+            "loadPerHour": 1210,
+            "quantity": 29040,
+            "durationHours": 24,
+            "presentation": "1.5Lts",
+            "tanks": 26.14,
+            "startTime": "2026-11-24T13:00:00.000Z",
+            "endTime": "2026-11-25T13:00:00.000Z",
+            "id": "clv32pceb",
+            "color": "#6366f1"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "5",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-11-25T13:00:00.000Z",
+            "endTime": "2026-11-25T15:00:00.000Z",
+            "id": "f9sjw5eqz",
+            "color": "#587593"
+          },
+          {
+            "name": "JUSTY NARANJA",
+            "lineId": "5",
+            "loadPerHour": 1210,
+            "quantity": 29040,
+            "durationHours": 24,
+            "presentation": "1.5Lts",
+            "tanks": 26.14,
+            "startTime": "2026-11-25T15:00:00.000Z",
+            "endTime": "2026-11-26T15:00:00.000Z",
+            "id": "ax6xf6riv",
+            "color": "#ef4444"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "5",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-11-26T15:00:00.000Z",
+            "endTime": "2026-11-26T17:00:00.000Z",
+            "id": "gbkj3goqc",
+            "color": "#6366f1"
+          },
+          {
+            "name": "JUSTY NARANJA",
+            "lineId": "5",
+            "loadPerHour": 1210,
+            "quantity": 29040,
+            "durationHours": 24,
+            "presentation": "1.5Lts",
+            "tanks": 26.14,
+            "startTime": "2026-11-26T17:00:00.000Z",
+            "endTime": "2026-11-27T17:00:00.000Z",
+            "id": "nwpqx0feu",
+            "color": "#47CCB0"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "5",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-11-27T17:00:00.000Z",
+            "endTime": "2026-11-27T19:00:00.000Z",
+            "id": "seulgcvkd",
+            "color": "#587593"
+          },
+          {
+            "name": "JUSTY NARANJA",
+            "lineId": "5",
+            "loadPerHour": 1210,
+            "quantity": 14520,
+            "durationHours": 12,
+            "presentation": "1.5Lts",
+            "tanks": 13.07,
+            "startTime": "2026-11-27T19:00:00.000Z",
+            "endTime": "2026-11-28T07:00:00.000Z",
+            "id": "lz3rc9uaq",
+            "color": "#47CCB0"
+          },
+          {
             "name": "CS",
             "lineId": "2",
             "loadPerHour": 0,
             "quantity": 0,
             "durationHours": 0.5,
-            "startTime": "2026-11-24T22:35:00.000Z",
-            "endTime": "2026-11-24T23:05:00.000Z",
-            "id": "4ucop31ie",
-            "color": "#6366f1"
+            "startTime": "2026-11-24T08:21:00.000Z",
+            "endTime": "2026-11-24T08:51:00.000Z",
+            "id": "pkof3ki9a",
+            "color": "#ef4444"
           },
           {
             "name": "GLUP PIÑA PARCHITA",
@@ -16762,10 +16880,10 @@
             "durationHours": 5.45,
             "presentation": "2Lts",
             "tanks": 2,
-            "startTime": "2026-11-24T23:05:00.000Z",
-            "endTime": "2026-11-25T04:32:00.000Z",
-            "id": "71vhb10jf",
-            "color": "#587593"
+            "startTime": "2026-11-24T08:51:00.000Z",
+            "endTime": "2026-11-24T14:18:00.000Z",
+            "id": "uv77kxm6m",
+            "color": "#ef4444"
           },
           {
             "name": "CS",
@@ -16773,11 +16891,47 @@
             "loadPerHour": 0,
             "quantity": 0,
             "durationHours": 0.5,
-            "startTime": "2026-11-25T04:32:00.000Z",
-            "endTime": "2026-11-25T05:02:00.000Z",
-            "id": "6genpum75",
+            "startTime": "2026-11-24T14:18:00.000Z",
+            "endTime": "2026-11-24T14:48:00.000Z",
+            "id": "vuev5egw4",
+            "color": "#ef4444"
+          },
+          {
+            "name": "GLUP MANZANA VERDE",
+            "lineId": "2",
+            "loadPerHour": 2500,
+            "quantity": 16530,
+            "durationHours": 6.612,
+            "presentation": "2Lts",
+            "tanks": 2,
+            "startTime": "2026-11-24T14:48:00.000Z",
+            "endTime": "2026-11-24T21:24:43.200Z",
+            "id": "xxyu1kgdk",
+            "color": "#ec4899"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "7",
+            "loadPerHour": 2500,
+            "quantity": 86250,
+            "durationHours": 34.5,
+            "presentation": "1Lt",
+            "tanks": 10,
+            "startTime": "2026-11-23T11:00:00.000Z",
+            "endTime": "2026-11-24T21:30:00.000Z",
+            "id": "9zup3hfna",
             "color": "#ef4444"
           }
+        ],
+        "deletedTaskIds": [
+          "6genpum75",
+          "71vhb10jf",
+          "4ucop31ie",
+          "nl9yr729j",
+          "7ilb5q6xx",
+          "jwzq6k7ny",
+          "gvfznweip",
+          "ue4l26hkg"
         ]
       }
     },
@@ -23556,6 +23710,88 @@
               "code": "ENV-00080",
               "material": "BOTELLA ENVASADA GLUP KOLITA 1.0 L (LINEA 7)",
               "quantity": "148",
+              "unit": "UND",
+              "observation": ""
+            }
+          ],
+          "2026-11-19": [
+            {
+              "id": "fb5ea738-0ed8-460b-addf-9beed35ae92b",
+              "line": "Linea 1",
+              "flavor": "GLUP FRESH",
+              "code": "ENV-00013",
+              "material": "BOTELLA ENVASADA GLUP FRESH 2.0.LTS",
+              "quantity": "208",
+              "unit": "UND",
+              "observation": ""
+            },
+            {
+              "id": "babe85ef-19d2-4ce0-9ae9-873513e4cdaf",
+              "line": "Linea 2",
+              "flavor": "GLUP KOLITA",
+              "code": "ENV-00040",
+              "material": "BOTELLA ENVASADA GLUP KOLITA 2.0.LTS  (EN LINEA 2)",
+              "quantity": "19",
+              "unit": "UND",
+              "observation": ""
+            },
+            {
+              "id": "f16b966a-ee95-491a-b623-5ae6514a7094",
+              "line": "Linea 2",
+              "flavor": "GLUP MANZANA ROJA",
+              "code": "ENV-00086",
+              "material": "BOTELLA ENVASADA MANZANA ROJA 2.0 L (LINEA 2)",
+              "quantity": "34",
+              "unit": "UND",
+              "observation": ""
+            },
+            {
+              "id": "0f7c8dc5-335f-4269-8742-0b5e409d6daf",
+              "line": "Linea 3",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00063",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 2L (LINEA 3)",
+              "quantity": "65",
+              "unit": "UND",
+              "observation": ""
+            },
+            {
+              "id": "b3f09801-7b8b-438c-adcc-5e7e8028f294",
+              "line": "Linea 4",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00054",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 2.LTS (LINEA 4)",
+              "quantity": "76",
+              "unit": "UND",
+              "observation": ""
+            },
+            {
+              "id": "9f0fddce-631d-4913-8969-a2974d757492",
+              "line": "Linea 5",
+              "flavor": "JUSTY DURAZNO",
+              "code": "ENV-00095",
+              "material": "BOTELLA ENVASADA JUSTY DURAZNO 1.5 LTS",
+              "quantity": "288",
+              "unit": "UND",
+              "observation": ""
+            },
+            {
+              "id": "2f904c1a-fd9e-4269-b84b-483f8361556f",
+              "line": "Linea 7",
+              "flavor": "GLUP KOLITA",
+              "code": "ENV-00080",
+              "material": "BOTELLA ENVASADA GLUP KOLITA 1.0 L (LINEA 7)",
+              "quantity": "417",
+              "unit": "UND",
+              "observation": ""
+            },
+            {
+              "id": "01396d4a-bc60-40df-bcbd-85a5382bfe38",
+              "line": "Linea 7",
+              "flavor": "GLUP UVA",
+              "code": "ENV-00079",
+              "material": "BOTELLA ENVASADA GLUP UVA 1.0 L (LINEA 7)",
+              "quantity": "115",
               "unit": "UND",
               "observation": ""
             }
@@ -30568,6 +30804,176 @@
               "kind": "termo",
               "preformSize": ""
             }
+          ],
+          "2026-11-19": [
+            {
+              "id": "0c39059f-27e0-472d-91c3-c6366a8195f9",
+              "line": "Linea 1",
+              "flavor": "verde",
+              "code": "EMP_0103",
+              "material": "PREFORMA VERDE 42,64 GR-1881",
+              "quantity": "2428",
+              "unit": "UND",
+              "observation": "",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "154643a7-f73c-49bb-97c0-e6b261fbe0e1",
+              "line": "Linea 1",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "3,84",
+              "unit": "Kg",
+              "observation": "",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "0dc3a755-0cc0-4ce3-be77-0f2e392d7651",
+              "line": "Linea 2",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "2334",
+              "unit": "UND",
+              "observation": "",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "24aa9997-836d-494c-bc07-f7b267e37f7a",
+              "line": "Linea 2",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "2",
+              "unit": "Kg",
+              "observation": "",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "cc94e0b7-e9ce-48e9-9d08-63185964616a",
+              "line": "Linea 3",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "357",
+              "unit": "UND",
+              "observation": "",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "841c2eb5-6d3e-411c-90fd-d53390e49fcd",
+              "line": "Linea 3",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "0,5",
+              "unit": "Kg",
+              "observation": "",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "30dd7d7e-f31e-4d3f-84a0-b5cbe2fc3822",
+              "line": "Linea 4",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "3690",
+              "unit": "UND",
+              "observation": "",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "3f29de2f-d0a0-475c-8170-0c9be45e54d8",
+              "line": "Linea 4",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "2,71",
+              "unit": "Kg",
+              "observation": "",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "eea84e85-1f90-456b-8927-7b6100668188",
+              "line": "Linea 5",
+              "flavor": "transparente",
+              "code": "EMP_0068",
+              "material": "PREFORMA TRANSPARENTE 36 GR-1881",
+              "quantity": "3805",
+              "unit": "UND",
+              "observation": "",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "eb2e1044-b43e-4dec-9eac-9f0cf21ee1c1",
+              "line": "Linea 5",
+              "flavor": "",
+              "code": "EMP_0017",
+              "material": "POLIETILENO TERMOENCOGIBLE 55 X 0.07",
+              "quantity": "2,06",
+              "unit": "Kg",
+              "observation": "",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "56840cf4-74fa-49c2-89b2-711ff6f722b9",
+              "line": "Linea 6",
+              "flavor": "transparente",
+              "code": "EMP_0126",
+              "material": "PREFORMA TRANSPARENTE 20,55GR-1881",
+              "quantity": "900",
+              "unit": "UND",
+              "observation": "",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "cf64e636-02de-412a-8c73-07ed5b311f81",
+              "line": "Linea 6",
+              "flavor": "",
+              "code": "EMP_0130",
+              "material": "POLIETILENO TERMOENCOGIBLE 43 x 0.06",
+              "quantity": "0,38",
+              "unit": "Kg",
+              "observation": "",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "8cc80480-293d-4c51-bcec-c0f6aaea1326",
+              "line": "Linea 7",
+              "flavor": "transparente",
+              "code": "EMP_0166",
+              "material": "PREFORMA TRANSPARENTE 33 GR-1881",
+              "quantity": "3999",
+              "unit": "UND",
+              "observation": "",
+              "kind": "preformas",
+              "preformSize": "33"
+            },
+            {
+              "id": "50167553-f577-4377-8ac2-24185bd589a6",
+              "line": "Linea 7",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "1,37",
+              "unit": "Kg",
+              "observation": "",
+              "kind": "termo",
+              "preformSize": ""
+            }
           ]
         }
       },
@@ -33165,7 +33571,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-20T04:23:22.291Z"
+    "updatedAt": "2026-11-20T21:31:51.253Z"
   },
   "ordenesSap": [
     {
@@ -48676,10 +49082,10 @@
           "fechaInicio": "2026-11-19",
           "ticket1": "16625",
           "cajas1": 11600,
-          "ticket2": "",
+          "ticket2": "16626",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2695,
           "ticket4": "",
           "cajas4": 0
         }
@@ -48738,12 +49144,12 @@
           "fechaInicio": "2026-11-19",
           "ticket1": "16670",
           "cajas1": 6320,
-          "ticket2": "",
+          "ticket2": "16671",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 16000
         }
       ]
     },
@@ -48769,12 +49175,12 @@
           "fechaInicio": "2026-11-19",
           "ticket1": "16582",
           "cajas1": 11280,
-          "ticket2": "",
+          "ticket2": "16583",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 21630
         }
       ]
     },
@@ -48800,12 +49206,12 @@
           "fechaInicio": "2026-11-19",
           "ticket1": "16764",
           "cajas1": 7760,
-          "ticket2": "",
+          "ticket2": "16765",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 21360
         }
       ]
     },
@@ -48831,12 +49237,12 @@
           "fechaInicio": "2026-11-19",
           "ticket1": "16716",
           "cajas1": 3900,
-          "ticket2": "",
+          "ticket2": "16717",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 8950
         }
       ]
     },
@@ -48893,6 +49299,210 @@
           "fechaInicio": "2026-11-19",
           "ticket1": "16809",
           "cajas1": 7956,
+          "ticket2": "16810",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 15442
+        }
+      ]
+    },
+    {
+      "id": "2-1795173980042",
+      "linea": 2,
+      "sabor": "GLUP MANZANA ROJA",
+      "ordenNumero": "65057",
+      "semana": 47,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-19",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16626",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 17920
+        },
+        {
+          "fechaInicio": "2026-11-20",
+          "ticket1": "16627",
+          "cajas1": 14720,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "7-1795174088415",
+      "linea": 7,
+      "sabor": "GLUP UVA",
+      "ordenNumero": "65063",
+      "semana": 47,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-19",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16810",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 4602
+        },
+        {
+          "fechaInicio": "2026-11-20",
+          "ticket1": "16811",
+          "cajas1": 15958,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "6-1795175896687",
+      "linea": 6,
+      "sabor": "GLUP UVA",
+      "ordenNumero": "65069",
+      "semana": 47,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-19",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16549",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 12640
+        },
+        {
+          "fechaInicio": "2026-11-20",
+          "ticket1": "16550",
+          "cajas1": 916,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "6-1795198627162",
+      "linea": 6,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "65075",
+      "semana": 47,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-20",
+          "ticket1": "16550",
+          "cajas1": 1280,
+          "ticket2": "",
+          "cajas2": 3520,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "1-1795199934803",
+      "linea": 1,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "65081",
+      "semana": 47,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-20",
+          "ticket1": "16672",
+          "cajas1": 11360,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        },
+        {
+          "fechaInicio": "2026-11-21",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "3-1795199947750",
+      "linea": 3,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "65087",
+      "semana": 47,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-20",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "4-1795199957132",
+      "linea": 4,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "65093",
+      "semana": 47,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-20",
+          "ticket1": "16766",
+          "cajas1": 16640,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "5-1795200178468",
+      "linea": 5,
+      "sabor": "JUSTY DURAZNO",
+      "ordenNumero": "65098",
+      "semana": 47,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-20",
+          "ticket1": "16718",
+          "cajas1": 7800,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -292329,6 +292939,25 @@
         "usuario": "Luis Sanchez",
         "id": 1795167001721,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-20",
+        "semana": 47,
+        "turno": "DIURNO",
+        "operador": "ISRAEL RICO",
+        "linea": "Línea 7",
+        "equipo": "LLENADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "07:15",
+        "finParada": "07:27",
+        "totalMin": "12",
+        "zona": "Llenado",
+        "falla": "BAJO CONTENIDO NETO VALVULA #10",
+        "orden": "10536",
+        "observaciones": "",
+        "usuario": "Richard Marín",
+        "id": 1795195454968,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -316136,22 +316765,22 @@
         "fechaEmision": "2026-11-09",
         "semana": 46,
         "turno": "DIURNO",
-        "solicitante": "MICHAEL AGRAZ",
+        "solicitante": "",
         "linea": "Línea 2",
         "maquina": "ETIQUETADORA",
-        "aviso": "7030",
+        "aviso": "",
         "fechaParada": "2026-11-09",
-        "inicioMtto": "07:00",
-        "finMtto": "07:50",
+        "inicioMtto": "",
+        "finMtto": "",
         "inicioParada": "07:00",
         "finParada": "07:50",
         "tMtto": "50",
         "tipoParada": "AVERÍA",
-        "mtto": "correctivo",
+        "mtto": "",
         "falla": "AJUSTE Y LIMPIEZA DE LISTON ",
-        "mttoEsp": "R. GUTIERREZ",
-        "descripcionFalla": "FALLA EN APLICACION DE PEGA",
-        "descripcionAccion": "SE REALIZA AJUSTE EN LISTON #01",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
         "observaciones": "",
         "bloqueado": true,
         "usuario": "Froilan Bolivar"
@@ -316190,22 +316819,22 @@
         "fechaEmision": "2026-11-09",
         "semana": 46,
         "turno": "DIURNO",
-        "solicitante": "RICARDO DIAZ",
+        "solicitante": "",
         "linea": "Línea 3",
         "maquina": "LLENADORA",
-        "aviso": "7031",
+        "aviso": "",
         "fechaParada": "2026-11-09",
-        "inicioMtto": "08:50",
-        "finMtto": "09:20",
+        "inicioMtto": "",
+        "finMtto": "",
         "inicioParada": "08:50",
         "finParada": "09:20",
         "tMtto": "30",
         "tipoParada": "AVERÍA",
-        "mtto": "correctivo",
+        "mtto": "",
         "falla": "CAIDA DE BOTELLA EN EL RINSER OCACIONA MALA ENTREGA ",
-        "mttoEsp": "JHONATAN CRESPO",
-        "descripcionFalla": "CAIDA DE BOTELLAS Y MALA ENTREGA EN RINSER",
-        "descripcionAccion": "SE REALIZO CAMBIO DE HORQUILLA, RESORTE DE HORQUILLA Y PINZA DEL RINSER #20, SE REALIZO AJUSTE DE ALTURA EN ORGANO DE ELEVACION #13",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
         "observaciones": "",
         "bloqueado": true,
         "usuario": "Froilan Bolivar"
@@ -316217,23 +316846,23 @@
         "fechaEmision": "2026-11-09",
         "semana": 46,
         "turno": "DIURNO",
-        "solicitante": "RICARDO DIAZ",
+        "solicitante": "",
         "linea": "Línea 3",
         "maquina": "SOPLADORA",
-        "aviso": "7027",
+        "aviso": "",
         "fechaParada": "2026-11-09",
-        "inicioMtto": "08:55",
-        "finMtto": "08:10",
+        "inicioMtto": "",
+        "finMtto": "",
         "inicioParada": "07:53",
         "finParada": "08:12",
         "tMtto": "19",
         "tipoParada": "AVERÍA",
-        "mtto": "correctivo",
+        "mtto": "",
         "falla": "REVISION DE LAMPARAS POR BREAKER CAIDO ",
-        "mttoEsp": "HENRRY ",
-        "descripcionFalla": "REVISION POR BREAKER DISPARADO",
-        "descripcionAccion": "SE REALIZA REVISION DE MODULOS DE LAMPARAS POR TERMOMAGNETICO DISPARADO. SE REALIZA PRUEBA DE CONTINUIDAD DE CADA UNO DE LOS DISPOSITIVOS Y CON SU RESPECTO A TIERRA ESTANDO SIN NOVEDAD, SE REALIZA PRUEBA DE VACIO Y TRABAJA CON NORMALIDAD",
-        "observaciones": "SE PRESUME QUE LA FALLA SE ORIGINO POR LA CONDENSACION DE LA RAMPA DE ENFRIAMIENTO",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
         "bloqueado": true,
         "usuario": "Froilan Bolivar"
       },
@@ -316244,22 +316873,22 @@
         "fechaEmision": "2026-11-09",
         "semana": 46,
         "turno": "DIURNO",
-        "solicitante": "RICARDO DIAZ",
+        "solicitante": "",
         "linea": "Línea 3",
         "maquina": "LLENADORA",
-        "aviso": "7043",
+        "aviso": "",
         "fechaParada": "2026-11-09",
-        "inicioMtto": "14:56",
-        "finMtto": "15:09",
+        "inicioMtto": "",
+        "finMtto": "",
         "inicioParada": "14:58",
         "finParada": "15:07",
         "tMtto": "9",
         "tipoParada": "AVERÍA",
-        "mtto": "correctivo",
+        "mtto": "",
         "falla": "AJUSTE DE CENTRADORES #23,#27,#28,#41 Y #45",
-        "mttoEsp": "MIGUEL PEINADO",
-        "descripcionFalla": "MALA ENTREGA #23,27,28",
-        "descripcionAccion": "AJUSTE DE CENTRADORES DE ORGANOS DE ELEVACION #23,27,28,41,45",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
         "observaciones": "",
         "bloqueado": true,
         "usuario": "Froilan Bolivar"
@@ -316271,22 +316900,22 @@
         "fechaEmision": "2026-11-09",
         "semana": 46,
         "turno": "DIURNO",
-        "solicitante": "DANIEL MONCADA",
+        "solicitante": "",
         "linea": "Línea 5",
         "maquina": "TAPADORA",
-        "aviso": "7034",
+        "aviso": "",
         "fechaParada": "2026-11-09",
-        "inicioMtto": "07:40",
-        "finMtto": "08:18",
+        "inicioMtto": "",
+        "finMtto": "",
         "inicioParada": "07:40",
         "finParada": "07:52",
         "tMtto": "12",
         "tipoParada": "AVERÍA",
-        "mtto": "correctivo",
+        "mtto": "",
         "falla": "TAPA ATASCADA EN CHUCK #14",
-        "mttoEsp": "MIGUEL PEINADO",
-        "descripcionFalla": "TAPA ATORADA EN CHUCK",
-        "descripcionAccion": "AJUSTE DE BAJANTE DE TAPAS, AJUSTE DE PLATO DE CARGA",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
         "observaciones": "",
         "bloqueado": true,
         "usuario": "Froilan Bolivar"
@@ -316298,22 +316927,22 @@
         "fechaEmision": "2026-11-09",
         "semana": 46,
         "turno": "DIURNO",
-        "solicitante": "DANIEL MONCADA",
+        "solicitante": "",
         "linea": "Línea 5",
         "maquina": "LLENADORA",
-        "aviso": "7037",
+        "aviso": "",
         "fechaParada": "2026-11-09",
-        "inicioMtto": "08:26",
-        "finMtto": "08:47",
+        "inicioMtto": "",
+        "finMtto": "",
         "inicioParada": "08:26",
         "finParada": "08:47",
         "tMtto": "21",
         "tipoParada": "AVERÍA",
-        "mtto": "correctivo",
+        "mtto": "",
         "falla": "AJUSTE DE ALTURA DE LOS ORGANOS DE ELEVACION #22,38,40 Y 79 ",
-        "mttoEsp": "MIGUEL PEINADO",
-        "descripcionFalla": "CAIDA DE BOTELLAS ORGANOS #22,38,40,79",
-        "descripcionAccion": "AJUSTE DE ALTURA DE ORGANOS DE ELEVACION #22,38,40,79",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
         "observaciones": "",
         "bloqueado": true,
         "usuario": "Froilan Bolivar"
@@ -316379,22 +317008,22 @@
         "fechaEmision": "2026-11-09",
         "semana": 46,
         "turno": "DIURNO",
-        "solicitante": "DANIEL MONCADA",
+        "solicitante": "",
         "linea": "Línea 6",
         "maquina": "SOPLADORA",
-        "aviso": "7039",
+        "aviso": "",
         "fechaParada": "2026-11-09",
-        "inicioMtto": "09:30",
-        "finMtto": "09:38",
+        "inicioMtto": "",
+        "finMtto": "",
         "inicioParada": "09:16",
         "finParada": "09:49",
         "tMtto": "33",
         "tipoParada": "AVERÍA",
         "mtto": "",
         "falla": "CAMBIO DE ELECTROVALVULA DE VARILLA DE ESTIRADO #4",
-        "mttoEsp": "MIGUEL PEINADO / RENY G",
-        "descripcionFalla": "FALLA EN VALVULA DE CILINDRO DE ESTIRADO",
-        "descripcionAccion": "CAMBIO DE VALVULA DE CILINDRO DE ESTIRADO #04",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
         "observaciones": "",
         "bloqueado": true,
         "usuario": "Froilan Bolivar"
@@ -317621,23 +318250,23 @@
         "fechaEmision": "2026-11-10",
         "semana": 46,
         "turno": "NOCTURNO",
-        "solicitante": "",
+        "solicitante": "RONALD VALERA",
         "linea": "Línea 2",
         "maquina": "SOPLADORA",
-        "aviso": "",
+        "aviso": "7083",
         "fechaParada": "2026-11-10",
-        "inicioMtto": "",
-        "finMtto": "",
+        "inicioMtto": "06:10",
+        "finMtto": "07:45",
         "inicioParada": "06:10",
         "finParada": "07:00",
         "tMtto": "50",
         "tipoParada": "AVERÍA",
-        "mtto": "",
+        "mtto": "correctivo",
         "falla": "TRANCAMIENTO DE PREFORMAS EN HORNO, LAMPARAS ROTAS",
-        "mttoEsp": "",
-        "descripcionFalla": "",
-        "descripcionAccion": "",
-        "observaciones": "",
+        "mttoEsp": "NELSON M / GABRIEL R",
+        "descripcionFalla": "TRANCAMIENTO DE HORNO CON PREFORMAS",
+        "descripcionAccion": "SE REALIZA SUSTITUCION DE LAS LAMPARAS DE CALENTAMIENTO IR DE LOS MODULOS 3B, 4B, 5B, 6B, 7B. POR COLISION DE PREFORMA EN EL RIEL DE CALENTAMIENTO, SE REALIZA SUSTITUCION DE 3 BORNERAS CERAMICAS POR ESTAR PARTIDAS EN EL MODULO 4B, SE REALIZA MEDICION PUNTO A PUNTO ESTANDO SIN N",
+        "observaciones": "DESPUES DE REALIZAR LOS MONTAJES DE LOS MODULOS Y ENTREGA POR PARTE DEL EQUIPO DE MTTO ELECTRICO LA LINEA QUEDO BAJO SUPERVISION Y REVISION POR LOS TECNICOS ESPECIALISTAS DEL AREA MECANICA",
         "bloqueado": true,
         "usuario": "Richard Marín"
       },
@@ -322778,22 +323407,22 @@
         "fechaEmision": "2026-11-19",
         "semana": 47,
         "turno": "DIURNO",
-        "solicitante": "RONAL VALERA",
+        "solicitante": "",
         "linea": "Línea 1",
         "maquina": "MIXER",
-        "aviso": "7305",
+        "aviso": "",
         "fechaParada": "2026-11-19",
-        "inicioMtto": "13:55",
-        "finMtto": "15:30",
+        "inicioMtto": "",
+        "finMtto": "",
         "inicioParada": "13:50",
         "finParada": "15:30",
         "tMtto": "100",
         "tipoParada": "AVERÍA",
-        "mtto": "correctivo",
+        "mtto": "",
         "falla": "FALLA EN BOMBA DE JARABE",
-        "mttoEsp": "JUNIOR CABALLERO",
-        "descripcionFalla": "FALLA EN BOMBA DE MIXER",
-        "descripcionAccion": "CAMBIO DE BOMBA DE JARABE EN MIXER",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
         "observaciones": "",
         "bloqueado": true,
         "usuario": "Richard Marín"
@@ -322805,22 +323434,22 @@
         "fechaEmision": "2026-11-19",
         "semana": 47,
         "turno": "DIURNO",
-        "solicitante": "RONAL VALERA",
+        "solicitante": "",
         "linea": "Línea 1",
         "maquina": "MIXER",
-        "aviso": "7305",
+        "aviso": "",
         "fechaParada": "2026-11-19",
-        "inicioMtto": "15:30",
-        "finMtto": "16:20",
+        "inicioMtto": "",
+        "finMtto": "",
         "inicioParada": "15:30",
         "finParada": "16:20",
         "tMtto": "50",
         "tipoParada": "AVERÍA",
-        "mtto": "correctivo",
+        "mtto": "",
         "falla": "FUGA DE AGUA EN TUBERIA DE ENTRADA A TANQUE DE AGUA",
-        "mttoEsp": "DUGLAS BOLIVAR",
-        "descripcionFalla": "FUGA DE AGUA EN TUBERIA DEL MIXER",
-        "descripcionAccion": "REPARACION DE SOLDADURA DE CONTRAPRESION DE TANQUE DE AGUA DE PROCESO",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
         "observaciones": "",
         "bloqueado": true,
         "usuario": "Richard Marín"
@@ -323094,6 +323723,33 @@
         "observaciones": "",
         "bloqueado": true,
         "usuario": "Luis Sanchez"
+      },
+      {
+        "id": 1795195912283.9587,
+        "fechaOrden": "2026-11-20",
+        "orden": "10536",
+        "fechaEmision": "2026-11-20",
+        "semana": 47,
+        "turno": "DIURNO",
+        "solicitante": "VICTOR CARVALLO",
+        "linea": "Línea 7",
+        "maquina": "LLENADORA",
+        "aviso": "7319",
+        "fechaParada": "2026-11-20",
+        "inicioMtto": "07:16",
+        "finMtto": "07:26",
+        "inicioParada": "07:15",
+        "finParada": "07:27",
+        "tMtto": "12",
+        "tipoParada": "AVERÍA",
+        "mtto": "correctivo",
+        "falla": "BAJO CONTENIDO NETO VALVULA #10",
+        "mttoEsp": "OMAR BARRIOS",
+        "descripcionFalla": "BAJO NIVEL VALVULA #10",
+        "descripcionAccion": "SE REALIZA CAMBIO DE DIAFRAGMA ROTO",
+        "observaciones": "",
+        "bloqueado": true,
+        "usuario": "Richard Marín"
       }
     ],
     "seguimiento-ordenes": {
@@ -323471,6 +324127,12 @@
           "producto": "808",
           "ubb": 35.45,
           "pnc": 268
+        },
+        "auto-1-1795023390204": {
+          "cajasPlanificadas": 69000,
+          "jarabeReal": 107199,
+          "producto": "604",
+          "ubb": 37.3
         }
       },
       "linea-2": {
@@ -323901,6 +324563,12 @@
           "producto": "25",
           "jarabeReal": 13260,
           "ubb": 8.57
+        },
+        "auto-2-1794857130807": {
+          "cajasPlanificadas": 115666,
+          "jarabeReal": 226231,
+          "ubb": 230.08,
+          "producto": "400"
         }
       },
       "linea-3": {
@@ -324238,6 +324906,12 @@
           "producto": "232",
           "jarabeReal": 143428,
           "ubb": 49.8
+        },
+        "auto-3-1795023401887": {
+          "cajasPlanificadas": 131600,
+          "jarabeReal": 135758,
+          "ubb": 47.18,
+          "producto": "137"
         }
       },
       "linea-4": {
@@ -324523,6 +325197,12 @@
           "cajasPlanificadas": 134400,
           "producto": "208",
           "ubb": 24.9
+        },
+        "auto-4-1795023416583": {
+          "cajasPlanificadas": 128800,
+          "jarabeReal": 110848,
+          "producto": "175",
+          "ubb": 38.5
         }
       },
       "linea-5": {
@@ -324761,6 +325441,12 @@
           "producto": "499",
           "jarabeReal": 520000,
           "ubb": 520
+        },
+        "auto-5-1795037503147": {
+          "cajasPlanificadas": 41745,
+          "jarabeReal": 390000,
+          "producto": "426",
+          "ubb": 390
         }
       },
       "linea-6": {
@@ -325071,6 +325757,12 @@
           "producto": "283",
           "jarabeReal": 34649,
           "ubb": 12.03
+        },
+        "auto-6-1795037517480": {
+          "cajasPlanificadas": 17800,
+          "producto": "84",
+          "jarabeReal": 17740,
+          "ubb": 18
         }
       },
       "linea-7": {
@@ -325493,6 +326185,12 @@
           "producto": "849",
           "jarabeReal": 138209,
           "ubb": 48
+        },
+        "auto-7-1795087904673": {
+          "cajasPlanificadas": 35583,
+          "jarabeReal": 71120,
+          "producto": "565",
+          "ubb": 72
         }
       }
     },
@@ -346429,13 +347127,13 @@
             "1": "",
             "2": "",
             "3": 21360,
-            "4": "",
+            "4": 21360,
             "5": "",
             "6": "",
             "7": ""
           },
           "GLUP FRESH": {
-            "1": "",
+            "1": 16000,
             "2": "",
             "3": "",
             "4": "",
@@ -346449,8 +347147,8 @@
             "3": "",
             "4": "",
             "5": "",
-            "6": "",
-            "7": ""
+            "6": 12640,
+            "7": 4602
           },
           "GLUP PIÑA": {
             "1": "",
@@ -346517,7 +347215,7 @@
           },
           "GLUP MANZANA ROJA": {
             "1": "",
-            "2": "",
+            "2": 17920,
             "3": "",
             "4": "",
             "5": "",
@@ -346538,7 +347236,7 @@
             "2": "",
             "3": "",
             "4": "",
-            "5": "",
+            "5": 8950,
             "6": "",
             "7": ""
           },
@@ -347314,7 +348012,12 @@
       "2026-11-17-suave": "152074",
       "2026-11-17-procesos": "3057786,97",
       "2026-11-17-filtrada": "4495868,59",
-      "2026-11-17-total": "3386520"
+      "2026-11-17-total": "3386520",
+      "2026-11-19-servicio": "32506",
+      "2026-11-19-suave": "159897",
+      "2026-11-19-procesos": "2979572,07",
+      "2026-11-19-filtrada": "4495805,27",
+      "2026-11-19-total": "3360310"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
@@ -353048,7 +353751,13 @@
       "2026-11-18-tank-3": "30",
       "2026-11-18-tank-4": "9400",
       "2026-11-18-tank-5": "70",
-      "2026-11-18-tank-6": "10730"
+      "2026-11-18-tank-6": "10730",
+      "2026-11-19-tank-1": "-10",
+      "2026-11-19-tank-2": "5780",
+      "2026-11-19-tank-3": "420",
+      "2026-11-19-tank-4": "20",
+      "2026-11-19-tank-5": "-10",
+      "2026-11-19-tank-6": "10140"
     },
     "logistica-inventario-mensual": {
       "periods": {
@@ -362289,7 +362998,9 @@
       "2026-11-17-tank-1": "70",
       "2026-11-17-tank-2": "3240",
       "2026-11-18-tank-1": "70",
-      "2026-11-18-tank-2": "2510"
+      "2026-11-18-tank-2": "2510",
+      "2026-11-19-tank-1": "50",
+      "2026-11-19-tank-2": "2130"
     }
   },
   "cacheVersion": 0,
@@ -362369,7 +363080,8 @@
     "5-1794592946708",
     "5-1793372524705",
     "5-1795023429933",
-    "6-1795023446782"
+    "6-1795023446782",
+    "6-1795174048180"
   ],
   "logisticsStockFile": {
     "filename": "stock-producto-terminado.xlsx",
