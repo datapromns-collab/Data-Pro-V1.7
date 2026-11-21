@@ -82,11 +82,19 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { WeeklyData } from '@/lib/json-db';
 import { ScheduledTask } from '@/lib/types';
-import { format, getISOWeek, addDays, addMonths, subMonths, startOfWeek, startOfMonth, endOfMonth, eachDayOfInterval, startOfDay, endOfDay } from 'date-fns';
+import { format, getISOWeek, getISOWeekYear, addDays, addMonths, subMonths, startOfWeek, startOfMonth, endOfMonth, eachDayOfInterval, startOfDay, endOfDay } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { Bar, CartesianGrid, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, BarChart, Legend, Line, ComposedChart } from 'recharts';
+
+const obtenerClaveSemanaISO = (fecha: Date) =>
+  `${getISOWeekYear(fecha)}-W${String(getISOWeek(fecha)).padStart(2, '0')}`;
+const obtenerInicioSemanaISO = (clave: string) => {
+  const [anio, semana] = clave.split('-W').map(Number);
+  const eneroCuatro = new Date(anio, 0, 4);
+  return addDays(startOfWeek(eneroCuatro, { weekStartsOn: 1 }), (semana - 1) * 7);
+};
 
 const lazyModule = <Props,>(loader: () => Promise<React.ComponentType<Props>>) =>
   dynamic<Props>(() => loader().then((Component) => ({ default: Component })), {
@@ -2239,10 +2247,16 @@ export default function PlannerPage() {
   const [allOrdenesSap, setAllOrdenesSap] = useState<any[]>([]);
   const [reporteDataLoaded, setReporteDataLoaded] = useState(false);
   const [resumenSemanalSubTab, setResumenSemanalSubTab] = useState('resumen');
+  const [resumenSemanalTendenciasSubTab, setResumenSemanalTendenciasSubTab] = useState<'alcance' | 'paradas'>('alcance');
   const [resumenSemanalWeekStartDate, setResumenSemanalWeekStartDate] = useState(new Date());
+  const [resumenSemanalTendenciasInicio, setResumenSemanalTendenciasInicio] = useState(() => obtenerClaveSemanaISO(new Date()));
+  const [resumenSemanalTendenciasFin, setResumenSemanalTendenciasFin] = useState(() => obtenerClaveSemanaISO(new Date()));
   const [ptSubTab, setPtSubTab] = useState('TDiurno');
   const [resumenMensualDate, setResumenMensualDate] = useState(() => new Date());
-  const [resumenMensualSubTab, setResumenMensualSubTab] = useState<'mes' | 'pt'>('mes');
+  const [resumenMensualSubTab, setResumenMensualSubTab] = useState<'mes' | 'pt' | 'tendencias'>('mes');
+  const [resumenMensualTendenciasSubTab, setResumenMensualTendenciasSubTab] = useState<'alcance' | 'paradas'>('alcance');
+  const [resumenMensualTendenciasInicio, setResumenMensualTendenciasInicio] = useState(() => format(new Date(), 'yyyy-MM'));
+  const [resumenMensualTendenciasFin, setResumenMensualTendenciasFin] = useState(() => format(new Date(), 'yyyy-MM'));
   const [resumenMensualPtSubTab, setResumenMensualPtSubTab] = useState<'TDiurno' | 'TNocturno'>('TDiurno');
   const resumenSemanalWeekDates = useMemo(() => {
     const weekStart = startOfWeek(resumenSemanalWeekStartDate, { weekStartsOn: 1 });
@@ -2253,6 +2267,24 @@ export default function PlannerPage() {
     return eachDayOfInterval({ start: inicio, end: endOfMonth(resumenMensualDate) })
       .map((day) => format(day, 'yyyy-MM-dd'));
   }, [resumenMensualDate]);
+  const resumenSemanalTendenciasRango = useMemo(() => {
+    const inicio = obtenerInicioSemanaISO(resumenSemanalTendenciasInicio);
+    const fin = obtenerInicioSemanaISO(resumenSemanalTendenciasFin);
+    return {
+      fechaInicio: format(inicio, 'yyyy-MM-dd'),
+      fechaFin: format(addDays(fin, 6), 'yyyy-MM-dd'),
+    };
+  }, [resumenSemanalTendenciasFin, resumenSemanalTendenciasInicio]);
+  const resumenMensualTendenciasRango = useMemo(() => {
+    const [anioInicio, mesInicio] = resumenMensualTendenciasInicio.split('-').map(Number);
+    const [anioFin, mesFin] = resumenMensualTendenciasFin.split('-').map(Number);
+    const inicio = startOfMonth(new Date(anioInicio, mesInicio - 1, 1));
+    const fin = endOfMonth(new Date(anioFin, mesFin - 1, 1));
+    return {
+      fechaInicio: format(inicio, 'yyyy-MM-dd'),
+      fechaFin: format(fin, 'yyyy-MM-dd'),
+    };
+  }, [resumenMensualTendenciasFin, resumenMensualTendenciasInicio]);
   useEffect(() => {
     const semanaInicio = startOfWeek(resumenSemanalWeekStartDate, { weekStartsOn: 1 });
     const semanaFin = addDays(semanaInicio, 6);
@@ -5821,7 +5853,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                            <div className="flex-1 flex flex-col">
                              <div className="flex items-center gap-3 mb-4 no-print">
                                <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 pointer-events-auto">
-                                 {['resumen', 'pt'].map((subTab) => (
+                                 {['resumen', 'pt', 'tendencias'].map((subTab) => (
                                    <button
                                      key={subTab}
                                      onClick={() => setResumenSemanalSubTab(subTab)}
@@ -5830,11 +5862,11 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                        resumenSemanalSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                      )}
                                    >
-                                     {subTab === 'resumen' ? 'Semana' : 'PT'}
+                                     {subTab === 'resumen' ? 'Semana' : subTab === 'pt' ? 'PT' : 'Tendencias'}
                                    </button>
                                  ))}
                                </div>
-                               <div className="ml-auto pointer-events-auto">
+                               {resumenSemanalSubTab !== 'tendencias' && <div className="ml-auto pointer-events-auto">
                                  <Popover>
                                    <PopoverTrigger asChild>
                                      <button className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
@@ -5875,8 +5907,61 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                      </div>
                                    </PopoverContent>
                                  </Popover>
-                               </div>
+                               </div>}
                              </div>
+                             {resumenSemanalSubTab === 'tendencias' && (
+                               <div className="mb-3 flex flex-wrap items-center gap-3 no-print">
+                                 <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                                   Semana inicio
+                                   <input
+                                     type="week"
+                                     value={resumenSemanalTendenciasInicio}
+                                     max={resumenSemanalTendenciasFin}
+                                     onChange={(event) => {
+                                       const semana = event.target.value;
+                                       if (!semana) return;
+                                       setResumenSemanalTendenciasInicio(semana);
+                                       if (semana > resumenSemanalTendenciasFin) setResumenSemanalTendenciasFin(semana);
+                                     }}
+                                     className="h-9 rounded-full border border-slate-200 bg-white px-3 text-xs font-bold normal-case tracking-normal text-slate-700"
+                                   />
+                                 </label>
+                                 <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                                   Semana final
+                                   <input
+                                     type="week"
+                                     value={resumenSemanalTendenciasFin}
+                                     min={resumenSemanalTendenciasInicio}
+                                     onChange={(event) => {
+                                       const semana = event.target.value;
+                                       if (!semana) return;
+                                       setResumenSemanalTendenciasFin(semana);
+                                       if (semana < resumenSemanalTendenciasInicio) setResumenSemanalTendenciasInicio(semana);
+                                     }}
+                                     className="h-9 rounded-full border border-slate-200 bg-white px-3 text-xs font-bold normal-case tracking-normal text-slate-700"
+                                   />
+                                 </label>
+                               </div>
+                             )}
+                             {resumenSemanalSubTab === 'tendencias' && (
+                               <div role="tablist" aria-label="Subsecciones de tendencias semanales" className="mb-3 flex items-center gap-2">
+                                 {(['alcance', 'paradas'] as const).map((subTab) => (
+                                   <button
+                                     key={subTab}
+                                     type="button"
+                                     role="tab"
+                                     aria-selected={resumenSemanalTendenciasSubTab === subTab}
+                                     onClick={() => setResumenSemanalTendenciasSubTab(subTab)}
+                                     className={cn(
+                                       "inline-flex h-8 items-center justify-center rounded-full px-5 text-[10px] font-bold uppercase tracking-widest",
+                                       resumenSemanalTendenciasSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                     )}
+                                   >
+                                     {subTab === 'alcance' ? 'Alcance' : 'Paradas'}
+                                   </button>
+                                 ))}
+                               </div>
+                             )}
                               <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                                 {resumenSemanalSubTab === 'resumen' && (
                                   <div className="flex flex-col gap-3">
@@ -6047,6 +6132,16 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                    </div>
                                  </div>
                                )}
+                               {resumenSemanalSubTab === 'tendencias' && (
+                                 <PlantaReporteTendencias
+                                   ordenesSap={allOrdenesSap}
+                                   tasks={allTasks}
+                                   informesOperacionales={allInformesOperacionales}
+                                   subseccion={resumenSemanalTendenciasSubTab}
+                                   rangoFechas={resumenSemanalTendenciasRango}
+                                   agrupacion="semana"
+                                 />
+                               )}
                              </div>
                            </div>
                          )}
@@ -6054,7 +6149,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                          <div className="flex-1 flex flex-col gap-3">
                            <div className="flex flex-wrap items-center gap-3 no-print">
                              <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 pointer-events-auto">
-                               {(['mes', 'pt'] as const).map((subTab) => (
+                               {(['mes', 'pt', 'tendencias'] as const).map((subTab) => (
                                  <button
                                    key={subTab}
                                    onClick={() => setResumenMensualSubTab(subTab)}
@@ -6063,11 +6158,11 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                      resumenMensualSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                    )}
                                  >
-                                   {subTab === 'mes' ? 'Mes' : 'PT'}
+                                   {subTab === 'mes' ? 'Mes' : subTab === 'pt' ? 'PT' : 'Tendencias'}
                                  </button>
                                ))}
                              </div>
-                             <label className="ml-auto flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                             {resumenMensualSubTab !== 'tendencias' && <label className="ml-auto flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
                                Mes y año
                                <input
                                  type="month"
@@ -6079,8 +6174,61 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                  }}
                                  className="h-9 rounded-full border border-slate-200 bg-white px-3 text-xs font-bold text-slate-700 pointer-events-auto"
                                />
-                             </label>
+                             </label>}
                            </div>
+                           {resumenMensualSubTab === 'tendencias' && (
+                             <div className="mb-1 flex flex-wrap items-center gap-3 no-print">
+                               <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                                 Mes inicio
+                                 <input
+                                   type="month"
+                                   value={resumenMensualTendenciasInicio}
+                                   max={resumenMensualTendenciasFin}
+                                   onChange={(event) => {
+                                     const mes = event.target.value;
+                                     if (!mes) return;
+                                     setResumenMensualTendenciasInicio(mes);
+                                     if (mes > resumenMensualTendenciasFin) setResumenMensualTendenciasFin(mes);
+                                   }}
+                                   className="h-9 rounded-full border border-slate-200 bg-white px-3 text-xs font-bold normal-case tracking-normal text-slate-700"
+                                 />
+                               </label>
+                               <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                                 Mes final
+                                 <input
+                                   type="month"
+                                   value={resumenMensualTendenciasFin}
+                                   min={resumenMensualTendenciasInicio}
+                                   onChange={(event) => {
+                                     const mes = event.target.value;
+                                     if (!mes) return;
+                                     setResumenMensualTendenciasFin(mes);
+                                     if (mes < resumenMensualTendenciasInicio) setResumenMensualTendenciasInicio(mes);
+                                   }}
+                                   className="h-9 rounded-full border border-slate-200 bg-white px-3 text-xs font-bold normal-case tracking-normal text-slate-700"
+                                 />
+                               </label>
+                             </div>
+                           )}
+                           {resumenMensualSubTab === 'tendencias' && (
+                             <div role="tablist" aria-label="Subsecciones de tendencias mensuales" className="mb-1 flex items-center gap-2">
+                               {(['alcance', 'paradas'] as const).map((subTab) => (
+                                 <button
+                                   key={subTab}
+                                   type="button"
+                                   role="tab"
+                                   aria-selected={resumenMensualTendenciasSubTab === subTab}
+                                   onClick={() => setResumenMensualTendenciasSubTab(subTab)}
+                                   className={cn(
+                                     "inline-flex h-8 items-center justify-center rounded-full px-5 text-[10px] font-bold uppercase tracking-widest",
+                                     resumenMensualTendenciasSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                   )}
+                                 >
+                                   {subTab === 'alcance' ? 'Alcance' : 'Paradas'}
+                                 </button>
+                               ))}
+                             </div>
+                           )}
                            <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                              {resumenMensualSubTab === 'mes' && (
                                <div className="flex flex-col gap-3">
@@ -6213,6 +6361,16 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                    />
                                  </div>
                                </div>
+                             )}
+                             {resumenMensualSubTab === 'tendencias' && (
+                               <PlantaReporteTendencias
+                                 ordenesSap={allOrdenesSap}
+                                 tasks={allTasks}
+                                 informesOperacionales={allInformesOperacionales}
+                                 subseccion={resumenMensualTendenciasSubTab}
+                                 rangoFechas={resumenMensualTendenciasRango}
+                                 agrupacion="mes"
+                               />
                              )}
                            </div>
                          </div>

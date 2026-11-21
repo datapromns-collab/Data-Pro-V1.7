@@ -6,6 +6,7 @@ import type { LabelProps } from "recharts";
 import { FileDown } from "lucide-react";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
+import { getISOWeek } from "date-fns";
 import { Button } from "@/components/ui/button";
 import type { OrdenSap } from "@/lib/json-db";
 import type { ScheduledTask } from "@/lib/types";
@@ -15,6 +16,8 @@ type Props = {
   tasks: ScheduledTask[];
   informesOperacionales: InformeOperacional[];
   subseccion: "alcance" | "paradas";
+  rangoFechas?: { fechaInicio: string; fechaFin: string };
+  agrupacion?: "dia" | "semana" | "mes";
 };
 
 type InformeOperacional = {
@@ -24,7 +27,15 @@ type InformeOperacional = {
   totalMin?: number | string;
 };
 
-type CategoriaParadaKey = "servicios" | "ausentismo" | "electricas" | "adecuaciones" | "averia" | "operacionales";
+type CategoriaParadaKey =
+  | "servicios"
+  | "ausentismo"
+  | "electricas"
+  | "adecuaciones"
+  | "averia"
+  | "operacionales"
+  | "programadas"
+  | "tiempoMuerto";
 type CategoriaParada = { key: CategoriaParadaKey; label: string; color: string };
 
 const LINEAS = Array.from({ length: 7 }, (_, index) => index + 1);
@@ -36,6 +47,8 @@ const CATEGORIAS_PARADA: CategoriaParada[] = [
   { key: "adecuaciones", label: "Adecuaciones", color: "#8b5cf6" },
   { key: "averia", label: "Avería (OT)", color: "#ec4899" },
   { key: "operacionales", label: "Operacionales", color: "#0891b2" },
+  { key: "programadas", label: "Paradas Programadas", color: "#ca8a04" },
+  { key: "tiempoMuerto", label: "Tiempo Muerto", color: "#64748b" },
 ];
 const TIPOS_SERVICIOS = new Set([
   "SALA DE MAQUINAS",
@@ -59,6 +72,45 @@ const sumarDias = (fechaKey: string, dias: number) => {
   fecha.setDate(fecha.getDate() + dias);
   return fechaLocalKey(fecha);
 };
+type FilaTendencia = Record<string, number | string | null> & { fecha: string; etiquetaFecha: string };
+const inicioSemanaKey = (fechaKey: string) => {
+  const [year, month, day] = fechaKey.split("-").map(Number);
+  const fecha = new Date(year, month - 1, day, 12);
+  fecha.setDate(fecha.getDate() - ((fecha.getDay() + 6) % 7));
+  return fechaLocalKey(fecha);
+};
+const agruparFilasPorPeriodo = (filas: FilaTendencia[], agrupacion: "dia" | "semana" | "mes") => {
+  if (agrupacion === "dia") return filas;
+  const agrupadas = new Map<string, FilaTendencia>();
+  filas.forEach((fila) => {
+    const clave = agrupacion === "semana" ? inicioSemanaKey(fila.fecha) : `${fila.fecha.slice(0, 7)}-01`;
+    const [year, month, day] = clave.split("-").map(Number);
+    const fechaPeriodo = new Date(year, month - 1, day, 12);
+    const juevesSemana = new Date(fechaPeriodo);
+    juevesSemana.setDate(juevesSemana.getDate() + 3);
+    const etiquetaFecha = agrupacion === "semana"
+      ? `Sem ${String(getISOWeek(fechaPeriodo)).padStart(2, "0")} · ${juevesSemana.getFullYear()}`
+      : `${clave.slice(5, 7)}/${clave.slice(0, 4)}`;
+    const existente = agrupadas.get(clave);
+    if (!existente) {
+      agrupadas.set(clave, { ...fila, fecha: clave, etiquetaFecha });
+      return;
+    }
+    Object.entries(fila).forEach(([campo, valor]) => {
+      if (typeof valor === "number" && campo !== "cumplimiento") {
+        existente[campo] = (Number(existente[campo]) || 0) + valor;
+      }
+    });
+  });
+  return Array.from(agrupadas.values()).map((fila) => {
+    if ("produccion" in fila && "planificado" in fila) {
+      fila.cumplimiento = Number(fila.planificado) > 0
+        ? (Number(fila.produccion) / Number(fila.planificado)) * 100
+        : null;
+    }
+    return fila;
+  });
+};
 const formatearMiles = (value: number) => new Intl.NumberFormat("es-VE", { maximumFractionDigits: 2 }).format(value);
 const formatearPorcentaje = (value: number) =>
   `${new Intl.NumberFormat("es-VE", { maximumFractionDigits: 1 }).format(value)}%`;
@@ -68,6 +120,7 @@ const normalizarTexto = (value: unknown) =>
 function obtenerCategoriaParada(tipo: unknown): CategoriaParadaKey | null {
   const normalizado = normalizarTexto(tipo);
   if (TIPOS_SERVICIOS.has(normalizado)) return "servicios";
+  if (normalizado === "PROGRAMADA") return "programadas";
   if (normalizado === "AUSENTISMO") return "ausentismo";
   if (normalizado === "FALLA DE E/E" || normalizado.includes("ELECTRICA")) return "electricas";
   if (normalizado === "ADECUACIONES") return "adecuaciones";
@@ -136,6 +189,7 @@ type BarCalloutProps = LabelProps & {
   index?: number;
   payload?: {
     fecha?: string;
+    etiquetaFecha?: string;
     produccion?: number;
     planificado?: number;
     cumplimiento?: number | null;
@@ -147,8 +201,7 @@ function BarDataCallout({ x = 0, y = 0, width = 0, payload }: BarCalloutProps) {
   const rowHeight = 13;
   const centerX = (Number(x) || 0) + (Number(width) || 0) / 2;
   const boxY = Math.max(2, (Number(y) || 0) - rowHeight * 4 - 4);
-  const fecha = payload?.fecha || "";
-  const fechaCorta = fecha ? `${fecha.slice(8, 10)}/${fecha.slice(5, 7)}` : "";
+  const fechaCorta = payload?.etiquetaFecha || payload?.fecha || "";
   const cumplimiento = payload?.cumplimiento;
   const items = [
     { texto: fechaCorta, color: "#0f172a", negrita: true },
@@ -181,10 +234,14 @@ export default function PlantaReporteTendencias({
   tasks,
   informesOperacionales = [],
   subseccion,
+  rangoFechas,
+  agrupacion = "dia",
 }: Props) {
   const hoy = fechaLocalKey(new Date());
-  const [fechaFin, setFechaFin] = useState(hoy);
-  const [fechaInicio, setFechaInicio] = useState(() => sumarDias(hoy, -29));
+  const [fechaFinManual, setFechaFinManual] = useState(hoy);
+  const [fechaInicioManual, setFechaInicioManual] = useState(() => sumarDias(hoy, -29));
+  const fechaInicio = rangoFechas?.fechaInicio ?? fechaInicioManual;
+  const fechaFin = rangoFechas?.fechaFin ?? fechaFinManual;
   const [lineaSeleccionada, setLineaSeleccionada] = useState(1);
   const [informesParadas, setInformesParadas] = useState(informesOperacionales);
   const [cargandoParadas, setCargandoParadas] = useState(false);
@@ -197,6 +254,7 @@ export default function PlantaReporteTendencias({
   const graficaRef = useRef<HTMLDivElement>(null);
   const graficaParadasRef = useRef<HTMLDivElement>(null);
   const rangoValido = fechaInicio <= fechaFin;
+  const periodoEtiqueta = agrupacion === "semana" ? "semanal" : agrupacion === "mes" ? "mensual" : "diaria";
 
   useEffect(() => {
     if (!rangoValido) return;
@@ -265,7 +323,7 @@ export default function PlantaReporteTendencias({
       }
     });
 
-    const filas: Array<Record<string, number | string | null>> = [];
+    const filas: FilaTendencia[] = [];
     for (let fecha = fechaInicio; fecha <= fechaFin; fecha = sumarDias(fecha, 1)) {
       const cantidadesDia = produccionPorFecha.get(fecha) || {};
       const produccion = cantidadesDia[lineaSeleccionada] || 0;
@@ -280,15 +338,16 @@ export default function PlantaReporteTendencias({
       });
     }
 
-    const tendencia = calcularTendenciaCuadratica(filas.map((fila) => Number(fila.produccion)));
+    const filasPeriodo = agruparFilasPorPeriodo(filas, agrupacion);
+    const tendencia = calcularTendenciaCuadratica(filasPeriodo.map((fila) => Number(fila.produccion)));
     if (tendencia) {
-      filas.forEach((fila, indice) => {
+      filasPeriodo.forEach((fila, indice) => {
         fila.tendenciaPolinomica = tendencia[indice];
       });
     }
 
-    return filas;
-  }, [fechaInicio, fechaFin, lineaSeleccionada, ordenesSap, rangoValido, tasks]);
+    return filasPeriodo;
+  }, [agrupacion, fechaInicio, fechaFin, lineaSeleccionada, ordenesSap, rangoValido, tasks]);
 
   const datosParadas = useMemo(() => {
     if (!rangoValido) return [];
@@ -297,7 +356,6 @@ export default function PlantaReporteTendencias({
       const fecha = String(registro.fecha || "");
       if (fecha < fechaInicio || fecha > fechaFin || obtenerLineaNumero(registro.linea) !== lineaSeleccionada) return;
       const categoria = obtenerCategoriaParada(registro.tipoParada);
-      if (!categoria) return;
       const minutos = minutosPorFecha.get(fecha) ?? {
         servicios: 0,
         ausentismo: 0,
@@ -305,18 +363,30 @@ export default function PlantaReporteTendencias({
         adecuaciones: 0,
         averia: 0,
         operacionales: 0,
+        programadas: 0,
+        tiempoMuerto: 0,
       };
-      minutos[categoria] += numero(registro.totalMin);
+      const minutosRegistro = numero(registro.totalMin);
+      if (categoria === "programadas") {
+        minutos.programadas += minutosRegistro;
+      } else {
+        minutos.tiempoMuerto += minutosRegistro;
+        if (categoria) minutos[categoria] += minutosRegistro;
+      }
       minutosPorFecha.set(fecha, minutos);
     });
 
-    const filas: Array<Record<string, number | string | null>> = [];
+    const filas: FilaTendencia[] = [];
     for (let fecha = fechaInicio; fecha <= fechaFin; fecha = sumarDias(fecha, 1)) {
       const categoriasMinutos = minutosPorFecha.get(fecha);
       const valores = Object.fromEntries(
         CATEGORIAS_PARADA.map(({ key }) => [key, (categoriasMinutos?.[key] ?? 0) / 60]),
       ) as Record<CategoriaParadaKey, number>;
-      const totalSeleccionado = paradasSeleccionadas.reduce((total, key) => total + valores[key], 0);
+      const incluirDetalle = !paradasSeleccionadas.includes("tiempoMuerto");
+      const totalSeleccionado = paradasSeleccionadas.reduce((total, key) => {
+        const esDetalle = ["servicios", "ausentismo", "electricas", "adecuaciones", "averia", "operacionales"].includes(key);
+        return total + (incluirDetalle || !esDetalle ? valores[key] : 0);
+      }, 0);
       filas.push({
         fecha,
         etiquetaFecha: `${fecha.slice(8, 10)}/${fecha.slice(5, 7)}`,
@@ -325,14 +395,15 @@ export default function PlantaReporteTendencias({
       });
     }
 
-    const tendencia = calcularTendenciaCuadratica(filas.map((fila) => Number(fila.totalParadas)));
+    const filasPeriodo = agruparFilasPorPeriodo(filas, agrupacion);
+    const tendencia = calcularTendenciaCuadratica(filasPeriodo.map((fila) => Number(fila.totalParadas)));
     if (tendencia) {
-      filas.forEach((fila, indice) => {
+      filasPeriodo.forEach((fila, indice) => {
         fila.tendenciaPolinomica = tendencia[indice];
       });
     }
-    return filas;
-  }, [fechaInicio, fechaFin, informesParadas, lineaSeleccionada, paradasSeleccionadas, rangoValido]);
+    return filasPeriodo;
+  }, [agrupacion, fechaInicio, fechaFin, informesParadas, lineaSeleccionada, paradasSeleccionadas, rangoValido]);
 
   const exportarPDF = async (
     grafica: HTMLDivElement | null,
@@ -401,7 +472,7 @@ export default function PlantaReporteTendencias({
 
   return (
     <section aria-label="Tendencias de Planta" className="flex flex-col gap-4">
-      <div className="grid gap-4 rounded-2xl border border-slate-200 bg-white p-4 md:grid-cols-[minmax(240px,1fr)_auto_auto] md:items-end">
+      <div className={`grid gap-4 rounded-2xl border border-slate-200 bg-white p-4 ${rangoFechas ? "md:grid-cols-1" : "md:grid-cols-[minmax(240px,1fr)_auto_auto]"} md:items-end`}>
         <fieldset>
           <legend className="mb-2 text-[10px] font-black uppercase tracking-widest text-slate-600">Líneas</legend>
           <div className="flex flex-wrap gap-2">
@@ -428,27 +499,31 @@ export default function PlantaReporteTendencias({
           </div>
         </fieldset>
 
-        <label className="flex flex-col gap-1 text-[10px] font-black uppercase tracking-widest text-slate-600">
-          Fecha inicio
-          <input
-            type="date"
-            value={fechaInicio}
-            max={fechaFin}
-            onChange={(event) => setFechaInicio(event.target.value)}
-            className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-xs font-bold normal-case tracking-normal text-slate-800"
-          />
-        </label>
+        {!rangoFechas && (
+          <>
+            <label className="flex flex-col gap-1 text-[10px] font-black uppercase tracking-widest text-slate-600">
+              Fecha inicio
+              <input
+                type="date"
+                value={fechaInicio}
+                max={fechaFin}
+                onChange={(event) => setFechaInicioManual(event.target.value)}
+                className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-xs font-bold normal-case tracking-normal text-slate-800"
+              />
+            </label>
 
-        <label className="flex flex-col gap-1 text-[10px] font-black uppercase tracking-widest text-slate-600">
-          Fecha final
-          <input
-            type="date"
-            value={fechaFin}
-            min={fechaInicio}
-            onChange={(event) => setFechaFin(event.target.value)}
-            className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-xs font-bold normal-case tracking-normal text-slate-800"
-          />
-        </label>
+            <label className="flex flex-col gap-1 text-[10px] font-black uppercase tracking-widest text-slate-600">
+              Fecha final
+              <input
+                type="date"
+                value={fechaFin}
+                min={fechaInicio}
+                onChange={(event) => setFechaFinManual(event.target.value)}
+                className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-xs font-bold normal-case tracking-normal text-slate-800"
+              />
+            </label>
+          </>
+        )}
       </div>
 
       {subseccion === "paradas" && (
@@ -483,12 +558,12 @@ export default function PlantaReporteTendencias({
           La fecha de inicio no puede ser posterior a la fecha final.
         </p>
       ) : subseccion === "alcance" ? (
-        <section aria-label="Producción diaria por línea" className="rounded-2xl border border-slate-200 bg-white p-4">
+        <section aria-label={`Producción ${periodoEtiqueta} por línea`} className="rounded-2xl border border-slate-200 bg-white p-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h3 className="text-xs font-black uppercase tracking-wide text-slate-700">Producción diaria · Línea {lineaSeleccionada}</h3>
+            <h3 className="text-xs font-black uppercase tracking-wide text-slate-700">Producción {periodoEtiqueta} · Línea {lineaSeleccionada}</h3>
             <Button
               type="button"
-              onClick={() => exportarPDF(graficaRef.current, "Tendencias de Producción", "Producción diaria, tendencia polinómica de grado 2 y cumplimiento.", "Tendencias")}
+              onClick={() => exportarPDF(graficaRef.current, "Tendencias de Producción", `Producción ${periodoEtiqueta}, tendencia polinómica de grado 2 y cumplimiento.`, "Tendencias")}
               disabled={exportandoPDF}
               className="gap-2"
             >
@@ -501,7 +576,7 @@ export default function PlantaReporteTendencias({
               {errorExportacion}
             </p>
           )}
-          <p className="mt-1 text-xs text-slate-500">Las barras muestran la producción diaria; la línea polinómica muestra su tendencia de grado 2. La línea roja indica el cumplimiento frente a lo planificado en el eje derecho.</p>
+          <p className="mt-1 text-xs text-slate-500">Las barras muestran el total de producción por periodo; la línea polinómica muestra su tendencia de grado 2. La línea roja indica el cumplimiento frente a lo planificado en el eje derecho.</p>
           <div ref={graficaRef} className="mt-3 h-[420px] min-w-0 bg-white">
             <ResponsiveContainer width="100%" height="100%">
               <ComposedChart data={datos} margin={{ top: 12, right: 16, left: 8, bottom: 12 }}>
@@ -521,7 +596,7 @@ export default function PlantaReporteTendencias({
                     const fila = payload[0]?.payload;
                     return (
                       <div className="rounded-lg border border-slate-200 bg-white px-3 py-2 shadow-lg">
-                        <p className="mb-1 font-semibold text-slate-900">{String(fila?.fecha || label)}</p>
+                        <p className="mb-1 font-semibold text-slate-900">{String(fila?.etiquetaFecha || label)}</p>
                         <p style={{ color: COLORES[lineaSeleccionada - 1] }}>
                           Producción: {formatearMiles(Number(fila?.produccion) || 0)} cajas
                         </p>
@@ -575,12 +650,12 @@ export default function PlantaReporteTendencias({
           </div>
         </section>
       ) : (
-        <section aria-label="Paradas diarias por línea" className="rounded-2xl border border-slate-200 bg-white p-4">
+        <section aria-label={`Paradas ${periodoEtiqueta} por línea`} className="rounded-2xl border border-slate-200 bg-white p-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h3 className="text-xs font-black uppercase tracking-wide text-slate-700">Paradas diarias · Línea {lineaSeleccionada}</h3>
+            <h3 className="text-xs font-black uppercase tracking-wide text-slate-700">Paradas {periodoEtiqueta} · Línea {lineaSeleccionada}</h3>
             <Button
               type="button"
-              onClick={() => exportarPDF(graficaParadasRef.current, "Tendencias de Paradas", "Horas de parada por categoría y tendencia polinómica de grado 2.", "Paradas")}
+              onClick={() => exportarPDF(graficaParadasRef.current, "Tendencias de Paradas", `Horas de parada por periodo, tendencia polinómica de grado 2 (${periodoEtiqueta}).`, "Paradas")}
               disabled={exportandoPDF}
               className="gap-2"
             >
@@ -602,7 +677,7 @@ export default function PlantaReporteTendencias({
           {paradasSeleccionadas.length === 0 && (
             <p className="mt-2 text-xs font-semibold text-slate-600">Selecciona al menos un tipo de parada para mostrar datos.</p>
           )}
-          <p className="mt-1 text-xs text-slate-500">Cada color representa un tipo de parada; la línea polinómica muestra la tendencia del total de las categorías seleccionadas.</p>
+          <p className="mt-1 text-xs text-slate-500">Tiempo Muerto suma las paradas no programadas. Si está seleccionado, la tendencia excluye sus categorías de detalle para evitar duplicar horas.</p>
           <div ref={graficaParadasRef} className="mt-3 h-[420px] min-w-0 bg-white">
             <ResponsiveContainer width="100%" height="100%">
               <ComposedChart data={datosParadas} margin={{ top: 12, right: 16, left: 8, bottom: 12 }}>
@@ -615,7 +690,7 @@ export default function PlantaReporteTendencias({
                     const fila = payload[0]?.payload;
                     return (
                       <div className="rounded-lg border border-slate-200 bg-white px-3 py-2 shadow-lg">
-                        <p className="mb-1 font-semibold text-slate-900">{String(fila?.fecha || label)}</p>
+                        <p className="mb-1 font-semibold text-slate-900">{String(fila?.etiquetaFecha || label)}</p>
                         {payload.map((dato) => (
                           <p key={String(dato.dataKey)} style={{ color: String(dato.color || "#334155") }}>
                             {String(dato.name)}: {formatearMiles(Number(dato.value) || 0)} h
