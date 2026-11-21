@@ -193,7 +193,7 @@ export const PRODUCT_FACTORS: Record<string, Record<string, number>> = {
   "GLUP KOLITA": { "2Lts": 8895, "1Lt": 8895, "0.4Lts": 17790 },
   "GLUP MANZANA VERDE": { "2Lts": 8265, "1Lt": 8265, "0.4Lts": 16530 },
   "GLUP PIÑA PARCHITA": { "2Lts": 6812.5, "1Lt": 6812.5, "0.4Lts": 13625 },
-  "GLUP MANZANA ROJA": { "2Lts": 8047.5, "1Lt": 8047.5, "0.4Lts": 16095 },
+  "GLUP MANZANA ROJA": { "2Lts": 8325, "1Lt": 8325, "0.4Lts": 16650 },
   "JUSTY NARANJA": { "1.5Lts": 1111.11 },
   "JUSTY DURAZNO": { "1.5Lts": 1111.11 },
   "JUSTY MANDARINA": { "1.5Lts": 1111.11 },
