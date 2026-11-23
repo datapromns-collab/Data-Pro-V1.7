@@ -11,7 +11,7 @@ import {
 } from '@/hooks/use-permissions-store';
 import { type UserRole, useAuthStore } from '@/hooks/use-auth-store';
 import { Button } from '@/components/ui/button';
-import { ShieldCheck, ChevronDown, ChevronRight, UserPlus, Trash2, Upload, X } from 'lucide-react';
+import { ShieldCheck, ChevronDown, ChevronRight, UserPlus, Trash2, Upload, X, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ProfileImageViewer } from '@/components/planner/ProfileImageViewer';
 
@@ -130,6 +130,7 @@ function PermisosModuleContent() {
   const [selectedUserId, setSelectedUserId] = useState<string | null>(users[0]?.id ?? null);
   const [selectedModule, setSelectedModule] = useState<ModuleId>(allModules[0]);
   const [form, setForm] = useState({ ...DEFAULT_USER_FORM });
+  const [userSearch, setUserSearch] = useState('');
   const [notice, setNotice] = useState<string | null>(null);
   const [isSavingProfileImage, setIsSavingProfileImage] = useState(false);
   const profileImageInputRef = useRef<HTMLInputElement>(null);
@@ -151,6 +152,12 @@ function PermisosModuleContent() {
   }, [selectedUserId, users]);
 
   const selectedUser = selectedUserId ? users.find((user) => user.id === selectedUserId) ?? null : null;
+  const filteredUsers = users.filter((user) => {
+    const query = userSearch.trim().toLocaleLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    if (!query) return true;
+    return [user.name, user.id, user.role, user.displayRole ?? '']
+      .some((value) => value.toLocaleLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(query));
+  });
 
   useEffect(() => {
     if (selectedUser) {
@@ -318,8 +325,20 @@ function PermisosModuleContent() {
             </Button>
           </div>
 
+          <label className="relative block">
+            <Search aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <input
+              type="search"
+              value={userSearch}
+              onChange={(event) => setUserSearch(event.target.value)}
+              aria-label="Buscar usuarios"
+              placeholder="Buscar usuario..."
+              className="h-10 w-full rounded-xl border border-slate-200 bg-white pl-9 pr-3 text-xs font-semibold text-slate-800 outline-none placeholder:font-medium placeholder:text-slate-400 focus:border-primary"
+            />
+          </label>
+
           <div className="space-y-2">
-            {users.map((user) => (
+            {filteredUsers.map((user) => (
               <div
                 key={user.id}
                 className={cn(
@@ -348,6 +367,11 @@ function PermisosModuleContent() {
                 </button>
               </div>
             ))}
+            {filteredUsers.length === 0 && (
+              <p className="rounded-xl border border-dashed border-slate-200 px-3 py-5 text-center text-xs font-semibold text-slate-500">
+                No se encontraron usuarios.
+              </p>
+            )}
           </div>
           </div>
 

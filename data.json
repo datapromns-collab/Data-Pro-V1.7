@@ -33379,7 +33379,8 @@
         "etq.mds": [
           "planning",
           "seguimiento",
-          "management"
+          "management",
+          "planta"
         ],
         "logg.mds": [
           "planning",
@@ -34163,7 +34164,8 @@
           "planta.cycles": "none"
         },
         "enf.mds": {
-          "planta.cycles": "none"
+          "planta.cycles": "none",
+          "planta.line-stops.work-orders.edit-pending": "write"
         },
         "mtto2.mds": {
           "planta.cycles": "none"
@@ -34201,6 +34203,10 @@
           "planning.seguimiento-prodt": "none",
           "planning.speeds": "none",
           "planning.calculator": "none",
+          "planta.line-stops.work-orders.edit-pending": "write",
+          "planta.cycles": "none"
+        },
+        "etq.mds": {
           "planta.line-stops.work-orders.edit-pending": "write",
           "planta.cycles": "none"
         }
@@ -34370,10 +34376,10 @@
       },
       {
         "id": "etq.mds",
-        "name": "Especialista Etiquetadora",
+        "name": "Victor Carballo",
         "password": "scrypt$FKId00n4zR2_67ImrqiRGw$N758Z6_cBwS_I9svYnP-xlFdzuKrCtENL-MKhoVm7m_oyoBHYGNJx926rI95y7J1MRa_ukeP7J89WenctDSk1A",
         "role": "STANDARD",
-        "displayRole": "ETIQUETADORA"
+        "displayRole": "Especialista Etiquetadora"
       },
       {
         "id": "logg.mds",
@@ -34518,7 +34524,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-23T18:03:02.111Z"
+    "updatedAt": "2026-11-23T20:26:58.361Z"
   },
   "ordenesSap": [
     {
