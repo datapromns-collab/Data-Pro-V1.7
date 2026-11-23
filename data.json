@@ -34425,11 +34425,39 @@
         "role": "STANDARD",
         "displayRole": "STANDARD",
         "password": "scrypt$LfaXWYOPpz8IqA14TTzDuQ$sbIIk-vNzZJ53ndqzl5HaLsYdDtsbeZcyJ1nlASOrIYvb2161fY6oqTeu6fM_yyyMzQmhf8z7TDPQxE4Po2naA"
+      },
+      {
+        "id": "prodts1.mds",
+        "name": "Ricardo Díaz",
+        "role": "STANDARD",
+        "displayRole": "Supervisor de Producción",
+        "password": "scrypt$UO4XtU2aAbAVkMltFoBUhQ$qwJn2pggSIUxQLzo5kA82IHDZTXrtCAYwULHS1fPt1JxwMUv4ZWDAB3sWJlN6dKN9c2idX4a385dNhTI640zjQ"
+      },
+      {
+        "id": "prodts2.mds",
+        "name": "Daniel Moncada",
+        "role": "STANDARD",
+        "displayRole": "Supervisor de Protección",
+        "password": "scrypt$jGbtePhlqBhd7wy3KYfFlw$z_dE9gbx__JBOPtKalIP4tcG43g937AFFlYVcFaeHDe-rlJpiR-RkbhqNl1JSmCi1L-HKLieEgjKIFK1Uc7zEA"
+      },
+      {
+        "id": "prodts3.mds",
+        "name": "Gregorio Aguilar",
+        "role": "STANDARD",
+        "displayRole": "Supervisor de Producción",
+        "password": "scrypt$BvxpiIuyGuUE1Cix2kMbcg$lca4npatPi7TVL8pwPSt54u7A3EQBHKXT7velpuXe7iZ35v8GgC-DyqXRO9LULiWEo9tosyIP1G-KthltCyArA"
+      },
+      {
+        "id": "prodts4.mds",
+        "name": "Jhon Bolivar",
+        "role": "STANDARD",
+        "displayRole": "Supervisor de Producción",
+        "password": "scrypt$rj0xoIJhLkWCOniw0RbP2g$cRV4uOcZql4Itb2wKP7ejduNypN83wbyeuH6qH7nz3FoW2h5xhZxE-ZudW8unqj-FJ7lb_WSkseuymgdJ_EWSg"
       }
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-23T17:17:12.735Z"
+    "updatedAt": "2026-11-23T17:58:07.715Z"
   },
   "ordenesSap": [
     {
@@ -66750,7 +66778,7 @@
         "2026-11-20": {
           "PORTUGUESA": {
             "invInicialSacos": "11200",
-            "recepcionSacos": "8200",
+            "recepcionSacos": "6200",
             "invFinalSacos": "13360"
           }
         },
@@ -68645,7 +68673,8 @@
         "2026-11-15": "1.02",
         "2026-11-17": "1.02",
         "2026-11-18": "1.02",
-        "2026-11-19": "1.02"
+        "2026-11-19": "1.02",
+        "2026-11-20": "1.02"
       },
       "_deletedIds": {},
       "weeklyFisico": {
@@ -68676,7 +68705,7 @@
         "2026-11-02|2026-11": 1274383.35,
         "2026-11-23|2026-11": 0,
         "2026-11-09|2026-11": 1281265.09,
-        "2026-11-16|2026-11": 1409362.18
+        "2026-11-16|2026-11": 1309362.18
       }
     },
     "seguimiento-etiquetadora": {
