@@ -1999,7 +1999,7 @@ function JarabesModuleInner({ onPrintStandard, onPrintPromedio, onPrintWeeklySta
   }, [selectedFecha]);
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-700 w-full">
+    <div className="jarabes-theme-scope space-y-6 animate-in fade-in duration-700 w-full">
       <Tabs defaultValue="simple" className="w-full">
         <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6 no-print">
           <TabsList className="bg-transparent h-auto p-0">
