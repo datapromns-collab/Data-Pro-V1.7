@@ -295,8 +295,9 @@ function PermisosModuleContent() {
         </Button>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[320px_240px_minmax(0,1fr)]">
-        <section className="space-y-4 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm xl:max-h-[min(70vh,640px)] xl:overflow-y-auto xl:overscroll-contain">
+      <div className="grid gap-6 2xl:grid-cols-[320px_240px_minmax(0,1fr)_320px]">
+        <section className="space-y-4 2xl:contents">
+          <div className="space-y-4 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm 2xl:max-h-[min(70vh,640px)] 2xl:overflow-y-auto 2xl:overscroll-contain">
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Usuarios</p>
@@ -348,8 +349,9 @@ function PermisosModuleContent() {
               </div>
             ))}
           </div>
+          </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+          <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm 2xl:order-4 2xl:max-h-[min(70vh,640px)] 2xl:overflow-y-auto 2xl:overscroll-contain">
             <div className="mb-3 text-[10px] font-black uppercase tracking-widest text-slate-500">Usuario seleccionado</div>
             <div className="space-y-3">
               <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500">
@@ -482,7 +484,7 @@ function PermisosModuleContent() {
           </div>
         </section>
 
-        <section aria-label="Selección de módulos" className="h-fit rounded-3xl border border-slate-200 bg-white p-4 shadow-sm xl:max-h-[min(70vh,640px)] xl:overflow-y-auto xl:overscroll-contain">
+        <section aria-label="Selección de módulos" className="h-fit rounded-3xl border border-slate-200 bg-white p-4 shadow-sm 2xl:order-2 2xl:max-h-[min(70vh,640px)] 2xl:overflow-y-auto 2xl:overscroll-contain">
           <div className="mb-3">
             <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-500">Módulos</h3>
             <p className="mt-1 text-[10px] font-semibold text-slate-400">Selecciona un módulo para configurar sus secciones.</p>
@@ -514,7 +516,7 @@ function PermisosModuleContent() {
           </div>
         </section>
 
-        <section className="h-fit self-start rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="h-fit self-start rounded-3xl border border-slate-200 bg-white p-5 shadow-sm 2xl:order-3">
           <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
             <div>
               <h3 className="text-base font-black uppercase tracking-tight text-slate-900">{MODULE_LABELS[selectedModule]}</h3>

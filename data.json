@@ -33451,6 +33451,22 @@
         "mtto7.mds": [
           "planning",
           "planta"
+        ],
+        "prodts1.mds": [
+          "planning",
+          "planta"
+        ],
+        "prodts2.mds": [
+          "planning",
+          "planta"
+        ],
+        "prodts3.mds": [
+          "planning",
+          "planta"
+        ],
+        "prodts4.mds": [
+          "planning",
+          "planta"
         ]
       },
       "planning": {
@@ -33908,6 +33924,18 @@
         "mtto7.mds": [
           "planning",
           "planta"
+        ],
+        "prodts1.mds": [
+          "planning"
+        ],
+        "prodts2.mds": [
+          "planning"
+        ],
+        "prodts3.mds": [
+          "planning"
+        ],
+        "prodts4.mds": [
+          "planning"
         ]
       },
       "sections": {
@@ -34142,6 +34170,39 @@
         },
         "mtto4.mds": {
           "planta.cycles": "none"
+        },
+        "prodts1.mds": {
+          "planning.gantt": "read",
+          "planning.plan-semana": "read",
+          "planning.seguimiento-prodt": "none",
+          "planning.speeds": "none",
+          "planning.calculator": "none",
+          "planta.line-stops.work-orders.edit-pending": "write",
+          "planta.cycles": "none"
+        },
+        "prodts2.mds": {
+          "planning.gantt": "read",
+          "planning.seguimiento-prodt": "none",
+          "planning.speeds": "none",
+          "planning.calculator": "none",
+          "planta.line-stops.work-orders.edit-pending": "write",
+          "planta.cycles": "none"
+        },
+        "prodts3.mds": {
+          "planning.gantt": "read",
+          "planning.seguimiento-prodt": "none",
+          "planning.speeds": "none",
+          "planning.calculator": "none",
+          "planta.line-stops.work-orders.edit-pending": "write",
+          "planta.cycles": "none"
+        },
+        "prodts4.mds": {
+          "planning.gantt": "read",
+          "planning.seguimiento-prodt": "none",
+          "planning.speeds": "none",
+          "planning.calculator": "none",
+          "planta.line-stops.work-orders.edit-pending": "write",
+          "planta.cycles": "none"
         }
       }
     },
@@ -34166,7 +34227,7 @@
         "id": "demon2",
         "name": "yonny .H",
         "password": "scrypt$IjZwMF7XPLFbEb6fW4riFQ$9DBfWYFHexcPbPgM0x9MRrK5pZC6o62VjOk4uoyce0wk8a47zfiVdmfam9yQQwsOq9mvouYbB4gBSKlOwx-vdQ",
-        "role": "STANDARD",
+        "role": "ADMIN",
         "displayRole": "Carga Sap",
         "avatarUrl": "data:image/jpeg;base64,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"
       },
@@ -34457,7 +34518,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-23T17:58:07.715Z"
+    "updatedAt": "2026-11-23T18:03:02.111Z"
   },
   "ordenesSap": [
     {
@@ -64914,6 +64975,28 @@
             "preparado": "40",
             "final": "40"
           }
+        },
+        "2026-11-23": {
+          "GLUP COLA": {
+            "inicial": "95.24",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP FRESH 10%": {
+            "inicial": "12.62",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP KOLITA": {
+            "inicial": "36",
+            "preparado": "",
+            "final": ""
+          },
+          "JUSTY NARANJA": {
+            "inicial": "40",
+            "preparado": "",
+            "final": ""
+          }
         }
       },
       "sugar": {
@@ -66795,6 +66878,13 @@
             "recepcionSacos": "",
             "invFinalSacos": "11280"
           }
+        },
+        "2026-11-23": {
+          "PORTUGUESA": {
+            "invInicialSacos": "11280",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          }
         }
       },
       "tanques": {
@@ -68468,6 +68558,16 @@
           "Sala 1": {
             "invInicialSacos": "887",
             "invFinalSacos": "1213"
+          }
+        },
+        "2026-11-23": {
+          "JARABE SIMPLE": {
+            "invInicialSacos": "523",
+            "invFinalSacos": ""
+          },
+          "Sala 1": {
+            "invInicialSacos": "1213",
+            "invFinalSacos": ""
           }
         }
       },
@@ -298834,6 +298934,443 @@
         "usuario": "Luis Sanchez",
         "id": 1795448797250,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "operador": "JOSE CORDERO",
+        "linea": "Línea 1",
+        "equipo": "LLENADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "07:28",
+        "finParada": "07:37",
+        "totalMin": "9",
+        "zona": "Llenado",
+        "falla": "FALLA EN LECTOR DE TAPAS ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1795457072633,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "08:42",
+        "finParada": "09:10",
+        "totalMin": "28",
+        "zona": "Llenado",
+        "falla": "FALLA ELECTRICA PAC, SE REALIZA ELCAMBIO DE FASE DE GENERADORES ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1795457203393,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "operador": "SAUL ALBANO",
+        "linea": "Línea 1",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "12:25",
+        "finParada": "12:42",
+        "totalMin": "17",
+        "zona": "Llenado",
+        "falla": "DESACOPLE DEL TAMBOR DE TRANSFERENCIA, SE AJUSTA CILINDRO DE TRANSFERENCIA ",
+        "orden": "10397",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1795458070722,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "09:10",
+        "finParada": "09:25",
+        "totalMin": "15",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES POSTERIOR A LA FALLA ELECTRICA SE REINICIA LA MAQUINA ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1795458134832,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "operador": "JOEL INOJOSA ",
+        "linea": "Línea 1",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "10:45",
+        "finParada": "10:51",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "FALLA EN EL CORTE ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1795458220321,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "",
+        "tipoParada": "SALA DE JARABE",
+        "inicioParada": "11:25",
+        "finParada": "11:31",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "SIN PRESION DE JARABE ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1795458252464,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "operador": "JOEL INOJOSA ",
+        "linea": "Línea 1",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "11:36",
+        "finParada": "11:45",
+        "totalMin": "9",
+        "zona": "Llenado",
+        "falla": "BOTELLAS CAIDA EN EMPLAYADO ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1795458293074,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "operador": "BRUNO VALLES ",
+        "linea": "Línea 2",
+        "equipo": "TAPADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "07:00",
+        "finParada": "07:10",
+        "totalMin": "10",
+        "zona": "Llenado",
+        "falla": "SENSOR DE TAPAS DESAJUSTADO ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1795458508068,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "operador": "BRUNO VALLES ",
+        "linea": "Línea 2",
+        "equipo": "TAPADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "08:30",
+        "finParada": "09:20",
+        "totalMin": "50",
+        "zona": "Llenado",
+        "falla": "TAPA TRANCADA EN BAJANTE, SE REALIZA AJUSTE EN BAJANTE DE TAPAS ",
+        "orden": "10801",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1795458673932,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 2",
+        "equipo": "TAPADORA ",
+        "tipoParada": "AVERIA ",
+        "inicioParada": "10:22",
+        "finParada": "10:32",
+        "totalMin": "10",
+        "zona": "Llenado",
+        "falla": "TAPAS ATASCADA EN RIEL ",
+        "orden": "10802",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1795458771724,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "operador": "JOSE CORDERO",
+        "linea": "Línea 1",
+        "equipo": "LLENADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "13:49",
+        "finParada": "14:01",
+        "totalMin": "12",
+        "zona": "Llenado",
+        "falla": "AJUSTE DE ESTRELLA DE TRANSFERENCIA ",
+        "orden": "10398",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1795460126973,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "TRANSPORTADOR DE CAJAS",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "07:05",
+        "finParada": "07:50",
+        "totalMin": "45",
+        "zona": "Llenado",
+        "falla": "RUPTURA DE BANDA TRANSPORTADORA DE CAJAS ",
+        "orden": "10620",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1795460324684,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "operador": "DANIEL PARRA ",
+        "linea": "Línea 3",
+        "equipo": "LLENADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "08:13",
+        "finParada": "08:27",
+        "totalMin": "14",
+        "zona": "Llenado",
+        "falla": "MAL LLENADO VALVULA 93-88",
+        "orden": "10621",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1795460480251,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "08:42",
+        "finParada": "14:52",
+        "totalMin": "370",
+        "zona": "Llenado",
+        "falla": "FALLA DE ENERGIA ELECTRICA PAC ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1795460542411,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 4",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "08:42",
+        "finParada": "14:52",
+        "totalMin": "370",
+        "zona": "Llenado",
+        "falla": "FALLA ELECTRICA PAC ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1795460654099,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 5",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "08:42",
+        "finParada": "14:52",
+        "totalMin": "370",
+        "zona": "Llenado",
+        "falla": "FALLA ELECTRICA PAC ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1795460677930,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 6",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "08:42",
+        "finParada": "14:52",
+        "totalMin": "370",
+        "zona": "Llenado",
+        "falla": "FALLA ELECTRICA PAC ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1795460695692,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 7",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "08:42",
+        "finParada": "14:52",
+        "totalMin": "370",
+        "zona": "Llenado",
+        "falla": "FALLA ELECTRICA PAC ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1795460721835,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "operador": "MARCELO RIVAS",
+        "linea": "Línea 5",
+        "equipo": "LLENADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "07:00",
+        "finParada": "07:20",
+        "totalMin": "20",
+        "zona": "Llenado",
+        "falla": "AJUSTE DE SINCRONIZACION DE LLENADORA ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1795460828157,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "operador": "MARCELO RIVAS",
+        "linea": "Línea 5",
+        "equipo": "LLENADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "07:33",
+        "finParada": "07:40",
+        "totalMin": "7",
+        "zona": "Llenado",
+        "falla": "PLATO DE CARGA DE TAPAS SOCIO",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1795460978521,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 6",
+        "equipo": "LLENADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "07:00",
+        "finParada": "07:08",
+        "totalMin": "8",
+        "zona": "Llenado",
+        "falla": "DRENADO POR ALTA TEMPERATURA ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1795461062010,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "operador": "JOSE RICO",
+        "linea": "Línea 7",
+        "equipo": "SOPLADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "07:24",
+        "finParada": "07:34",
+        "totalMin": "10",
+        "zona": "Llenado",
+        "falla": "AJUSTE EYECTOR DE BOTELLAS ",
+        "orden": "10542",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1795461167440,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "operador": "ATAGUALPA BASTIDAS ",
+        "linea": "Línea 7",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "08:15",
+        "finParada": "08:40",
+        "totalMin": "25",
+        "zona": "Llenado",
+        "falla": "TAPETE ATASCADDO ",
+        "orden": "10541",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1795461284511,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -330031,6 +330568,222 @@
         "observaciones": "",
         "bloqueado": true,
         "usuario": "Luis Sanchez"
+      },
+      {
+        "id": 1795458071887.5574,
+        "fechaOrden": "2026-11-23",
+        "orden": "10397",
+        "fechaEmision": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "solicitante": "MICHAEL AGRAZ",
+        "linea": "Línea 1",
+        "maquina": "ETIQUETADORA",
+        "aviso": "7350",
+        "fechaParada": "2026-11-23",
+        "inicioMtto": "12:26",
+        "finMtto": "12:36",
+        "inicioParada": "12:25",
+        "finParada": "12:42",
+        "tMtto": "17",
+        "tipoParada": "AVERÍA",
+        "mtto": "correctivo",
+        "falla": "DESACOPLE DEL TAMBOR DE TRANSFERENCIA, SE AJUSTA CILINDRO DE TRANSFERENCIA ",
+        "mttoEsp": "RENNY GUTIERRES",
+        "descripcionFalla": "DESACOPLE DEL TAMBOR DE TRANSFERENCIA ",
+        "descripcionAccion": "AJUSTE EN EL CILINDRO DE TRANFERENCIA ",
+        "observaciones": "",
+        "bloqueado": true,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "id": 1795458677704.2612,
+        "fechaOrden": "2026-11-23",
+        "orden": "10801",
+        "fechaEmision": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "solicitante": "",
+        "linea": "Línea 2",
+        "maquina": "TAPADORA",
+        "aviso": "",
+        "fechaParada": "2026-11-23",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "08:30",
+        "finParada": "09:20",
+        "tMtto": "50",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "TAPA TRANCADA EN BAJANTE, SE REALIZA AJUSTE EN BAJANTE DE TAPAS ",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": true,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "id": 1795459178643.6917,
+        "fechaOrden": "2026-11-23",
+        "orden": "10802",
+        "fechaEmision": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "solicitante": "",
+        "linea": "Línea 2",
+        "maquina": "TAPADORA ",
+        "aviso": "",
+        "fechaParada": "2026-11-23",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "10:22",
+        "finParada": "10:32",
+        "tMtto": "10",
+        "tipoParada": "AVERIA ",
+        "mtto": "",
+        "falla": "TAPAS ATASCADA EN RIEL ",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": true,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "id": 1795460126974,
+        "fechaOrden": "2026-11-23",
+        "orden": "10398",
+        "fechaEmision": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "solicitante": "MICHAEL AGRAZ",
+        "linea": "Línea 1",
+        "maquina": "LLENADORA",
+        "aviso": "7352",
+        "fechaParada": "2026-11-23",
+        "inicioMtto": "13:50",
+        "finMtto": "14:01",
+        "inicioParada": "13:49",
+        "finParada": "14:01",
+        "tMtto": "12",
+        "tipoParada": "AVERÍA",
+        "mtto": "correctivo",
+        "falla": "AJUSTE DE ESTRELLA DE TRANSFERENCIA ",
+        "mttoEsp": "ELPIDIO BORREGO",
+        "descripcionFalla": "AJUSTE DE ESTRELLA DE TRANSFERENCIA ",
+        "descripcionAccion": "CORRECCIOON DE DE ALTURA DE ESTRELLA ENTRADA A TAPADORA ",
+        "observaciones": "",
+        "bloqueado": true,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "id": 1795460338427.6106,
+        "fechaOrden": "2026-11-23",
+        "orden": "10620",
+        "fechaEmision": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "solicitante": "",
+        "linea": "Línea 3",
+        "maquina": "TRANSPORTADOR DE CAJAS",
+        "aviso": "",
+        "fechaParada": "2026-11-23",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "07:05",
+        "finParada": "07:50",
+        "tMtto": "45",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "RUPTURA DE BANDA TRANSPORTADORA DE CAJAS ",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": true,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "id": 1795460488438.2854,
+        "fechaOrden": "2026-11-23",
+        "orden": "10621",
+        "fechaEmision": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "solicitante": "",
+        "linea": "Línea 3",
+        "maquina": "LLENADORA",
+        "aviso": "",
+        "fechaParada": "2026-11-23",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "08:13",
+        "finParada": "08:27",
+        "tMtto": "14",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "MAL LLENADO VALVULA 93-88",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": true,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "id": 1795461178381.1143,
+        "fechaOrden": "2026-11-23",
+        "orden": "10542",
+        "fechaEmision": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "solicitante": "",
+        "linea": "Línea 7",
+        "maquina": "SOPLADORA",
+        "aviso": "",
+        "fechaParada": "2026-11-23",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "07:24",
+        "finParada": "07:34",
+        "tMtto": "10",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "AJUSTE EYECTOR DE BOTELLAS ",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": true,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "id": 1795463143813.158,
+        "fechaOrden": "2026-11-23",
+        "orden": "10541",
+        "fechaEmision": "2026-11-23",
+        "semana": 48,
+        "turno": "DIURNO",
+        "solicitante": "",
+        "linea": "Línea 7",
+        "maquina": "ENFARDADORA",
+        "aviso": "",
+        "fechaParada": "2026-11-23",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "08:15",
+        "finParada": "08:40",
+        "tMtto": "25",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "TAPETE ATASCADDO ",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": true,
+        "usuario": "Luis Sanchez"
       }
     ],
     "seguimiento-ordenes": {
@@ -330414,6 +331167,12 @@
           "jarabeReal": 107199,
           "producto": "604",
           "ubb": 37.3
+        },
+        "auto-1-1795199934803": {
+          "cajasPlanificadas": 86250,
+          "producto": "247",
+          "jarabeReal": 133663,
+          "ubb": 46.49
         }
       },
       "linea-2": {
@@ -330856,6 +331615,12 @@
           "producto": "96",
           "jarabeReal": 100080,
           "ubb": 48
+        },
+        "auto-2-1795260355903": {
+          "cajasPlanificadas": 64013,
+          "producto": "317",
+          "jarabeReal": 136798,
+          "ubb": 88
         }
       },
       "linea-3": {
@@ -331201,7 +331966,10 @@
           "producto": "137"
         },
         "auto-3-1795199947750": {
-          "cajasPlanificadas": 96600
+          "cajasPlanificadas": 96600,
+          "producto": "20",
+          "jarabeReal": 66217,
+          "ubb": 23
         }
       },
       "linea-4": {
@@ -331498,7 +332266,9 @@
         },
         "auto-4-1795199957132": {
           "cajasPlanificadas": 128800,
-          "producto": "208"
+          "producto": "343",
+          "jarabeReal": 86927,
+          "ubb": 30.23
         }
       },
       "linea-5": {
@@ -331746,7 +332516,9 @@
         },
         "auto-5-1795200178468": {
           "cajasPlanificadas": 50820,
-          "producto": "280"
+          "producto": "310",
+          "jarabeReal": 310000,
+          "ubb": 310
         }
       },
       "linea-6": {
@@ -332072,7 +332844,9 @@
         },
         "auto-6-1795198627162": {
           "cajasPlanificadas": 34500,
-          "producto": "20"
+          "producto": "152",
+          "jarabeReal": 22420,
+          "ubb": 7.79
         }
       },
       "linea-7": {
@@ -332510,7 +333284,9 @@
         },
         "auto-7-1795260368123": {
           "cajasPlanificadas": 16125,
-          "producto": "0"
+          "producto": "5",
+          "jarabeReal": 33340,
+          "ubb": 16
         }
       }
     },
