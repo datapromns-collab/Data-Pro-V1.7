@@ -1,5 +1,5 @@
 import { readDb, writeDb } from '@/lib/db-writer';
-import { requireAuthenticated } from '@/lib/server-auth';
+import { requireAuthenticated, requireMessageSender } from '@/lib/server-auth';
 
 export async function GET(request: Request) {
   const auth = await requireAuthenticated(request);
@@ -23,7 +23,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const auth = await requireAuthenticated(request);
+  const auth = await requireMessageSender(request);
   if (auth.response) return auth.response;
   try {
     const body = await request.json();

@@ -463,6 +463,30 @@ export default function PlannerPage() {
     logout
   } = useAuthStore();
 
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const preferenceKey = `data-pro-theme:${user?.id ?? 'guest'}`;
+    try {
+      const enabled = window.localStorage.getItem(preferenceKey) === 'dark';
+      setIsDarkMode(enabled);
+      document.documentElement.classList.toggle('dark', enabled);
+    } catch (error) {
+      console.error('[Theme] No se pudo cargar la preferencia de apariencia', error);
+    }
+  }, [user?.id]);
+
+  const toggleDarkMode = () => {
+    const enabled = !isDarkMode;
+    setIsDarkMode(enabled);
+    document.documentElement.classList.toggle('dark', enabled);
+    try {
+      window.localStorage.setItem(`data-pro-theme:${user?.id ?? 'guest'}`, enabled ? 'dark' : 'light');
+    } catch (error) {
+      console.error('[Theme] No se pudo guardar la preferencia de apariencia', error);
+    }
+  };
+
   const {
     permissions,
     isLoaded: permissionsLoaded,
@@ -471,6 +495,7 @@ export default function PlannerPage() {
     hasReadOnlyModule,
     getModuleLevel,
     getPermissionLevel,
+    canSendMessages,
     allModules
   } = usePermissionsStore();
 
@@ -4420,8 +4445,24 @@ export default function PlannerPage() {
                       )}
                     </div>
                   )}
-                  {user && <MessagesCenter user={user} isAdmin={isAdmin} />}
+                  {user && (
+                    <MessagesCenter
+                      user={user}
+                      canSendMessages={isAdmin || canSendMessages(user.id)}
+                    />
+                  )}
                   <FcmManager userId={user?.id} />
+                  <button
+                    type="button"
+                    onClick={toggleDarkMode}
+                    aria-label={isDarkMode ? 'Activar modo claro' : 'Activar modo oscuro'}
+                    aria-pressed={isDarkMode}
+                    title={isDarkMode ? 'Activar modo claro' : 'Activar modo oscuro'}
+                    className="inline-flex h-9 shrink-0 items-center gap-2 rounded-full border border-slate-200 bg-white px-3 text-[10px] font-bold uppercase tracking-wide text-slate-700 shadow-sm hover:bg-slate-50"
+                  >
+                    {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                    <span className="hidden sm:inline">{isDarkMode ? 'Claro' : 'Oscuro'}</span>
+                  </button>
                  {activeModule === 'ordenes-sap' && <CorrelativoSelector activeLinea={ordenesSapActiveLinea} selectedFecha={selectedFechaSap} />}
                  {activeModule === 'planning' && (
                   <>

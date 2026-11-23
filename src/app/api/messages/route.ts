@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import { notifyRecipients } from '@/lib/fcm';
-import { requireAuthenticated } from '@/lib/server-auth';
+import { requireAuthenticated, requireMessageSender } from '@/lib/server-auth';
 
 export const runtime = 'nodejs';
 
@@ -69,7 +69,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const auth = await requireAuthenticated(request);
+  const auth = await requireMessageSender(request);
   if (auth.response) return auth.response;
   try {
     const body = await request.json();

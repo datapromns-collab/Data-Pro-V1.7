@@ -82,6 +82,7 @@ const PLANNING_STORAGE_KEY = 'planner_planning_permissions';
 const MANAGEMENT_STORAGE_KEY = 'planner_management_permissions';
 const READONLY_STORAGE_KEY = 'planner_readonly_modules';
 const SECTION_STORAGE_KEY = 'planner_section_permissions';
+const MESSAGE_SENDER_STORAGE_KEY = 'planner_message_sender_permissions';
 
 export type ModuleId =
   | 'planning'
@@ -187,6 +188,7 @@ export interface SharedPermissionsState {
   management: ManagementPermissions;
   readOnlyModules: UserPermissions;
   sections: SectionPermissions;
+  messageSenders: Record<string, boolean>;
 }
 
 type PermissionMapName = keyof SharedPermissionsState;
@@ -198,6 +200,7 @@ const PERMISSION_MAP_NAMES: PermissionMapName[] = [
   'management',
   'readOnlyModules',
   'sections',
+  'messageSenders',
 ];
 
 function getPermissionUpdates(previous: SharedPermissionsState, next: SharedPermissionsState): PermissionUpdates {
@@ -242,7 +245,10 @@ async function loadSharedPermissions(): Promise<SharedPermissionsState | null> {
     const payload = await response.json();
     const permissions = payload?.permissions;
     if (!permissions || typeof permissions !== 'object') return null;
-    return permissions as SharedPermissionsState;
+    return {
+      ...permissions,
+      messageSenders: permissions.messageSenders ?? {},
+    } as SharedPermissionsState;
   } catch {
     return null;
   }
@@ -725,6 +731,7 @@ export function usePermissionsStore() {
   const [managementPermissions, setManagementPermissions] = useState<ManagementPermissions>({});
   const [readOnlyModules, setReadOnlyModules] = useState<UserPermissions>({});
   const [sectionPermissions, setSectionPermissions] = useState<SectionPermissions>({});
+  const [messageSenders, setMessageSenders] = useState<Record<string, boolean>>({});
   const [isLoaded, setIsLoaded] = useState(false);
   const [syncError, setSyncError] = useState(false);
   const currentStateRef = useRef<SharedPermissionsState | null>(null);
@@ -749,12 +756,14 @@ export function usePermissionsStore() {
     const savedManagement = localStorage.getItem(MANAGEMENT_STORAGE_KEY);
     const savedReadOnly = localStorage.getItem(READONLY_STORAGE_KEY);
     const savedSections = localStorage.getItem(SECTION_STORAGE_KEY);
+    const savedMessageSenders = localStorage.getItem(MESSAGE_SENDER_STORAGE_KEY);
 
     let modules: UserPermissions = {};
     let planning: PlanningPermissions = {};
     let management: ManagementPermissions = {};
     let readOnly: UserPermissions = {};
     let sections: SectionPermissions = {};
+    let messageSenderPermissions: Record<string, boolean> = {};
 
     if (savedModules) {
       try {
@@ -804,12 +813,21 @@ export function usePermissionsStore() {
       }
     }
 
+    if (savedMessageSenders) {
+      try {
+        messageSenderPermissions = JSON.parse(savedMessageSenders) as Record<string, boolean>;
+      } catch {
+        messageSenderPermissions = {};
+      }
+    }
+
     const localState: SharedPermissionsState = {
       modules,
       planning,
       management,
       readOnlyModules: readOnly,
       sections,
+      messageSenders: messageSenderPermissions,
     };
 
     const applyState = (next: SharedPermissionsState) => {
@@ -818,6 +836,7 @@ export function usePermissionsStore() {
       setManagementPermissions(next.management);
       setReadOnlyModules(next.readOnlyModules);
       setSectionPermissions(next.sections);
+      setMessageSenders(next.messageSenders ?? {});
       currentStateRef.current = next;
       persistedStateRef.current = next;
     };
@@ -850,6 +869,7 @@ export function usePermissionsStore() {
       management: managementPermissions,
       readOnlyModules,
       sections: sectionPermissions,
+      messageSenders,
     };
     currentStateRef.current = next;
     const persisted = persistedStateRef.current;
@@ -860,7 +880,7 @@ export function usePermissionsStore() {
       void queuePermissionUpdates(updates).catch(() => setSyncError(true));
     }, 150);
     return () => window.clearTimeout(timer);
-  }, [isLoaded, permissions, planningPermissions, managementPermissions, readOnlyModules, sectionPermissions]);
+  }, [isLoaded, permissions, planningPermissions, managementPermissions, readOnlyModules, sectionPermissions, messageSenders]);
 
   useEffect(() => {
     if (!isLoaded) return;
@@ -889,6 +909,7 @@ export function usePermissionsStore() {
       setManagementPermissions(remote.management);
       setReadOnlyModules(remote.readOnlyModules);
       setSectionPermissions(remote.sections);
+      setMessageSenders(remote.messageSenders);
       currentStateRef.current = remote;
       persistedStateRef.current = remote;
       setSyncError(false);
@@ -897,6 +918,7 @@ export function usePermissionsStore() {
       localStorage.setItem(MANAGEMENT_STORAGE_KEY, JSON.stringify(remote.management));
       localStorage.setItem(READONLY_STORAGE_KEY, JSON.stringify(remote.readOnlyModules));
       localStorage.setItem(SECTION_STORAGE_KEY, JSON.stringify(remote.sections));
+      localStorage.setItem(MESSAGE_SENDER_STORAGE_KEY, JSON.stringify(remote.messageSenders));
     };
     const timer = window.setInterval(() => void refresh(), 15000);
     return () => window.clearInterval(timer);
@@ -925,6 +947,11 @@ export function usePermissionsStore() {
   const saveSectionPermissions = (next: SectionPermissions) => {
     setSectionPermissions(next);
     localStorage.setItem(SECTION_STORAGE_KEY, JSON.stringify(next));
+  };
+
+  const saveMessageSenders = (next: Record<string, boolean>) => {
+    setMessageSenders(next);
+    localStorage.setItem(MESSAGE_SENDER_STORAGE_KEY, JSON.stringify(next));
   };
 
   const getModuleLevel = useCallback((userId: string, module: ModuleId): PermissionLevel => {
@@ -1069,6 +1096,15 @@ export function usePermissionsStore() {
     });
   };
 
+  const canSendMessages = useCallback((userId: string): boolean => (
+    messageSenders[userId] === true
+  ), [messageSenders]);
+
+  const setMessageSendPermission = (userId: string, enabled: boolean) => {
+    if (!userId) return;
+    saveMessageSenders({ ...messageSenders, [userId]: enabled });
+  };
+
   const renameUserAccess = (oldId: string, newId: string) => {
     if (!oldId || !newId || oldId === newId) return;
 
@@ -1111,6 +1147,13 @@ export function usePermissionsStore() {
       delete nextSections[oldId];
     }
     saveSectionPermissions(nextSections);
+
+    const nextMessageSenders = { ...messageSenders };
+    if (oldId in nextMessageSenders) {
+      nextMessageSenders[newId] = nextMessageSenders[oldId];
+      delete nextMessageSenders[oldId];
+    }
+    saveMessageSenders(nextMessageSenders);
   };
 
   const removeUserAccess = (userId: string) => {
@@ -1135,6 +1178,10 @@ export function usePermissionsStore() {
     const nextSections = { ...sectionPermissions };
     delete nextSections[userId];
     saveSectionPermissions(nextSections);
+
+    const nextMessageSenders = { ...messageSenders };
+    delete nextMessageSenders[userId];
+    saveMessageSenders(nextMessageSenders);
   };
 
   const resetToDefaults = () => {
@@ -1143,6 +1190,7 @@ export function usePermissionsStore() {
     saveManagementPermissions({ ...DEFAULT_MANAGEMENT_PERMISSIONS });
     saveReadOnlyModules({ ...DEFAULT_READONLY_MODULES });
     saveSectionPermissions({});
+    saveMessageSenders({});
   };
 
   return {
@@ -1152,6 +1200,8 @@ export function usePermissionsStore() {
     readOnlyModules,
     sectionPermissions,
     isLoaded,
+    canSendMessages,
+    setMessageSendPermission,
     syncError,
     toggleModuleForUser,
     togglePlanningPermission,

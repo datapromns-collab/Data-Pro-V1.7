@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import {
   Bell,
   Send,
@@ -38,12 +38,27 @@ const TYPE_BADGE: Record<Message["type"], { label: string; cls: string; Icon: an
   error: { label: "ERROR", cls: "bg-red-100 text-red-700 border-red-200", Icon: XCircle },
 };
 
+const MESSAGE_EMOJIS = [
+  { emoji: "🙂", label: "Sonrisa" },
+  { emoji: "😂", label: "Risa" },
+  { emoji: "😍", label: "Me encanta" },
+  { emoji: "👍", label: "Aprobación" },
+  { emoji: "👏", label: "Aplausos" },
+  { emoji: "✅", label: "Correcto" },
+  { emoji: "⚠️", label: "Advertencia" },
+  { emoji: "🎉", label: "Celebración" },
+  { emoji: "📢", label: "Anuncio" },
+  { emoji: "❤️", label: "Corazón" },
+  { emoji: "💡", label: "Idea" },
+  { emoji: "🙏", label: "Gracias" },
+] as const;
+
 interface MessagesCenterProps {
   user: { id: string; name: string } | null;
-  isAdmin: boolean;
+  canSendMessages: boolean;
 }
 
-export function MessagesCenter({ user, isAdmin }: MessagesCenterProps) {
+export function MessagesCenter({ user, canSendMessages }: MessagesCenterProps) {
   const userId = user?.id;
   const { messages, unreadCount, markAllAsRead, reload } = useMessagesStore(userId);
   const { toast } = useToast();
@@ -55,6 +70,8 @@ export function MessagesCenter({ user, isAdmin }: MessagesCenterProps) {
   const [recipientMode, setRecipientMode] = useState<"all" | "selected">("all");
   const [selected, setSelected] = useState<string[]>([]);
   const [sending, setSending] = useState(false);
+  const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
+  const messageInputRef = useRef<HTMLTextAreaElement>(null);
 
   const recipients = useMemo(() => {
     if (recipientMode === "all") {
@@ -112,6 +129,20 @@ export function MessagesCenter({ user, isAdmin }: MessagesCenterProps) {
     setSelected((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
   };
 
+  const insertEmoji = (emoji: string) => {
+    const input = messageInputRef.current;
+    const start = input?.selectionStart ?? text.length;
+    const end = input?.selectionEnd ?? text.length;
+    const nextText = `${text.slice(0, start)}${emoji}${text.slice(end)}`;
+    setText(nextText);
+    setEmojiPickerOpen(false);
+    requestAnimationFrame(() => {
+      input?.focus();
+      const cursor = start + emoji.length;
+      input?.setSelectionRange(cursor, cursor);
+    });
+  };
+
   const others = USERS_LIST.filter((u) => u.id !== userId);
 
   return (
@@ -147,7 +178,7 @@ export function MessagesCenter({ user, isAdmin }: MessagesCenterProps) {
           )}
         </div>
 
-        {isAdmin && !composing && (
+        {canSendMessages && !composing && (
           <button
             type="button"
             onClick={() => setComposing(true)}
@@ -157,7 +188,7 @@ export function MessagesCenter({ user, isAdmin }: MessagesCenterProps) {
           </button>
         )}
 
-        {isAdmin && composing && (
+        {canSendMessages && composing && (
           <div className="p-3 space-y-2 border-b border-slate-100">
             <Input
               value={title}
@@ -166,11 +197,44 @@ export function MessagesCenter({ user, isAdmin }: MessagesCenterProps) {
               className="h-9 text-[12px] font-bold"
             />
             <Textarea
+              ref={messageInputRef}
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder="Escribe el mensaje..."
               className="min-h-[70px] text-[12px] resize-none"
             />
+            <div>
+              <button
+                type="button"
+                aria-expanded={emojiPickerOpen}
+                aria-controls="message-emoji-picker"
+                onClick={() => setEmojiPickerOpen((open) => !open)}
+                className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-slate-200 px-2 text-[11px] font-bold text-slate-600 hover:bg-slate-50"
+              >
+                <span aria-hidden="true">😊</span> Emojis
+              </button>
+              {emojiPickerOpen && (
+                <div
+                  id="message-emoji-picker"
+                  role="group"
+                  aria-label="Selecciona un emoji"
+                  className="mt-2 grid grid-cols-6 gap-1 rounded-lg border border-slate-200 bg-white p-2"
+                >
+                  {MESSAGE_EMOJIS.map(({ emoji, label }) => (
+                    <button
+                      key={emoji}
+                      type="button"
+                      aria-label={`Insertar ${label}`}
+                      title={label}
+                      onClick={() => insertEmoji(emoji)}
+                      className="flex h-9 items-center justify-center rounded-md text-lg hover:bg-slate-100"
+                    >
+                      {emoji}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
             <div className="flex items-center gap-2">
               <Select value={type} onValueChange={(v) => setType(v as Message["type"])}>
                 <SelectTrigger className="h-9 w-[110px] text-[11px] font-bold">

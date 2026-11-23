@@ -34210,6 +34210,10 @@
           "planta.line-stops.work-orders.edit-pending": "write",
           "planta.cycles": "none"
         }
+      },
+      "messageSenders": {
+        "maria.mds": true,
+        "alex.mds": true
       }
     },
     "users": [
@@ -34524,7 +34528,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-23T20:26:58.361Z"
+    "updatedAt": "2026-11-23T21:00:17.655Z"
   },
   "ordenesSap": [
     {
@@ -50723,7 +50727,7 @@
         {
           "fechaInicio": "2026-11-23",
           "ticket1": "16814",
-          "cajas1": 1482,
+          "cajas1": 2028,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",

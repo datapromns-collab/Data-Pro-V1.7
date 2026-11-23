@@ -1,6 +1,138 @@
 {
   "messages": [
     {
+      "id": "2026-11-23T21:05:53.156Z-t7e5gq6",
+      "title": "Hola",
+      "message": "Hola fea",
+      "type": "info",
+      "senderId": "alex.mds",
+      "senderName": "Alexandra Arteaga",
+      "recipient": "maria.mds",
+      "read": true,
+      "createdAt": "2026-11-23T21:05:53.156Z"
+    },
+    {
+      "id": "2026-11-23T20:35:12.174Z-5pq9voi",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": true,
+      "createdAt": "2026-11-23T20:35:12.174Z"
+    },
+    {
+      "id": "2026-11-14T15:35:25.107Z-jga2c5r",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": true,
+      "createdAt": "2026-11-14T15:35:25.107Z"
+    },
+    {
+      "id": "2026-11-14T15:03:53.664Z-2n61n47",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": true,
+      "createdAt": "2026-11-14T15:03:53.664Z"
+    },
+    {
+      "id": "2026-11-14T14:09:41.196Z-r0p7c53",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": true,
+      "createdAt": "2026-11-14T14:09:41.196Z"
+    },
+    {
+      "id": "2026-11-14T13:48:44.118Z-do2cnpl",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": true,
+      "createdAt": "2026-11-14T13:48:44.118Z"
+    },
+    {
+      "id": "2026-11-14T13:46:47.735Z-yqq3w5i",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": true,
+      "createdAt": "2026-11-14T13:46:47.735Z"
+    },
+    {
+      "id": "2026-11-14T12:19:40.786Z-xdfhlg4",
+      "title": "Actualización 2",
+      "message": "Culminada",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": true,
+      "createdAt": "2026-11-14T12:19:40.786Z"
+    },
+    {
+      "id": "2026-11-14T12:17:52.855Z-57unndd",
+      "title": "Actualización 2",
+      "message": "Iniciando actualización 2",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": true,
+      "createdAt": "2026-11-14T12:17:52.855Z"
+    },
+    {
+      "id": "2026-11-14T12:09:06.392Z-py7bdtf",
+      "title": "Actualización 1",
+      "message": "Culminada",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": true,
+      "createdAt": "2026-11-14T12:09:06.392Z"
+    },
+    {
+      "id": "2026-11-23T20:45:55.031Z-tc43uje",
+      "title": "asc",
+      "message": "hola",
+      "type": "info",
+      "senderId": "demon2",
+      "senderName": "yonny .H",
+      "recipient": "demon",
+      "read": true,
+      "createdAt": "2026-11-23T20:45:55.031Z"
+    },
+    {
+      "id": "2026-11-23T20:35:12.174Z-553wasj",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "jaime.r",
+      "read": false,
+      "createdAt": "2026-11-23T20:35:12.174Z"
+    },
+    {
       "id": "2026-11-14T15:35:25.107Z-t0jsv9u",
       "title": "Actualización 5",
       "message": "Iniciando actualización",
@@ -100,15 +232,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-728yuko",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-s1jkl9u",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "jaime.r",
-      "read": false,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "recipient": "demon2",
+      "read": true,
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-v0rkwnf",
@@ -210,125 +342,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-xv1obz5",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-mf0vc68",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "demon2",
-      "read": true,
-      "createdAt": "2026-11-14T12:06:05.834Z"
-    },
-    {
-      "id": "2026-11-14T15:35:25.107Z-jga2c5r",
-      "title": "Actualización 5",
-      "message": "Iniciando actualización",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-11-14T15:35:25.107Z"
-    },
-    {
-      "id": "2026-11-14T15:03:53.664Z-2n61n47",
-      "title": "Actualización 4",
-      "message": "Culminada",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-11-14T15:03:53.664Z"
-    },
-    {
-      "id": "2026-11-14T14:09:41.196Z-r0p7c53",
-      "title": "Actualización 4",
-      "message": "Iniciando actualización",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-11-14T14:09:41.196Z"
-    },
-    {
-      "id": "2026-11-14T13:48:44.118Z-do2cnpl",
-      "title": "Actualización 3",
-      "message": "Culminada",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-11-14T13:48:44.118Z"
-    },
-    {
-      "id": "2026-11-14T13:46:47.735Z-yqq3w5i",
-      "title": "Actualización 3",
-      "message": "Iniciando actualización",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-11-14T13:46:47.735Z"
-    },
-    {
-      "id": "2026-11-14T12:19:40.786Z-xdfhlg4",
-      "title": "Actualización 2",
-      "message": "Culminada",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-11-14T12:19:40.786Z"
-    },
-    {
-      "id": "2026-11-14T12:17:52.855Z-57unndd",
-      "title": "Actualización 2",
-      "message": "Iniciando actualización 2",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-11-14T12:17:52.855Z"
-    },
-    {
-      "id": "2026-11-14T12:09:06.392Z-py7bdtf",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-11-14T12:09:06.392Z"
-    },
-    {
-      "id": "2026-11-14T12:06:57.036Z-26a9dsz",
-      "title": "Actualización 1",
-      "message": "Iniciando actualización",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-11-14T12:06:57.036Z"
-    },
-    {
-      "id": "2026-11-14T12:06:05.834Z-4y4wd2h",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "recipient": "alex.mds",
+      "read": false,
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-3oozf7v",
@@ -430,15 +452,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-0vwj01m",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-yfyoqq3",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "recipient": "anto.mds",
+      "read": false,
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-hrvzq9a",
@@ -540,15 +562,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-hf89420",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-xdmvrq9",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "anto.mds",
+      "recipient": "prodtj.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-pzm2l1m",
@@ -650,15 +672,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-ar0myc1",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-v4mjls4",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtj.mds",
-      "read": true,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "recipient": "prodtg.mds",
+      "read": false,
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-2lptye5",
@@ -760,15 +782,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-cqbhtnd",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-7htxf9v",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtg.mds",
+      "recipient": "prodts.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-w8bmjeo",
@@ -870,15 +892,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-fnj8115",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-c0pjg9d",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodts.mds",
+      "recipient": "procj.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-e0pp2iu",
@@ -980,15 +1002,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-bz867nf",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-bxi4uxg",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procj.mds",
-      "read": true,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "recipient": "cald.mds",
+      "read": false,
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-3f1os9n",
@@ -1090,15 +1112,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-tnqzji1",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-lzvxnal",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "cald.mds",
+      "recipient": "prodt.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-qkn5phs",
@@ -1200,15 +1222,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-rzzwgvp",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-a9gm0az",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt.mds",
+      "recipient": "prodt1.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-0fea1bk",
@@ -1310,15 +1332,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-0tggvdc",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-obt8m8e",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt1.mds",
-      "read": true,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "recipient": "prodt2.mds",
+      "read": false,
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-kjjvllw",
@@ -1420,15 +1442,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-pr8aune",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-3adwmzu",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt2.mds",
-      "read": true,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "recipient": "proc.mds",
+      "read": false,
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-9skw597",
@@ -1530,15 +1552,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-t1ilrbg",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-ayhsu3u",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc.mds",
-      "read": true,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "recipient": "proc1.mds",
+      "read": false,
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-hhgsfyd",
@@ -1640,15 +1662,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-iiytbit",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-whknqwn",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc1.mds",
+      "recipient": "proc2.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-8vrttrc",
@@ -1750,15 +1772,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-gnfw9m5",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-kwtzvwu",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc2.mds",
+      "recipient": "procs1.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-880fs80",
@@ -1860,15 +1882,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-prbwcvk",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-iusfebu",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procs1.mds",
+      "recipient": "procs2.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-a2mwj08",
@@ -1970,15 +1992,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-w0akd82",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-l7whirg",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procs2.mds",
+      "recipient": "finan.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-0xwk97a",
@@ -2080,15 +2102,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-xywzat3",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-xmagps4",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "finan.mds",
+      "recipient": "g.tec.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-nrtt63p",
@@ -2190,15 +2212,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-kkhiag0",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-aewb8lr",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "g.tec.mds",
+      "recipient": "enf.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-thawmv7",
@@ -2300,15 +2322,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-8iug76t",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-qbn27sw",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "enf.mds",
-      "read": true,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "recipient": "etq.mds",
+      "read": false,
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-gt3d3dy",
@@ -2410,15 +2432,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-notbzlj",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-eiev55c",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "etq.mds",
+      "recipient": "logg.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-mzac2mu",
@@ -2520,15 +2542,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-bhnm7g7",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-7eo6dsn",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "logg.mds",
+      "recipient": "mtto.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-5mx9m8b",
@@ -2630,15 +2652,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-mbphhe7",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-ty6txck",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto.mds",
+      "recipient": "MDS",
       "read": false,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-95fqpex",
@@ -2740,15 +2762,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-rgza89v",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-cs9gxbf",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "MDS",
+      "recipient": "mtto1.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-sa9cy09",
@@ -2850,15 +2872,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-y7oh48y",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-yxl5cdm",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto1.mds",
+      "recipient": "stf",
       "read": false,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-bf5krl7",
@@ -2960,15 +2982,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-4gak54s",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-wfohhfv",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "stf",
+      "recipient": "prodt3.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-szry6no",
@@ -3070,15 +3092,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-tpv4i1k",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-2daghdd",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt3.mds",
+      "recipient": "prodt4.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-2q6cm7m",
@@ -3180,15 +3202,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-9milmbg",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-2x6awx8",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt4.mds",
-      "read": true,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "recipient": "alc.mds",
+      "read": false,
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-0zbs0df",
@@ -3290,15 +3312,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-n4bf9fi",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-kmuhk39",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alc.mds",
+      "recipient": "alc1.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-7vui55p",
@@ -3400,15 +3422,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-dsrynk4",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-c2ay77d",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alc1.mds",
+      "recipient": "proc3.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-sx1iwsz",
@@ -3510,15 +3532,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-3pq78ug",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-5tk7ia2",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc3.mds",
+      "recipient": "mtto2.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-75al8zy",
@@ -3620,15 +3642,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-a6mtk1m",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-wvfhrqm",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto2.mds",
+      "recipient": "mtto3.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-huwwgsy",
@@ -3730,15 +3752,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-ejqz0r3",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-yx9r8eb",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto3.mds",
+      "recipient": "mtto4.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-g42ace9",
@@ -3840,15 +3862,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-7rp8grk",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-tw54ky3",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto4.mds",
+      "recipient": "mtto5.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-t4iy0h8",
@@ -3950,15 +3972,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-y2o1ky3",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-rfd5uil",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto5.mds",
+      "recipient": "mtto6.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-x9rlvfn",
@@ -4060,15 +4082,15 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-5i7zx98",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-x2k3vcd",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto6.mds",
+      "recipient": "mtto7.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-11-14T15:35:25.107Z-orbhs5g",
@@ -4170,15 +4192,48 @@
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
     {
-      "id": "2026-11-14T12:06:05.834Z-5i0wujw",
-      "title": "Actualizaciones",
-      "message": "Se estarán realizando actualizaciones en el transcurso del día se le estarán notificando para tomen sus previsiones",
-      "type": "warning",
+      "id": "2026-11-23T20:35:12.174Z-cbjj8l9",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto7.mds",
+      "recipient": "prodts1.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:06:05.834Z"
+      "createdAt": "2026-11-23T20:35:12.174Z"
+    },
+    {
+      "id": "2026-11-23T20:35:12.174Z-fbade9j",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodts2.mds",
+      "read": false,
+      "createdAt": "2026-11-23T20:35:12.174Z"
+    },
+    {
+      "id": "2026-11-23T20:35:12.174Z-wwnkt2f",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodts3.mds",
+      "read": false,
+      "createdAt": "2026-11-23T20:35:12.174Z"
+    },
+    {
+      "id": "2026-11-23T20:35:12.174Z-khj8oyi",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodts4.mds",
+      "read": false,
+      "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
       "id": "2026-10-20T17:14:08.396Z-qm55jui",

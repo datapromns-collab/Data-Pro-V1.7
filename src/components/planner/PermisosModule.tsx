@@ -123,6 +123,8 @@ function PermisosModuleContent() {
     setModulePermission,
     getPermissionLevel,
     setPermissionLevel,
+    canSendMessages,
+    setMessageSendPermission,
     renameUserAccess,
     removeUserAccess,
   } = usePermissionsStore();
@@ -427,6 +429,27 @@ function PermisosModuleContent() {
                   className="mt-1 h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm font-bold text-slate-800 outline-none focus:border-primary"
                   placeholder="Ej: GERENTE DE PRODUCCIÓN"
                 />
+              </label>
+              <label className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3">
+                <input
+                  type="checkbox"
+                  checked={selectedUser?.role === 'ADMIN' || Boolean(selectedUserId && canSendMessages(selectedUserId))}
+                  disabled={!selectedUserId || selectedUser?.role === 'ADMIN'}
+                  onChange={(event) => {
+                    if (selectedUserId) setMessageSendPermission(selectedUserId, event.target.checked);
+                  }}
+                  className="mt-0.5 h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary"
+                />
+                <span>
+                  <span className="block text-[10px] font-black uppercase tracking-widest text-slate-700">
+                    Puede enviar notificaciones
+                  </span>
+                  <span className="mt-1 block text-[10px] font-semibold text-slate-500">
+                    {selectedUser?.role === 'ADMIN'
+                      ? 'Los administradores ya tienen este permiso por su rol.'
+                      : 'Permite enviar mensajes sin cambiar el rol del usuario.'}
+                  </span>
+                </span>
               </label>
               <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-3">
                 <ProfileImageViewer

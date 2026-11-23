@@ -230,6 +230,21 @@ export async function requireAdmin(request: Request): Promise<
   return auth;
 }
 
+export async function requireMessageSender(request: Request): Promise<
+  { user: AuthenticatedUser; response?: never } | { user?: never; response: Response }
+> {
+  const auth = await requireAuthenticated(request);
+  if (auth.response) return auth;
+  if (auth.user.role === 'ADMIN') return auth;
+
+  const canSendMessages = readDb().planner?.permissions?.messageSenders?.[auth.user.id] === true;
+  if (!canSendMessages) {
+    return { response: Response.json({ error: 'Message sending permission required' }, { status: 403 }) };
+  }
+  return auth;
+}
+
+
 function stableStringify(value: unknown): string {
   if (Array.isArray(value)) {
     return `[${value.map(stableStringify).join(',')}]`;
