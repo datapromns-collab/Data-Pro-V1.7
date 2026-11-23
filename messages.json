@@ -30,7 +30,7 @@
       "senderId": "maria.mds",
       "senderName": "Maria Reinoso",
       "recipient": "alex.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-23T21:13:24.597Z"
     },
     {
