@@ -16900,12 +16900,12 @@
             "name": "GLUP MANZANA VERDE",
             "lineId": "2",
             "loadPerHour": 2500,
-            "quantity": 16530,
-            "durationHours": 6.612,
+            "quantity": 16541,
+            "durationHours": 6.6164,
             "presentation": "2Lts",
             "tanks": 2,
             "startTime": "2026-11-24T14:48:00.000Z",
-            "endTime": "2026-11-24T21:24:43.200Z",
+            "endTime": "2026-11-24T21:24:59.040Z",
             "id": "xxyu1kgdk",
             "color": "#ec4899"
           },
@@ -16982,19 +16982,6 @@
             "color": "#10b981"
           },
           {
-            "name": "GLUP COLA",
-            "lineId": "6",
-            "loadPerHour": 1200,
-            "quantity": 34560,
-            "durationHours": 28.8,
-            "presentation": "0.4Lts",
-            "tanks": 2,
-            "startTime": "2026-11-27T04:12:00.000Z",
-            "endTime": "2026-11-28T09:00:00.000Z",
-            "id": "2wkmuqj0f",
-            "color": "#587593"
-          },
-          {
             "name": "MTTO",
             "lineId": "7",
             "loadPerHour": 0,
@@ -17028,6 +17015,67 @@
             "endTime": "2026-11-26T19:12:00.000Z",
             "id": "0wp0h5fdm",
             "color": "#ef4444"
+          },
+          {
+            "name": "GLUP FRESH",
+            "lineId": "6",
+            "loadPerHour": 1200,
+            "quantity": 17260,
+            "durationHours": 14.383333333333333,
+            "presentation": "0.4Lts",
+            "tanks": 1,
+            "startTime": "2026-11-27T04:12:00.000Z",
+            "endTime": "2026-11-27T18:35:00.000Z",
+            "id": "j9nfu0wq7",
+            "color": "#10b981"
+          },
+          {
+            "name": "CS",
+            "lineId": "6",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-11-27T18:35:00.000Z",
+            "endTime": "2026-11-27T19:05:00.000Z",
+            "id": "qix3cx4l5",
+            "color": "#f59e0b"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "6",
+            "loadPerHour": 1200,
+            "quantity": 16704,
+            "durationHours": 13.92,
+            "presentation": "0.4Lts",
+            "tanks": 0.97,
+            "startTime": "2026-11-27T19:05:00.000Z",
+            "endTime": "2026-11-28T09:00:12.000Z",
+            "id": "aatey5u5h",
+            "color": "#ec4899"
+          },
+          {
+            "name": "CS",
+            "lineId": "2",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-11-24T21:25:00.000Z",
+            "endTime": "2026-11-24T21:55:00.000Z",
+            "id": "vgy663bis",
+            "color": "#10b981"
+          },
+          {
+            "name": "GLUP KOLITA",
+            "lineId": "2",
+            "loadPerHour": 2500,
+            "quantity": 88950,
+            "durationHours": 35.58,
+            "presentation": "2Lts",
+            "tanks": 10,
+            "startTime": "2026-11-24T21:55:00.000Z",
+            "endTime": "2026-11-26T09:29:48.000Z",
+            "id": "qfm2qma9p",
+            "color": "#10b981"
           }
         ],
         "deletedTaskIds": [
@@ -17045,7 +17093,8 @@
           "iewgwiq9s",
           "a7ineljfs",
           "vfi4tnkbp",
-          "sbekx44ne"
+          "sbekx44ne",
+          "2wkmuqj0f"
         ]
       }
     },
@@ -19171,6 +19220,41 @@
           "aditivosCantidad": {},
           "solidosCantidad": {},
           "quimicosInsumosCantidad": {}
+        },
+        "2026-11-23": {
+          "tapas": {
+            "EMP_0095-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0095-Importada": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaEW": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaTipo2": {
+              "totalCajas": "",
+              "total": ""
+            }
+          },
+          "separadores": {},
+          "preformas": {},
+          "plasticos": {},
+          "adhesivoCantidad": "",
+          "etiquetasCantidad": {},
+          "azucarCantidad": {},
+          "concentradosCantidad": {},
+          "concentradosJustyCantidad": {},
+          "aditivosCantidad": {},
+          "solidosCantidad": {},
+          "quimicosInsumosCantidad": {}
         }
       },
       "semanal": {
@@ -20196,6 +20280,50 @@
           "quimicosInsumosCantidad": {}
         },
         "2026-11-16": {
+          "tapas": {
+            "EMP_0095-Alpla": {
+              "totalCajas": "924000",
+              "total": ""
+            },
+            "EMP_0095-Importada": {
+              "totalCajas": "1464000",
+              "total": ""
+            },
+            "EMP_0105-Alpla": {
+              "totalCajas": "1183000",
+              "total": ""
+            },
+            "EMP_0105-ImportadaEW": {
+              "totalCajas": "2592000",
+              "total": ""
+            },
+            "EMP_0105-ImportadaTipo2": {
+              "totalCajas": "1435200",
+              "total": ""
+            }
+          },
+          "separadores": {},
+          "preformas": {
+            "EMP_0009": "232200",
+            "EMP_0068": "706500",
+            "EMP_0093-Ultrapack": "781886",
+            "EMP_0103-Ultrapack": "484320",
+            "EMP_0120-Ultrapack": "455800",
+            "EMP_0126-Ultrapack": "751080",
+            "EMP_0135-Alpla": "450360",
+            "EMP_0166": "911600"
+          },
+          "plasticos": {},
+          "adhesivoCantidad": "",
+          "etiquetasCantidad": {},
+          "azucarCantidad": {},
+          "concentradosCantidad": {},
+          "concentradosJustyCantidad": {},
+          "aditivosCantidad": {},
+          "solidosCantidad": {},
+          "quimicosInsumosCantidad": {}
+        },
+        "2026-11-23": {
           "tapas": {
             "EMP_0095-Alpla": {
               "totalCajas": "924000",
@@ -24038,6 +24166,78 @@
               "code": "ENV-00079",
               "material": "BOTELLA ENVASADA GLUP UVA 1.0 L (LINEA 7)",
               "quantity": "76",
+              "unit": "UND",
+              "observation": ""
+            }
+          ],
+          "2026-11-22": [
+            {
+              "id": "2bdf656b-818d-446f-8dec-29e24e0c07e0",
+              "line": "Linea 1",
+              "flavor": "GLUP FRESH",
+              "code": "ENV-00013",
+              "material": "BOTELLA ENVASADA GLUP FRESH 2.0.LTS",
+              "quantity": "66",
+              "unit": "UND",
+              "observation": ""
+            },
+            {
+              "id": "58a6cb95-d638-40da-abcc-acc60836da23",
+              "line": "Linea 2",
+              "flavor": "GLUP UVA",
+              "code": "ENV-00039",
+              "material": "BOTELLA ENVASADA GLUP UVA  2.0.LTS  (EN LINEA 2)",
+              "quantity": "87",
+              "unit": "UND",
+              "observation": ""
+            },
+            {
+              "id": "388ce8a8-4e46-430f-907f-4a2cc6568caa",
+              "line": "Linea 3",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00063",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 2L (LINEA 3)",
+              "quantity": "20",
+              "unit": "UND",
+              "observation": ""
+            },
+            {
+              "id": "cd83435b-fda5-4820-b57b-6de86b0ab6e1",
+              "line": "Linea 4",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00054",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 2.LTS (LINEA 4)",
+              "quantity": "135",
+              "unit": "UND",
+              "observation": ""
+            },
+            {
+              "id": "fc5491bc-faae-4d32-b33c-f12c7d23fd8e",
+              "line": "Linea 5",
+              "flavor": "JUSTY DURAZNO",
+              "code": "ENV-00095",
+              "material": "BOTELLA ENVASADA JUSTY DURAZNO 1.5 LTS",
+              "quantity": "30",
+              "unit": "UND",
+              "observation": ""
+            },
+            {
+              "id": "233e3286-f820-420b-a42c-65bb84d2ec98",
+              "line": "Linea 6",
+              "flavor": "GLUP FRESH",
+              "code": "ENV-00060",
+              "material": "BOTELLA ENVASADA GLUP FRESH 400 ML (LINEA 6)",
+              "quantity": "132",
+              "unit": "UND",
+              "observation": ""
+            },
+            {
+              "id": "b8094664-8425-4caf-9d51-a9a197598d40",
+              "line": "Linea 7",
+              "flavor": "GLUP MANZANA ROJA",
+              "code": "ENV-00103",
+              "material": "BOTELLA ENVASADA GLUP MANZANA ROJA 1.0 L (LINEA 7)",
+              "quantity": "5",
               "unit": "UND",
               "observation": ""
             }
@@ -33987,7 +34187,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-22T11:35:06.694Z"
+    "updatedAt": "2026-11-23T14:10:37.663Z"
   },
   "ordenesSap": [
     {
@@ -49879,8 +50079,8 @@
         },
         {
           "fechaInicio": "2026-11-22",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16676",
+          "cajas1": 9602,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -50014,8 +50214,8 @@
         },
         {
           "fechaInicio": "2026-11-22",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16631",
+          "cajas1": 14538,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -50047,6 +50247,146 @@
           "fechaInicio": "2026-11-21",
           "ticket1": "16813",
           "cajas1": 7235,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "1-1795439601693",
+      "linea": 1,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "65121",
+      "semana": 48,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-23",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "2-1795439648658",
+      "linea": 2,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "65127",
+      "semana": 48,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-23",
+          "ticket1": "16632",
+          "cajas1": 2160,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "3-1795439662393",
+      "linea": 3,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "65133",
+      "semana": 48,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-23",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "4-1795439676163",
+      "linea": 4,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "65139",
+      "semana": 48,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-23",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "5-1795439688351",
+      "linea": 5,
+      "sabor": "JUSTY NARANJA",
+      "ordenNumero": "65144",
+      "semana": 48,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-23",
+          "ticket1": "16722",
+          "cajas1": 700,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "6-1795439702991",
+      "linea": 6,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "65150",
+      "semana": 48,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-23",
+          "ticket1": "16854",
+          "cajas1": 1920,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "7-1795439715628",
+      "linea": 7,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "65156",
+      "semana": 48,
+      "dias": [
+        {
+          "fechaInicio": "2026-11-23",
+          "ticket1": "16814",
+          "cajas1": 1482,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -64198,28 +64538,111 @@
         "2026-11-19": {
           "GLUP COLA": {
             "inicial": "65.73",
-            "preparado": "",
-            "final": ""
+            "preparado": "36",
+            "final": "58.47"
           },
           "GLUP FRESH 10%": {
             "inicial": "9.47",
-            "preparado": "",
-            "final": ""
+            "preparado": "24",
+            "final": "18.90"
           },
           "GLUP KOLITA": {
             "inicial": "62.29",
-            "preparado": "",
+            "preparado": "18",
             "final": ""
           },
           "GLUP UVA 10%": {
             "inicial": "11",
-            "preparado": "",
-            "final": ""
+            "preparado": "33",
+            "final": "25.40"
           },
           "JUSTY DURAZNO": {
             "inicial": "29",
+            "preparado": "240",
+            "final": "26"
+          },
+          "GLUP MANZANA ROJA 10%": {
+            "preparado": "40",
+            "final": "21.80"
+          }
+        },
+        "2026-11-20": {
+          "GLUP COLA": {
+            "inicial": "58.47",
+            "preparado": "42",
+            "final": "75.73"
+          },
+          "GLUP FRESH 10%": {
+            "inicial": "18.90",
+            "preparado": "24",
+            "final": "17.26"
+          },
+          "GLUP UVA 10%": {
+            "inicial": "25.40",
+            "preparado": "44",
+            "final": "34.20"
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "26",
+            "preparado": "200",
+            "final": "18"
+          },
+          "GLUP MANZANA ROJA 10%": {
+            "inicial": "21.80",
+            "preparado": "24",
+            "final": "6.48"
+          }
+        },
+        "2026-11-21": {
+          "GLUP COLA": {
+            "inicial": "75.73",
+            "preparado": "42",
+            "final": "89.24"
+          },
+          "GLUP FRESH 10%": {
+            "inicial": "17.26",
+            "preparado": "18",
+            "final": "13.16"
+          },
+          "GLUP UVA 10%": {
+            "inicial": "34.20",
+            "preparado": "44",
+            "final": "22.32"
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "18",
+            "preparado": "80",
+            "final": ""
+          },
+          "GLUP MANZANA ROJA 10%": {
+            "inicial": "6.48",
             "preparado": "",
             "final": ""
+          }
+        },
+        "2026-11-22": {
+          "GLUP COLA": {
+            "inicial": "89.24",
+            "preparado": "6",
+            "final": "95.24"
+          },
+          "GLUP FRESH 10%": {
+            "inicial": "13.16",
+            "preparado": "6",
+            "final": "12.62"
+          },
+          "GLUP UVA 10%": {
+            "inicial": "22.32",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP KOLITA": {
+            "preparado": "36",
+            "final": "36"
+          },
+          "JUSTY NARANJA": {
+            "preparado": "40",
+            "final": "40"
           }
         }
       },
@@ -66078,8 +66501,29 @@
         "2026-11-19": {
           "PORTUGUESA": {
             "invInicialSacos": "10400",
+            "recepcionSacos": "208000",
+            "invFinalSacos": "11200"
+          }
+        },
+        "2026-11-20": {
+          "PORTUGUESA": {
+            "invInicialSacos": "11200",
+            "recepcionSacos": "8200",
+            "invFinalSacos": "13360"
+          }
+        },
+        "2026-11-21": {
+          "PORTUGUESA": {
+            "invInicialSacos": "13360",
+            "recepcionSacos": "2880",
+            "invFinalSacos": "12720"
+          }
+        },
+        "2026-11-22": {
+          "PORTUGUESA": {
+            "invInicialSacos": "12720",
             "recepcionSacos": "",
-            "invFinalSacos": ""
+            "invFinalSacos": "11280"
           }
         }
       },
@@ -67719,11 +68163,41 @@
         "2026-11-19": {
           "JARABE SIMPLE": {
             "invInicialSacos": "473",
-            "invFinalSacos": ""
+            "invFinalSacos": "518"
           },
           "Sala 1": {
             "invInicialSacos": "948",
-            "invFinalSacos": ""
+            "invFinalSacos": "703"
+          }
+        },
+        "2026-11-20": {
+          "JARABE SIMPLE": {
+            "invInicialSacos": "518",
+            "invFinalSacos": "529"
+          },
+          "Sala 1": {
+            "invInicialSacos": "703",
+            "invFinalSacos": "455"
+          }
+        },
+        "2026-11-21": {
+          "JARABE SIMPLE": {
+            "invInicialSacos": "529",
+            "invFinalSacos": "402"
+          },
+          "Sala 1": {
+            "invInicialSacos": "455",
+            "invFinalSacos": "887"
+          }
+        },
+        "2026-11-22": {
+          "JARABE SIMPLE": {
+            "invInicialSacos": "402",
+            "invFinalSacos": "523"
+          },
+          "Sala 1": {
+            "invInicialSacos": "887",
+            "invFinalSacos": "1213"
           }
         }
       },
@@ -67867,7 +68341,13 @@
         "2026-11-13": "50.26",
         "2026-11-14": "50.37",
         "2026-11-15": "50.13",
-        "2026-11-16": "50.2"
+        "2026-11-16": "50.2",
+        "2026-11-18": "50.21",
+        "2026-11-17": "50.18",
+        "2026-11-22": "50.08",
+        "2026-11-21": "50.12",
+        "2026-11-20": "50.35",
+        "2026-11-19": "50.19"
       },
       "costoAzucar": {
         "2026-07-28": "1.43",
@@ -67921,7 +68401,8 @@
         "2026-11-10": "1.02",
         "2026-11-12": "1.02",
         "2026-11-15": "1.02",
-        "2026-11-17": "1.02"
+        "2026-11-17": "1.02",
+        "2026-11-18": "1.02"
       },
       "_deletedIds": {},
       "weeklyFisico": {
@@ -67952,7 +68433,7 @@
         "2026-11-02|2026-11": 1274383.35,
         "2026-11-23|2026-11": 0,
         "2026-11-09|2026-11": 1281265.09,
-        "2026-11-16|2026-11": 1479524.67
+        "2026-11-16|2026-11": 11549362.18
       }
     },
     "seguimiento-etiquetadora": {
@@ -321454,22 +321935,22 @@
         "fechaEmision": "2026-11-09",
         "semana": 46,
         "turno": "DIURNO",
-        "solicitante": "MICHAEL AGRAZ",
+        "solicitante": "",
         "linea": "Línea 1",
         "maquina": "SOPLADORA",
-        "aviso": "7029",
+        "aviso": "",
         "fechaParada": "2026-11-09",
-        "inicioMtto": "08:40",
-        "finMtto": "09:04",
+        "inicioMtto": "",
+        "finMtto": "",
         "inicioParada": "08:40",
         "finParada": "09:04",
         "tMtto": "24",
         "tipoParada": "AVERÍA",
-        "mtto": "correctivo",
+        "mtto": "",
         "falla": "CAMBIO DE MANGUERA DE REFRIGERACION DEL MOLDE #4",
-        "mttoEsp": "FRANZEL PEREZ",
-        "descripcionFalla": "CAMBIO DE MANGUERA DE REFRIGERACION MOLDE #4",
-        "descripcionAccion": "SE  CAMBIA MANGUERA DE REFRIGERACION MOLDE #4",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
         "observaciones": "",
         "bloqueado": true,
         "usuario": "Froilan Bolivar"
@@ -328495,7 +328976,7 @@
         "usuario": "Richard Marín"
       },
       {
-        "id": 1795331565200.7432,
+        "id": 1795437422549.5608,
         "fechaOrden": "2026-11-20",
         "orden": "10395",
         "fechaEmision": "2026-11-20",
@@ -353241,6 +353722,390 @@
             "7": ""
           }
         }
+      },
+      "2026-11-22": {
+        "diurno": {
+          "GLUP COLA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP FRESH": {
+            "1": 9602,
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP UVA": {
+            "1": "",
+            "2": 14618,
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP PIÑA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP NARANJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP KOLITA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP MANZANA VERDE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP PONCHE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP CHICLE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP PIÑA PARCHITA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP MANZANA ROJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY NARANJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY DURAZNO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY MANDARINA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY SANDIA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY LIMON": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY TAMARINDO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY MANZANA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY PERA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "VITA TEA DURAZNO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "VITA TEA LIMON": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          }
+        },
+        "nocturno": {
+          "GLUP COLA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP FRESH": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP UVA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP PIÑA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP NARANJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP KOLITA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP MANZANA VERDE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP PONCHE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP CHICLE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP PIÑA PARCHITA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP MANZANA ROJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY NARANJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY DURAZNO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY MANDARINA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY SANDIA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY LIMON": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY TAMARINDO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY MANZANA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY PERA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "VITA TEA DURAZNO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "VITA TEA LIMON": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          }
+        }
       }
     },
     "planta-pnc": {
@@ -353955,7 +354820,12 @@
       "2026-11-21-suave": "148264",
       "2026-11-21-procesos": "2343477,82",
       "2026-11-21-filtrada": "3615634,79",
-      "2026-11-21-total": "3316825,33"
+      "2026-11-21-total": "3316825,33",
+      "2026-11-22-servicio": "34229",
+      "2026-11-22-suave": "116943",
+      "2026-11-22-procesos": "965148,25",
+      "2026-11-22-filtrada": "1700414,48",
+      "2026-11-22-total": "3140535,33"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
@@ -369984,7 +370854,10 @@
     "planta-informes-operacionales": {
       "*": [
         "1795063521618",
-        "1795067009150"
+        "1795067009150",
+        "1788991023411",
+        "1790538581551",
+        "1790371816310"
       ]
     },
     "planta-ordenes-trabajo": {
@@ -370057,14 +370930,16 @@
     "5-1793372524705",
     "5-1795023429933",
     "6-1795023446782",
-    "6-1795174048180"
+    "6-1795174048180",
+    "2-1795439615450",
+    "3-1795439627804"
   ],
   "logisticsStockFile": {
     "filename": "stock-producto-terminado.xlsx",
     "originalName": "Formato Inventario  Fisico Almacen PT DIARIO ACT  0888.xlsx",
     "tipo": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "tamano": 34917,
-    "uploadedAt": "2026-11-15T11:57:03.202Z",
+    "tamano": 35109,
+    "uploadedAt": "2026-11-22T21:55:16.311Z",
     "uploadedBy": "local-user"
   }
 }
