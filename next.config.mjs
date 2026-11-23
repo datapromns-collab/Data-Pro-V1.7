@@ -8,7 +8,14 @@ const nextConfig = {
   outputFileTracingExcludes: {
     '/api/*': ['./data.json.*.tmp', './data.json.backups/**'],
   },
-  allowedDevOrigins: ['10.0.0.239', 'http://localhost:3000', 'http://localhost:3001'],
+  allowedDevOrigins: [
+    '10.0.0.239',
+    'http://localhost:3000',
+    'http://localhost:3001',
+    '*.trycloudflare.com',
+    '*.ts.net',
+    'produccion01.taildc3025.ts.net',
+  ],
   images: {
     remotePatterns: [
       {
