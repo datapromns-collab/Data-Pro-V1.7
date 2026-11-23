@@ -1,6 +1,116 @@
 {
   "messages": [
     {
+      "id": "2026-11-23T21:13:24.597Z-3ygkyir",
+      "title": "HI",
+      "message": "👍",
+      "type": "info",
+      "senderId": "maria.mds",
+      "senderName": "Maria Reinoso",
+      "recipient": "alex.mds",
+      "read": false,
+      "createdAt": "2026-11-23T21:13:24.597Z"
+    },
+    {
+      "id": "2026-11-23T20:35:12.174Z-mf0vc68",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": false,
+      "createdAt": "2026-11-23T20:35:12.174Z"
+    },
+    {
+      "id": "2026-11-14T15:35:25.107Z-3oozf7v",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": true,
+      "createdAt": "2026-11-14T15:35:25.107Z"
+    },
+    {
+      "id": "2026-11-14T15:03:53.664Z-7vvakn4",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": true,
+      "createdAt": "2026-11-14T15:03:53.664Z"
+    },
+    {
+      "id": "2026-11-14T14:09:41.196Z-qu7gcld",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": true,
+      "createdAt": "2026-11-14T14:09:41.196Z"
+    },
+    {
+      "id": "2026-11-14T13:48:44.118Z-bmr2ddh",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": true,
+      "createdAt": "2026-11-14T13:48:44.118Z"
+    },
+    {
+      "id": "2026-11-14T13:46:47.735Z-abkysg3",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": true,
+      "createdAt": "2026-11-14T13:46:47.735Z"
+    },
+    {
+      "id": "2026-11-14T12:19:40.786Z-oxt944l",
+      "title": "Actualización 2",
+      "message": "Culminada",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": true,
+      "createdAt": "2026-11-14T12:19:40.786Z"
+    },
+    {
+      "id": "2026-11-14T12:17:52.855Z-b2bl8yl",
+      "title": "Actualización 2",
+      "message": "Iniciando actualización 2",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": true,
+      "createdAt": "2026-11-14T12:17:52.855Z"
+    },
+    {
+      "id": "2026-11-14T12:09:06.392Z-ixtfr54",
+      "title": "Actualización 1",
+      "message": "Culminada",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": true,
+      "createdAt": "2026-11-14T12:09:06.392Z"
+    },
+    {
       "id": "2026-11-23T21:05:53.156Z-t7e5gq6",
       "title": "Hola",
       "message": "Hola fea",
@@ -338,116 +448,6 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "demon2",
-      "read": true,
-      "createdAt": "2026-11-14T12:06:57.036Z"
-    },
-    {
-      "id": "2026-11-23T20:35:12.174Z-mf0vc68",
-      "title": "Data pro",
-      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
-      "type": "success",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": false,
-      "createdAt": "2026-11-23T20:35:12.174Z"
-    },
-    {
-      "id": "2026-11-14T15:35:25.107Z-3oozf7v",
-      "title": "Actualización 5",
-      "message": "Iniciando actualización",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-11-14T15:35:25.107Z"
-    },
-    {
-      "id": "2026-11-14T15:03:53.664Z-7vvakn4",
-      "title": "Actualización 4",
-      "message": "Culminada",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-11-14T15:03:53.664Z"
-    },
-    {
-      "id": "2026-11-14T14:09:41.196Z-qu7gcld",
-      "title": "Actualización 4",
-      "message": "Iniciando actualización",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-11-14T14:09:41.196Z"
-    },
-    {
-      "id": "2026-11-14T13:48:44.118Z-bmr2ddh",
-      "title": "Actualización 3",
-      "message": "Culminada",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-11-14T13:48:44.118Z"
-    },
-    {
-      "id": "2026-11-14T13:46:47.735Z-abkysg3",
-      "title": "Actualización 3",
-      "message": "Iniciando actualización",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-11-14T13:46:47.735Z"
-    },
-    {
-      "id": "2026-11-14T12:19:40.786Z-oxt944l",
-      "title": "Actualización 2",
-      "message": "Culminada",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-11-14T12:19:40.786Z"
-    },
-    {
-      "id": "2026-11-14T12:17:52.855Z-b2bl8yl",
-      "title": "Actualización 2",
-      "message": "Iniciando actualización 2",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-11-14T12:17:52.855Z"
-    },
-    {
-      "id": "2026-11-14T12:09:06.392Z-ixtfr54",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-11-14T12:09:06.392Z"
-    },
-    {
-      "id": "2026-11-14T12:06:57.036Z-4kwfvnv",
-      "title": "Actualización 1",
-      "message": "Iniciando actualización",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
       "read": true,
       "createdAt": "2026-11-14T12:06:57.036Z"
     },
