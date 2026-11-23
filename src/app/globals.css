@@ -576,3 +576,74 @@
     color: #e2e8f0 !important;
   }
 }
+
+
+@media screen {
+  html.dark .dark-material-consumption-table [class~="border-slate-100"] {
+    border-color: #475569 !important;
+  }
+
+  html.dark .dark-material-consumption-table [class~="bg-indigo-50/70"] {
+    background-color: #2b4563 !important;
+  }
+
+  html.dark .dark-material-consumption-table [class~="text-indigo-800"] {
+    color: #c7d2fe !important;
+  }
+}
+
+
+@media screen {
+  html.dark .ptab-insumos-dark-table [class*="bg-[#d9ef9f]"] {
+    background-color: #234b42 !important;
+    color: #d1fae5 !important;
+  }
+
+  html.dark .ptab-insumos-dark-table [class~="border-black"] {
+    border-color: #64748b !important;
+  }
+}
+
+
+@media screen {
+  html.dark .mtto-gas-consumption-table [class*="bg-[#deebf7]"] {
+    background-color: #263449 !important;
+    color: #e2e8f0 !important;
+  }
+
+  html.dark .mtto-gas-consumption-table [class~="border-slate-300"] {
+    border-color: #475569 !important;
+  }
+}
+
+
+@media screen {
+  html.dark .tabla-ordenes-scroll {
+    scrollbar-color: #64748b #1e293b;
+    background:
+      linear-gradient(to right, #1e293b 30%, rgba(30, 41, 59, 0)) left center / 24px 100% no-repeat,
+      linear-gradient(to left, #1e293b 30%, rgba(30, 41, 59, 0)) right center / 24px 100% no-repeat,
+      linear-gradient(to bottom, #1e293b 30%, rgba(30, 41, 59, 0)) top center / 100% 24px no-repeat,
+      linear-gradient(to top, #1e293b 30%, rgba(30, 41, 59, 0)) bottom center / 100% 24px no-repeat;
+  }
+
+  html.dark .tabla-ordenes-scroll::-webkit-scrollbar-track {
+    background: #1e293b;
+  }
+
+  html.dark .tabla-ordenes-scroll::-webkit-scrollbar-thumb {
+    background: #64748b;
+    border-color: #1e293b;
+  }
+
+  html.dark .tabla-ordenes-scroll::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+}
+
+
+@media screen {
+  html.dark .planta-cumplimiento-cell {
+    color: #000 !important;
+  }
+}

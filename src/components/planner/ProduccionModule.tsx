@@ -4412,7 +4412,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                         final: segmentGroup?.final || {},
                                       }));
                                     return (
-                                      <section key={group.title} className="overflow-hidden rounded-2xl border border-slate-200">
+                                      <section key={group.title} className="dark-material-consumption-table overflow-hidden rounded-2xl border border-slate-200">
                                         <h3 className="bg-indigo-700 px-4 py-3 text-xs font-black uppercase tracking-widest text-white">{group.title}</h3>
                                         <div className="overflow-x-auto">
                                           <table className="w-full min-w-[760px] border-collapse text-left text-xs">

@@ -11,6 +11,7 @@ import {
   AlertTriangle,
   CheckCircle2,
   XCircle,
+  Reply,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
@@ -60,10 +61,11 @@ interface MessagesCenterProps {
 
 export function MessagesCenter({ user, canSendMessages }: MessagesCenterProps) {
   const userId = user?.id;
-  const { messages, unreadCount, markAllAsRead, reload } = useMessagesStore(userId);
+  const { messages, unreadCount, markAsRead, markAllAsRead, reload } = useMessagesStore(userId);
   const { toast } = useToast();
 
   const [composing, setComposing] = useState(false);
+  const [replyingTo, setReplyingTo] = useState<Message | null>(null);
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [type, setType] = useState<Message["type"]>("info");
@@ -118,6 +120,7 @@ export function MessagesCenter({ user, canSendMessages }: MessagesCenterProps) {
       setType("info");
       setRecipientMode("all");
       setSelected([]);
+      setReplyingTo(null);
       setComposing(false);
       reload();
     } else {
@@ -127,6 +130,28 @@ export function MessagesCenter({ user, canSendMessages }: MessagesCenterProps) {
 
   const toggleRecipient = (id: string) => {
     setSelected((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+  };
+
+  const startNewMessage = () => {
+    setReplyingTo(null);
+    setTitle("");
+    setText("");
+    setType("info");
+    setRecipientMode("all");
+    setSelected([]);
+    setComposing(true);
+  };
+
+  const handleReply = (message: Message) => {
+    if (!user || !canSendMessages || message.senderId === user.id) return;
+    setReplyingTo(message);
+    setTitle(/^re:\s*/i.test(message.title) ? message.title : `Re: ${message.title}`);
+    setText("");
+    setType("info");
+    setRecipientMode("selected");
+    setSelected([message.senderId]);
+    setComposing(true);
+    void markAsRead([message.id]);
   };
 
   const insertEmoji = (emoji: string) => {
@@ -181,7 +206,7 @@ export function MessagesCenter({ user, canSendMessages }: MessagesCenterProps) {
         {canSendMessages && !composing && (
           <button
             type="button"
-            onClick={() => setComposing(true)}
+            onClick={startNewMessage}
             className="w-full flex items-center justify-center gap-2 h-10 text-[11px] font-black uppercase tracking-widest text-primary border-b border-slate-100 hover:bg-primary/5 transition-none"
           >
             <UserPlus className="h-4 w-4" /> Nuevo mensaje
@@ -190,6 +215,11 @@ export function MessagesCenter({ user, canSendMessages }: MessagesCenterProps) {
 
         {canSendMessages && composing && (
           <div className="p-3 space-y-2 border-b border-slate-100">
+            {replyingTo && (
+              <p className="text-[10px] font-semibold text-slate-500">
+                Respondiendo a {replyingTo.senderName}. La respuesta se enviará solo a esta persona.
+              </p>
+            )}
             <Input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -247,20 +277,22 @@ export function MessagesCenter({ user, canSendMessages }: MessagesCenterProps) {
                   <SelectItem value="error" className="text-[11px]">Error</SelectItem>
                 </SelectContent>
               </Select>
-              <Select
-                value={recipientMode}
-                onValueChange={(v) => setRecipientMode(v as "all" | "selected")}
-              >
-                <SelectTrigger className="h-9 flex-1 text-[11px] font-bold">
-                  <SelectValue placeholder="Destinatarios" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all" className="text-[11px]">Todos</SelectItem>
-                  <SelectItem value="selected" className="text-[11px]">Seleccionar...</SelectItem>
-                </SelectContent>
-              </Select>
+              {!replyingTo && (
+                <Select
+                  value={recipientMode}
+                  onValueChange={(v) => setRecipientMode(v as "all" | "selected")}
+                >
+                  <SelectTrigger className="h-9 flex-1 text-[11px] font-bold">
+                    <SelectValue placeholder="Destinatarios" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all" className="text-[11px]">Todos</SelectItem>
+                    <SelectItem value="selected" className="text-[11px]">Seleccionar...</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
             </div>
-            {recipientMode === "selected" && (
+            {!replyingTo && recipientMode === "selected" && (
               <div className="max-h-[140px] overflow-y-auto border border-slate-200 rounded-lg p-1.5 space-y-0.5">
                 {others.map((u) => (
                   <button
@@ -278,7 +310,9 @@ export function MessagesCenter({ user, canSendMessages }: MessagesCenterProps) {
                 ))}
               </div>
             )}
-            <p className="text-[10px] font-bold text-slate-400 truncate">Para: {recipientsLabel}</p>
+            <p className="text-[10px] font-bold text-slate-400 truncate">
+              Para: {replyingTo ? replyingTo.senderName : recipientsLabel}
+            </p>
             <div className="flex items-center gap-2">
               <Button
                 size="sm"
@@ -291,7 +325,10 @@ export function MessagesCenter({ user, canSendMessages }: MessagesCenterProps) {
               <Button
                 size="sm"
                 variant="ghost"
-                onClick={() => setComposing(false)}
+                onClick={() => {
+                  setComposing(false);
+                  setReplyingTo(null);
+                }}
                 className="h-9 px-3 text-[11px] font-bold text-slate-500"
               >
                 Cancelar
@@ -333,6 +370,15 @@ export function MessagesCenter({ user, canSendMessages }: MessagesCenterProps) {
                       {formatDistanceToNow(new Date(m.createdAt), { addSuffix: true, locale: es })}
                     </span>
                   </div>
+                  {canSendMessages && m.senderId !== userId && (
+                    <button
+                      type="button"
+                      onClick={() => handleReply(m)}
+                      className="mt-2 inline-flex items-center gap-1 text-[10px] font-black text-primary hover:underline"
+                    >
+                      <Reply className="h-3 w-3" /> Responder
+                    </button>
+                  )}
                 </div>
               );
             })

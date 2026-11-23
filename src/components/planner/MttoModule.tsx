@@ -219,7 +219,7 @@ export default function MttoModule({ getCo2TheoreticalForDate, co2Consumption, r
               </button>
             </div>
             <div className="min-h-0 flex-1 overflow-auto border border-slate-300 bg-white">
-              <table className="w-full min-w-[760px] border-collapse text-[11px]">
+              <table className="mtto-gas-consumption-table w-full min-w-[760px] border-collapse text-[11px]">
                 <thead className="sticky top-0 z-10">
                   <tr className="bg-white text-slate-800">
                     <th rowSpan={2} className="border border-slate-300 px-2 py-1 text-left font-bold uppercase">Tanque</th>
