@@ -993,7 +993,7 @@ function REstandarSemTable({ selectedFecha, costoAzucar, onPrintWeeklyStandard, 
         <p className="text-center text-xs font-bold text-slate-600 uppercase tracking-widest mb-1">Semana {semanaNumero}</p>
         <p className="text-center text-xs font-bold text-slate-600 uppercase tracking-widest mb-3">Mes {mesNombre.toUpperCase()}</p>
       </div>
-      <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
+      <div className="dark-sugar-yield-table border border-slate-300 rounded-xl overflow-hidden bg-white">
         <table className="w-full border-collapse text-center">
           <thead>
             <tr className="bg-blue-700 text-white">
@@ -1042,7 +1042,7 @@ function REstandarSemTable({ selectedFecha, costoAzucar, onPrintWeeklyStandard, 
       )}
 
       {!isEmpty && (
-        <div className="border border-yellow-400 rounded-xl overflow-hidden bg-white">
+        <div className="dark-sugar-yield-table border border-yellow-400 rounded-xl overflow-hidden bg-white">
           <table className="w-full border-collapse text-center">
             <thead>
               <tr className="bg-yellow-500 text-white">
@@ -1170,7 +1170,7 @@ function RPromedioSemTable({ selectedFecha, costoAzucar, realKgPerSack, updateCo
         <p className="text-center text-xs font-bold text-slate-600 uppercase tracking-widest mb-1">Semana {semanaNumero}</p>
         <p className="text-center text-xs font-bold text-slate-600 uppercase tracking-widest mb-3">Mes {mesNombre.toUpperCase()}</p>
       </div>
-      <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
+      <div className="dark-sugar-yield-table border border-slate-300 rounded-xl overflow-hidden bg-white">
         <table className="w-full border-collapse text-center">
           <thead>
             <tr className="bg-emerald-700 text-white">
@@ -1219,7 +1219,7 @@ function RPromedioSemTable({ selectedFecha, costoAzucar, realKgPerSack, updateCo
       )}
 
       {!isEmpty && (
-        <div className="border border-yellow-400 rounded-xl overflow-hidden bg-white">
+        <div className="dark-sugar-yield-table border border-yellow-400 rounded-xl overflow-hidden bg-white">
           <table className="w-full border-collapse text-center">
             <thead>
               <tr className="bg-yellow-500 text-white">
@@ -1351,7 +1351,7 @@ function REstandarMesTable({ selectedFecha, data, costoAzucar, realKgPerSack, on
          <h1 className="text-center text-lg font-black text-slate-900 uppercase tracking-widest mb-1">Resumen de Azucar Mensual</h1>
          <p className="text-center text-xs font-bold text-slate-600 uppercase tracking-widest mb-3">Mes {mesNombre.toUpperCase()}</p>
        </div>
-       <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
+       <div className="dark-sugar-yield-table border border-slate-300 rounded-xl overflow-hidden bg-white">
          <table className="w-full border-collapse text-center">
            <thead>
              <tr className="bg-blue-700 text-white">
@@ -1398,7 +1398,7 @@ function REstandarMesTable({ selectedFecha, data, costoAzucar, realKgPerSack, on
       )}
 
       {!isEmpty && (
-        <div className="border border-yellow-400 rounded-xl overflow-hidden bg-white">
+        <div className="dark-sugar-yield-table border border-yellow-400 rounded-xl overflow-hidden bg-white">
           <table className="w-full border-collapse text-center">
             <thead>
               <tr className="bg-yellow-500 text-white">
@@ -1535,7 +1535,7 @@ function RPromedioMesTable({ selectedFecha, costoAzucar, realKgPerSack, updateCo
           <h1 className="text-center text-lg font-black text-slate-900 uppercase tracking-widest mb-1">Resumen de Azucar Mensual</h1>
           <p className="text-center text-xs font-bold text-slate-600 uppercase tracking-widest mb-3">Mes {mesNombre.toUpperCase()}</p>
         </div>
-        <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
+        <div className="dark-sugar-yield-table border border-slate-300 rounded-xl overflow-hidden bg-white">
           <table className="w-full border-collapse text-center">
             <thead>
               <tr className="bg-emerald-700 text-white">
@@ -1582,7 +1582,7 @@ function RPromedioMesTable({ selectedFecha, costoAzucar, realKgPerSack, updateCo
       )}
 
       {!isEmpty && (
-        <div className="border border-slate-400 rounded-xl overflow-hidden bg-white">
+        <div className="dark-sugar-yield-table border border-slate-400 rounded-xl overflow-hidden bg-white">
           <table className="w-full border-collapse text-center">
             <thead>
               <tr className="bg-slate-500 text-white">

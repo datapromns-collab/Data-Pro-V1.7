@@ -554,7 +554,7 @@ export function AdminReportTool({
            </TabsContent>
 
             <TabsContent value="weekly-summary" className="m-0 animate-in fade-in-50 duration-500">
-              <Card className="p-0 bg-white border-slate-200 shadow-sm rounded-2xl overflow-hidden">
+              <Card className="dark-management-summary-table p-0 bg-white border-slate-200 shadow-sm rounded-2xl overflow-hidden">
                 <div className="px-4 py-3 border-b border-slate-200">
                   <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-widest">Resumen Semanal por Sabor y Línea</h3>
                 </div>
@@ -665,7 +665,7 @@ export function AdminReportTool({
             </TabsContent>
 
            <TabsContent value="monthly" className="m-0 animate-in fade-in-50 duration-500">
-            <Card className="rounded-2xl border-slate-200 overflow-hidden bg-white shadow-sm">
+            <Card className="dark-management-summary-table rounded-2xl border-slate-200 overflow-hidden bg-white shadow-sm">
               <div className="p-4 bg-slate-50 border-b flex justify-between items-center">
                 <div>
                   <h2 className="text-sm font-headline font-black text-slate-900 uppercase">Resumen Mensual de Producción Real</h2>
@@ -918,7 +918,7 @@ export function AdminReportTool({
                         <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-widest text-center border-b border-slate-200 pb-1">
                           LINEA DE PRODUCCION N°{lineId}
                         </h3>
-                        <div className="overflow-hidden border border-slate-900 rounded shadow-sm">
+                        <div className="dark-management-compliance-table overflow-hidden border border-slate-900 rounded shadow-sm">
                           <table className="w-full border-collapse text-[10px]">
                             <thead>
                               <tr className="bg-[#4a7ebb] text-white font-black uppercase">
@@ -1002,7 +1002,7 @@ export function AdminReportTool({
                     <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">Resumen Comparativo Mensual</h3>
                   </div>
                   
-                  <div className="overflow-hidden border border-slate-900 rounded shadow-md">
+                  <div className="dark-management-compliance-table overflow-hidden border border-slate-900 rounded shadow-md">
                     <table className="w-full border-collapse text-[10px]">
                       <thead>
                         <tr className="bg-[#4a7ebb] text-white font-black uppercase text-center">

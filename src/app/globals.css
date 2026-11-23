@@ -504,3 +504,75 @@
     background-color: #263449 !important;
   }
 }
+
+@media screen {
+  html.dark .dark-management-summary-table [class*="bg-[#dce6f1]"] {
+    background-color: #172f50 !important;
+  }
+
+  html.dark .dark-management-summary-table [class*="bg-[#b8cce4]"] {
+    background-color: #2b4563 !important;
+  }
+
+  html.dark .dark-management-summary-table [class*="bg-[#8aaad0]"] {
+    background-color: #3d5d80 !important;
+  }
+
+  html.dark .dark-management-summary-table [class*="border-slate-900"] {
+    border-color: #475569 !important;
+  }
+}
+
+
+@media screen {
+  html.dark .dark-management-compliance-table [class*="bg-[#dce6f1]"] {
+    background-color: #172f50 !important;
+  }
+
+  html.dark .dark-management-compliance-table [class*="bg-[#b8cce4]"] {
+    background-color: #2b4563 !important;
+  }
+
+  html.dark .dark-management-compliance-table [class*="border-slate-900"] {
+    border-color: #475569 !important;
+  }
+
+  html.dark .dark-management-compliance-table [class~="hover:bg-slate-200/50"]:hover,
+  html.dark .dark-management-compliance-table [class~="hover:bg-white/40"]:hover {
+    background-color: #334155 !important;
+  }
+}
+
+
+@media screen {
+  html.dark .dark-sugar-yield-table {
+    background-color: #1e293b !important;
+    border-color: #475569 !important;
+  }
+
+  html.dark .dark-sugar-yield-table [class~="bg-blue-50"],
+  html.dark .dark-sugar-yield-table [class~="bg-emerald-50"] {
+    background-color: #172f50 !important;
+  }
+
+  html.dark .dark-sugar-yield-table [class~="bg-white"] {
+    background-color: #1e293b !important;
+  }
+
+  html.dark .dark-sugar-yield-table [class~="bg-yellow-100"] {
+    background-color: #3f351c !important;
+  }
+
+  html.dark .dark-sugar-yield-table [class~="bg-slate-100"] {
+    background-color: #263449 !important;
+  }
+
+  html.dark .dark-sugar-yield-table [class~="border-slate-200"],
+  html.dark .dark-sugar-yield-table [class~="border-yellow-200"] {
+    border-color: #475569 !important;
+  }
+
+  html.dark .dark-sugar-yield-table [class~="text-slate-700"] {
+    color: #e2e8f0 !important;
+  }
+}
