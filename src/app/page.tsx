@@ -462,7 +462,6 @@ export default function PlannerPage() {
     login,
     logout
   } = useAuthStore();
-
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
@@ -759,6 +758,8 @@ export default function PlannerPage() {
   }, [canEditPendingWorkOrders, informesOperacionalesStore.data, ordenesTrabajoStore.isLoaded]);
 
   const ordenesTrabajoCargadas = useMemo(() => {
+    const vistosIds = new Set<string>();
+    const vistosOrdenes = new Set<string>();
     return (ordenesTrabajo || [])
       .filter((r) => {
         const orden = r.orden && String(r.orden).trim() !== '';
@@ -768,6 +769,14 @@ export default function PlannerPage() {
         const inWeek = (d: string) => d >= start && d <= end;
         return [r.fechaOrden, r.fechaParada, r.otFechaParada, r.fecha]
           .some((date) => typeof date === 'string' && date.trim() !== '' && inWeek(date));
+      })
+      .filter((r) => {
+        const id = r.id == null ? '' : String(r.id);
+        const orderKey = `${String(r.orden).trim()}|${r.fechaOrden || r.fecha || r.fechaParada || r.otFechaParada || ''}`;
+        if ((id && vistosIds.has(id)) || vistosOrdenes.has(orderKey)) return false;
+        if (id) vistosIds.add(id);
+        vistosOrdenes.add(orderKey);
+        return true;
       })
       .map((r) => ({
         id: r.id,
@@ -2703,11 +2712,12 @@ export default function PlannerPage() {
     if (!year || !month) return { days: [] as string[], leadingDays: 0 };
     const firstDay = new Date(year, month - 1, 1);
     const daysInMonth = new Date(year, month, 0).getDate();
+    const leadingDays = (firstDay.getDay() + 6) % 7;
     return {
       days: Array.from({ length: daysInMonth }, (_, index) =>
         format(new Date(year, month - 1, index + 1), 'yyyy-MM-dd'),
       ),
-      leadingDays: (firstDay.getDay() + 6) % 7,
+      leadingDays,
     };
   }, [ciclosMes]);
   const [operationalReportPdfStatus, setOperationalReportPdfStatus] = useState<'idle' | 'generating' | 'error'>('idle');
@@ -4950,7 +4960,9 @@ export default function PlannerPage() {
                                         ))}
                                       </SelectContent>
                                     </Select>
-                                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{filteredOperationalReports.length} registros</span>
+                                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                       {filteredOperationalReports.length} registros
+                                   </span>
                                     <Button
                                        type="button"
                                        onClick={() => void generateOperationalReportsPdf()}
@@ -4958,7 +4970,7 @@ export default function PlannerPage() {
                                        className="h-9 shrink-0 rounded-lg bg-slate-800 px-3 text-[10px] font-black uppercase tracking-wider text-white hover:bg-slate-900 disabled:opacity-50"
                                     >
                                        <FileDown className="mr-1.5 h-3.5 w-3.5" />
-                                       {operationalReportPdfStatus === 'generating' ? 'Generando?' : 'PDF'}
+                                       {operationalReportPdfStatus === 'generating' ? 'Generando…' : 'PDF'}
                                     </Button>
                                     {operationalReportPdfStatus === 'error' && (
                                        <span role="alert" className="text-[10px] font-bold text-red-600">
@@ -5218,7 +5230,11 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                             )}
                                           </TableRow>
                                        ))}
-                                        {filteredOperationalReports.length === 0 && (
+                                        {informesOperacionales.filter((r) => {
+                                          const matchLine = paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea;
+                                          const matchDate = !paradaFiltroFecha || r.fecha === paradaFiltroFecha;
+                                          return matchLine && matchDate;
+                                        }).length === 0 && (
                                         <TableRow>
                                            <TableCell colSpan={(user?.id === 'alex.mds' || user?.id === 'maria.mds') ? 16 : 15} className="text-center py-10 text-slate-400 font-bold uppercase text-[11px] tracking-wider">
                                              Sin registros para el filtro seleccionado
@@ -5257,29 +5273,29 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-auto">
                                         {filteredWorkOrders.length} registros
                                     </span>
-                                     <Button
-                                       type="button"
-                                       onClick={() => void generateWorkOrdersPdf()}
-                                       disabled={ordenesLoading || workOrdersPdfStatus === 'generating' || filteredWorkOrders.length === 0}
-                                       className="h-9 shrink-0 rounded-lg bg-slate-800 px-3 text-[10px] font-black uppercase tracking-wider text-white hover:bg-slate-900 disabled:opacity-50"
-                                     >
-                                       <FileDown className="mr-1.5 h-3.5 w-3.5" />
-                                       {workOrdersPdfStatus === 'generating' ? 'Generando?' : 'PDF'}
-                                     </Button>
-                                     <Button
-                                       type="button"
-                                       onClick={() => void generateWorkOrdersPdf('summary')}
-                                       disabled={ordenesLoading || workOrdersPdfStatus === 'generating' || filteredWorkOrders.length === 0}
-                                       className="h-9 shrink-0 rounded-lg bg-blue-700 px-3 text-[10px] font-black uppercase tracking-wider text-white hover:bg-blue-800 disabled:opacity-50"
-                                     >
-                                       <FileDown className="mr-1.5 h-3.5 w-3.5" />
-                                       {workOrdersPdfStatus === 'generating' ? 'Generando...' : 'PDF resumen'}
-                                     </Button>
-                                     {workOrdersPdfStatus === 'error' && (
-                                       <span role="alert" className="text-[10px] font-bold text-red-600">
-                                         No se pudo generar el PDF.
-                                       </span>
-                                     )}
+                                    <Button
+                                      type="button"
+                                      onClick={() => void generateWorkOrdersPdf()}
+                                      disabled={ordenesLoading || workOrdersPdfStatus === 'generating' || filteredWorkOrders.length === 0}
+                                      className="h-9 shrink-0 rounded-lg bg-slate-800 px-3 text-[10px] font-black uppercase tracking-wider text-white hover:bg-slate-900 disabled:opacity-50"
+                                    >
+                                      <FileDown className="mr-1.5 h-3.5 w-3.5" />
+                                      {workOrdersPdfStatus === 'generating' ? 'Generando…' : 'PDF'}
+                                    </Button>
+                                    <Button
+                                      type="button"
+                                      onClick={() => void generateWorkOrdersPdf('summary')}
+                                      disabled={ordenesLoading || workOrdersPdfStatus === 'generating' || filteredWorkOrders.length === 0}
+                                      className="h-9 shrink-0 rounded-lg bg-blue-700 px-3 text-[10px] font-black uppercase tracking-wider text-white hover:bg-blue-800 disabled:opacity-50"
+                                    >
+                                      <FileDown className="mr-1.5 h-3.5 w-3.5" />
+                                      {workOrdersPdfStatus === 'generating' ? 'Generando…' : 'PDF resumen'}
+                                    </Button>
+                                    {workOrdersPdfStatus === 'error' && (
+                                      <span role="alert" className="text-[10px] font-bold text-red-600">
+                                        No se pudo generar el PDF.
+                                      </span>
+                                    )}
                                   </div>
                                   <div className="rounded-lg border border-slate-200 overflow-auto max-h-[62vh] tabla-ordenes-scroll overscroll-contain pointer-events-auto" style={{ scrollBehavior: 'smooth' }}>
                                        <Table className={cn("min-w-[2200px] w-max", activeModuleReadOnly && "pointer-events-none")}>
@@ -5313,16 +5329,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                             </TableRow>
                                        </TableHeader>
                                          <TableBody>
-                                            {ordenesTrabajoCargadas
-                                              .filter((r) => {
-                                                const matchLine = ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea;
-                                                const matchDate = !paradaFiltroFecha || r.fechaOrden === paradaFiltroFecha;
-                                                const q = ordenBusqueda.trim().toLowerCase();
-                                                const matchQ = !q || [r.orden, r.solicitante, r.falla, r.maquina, r.aviso, r.observaciones, r.descripcionFalla, r.descripcionAccion]
-                                                  .filter(Boolean).some((v) => String(v).toLowerCase().includes(q));
-                                                return matchLine && matchDate && matchQ;
-                                              })
-                                              .map((row) => (
+                                            {filteredWorkOrders.map((row) => (
                                                  <OrdenTrabajoRow
                                                    key={row.id}
                                                    row={row}
@@ -5343,14 +5350,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                    formatearFecha={formatearFecha}
                                                  />
                                               ))}
-                                           {ordenesTrabajoCargadas.filter((r) => {
-                                             const matchLine = ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea;
-                                             const matchDate = !paradaFiltroFecha || r.fechaOrden === paradaFiltroFecha;
-                                             const q = ordenBusqueda.trim().toLowerCase();
-                                             const matchQ = !q || [r.orden, r.solicitante, r.falla, r.maquina, r.aviso, r.observaciones, r.descripcionFalla, r.descripcionAccion]
-                                               .filter(Boolean).some((v) => String(v).toLowerCase().includes(q));
-                                             return matchLine && matchDate && matchQ;
-                                            }).length === 0 && (
+                                           {filteredWorkOrders.length === 0 && (
                                               <TableRow>
                                                  <TableCell colSpan={(user?.id === 'alex.mds' || user?.id === 'maria.mds') ? 23 : 22} className="text-center py-10 text-slate-400 font-bold uppercase text-[11px] tracking-wider">
                                                   Sin registros para el filtro seleccionado
@@ -5984,25 +5984,25 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                  </label>
                                </div>
                              )}
-                             {resumenSemanalSubTab === 'tendencias' && (
-                               <div role="tablist" aria-label="Subsecciones de tendencias semanales" className="mb-3 flex items-center gap-2">
-                                 {(['alcance', 'paradas'] as const).map((subTab) => (
-                                   <button
-                                     key={subTab}
-                                     type="button"
-                                     role="tab"
-                                     aria-selected={resumenSemanalTendenciasSubTab === subTab}
-                                     onClick={() => setResumenSemanalTendenciasSubTab(subTab)}
-                                     className={cn(
-                                       "inline-flex h-8 items-center justify-center rounded-full px-5 text-[10px] font-bold uppercase tracking-widest",
-                                       resumenSemanalTendenciasSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                                     )}
-                                   >
-                                     {subTab === 'alcance' ? 'Alcance' : 'Paradas'}
-                                   </button>
-                                 ))}
-                               </div>
-                             )}
+                              {resumenSemanalSubTab === 'tendencias' && (
+                                <div role="tablist" aria-label="Subsecciones de tendencias semanales" className="mb-3 flex items-center gap-2">
+                                  {(['alcance', 'paradas'] as const).map((subTab) => (
+                                    <button
+                                      key={subTab}
+                                      type="button"
+                                      role="tab"
+                                      aria-selected={resumenSemanalTendenciasSubTab === subTab}
+                                      onClick={() => setResumenSemanalTendenciasSubTab(subTab)}
+                                      className={cn(
+                                        "inline-flex h-8 items-center justify-center rounded-full px-5 text-[10px] font-bold uppercase tracking-widest",
+                                        resumenSemanalTendenciasSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                      )}
+                                    >
+                                      {subTab === 'alcance' ? 'Alcance' : 'Paradas'}
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
                               <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                                 {resumenSemanalSubTab === 'resumen' && (
                                   <div className="flex flex-col gap-3">
@@ -6417,90 +6417,90 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                          </div>
                        )}
                           {activeTab === 'ciclos' && user?.id !== 'prodtj.mds' && user?.id !== 'prodtg.mds' && user?.id !== 'prodt.mds' && user?.id !== 'prodt1.mds' && user?.id !== 'prodt2.mds' && user?.id !== 'prodts.mds' && user?.id !== 'enf.mds' && (
-                         <div className="flex-1 bg-white rounded-[2.5rem] p-5 overflow-y-auto">
-                           <div className="mx-auto max-w-5xl space-y-5">
-                             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                               <div>
-                                 <h2 className="text-lg font-black uppercase tracking-wider text-slate-800">Ciclos</h2>
-                                 <p className="mt-1 text-xs text-slate-500">Activa o desactiva los días en que se permite registrar paradas de líneas.</p>
-                               </div>
-                               <Input
-                                 type="month"
-                                 value={ciclosMes}
-                                 onChange={(event) => setCiclosMes(event.target.value)}
-                                 className="w-full sm:w-48"
-                                 aria-label="Mes y año de Ciclos"
-                               />
-                             </div>
-                             <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                               <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3">
-                                 <div className="text-[10px] font-black uppercase tracking-widest text-emerald-700">Días activos</div>
-                                 <div className="mt-1 text-2xl font-black text-emerald-800">
-                                   {ciclosCalendario.days.filter((day) => ciclosDias?.[day] !== true).length}
-                                 </div>
-                               </div>
-                               <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3">
-                                 <div className="text-[10px] font-black uppercase tracking-widest text-red-700">Días desactivados</div>
-                                 <div className="mt-1 text-2xl font-black text-red-800">
-                                   {ciclosCalendario.days.filter((day) => ciclosDias?.[day] === true).length}
-                                 </div>
-                               </div>
-                               <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs font-medium leading-5 text-slate-600">
-                                 Los registros ya existentes se conservan. Desactivar un día bloquea nuevos registros con esa fecha.
-                               </div>
-                             </div>
-                             <div className="rounded-2xl border border-slate-200 bg-white p-3 sm:p-5">
-                               <div className="grid grid-cols-7 gap-2">
-                                 {['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'].map((weekday) => (
-                                   <div key={weekday} className="py-2 text-center text-[10px] font-black uppercase tracking-wider text-slate-400">{weekday}</div>
-                                 ))}
-                                 {Array.from({ length: ciclosCalendario.leadingDays }, (_, index) => (
-                                   <div key={`empty-${index}`} aria-hidden="true" />
-                                 ))}
-                                 {ciclosCalendario.days.map((day) => {
-                                   const desactivado = ciclosDias?.[day] === true;
-                                   return (
-                                     <button
-                                       key={day}
-                                       type="button"
-                                       disabled={!canWriteOperationalReports || !ciclosDiasStore.isLoaded}
-                                       onClick={() => ciclosDiasStore.setData((previous) => ({
-                                         ...previous,
-                                         [day]: !previous[day],
-                                       }))}
-                                       aria-pressed={!desactivado}
-                                       aria-label={`${format(new Date(`${day}T00:00:00`), 'd MMMM yyyy', { locale: es })}: ${desactivado ? 'desactivado' : 'activo'}`}
-                                       className={cn(
-                                         'min-h-16 rounded-xl border p-2 text-left transition-colors disabled:cursor-not-allowed disabled:opacity-60 sm:min-h-20',
-                                         desactivado
-                                           ? 'border-red-200 bg-red-50 text-red-800 hover:bg-red-100'
-                                           : 'border-emerald-200 bg-emerald-50 text-emerald-800 hover:bg-emerald-100',
-                                       )}
-                                     >
-                                       <span className="block text-lg font-black">{Number(day.slice(-2))}</span>
-                                       <span className="mt-1 block text-[9px] font-black uppercase tracking-widest">
-                                         {desactivado ? 'Inactivo' : 'Activo'}
-                                       </span>
-                                     </button>
-                                   );
-                                 })}
-                               </div>
-                             </div>
-                             {!canWriteOperationalReports && (
-                               <p className="text-sm font-semibold text-amber-700">No tienes permiso para modificar los ciclos.</p>
-                             )}
-                             {ciclosDiasStore.loadError && (
-                               <p role="alert" className="text-sm font-semibold text-red-700">{ciclosDiasStore.loadError}</p>
-                             )}
-                             {ciclosDiasStore.syncError && (
-                               <p role="alert" className="text-sm font-semibold text-red-700">{ciclosDiasStore.syncError}</p>
-                             )}
-                             {ciclosDiasStore.hasPendingChanges && !ciclosDiasStore.syncError && (
-                               <p role="status" className="text-xs font-semibold text-amber-700">Guardando cambios de Ciclos…</p>
-                             )}
-                           </div>
-                         </div>
-                       )}
+                          <div className="flex-1 bg-white rounded-[2.5rem] p-5 overflow-y-auto">
+                            <div className="mx-auto max-w-5xl space-y-5">
+                              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                <div>
+                                  <h2 className="text-lg font-black uppercase tracking-wider text-slate-800">Ciclos</h2>
+                                  <p className="mt-1 text-xs text-slate-500">Activa o desactiva los días en que se permite registrar paradas de líneas.</p>
+                                </div>
+                                <Input
+                                  type="month"
+                                  value={ciclosMes}
+                                  onChange={(event) => setCiclosMes(event.target.value)}
+                                  className="w-full sm:w-48"
+                                  aria-label="Mes y año de Ciclos"
+                                />
+                              </div>
+                              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                                <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3">
+                                  <div className="text-[10px] font-black uppercase tracking-widest text-emerald-700">Días activos</div>
+                                  <div className="mt-1 text-2xl font-black text-emerald-800">
+                                    {ciclosCalendario.days.filter((day) => ciclosDias?.[day] !== true).length}
+                                  </div>
+                                </div>
+                                <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3">
+                                  <div className="text-[10px] font-black uppercase tracking-widest text-red-700">Días desactivados</div>
+                                  <div className="mt-1 text-2xl font-black text-red-800">
+                                    {ciclosCalendario.days.filter((day) => ciclosDias?.[day] === true).length}
+                                  </div>
+                                </div>
+                                <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs font-medium leading-5 text-slate-600">
+                                  Los registros ya existentes se conservan. Desactivar un día bloquea nuevos registros con esa fecha.
+                                </div>
+                              </div>
+                              <div className="rounded-2xl border border-slate-200 bg-white p-3 sm:p-5">
+                                <div className="grid grid-cols-7 gap-2">
+                                  {['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'].map((weekday) => (
+                                    <div key={weekday} className="py-2 text-center text-[10px] font-black uppercase tracking-wider text-slate-400">{weekday}</div>
+                                  ))}
+                                  {Array.from({ length: ciclosCalendario.leadingDays }, (_, index) => (
+                                    <div key={`empty-${index}`} aria-hidden="true" />
+                                  ))}
+                                  {ciclosCalendario.days.map((day) => {
+                                    const desactivado = ciclosDias?.[day] === true;
+                                    return (
+                                      <button
+                                        key={day}
+                                        type="button"
+                                        disabled={!canWriteOperationalReports || !ciclosDiasStore.isLoaded}
+                                        onClick={() => ciclosDiasStore.setData((previous) => ({
+                                          ...previous,
+                                          [day]: !previous[day],
+                                        }))}
+                                        aria-pressed={!desactivado}
+                                        aria-label={`${format(new Date(`${day}T00:00:00`), 'd MMMM yyyy', { locale: es })}: ${desactivado ? 'desactivado' : 'activo'}`}
+                                        className={cn(
+                                          'min-h-16 rounded-xl border p-2 text-left transition-colors disabled:cursor-not-allowed disabled:opacity-60 sm:min-h-20',
+                                          desactivado
+                                            ? 'border-red-200 bg-red-50 text-red-800 hover:bg-red-100'
+                                            : 'border-emerald-200 bg-emerald-50 text-emerald-800 hover:bg-emerald-100',
+                                        )}
+                                      >
+                                        <span className="block text-lg font-black">{Number(day.slice(-2))}</span>
+                                        <span className="mt-1 block text-[9px] font-black uppercase tracking-widest">
+                                          {desactivado ? 'Inactivo' : 'Activo'}
+                                        </span>
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                              {!canWriteOperationalReports && (
+                                <p className="text-sm font-semibold text-amber-700">No tienes permiso para modificar los ciclos.</p>
+                              )}
+                              {ciclosDiasStore.loadError && (
+                                <p role="alert" className="text-sm font-semibold text-red-700">{ciclosDiasStore.loadError}</p>
+                              )}
+                              {ciclosDiasStore.syncError && (
+                                <p role="alert" className="text-sm font-semibold text-red-700">{ciclosDiasStore.syncError}</p>
+                              )}
+                              {ciclosDiasStore.hasPendingChanges && !ciclosDiasStore.syncError && (
+                                <p role="status" className="text-xs font-semibold text-amber-700">Guardando cambios de Ciclos…</p>
+                              )}
+                            </div>
+                          </div>
+                        )}
                      </>
                    )}
                       {activeModule === 'produccion' && hasAccess(user.id, 'produccion') && (
@@ -9594,13 +9594,15 @@ function getResumenPorLinea(informesOperacionales: any[], tasks: any[], realProd
     }, 0);
     const diferenciaTeoricaReal = Number.isFinite(produccionTeorica) ? String(Math.round(produccionTeorica - (alcanceTD + alcanceTN))) : '0';
     const serviciosTiposParada = ['SALA DE MAQUINAS', 'SALA DE JARABE', 'PTAB', 'INSUMOS', 'CALIDAD'];
-    const alcancePorFecha = (fechaDia: string) => (ordenesSap || []).reduce((total: number, orden: any) => {
-      if (Number(orden.linea) !== lineaNum) return total;
-      const dia = (orden.dias || []).find((item: any) => item.fechaInicio === fechaDia);
-      if (!dia) return total;
-      return total + ['cajas1', 'cajas2', 'cajas3', 'cajas4']
-        .reduce((suma: number, key: string) => suma + (Number(dia[key]) || 0), 0);
-    }, 0);
+    const alcancePorFecha = (fechaDia: string) => {
+      return (ordenesSap || []).reduce((total: number, orden: any) => {
+        if (Number(orden.linea) !== lineaNum) return total;
+        const dia = (orden.dias || []).find((item: any) => item.fechaInicio === fechaDia);
+        if (!dia) return total;
+        return total + ['cajas1', 'cajas2', 'cajas3', 'cajas4']
+          .reduce((suma: number, key: string) => suma + (Number(dia[key]) || 0), 0);
+      }, 0);
+    };
     const horasACajas = (registros: any[]) => {
       const cajas = fechaFiltro.reduce((total, fechaDia) => {
         const horasDia = registros
@@ -9894,19 +9896,19 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
     const planificadoTurno = esDiurno ? totalPlanificadoTD : totalPlanificadoTN;
     const alcanceTurno = esDiurno ? totalAlcanceTD : totalAlcanceTN;
     const cumplimientoTurno = esDiurno ? cumplimientoTD : cumplimientoTN;
-    const totalHorasProgramadasReales = data.reduce((acc, r) => {
-      const toNum = (v: any) => Number.parseFloat(String(v || '0').replace(',', '.')) || 0;
-      const hp = toNum(r.horasProgramadas);
-      const pp = toNum(r.paradasProgramadas);
-      return acc + Math.max(0, hp - pp);
-    }, 0);
-    const totalParadasAveria = data.reduce((acc, r) => {
-      const horasAveria = Number.parseFloat(String(r.averia || '0').replace(',', '.')) || 0;
-      return acc + horasAveria;
-    }, 0);
-    const disponibilidadTotal = totalHorasProgramadasReales > 0
-      ? (((totalHorasProgramadasReales - totalParadasAveria) / totalHorasProgramadasReales) * 100).toFixed(2).replace('.', ',') + '%'
-      : '0,00%';
+      const totalHorasProgramadasReales = data.reduce((acc, r) => {
+        const toNum = (v: any) => Number.parseFloat(String(v || '0').replace(',', '.')) || 0;
+        const hp = toNum(r.horasProgramadas);
+        const pp = toNum(r.paradasProgramadas);
+        return acc + Math.max(0, hp - pp);
+      }, 0);
+      const totalParadasAveria = data.reduce((acc, r) => {
+        const horasAveria = Number.parseFloat(String(r.averia || '0').replace(',', '.')) || 0;
+        return acc + horasAveria;
+      }, 0);
+      const disponibilidadTotal = totalHorasProgramadasReales > 0
+        ? (((totalHorasProgramadasReales - totalParadasAveria) / totalHorasProgramadasReales) * 100).toFixed(2).replace('.', ',') + '%'
+        : '0,00%';
    const tiempoMuertoDesbordado = data.some((r: any) => Number.parseFloat(String(r.tiempoMuertoInexplicableRaw ?? '0').replace(',', '.')) < 0);
    return (
      <div className="flex flex-col gap-3">

@@ -244,7 +244,6 @@ export async function requireMessageSender(request: Request): Promise<
   return auth;
 }
 
-
 function stableStringify(value: unknown): string {
   if (Array.isArray(value)) {
     return `[${value.map(stableStringify).join(',')}]`;
@@ -535,12 +534,6 @@ const COLLECTION_PERMISSION_MAP: Record<string, [string, string?]> = {
 };
 
 const COLLECTION_READ_FALLBACKS: Record<string, [string, string?][]> = {
-  'seguimiento-ordenes': [
-    ['insumos', 'ordenes'], ['insumos', 'rendimiento-azucar'],
-  ],
-  'seguimiento-ordenes-auto': [
-    ['insumos', 'ordenes'], ['insumos', 'rendimiento-azucar'],
-  ],
   jarabes: [
     ['insumos', 'rendimiento-azucar'], ['insumos', 'ordenes'],
     ['management', 'production'], ['management', 'weekly-summary'], ['management', 'monthly-summary'],

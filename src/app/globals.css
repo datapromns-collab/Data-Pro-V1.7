@@ -381,6 +381,7 @@
   --color-8: rgba(156, 163, 175, 0.8);
 }
 
+
 @media screen {
   html.dark {
     color-scheme: dark;
@@ -463,6 +464,7 @@
   }
 }
 
+
 @media screen {
   html.dark .jarabes-theme-scope [class~="bg-blue-50"] {
     background-color: #172f50 !important;
@@ -505,6 +507,7 @@
   }
 }
 
+
 @media screen {
   html.dark .dark-management-summary-table [class*="bg-[#dce6f1]"] {
     background-color: #172f50 !important;
@@ -543,7 +546,6 @@
   }
 }
 
-
 @media screen {
   html.dark .dark-sugar-yield-table {
     background-color: #1e293b !important;
@@ -577,7 +579,6 @@
   }
 }
 
-
 @media screen {
   html.dark .dark-material-consumption-table [class~="border-slate-100"] {
     border-color: #475569 !important;
@@ -604,7 +605,6 @@
   }
 }
 
-
 @media screen {
   html.dark .mtto-gas-consumption-table [class*="bg-[#deebf7]"] {
     background-color: #263449 !important;
@@ -615,7 +615,6 @@
     border-color: #475569 !important;
   }
 }
-
 
 @media screen {
   html.dark .tabla-ordenes-scroll {

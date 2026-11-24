@@ -484,9 +484,10 @@ function usePlannerStoreInner() {
       try {
         const config = JSON.parse(savedConfig);
         if (config.lineSpeeds) setLineSpeeds(config.lineSpeeds);
+        if (config.lineSpeedHistory) setLineSpeedHistory(config.lineSpeedHistory);
       } catch (e) {}
     }
-  }, [weekKey, setLineSpeeds, setLineSpeedHistory]);
+  }, [weekKey, setLineSpeeds]);
 
    const applyRemoteToState = useCallback((remote: any, authoritative = false) => {
     if (!remote) return;

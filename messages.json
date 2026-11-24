@@ -1,224 +1,125 @@
 {
   "messages": [
     {
-      "id": "2026-11-24T13:40:31.664Z-hnnwufs",
-      "title": "Re: Hola",
-      "message": "ALEX",
+      "id": "2026-11-24T18:40:13.433Z-5oj02k2",
+      "title": "PDP S48",
+      "message": "Abel en linea 2 cuadra las preparaciones para que el cambio a uva quede para el viernes nocturno 👍",
       "type": "info",
-      "senderId": "maria.mds",
-      "senderName": "Maria Reinoso",
-      "recipient": "alex.mds",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "procj.mds",
       "read": false,
-      "createdAt": "2026-11-24T13:40:31.664Z"
+      "createdAt": "2026-11-24T18:40:13.433Z"
     },
     {
-      "id": "2026-11-24T13:33:51.205Z-030mhrv",
+      "id": "2026-11-24T18:38:29.016Z-6hx93i4",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "procj.mds",
+      "read": false,
+      "createdAt": "2026-11-24T18:38:29.016Z"
+    },
+    {
+      "id": "2026-11-24T13:33:51.205Z-cdycgyd",
       "title": "PDP S48",
       "message": "⚠️ Se realizo modificación en el PDP s48 Linea 7",
       "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": false,
+      "recipient": "procj.mds",
+      "read": true,
       "createdAt": "2026-11-24T13:33:51.205Z"
     },
     {
-      "id": "2026-11-23T21:13:24.597Z-3ygkyir",
-      "title": "HI",
-      "message": "👍",
-      "type": "info",
-      "senderId": "maria.mds",
-      "senderName": "Maria Reinoso",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-11-23T21:13:24.597Z"
-    },
-    {
-      "id": "2026-11-23T20:35:12.174Z-mf0vc68",
+      "id": "2026-11-23T20:35:12.174Z-c0pjg9d",
       "title": "Data pro",
       "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
       "type": "success",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": false,
+      "recipient": "procj.mds",
+      "read": true,
       "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
-      "id": "2026-11-14T15:35:25.107Z-3oozf7v",
+      "id": "2026-11-14T15:35:25.107Z-e0pp2iu",
       "title": "Actualización 5",
       "message": "Iniciando actualización",
       "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
+      "recipient": "procj.mds",
       "read": true,
       "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
-      "id": "2026-11-14T15:03:53.664Z-7vvakn4",
+      "id": "2026-11-14T15:03:53.664Z-frhvbg6",
       "title": "Actualización 4",
       "message": "Culminada",
       "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
+      "recipient": "procj.mds",
       "read": true,
       "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
-      "id": "2026-11-14T14:09:41.196Z-qu7gcld",
+      "id": "2026-11-14T14:09:41.196Z-mznw11e",
       "title": "Actualización 4",
       "message": "Iniciando actualización",
       "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
+      "recipient": "procj.mds",
       "read": true,
       "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
-      "id": "2026-11-14T13:48:44.118Z-bmr2ddh",
+      "id": "2026-11-14T13:48:44.118Z-o4g8bh2",
       "title": "Actualización 3",
       "message": "Culminada",
       "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
+      "recipient": "procj.mds",
       "read": true,
       "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
-      "id": "2026-11-14T13:46:47.735Z-abkysg3",
+      "id": "2026-11-14T13:46:47.735Z-32sq0of",
       "title": "Actualización 3",
       "message": "Iniciando actualización",
       "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
+      "recipient": "procj.mds",
       "read": true,
       "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
-      "id": "2026-11-14T12:19:40.786Z-oxt944l",
+      "id": "2026-11-14T12:19:40.786Z-ew0kjqg",
       "title": "Actualización 2",
       "message": "Culminada",
       "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
+      "recipient": "procj.mds",
       "read": true,
       "createdAt": "2026-11-14T12:19:40.786Z"
     },
     {
-      "id": "2026-11-24T13:40:10.535Z-upwdfu9",
-      "title": "HOLA",
-      "message": "HOLAAAAAAAAAAAAAAAA👍",
-      "type": "info",
-      "senderId": "maria.mds",
-      "senderName": "Maria Reinoso",
-      "recipient": "stf",
-      "read": false,
-      "createdAt": "2026-11-24T13:40:10.535Z"
-    },
-    {
-      "id": "2026-11-24T13:36:31.908Z-wqrxmwe",
-      "title": "HELLO",
-      "message": "HOLAAAAAAAAAAAAAAA",
-      "type": "info",
-      "senderId": "maria.mds",
-      "senderName": "Maria Reinoso",
-      "recipient": "stf",
-      "read": false,
-      "createdAt": "2026-11-24T13:36:31.908Z"
-    },
-    {
-      "id": "2026-11-24T13:33:51.205Z-x3lnmlq",
+      "id": "2026-11-24T18:38:29.016Z-mmusu16",
       "title": "PDP S48",
-      "message": "⚠️ Se realizo modificación en el PDP s48 Linea 7",
-      "type": "info",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "stf",
+      "recipient": "jaime.r",
       "read": false,
-      "createdAt": "2026-11-24T13:33:51.205Z"
-    },
-    {
-      "id": "2026-11-23T20:35:12.174Z-yxl5cdm",
-      "title": "Data pro",
-      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
-      "type": "success",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "stf",
-      "read": false,
-      "createdAt": "2026-11-23T20:35:12.174Z"
-    },
-    {
-      "id": "2026-11-14T15:35:25.107Z-bf5krl7",
-      "title": "Actualización 5",
-      "message": "Iniciando actualización",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "stf",
-      "read": false,
-      "createdAt": "2026-11-14T15:35:25.107Z"
-    },
-    {
-      "id": "2026-11-14T15:03:53.664Z-s1hf96v",
-      "title": "Actualización 4",
-      "message": "Culminada",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "stf",
-      "read": false,
-      "createdAt": "2026-11-14T15:03:53.664Z"
-    },
-    {
-      "id": "2026-11-14T14:09:41.196Z-e7oa5av",
-      "title": "Actualización 4",
-      "message": "Iniciando actualización",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "stf",
-      "read": false,
-      "createdAt": "2026-11-14T14:09:41.196Z"
-    },
-    {
-      "id": "2026-11-14T13:48:44.118Z-dicyuct",
-      "title": "Actualización 3",
-      "message": "Culminada",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "stf",
-      "read": false,
-      "createdAt": "2026-11-14T13:48:44.118Z"
-    },
-    {
-      "id": "2026-11-14T13:46:47.735Z-zt3cm9m",
-      "title": "Actualización 3",
-      "message": "Iniciando actualización",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "stf",
-      "read": false,
-      "createdAt": "2026-11-14T13:46:47.735Z"
-    },
-    {
-      "id": "2026-11-14T12:19:40.786Z-gmb1g8m",
-      "title": "Actualización 2",
-      "message": "Culminada",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "stf",
-      "read": false,
-      "createdAt": "2026-11-14T12:19:40.786Z"
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-vrog8v9",
@@ -320,15 +221,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-7eauns8",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-jjlhnl3",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "jaime.r",
-      "read": false,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "recipient": "demon2",
+      "read": true,
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-d9dkq8o",
@@ -430,15 +331,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-na7hqo7",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-8r2fyjf",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "demon2",
-      "read": true,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "recipient": "maria.mds",
+      "read": false,
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-7eishot",
@@ -540,15 +441,125 @@
       "createdAt": "2026-11-14T12:19:40.786Z"
     },
     {
-      "id": "2026-11-14T12:17:52.855Z-57unndd",
-      "title": "Actualización 2",
-      "message": "Iniciando actualización 2",
+      "id": "2026-11-24T18:38:29.016Z-6wln3b5",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": false,
+      "createdAt": "2026-11-24T18:38:29.016Z"
+    },
+    {
+      "id": "2026-11-24T13:40:31.664Z-hnnwufs",
+      "title": "Re: Hola",
+      "message": "ALEX",
+      "type": "info",
+      "senderId": "maria.mds",
+      "senderName": "Maria Reinoso",
+      "recipient": "alex.mds",
+      "read": false,
+      "createdAt": "2026-11-24T13:40:31.664Z"
+    },
+    {
+      "id": "2026-11-24T13:33:51.205Z-030mhrv",
+      "title": "PDP S48",
+      "message": "⚠️ Se realizo modificación en el PDP s48 Linea 7",
       "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
+      "recipient": "alex.mds",
+      "read": false,
+      "createdAt": "2026-11-24T13:33:51.205Z"
+    },
+    {
+      "id": "2026-11-23T21:13:24.597Z-3ygkyir",
+      "title": "HI",
+      "message": "👍",
+      "type": "info",
+      "senderId": "maria.mds",
+      "senderName": "Maria Reinoso",
+      "recipient": "alex.mds",
       "read": true,
-      "createdAt": "2026-11-14T12:17:52.855Z"
+      "createdAt": "2026-11-23T21:13:24.597Z"
+    },
+    {
+      "id": "2026-11-23T20:35:12.174Z-mf0vc68",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": false,
+      "createdAt": "2026-11-23T20:35:12.174Z"
+    },
+    {
+      "id": "2026-11-14T15:35:25.107Z-3oozf7v",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": true,
+      "createdAt": "2026-11-14T15:35:25.107Z"
+    },
+    {
+      "id": "2026-11-14T15:03:53.664Z-7vvakn4",
+      "title": "Actualización 4",
+      "message": "Culminada",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": true,
+      "createdAt": "2026-11-14T15:03:53.664Z"
+    },
+    {
+      "id": "2026-11-14T14:09:41.196Z-qu7gcld",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": true,
+      "createdAt": "2026-11-14T14:09:41.196Z"
+    },
+    {
+      "id": "2026-11-14T13:48:44.118Z-bmr2ddh",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": true,
+      "createdAt": "2026-11-14T13:48:44.118Z"
+    },
+    {
+      "id": "2026-11-14T13:46:47.735Z-abkysg3",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": true,
+      "createdAt": "2026-11-14T13:46:47.735Z"
+    },
+    {
+      "id": "2026-11-24T18:38:29.016Z-jnfqdu5",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "anto.mds",
+      "read": false,
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-cjd523j",
@@ -650,15 +661,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-5rwbb35",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-d3vbiyl",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "anto.mds",
+      "recipient": "prodtj.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-2ne3hu6",
@@ -760,15 +771,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-8ll28rz",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-nhlxxue",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtj.mds",
-      "read": true,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "recipient": "prodtg.mds",
+      "read": false,
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-sq1qlqj",
@@ -870,15 +881,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-qlnm5xx",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-cu4t1fm",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtg.mds",
+      "recipient": "prodts.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-m3fhr7o",
@@ -980,125 +991,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-vcxzvu1",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "prodts.mds",
-      "read": false,
-      "createdAt": "2026-11-14T12:09:06.392Z"
-    },
-    {
-      "id": "2026-11-24T13:33:51.205Z-cdycgyd",
+      "id": "2026-11-24T18:38:29.016Z-vihk89t",
       "title": "PDP S48",
-      "message": "⚠️ Se realizo modificación en el PDP s48 Linea 7",
-      "type": "info",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procj.mds",
-      "read": true,
-      "createdAt": "2026-11-24T13:33:51.205Z"
-    },
-    {
-      "id": "2026-11-23T20:35:12.174Z-c0pjg9d",
-      "title": "Data pro",
-      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
-      "type": "success",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "procj.mds",
-      "read": true,
-      "createdAt": "2026-11-23T20:35:12.174Z"
-    },
-    {
-      "id": "2026-11-14T15:35:25.107Z-e0pp2iu",
-      "title": "Actualización 5",
-      "message": "Iniciando actualización",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "procj.mds",
-      "read": true,
-      "createdAt": "2026-11-14T15:35:25.107Z"
-    },
-    {
-      "id": "2026-11-14T15:03:53.664Z-frhvbg6",
-      "title": "Actualización 4",
-      "message": "Culminada",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "procj.mds",
-      "read": true,
-      "createdAt": "2026-11-14T15:03:53.664Z"
-    },
-    {
-      "id": "2026-11-14T14:09:41.196Z-mznw11e",
-      "title": "Actualización 4",
-      "message": "Iniciando actualización",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "procj.mds",
-      "read": true,
-      "createdAt": "2026-11-14T14:09:41.196Z"
-    },
-    {
-      "id": "2026-11-14T13:48:44.118Z-o4g8bh2",
-      "title": "Actualización 3",
-      "message": "Culminada",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "procj.mds",
-      "read": true,
-      "createdAt": "2026-11-14T13:48:44.118Z"
-    },
-    {
-      "id": "2026-11-14T13:46:47.735Z-32sq0of",
-      "title": "Actualización 3",
-      "message": "Iniciando actualización",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "procj.mds",
-      "read": true,
-      "createdAt": "2026-11-14T13:46:47.735Z"
-    },
-    {
-      "id": "2026-11-14T12:19:40.786Z-ew0kjqg",
-      "title": "Actualización 2",
-      "message": "Culminada",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "procj.mds",
-      "read": true,
-      "createdAt": "2026-11-14T12:19:40.786Z"
-    },
-    {
-      "id": "2026-11-14T12:17:52.855Z-ewlihdu",
-      "title": "Actualización 2",
-      "message": "Iniciando actualización 2",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "procj.mds",
-      "read": true,
-      "createdAt": "2026-11-14T12:17:52.855Z"
-    },
-    {
-      "id": "2026-11-14T12:09:06.392Z-1900v1d",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "procj.mds",
-      "read": true,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "recipient": "cald.mds",
+      "read": false,
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-yv0xch2",
@@ -1200,15 +1101,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-108fbsd",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-2hupbcf",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "cald.mds",
-      "read": true,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "recipient": "prodt.mds",
+      "read": false,
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-7bdpwvv",
@@ -1310,15 +1211,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-5njqd2u",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-mh1z3rs",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt.mds",
+      "recipient": "prodt1.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-zuc2yuf",
@@ -1420,15 +1321,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-7dgzvay",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-r34m188",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt1.mds",
+      "recipient": "prodt2.mds",
       "read": true,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-unolwcu",
@@ -1438,7 +1339,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "prodt2.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-24T13:33:51.205Z"
     },
     {
@@ -1449,7 +1350,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "prodt2.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
@@ -1530,15 +1431,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-a4bh7g1",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-n24wmq1",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt2.mds",
-      "read": true,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "recipient": "proc.mds",
+      "read": false,
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-o8mvv2p",
@@ -1640,15 +1541,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-jrjw3g6",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-b860tfs",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc.mds",
-      "read": true,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "recipient": "proc1.mds",
+      "read": false,
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-wgmwqph",
@@ -1750,15 +1651,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-0fhzeuw",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-q88mhme",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc1.mds",
+      "recipient": "proc2.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-jdaytly",
@@ -1860,15 +1761,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-6vrnx40",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-83x1nxp",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc2.mds",
+      "recipient": "procs1.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-nc3k5kg",
@@ -1970,15 +1871,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-s5wknek",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-z4gxeot",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procs1.mds",
+      "recipient": "procs2.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-85zeqp6",
@@ -2080,15 +1981,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-4g8rm2h",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-jlq8fxa",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procs2.mds",
+      "recipient": "finan.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-777znan",
@@ -2190,15 +2091,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-v7llelr",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-o8sxdiy",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "finan.mds",
+      "recipient": "g.tec.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-rhh4pb4",
@@ -2300,15 +2201,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-90dwnzq",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-o6s9cy8",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "g.tec.mds",
-      "read": true,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "recipient": "enf.mds",
+      "read": false,
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-l0yfqss",
@@ -2410,15 +2311,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-y0dv7ba",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-w9hpd4c",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "enf.mds",
-      "read": true,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "recipient": "etq.mds",
+      "read": false,
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-0m0v22p",
@@ -2520,15 +2421,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-ohqtp32",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-hw1onwh",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "etq.mds",
+      "recipient": "logg.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-zszygb6",
@@ -2630,15 +2531,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-4xyntwr",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-qqjgsuw",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "logg.mds",
+      "recipient": "mtto.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-phim81g",
@@ -2740,15 +2641,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-zt4gu88",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-ot95s83",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto.mds",
+      "recipient": "MDS",
       "read": false,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-cueyc7a",
@@ -2850,15 +2751,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-sasg0dt",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-gnf2oiy",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "MDS",
+      "recipient": "mtto1.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-l4ppuns",
@@ -2960,15 +2861,125 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-ylsrkk3",
-      "title": "Actualización 1",
+      "id": "2026-11-24T18:38:29.016Z-vqrpg6z",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "stf",
+      "read": false,
+      "createdAt": "2026-11-24T18:38:29.016Z"
+    },
+    {
+      "id": "2026-11-24T13:40:10.535Z-upwdfu9",
+      "title": "HOLA",
+      "message": "HOLAAAAAAAAAAAAAAAA👍",
+      "type": "info",
+      "senderId": "maria.mds",
+      "senderName": "Maria Reinoso",
+      "recipient": "stf",
+      "read": false,
+      "createdAt": "2026-11-24T13:40:10.535Z"
+    },
+    {
+      "id": "2026-11-24T13:36:31.908Z-wqrxmwe",
+      "title": "HELLO",
+      "message": "HOLAAAAAAAAAAAAAAA",
+      "type": "info",
+      "senderId": "maria.mds",
+      "senderName": "Maria Reinoso",
+      "recipient": "stf",
+      "read": false,
+      "createdAt": "2026-11-24T13:36:31.908Z"
+    },
+    {
+      "id": "2026-11-24T13:33:51.205Z-x3lnmlq",
+      "title": "PDP S48",
+      "message": "⚠️ Se realizo modificación en el PDP s48 Linea 7",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "stf",
+      "read": false,
+      "createdAt": "2026-11-24T13:33:51.205Z"
+    },
+    {
+      "id": "2026-11-23T20:35:12.174Z-yxl5cdm",
+      "title": "Data pro",
+      "message": "Data Pro V2.0 ya se encuentra en funcionamiento",
+      "type": "success",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "stf",
+      "read": false,
+      "createdAt": "2026-11-23T20:35:12.174Z"
+    },
+    {
+      "id": "2026-11-14T15:35:25.107Z-bf5krl7",
+      "title": "Actualización 5",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "stf",
+      "read": false,
+      "createdAt": "2026-11-14T15:35:25.107Z"
+    },
+    {
+      "id": "2026-11-14T15:03:53.664Z-s1hf96v",
+      "title": "Actualización 4",
       "message": "Culminada",
       "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto1.mds",
+      "recipient": "stf",
       "read": false,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "createdAt": "2026-11-14T15:03:53.664Z"
+    },
+    {
+      "id": "2026-11-14T14:09:41.196Z-e7oa5av",
+      "title": "Actualización 4",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "stf",
+      "read": false,
+      "createdAt": "2026-11-14T14:09:41.196Z"
+    },
+    {
+      "id": "2026-11-14T13:48:44.118Z-dicyuct",
+      "title": "Actualización 3",
+      "message": "Culminada",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "stf",
+      "read": false,
+      "createdAt": "2026-11-14T13:48:44.118Z"
+    },
+    {
+      "id": "2026-11-14T13:46:47.735Z-zt3cm9m",
+      "title": "Actualización 3",
+      "message": "Iniciando actualización",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "stf",
+      "read": false,
+      "createdAt": "2026-11-14T13:46:47.735Z"
+    },
+    {
+      "id": "2026-11-24T18:38:29.016Z-di0h0gm",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodt3.mds",
+      "read": false,
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-ipuqzhf",
@@ -3070,15 +3081,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-8rh6nso",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-xjzbmkw",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt3.mds",
+      "recipient": "prodt4.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-wvgoeoo",
@@ -3180,15 +3191,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-6h49ltf",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-jg2bwp5",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt4.mds",
-      "read": true,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "recipient": "alc.mds",
+      "read": false,
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-9if2k5y",
@@ -3290,15 +3301,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-4e2wzqz",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-r50yh4m",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alc.mds",
+      "recipient": "alc1.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-6zc7b72",
@@ -3400,15 +3411,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-vaydugg",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-718knqz",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alc1.mds",
+      "recipient": "proc3.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-niu97tn",
@@ -3510,15 +3521,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-kixyzx0",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-l99cvqq",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc3.mds",
+      "recipient": "mtto2.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-i9mt3l4",
@@ -3620,15 +3631,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-qrk08tu",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-s3rezxb",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto2.mds",
+      "recipient": "mtto3.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-oqnb6ww",
@@ -3730,15 +3741,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-yh9cr74",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-4be1ed7",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto3.mds",
+      "recipient": "mtto4.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-jr6rhnl",
@@ -3840,15 +3851,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-grnz8qu",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-dniasnd",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto4.mds",
+      "recipient": "mtto5.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-66qbs1x",
@@ -3950,15 +3961,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-nswsszh",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-jpns4d7",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto5.mds",
+      "recipient": "mtto6.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-xadf5jz",
@@ -4060,15 +4071,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-vclwpwo",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-h4ahd6s",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto6.mds",
+      "recipient": "mtto7.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-ivl0tgj",
@@ -4170,15 +4181,15 @@
       "createdAt": "2026-11-14T12:17:52.855Z"
     },
     {
-      "id": "2026-11-14T12:09:06.392Z-54ph22z",
-      "title": "Actualización 1",
-      "message": "Culminada",
-      "type": "info",
+      "id": "2026-11-24T18:38:29.016Z-eykbcy6",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto7.mds",
+      "recipient": "prodts1.mds",
       "read": false,
-      "createdAt": "2026-11-14T12:09:06.392Z"
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-6tdgc9n",
@@ -4203,6 +4214,17 @@
       "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
+      "id": "2026-11-24T18:38:29.016Z-irg48lj",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodts2.mds",
+      "read": false,
+      "createdAt": "2026-11-24T18:38:29.016Z"
+    },
+    {
       "id": "2026-11-24T13:33:51.205Z-o4ssz16",
       "title": "PDP S48",
       "message": "⚠️ Se realizo modificación en el PDP s48 Linea 7",
@@ -4225,6 +4247,17 @@
       "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
+      "id": "2026-11-24T18:38:29.016Z-p01dook",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodts3.mds",
+      "read": false,
+      "createdAt": "2026-11-24T18:38:29.016Z"
+    },
+    {
       "id": "2026-11-24T13:33:51.205Z-w6uyu68",
       "title": "PDP S48",
       "message": "⚠️ Se realizo modificación en el PDP s48 Linea 7",
@@ -4245,6 +4278,17 @@
       "recipient": "prodts3.mds",
       "read": false,
       "createdAt": "2026-11-23T20:35:12.174Z"
+    },
+    {
+      "id": "2026-11-24T18:38:29.016Z-c42zb7s",
+      "title": "PDP S48",
+      "message": "⚠️Actualización del PDP S48 para trabajos de fin de semana L1,L2,L3,L5,L6",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodts4.mds",
+      "read": false,
+      "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
       "id": "2026-11-24T13:33:51.205Z-g3x8je5",
