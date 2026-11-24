@@ -4643,7 +4643,7 @@ export default function PlannerPage() {
 
               <div className={cn(
                 "flex-1 min-w-0",
-                activeModuleReadOnly && activeModule !== 'calidad' && "pointer-events-none select-none",
+                activeModuleReadOnly && activeModule !== 'calidad' && activeModule !== 'management' && "pointer-events-none select-none",
               )}>
                   {activeModule === 'planning' && (isAdmin || hasAccess(user.id, 'planning') || user?.id === 'cal.mds') && (
                    <div className="flex flex-col h-full">
