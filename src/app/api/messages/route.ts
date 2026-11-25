@@ -2,6 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import { notifyRecipients } from '@/lib/fcm';
 import { requireAuthenticated, requireMessageSender } from '@/lib/server-auth';
+import { after } from 'next/server';
 
 export const runtime = 'nodejs';
 
@@ -122,7 +123,8 @@ export async function POST(request: Request) {
     db.messages = trimmed;
     writeDb(db);
 
-    try {
+    after(async () => {
+      try {
       await notifyRecipients(
         recipients,
         `Nuevo mensaje de ${senderName}`,
@@ -134,9 +136,10 @@ export async function POST(request: Request) {
           messageId: created[0]?.id ?? '',
         }
       );
-    } catch (pushErr) {
-      console.error('[FCM] No se pudieron enviar las notificaciones push', pushErr);
-    }
+      } catch (pushErr) {
+        console.error('[FCM] No se pudieron enviar las notificaciones push', pushErr);
+      }
+    });
 
     return new Response(JSON.stringify({ ok: true, count: created.length }), {
       status: 200,

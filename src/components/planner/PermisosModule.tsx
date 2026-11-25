@@ -135,6 +135,7 @@ function PermisosModuleContent() {
   const [userSearch, setUserSearch] = useState('');
   const [notice, setNotice] = useState<string | null>(null);
   const [isSavingProfileImage, setIsSavingProfileImage] = useState(false);
+  const [isSavingUser, setIsSavingUser] = useState(false);
   const profileImageInputRef = useRef<HTMLInputElement>(null);
 
   const resetFormToDefault = () => {
@@ -214,6 +215,7 @@ function PermisosModuleContent() {
   });
 
   const handleSaveUser = async () => {
+    if (isSavingUser) return;
     const nextId = form.id.trim();
     const nextName = form.name.trim();
     const nextPassword = form.password.trim();
@@ -223,6 +225,7 @@ function PermisosModuleContent() {
       return;
     }
 
+    setIsSavingUser(true);
     try {
       const previousId = selectedUser?.id;
       if (previousId && previousId !== nextId) {
@@ -243,6 +246,8 @@ function PermisosModuleContent() {
       setNotice(previousId ? 'Usuario actualizado correctamente' : 'Usuario creado correctamente');
     } catch (error) {
       setNotice(error instanceof Error ? error.message : 'No se pudo guardar el usuario');
+    } finally {
+      setIsSavingUser(false);
     }
   };
 
@@ -502,8 +507,8 @@ function PermisosModuleContent() {
             </div>
 
             <div className="mt-4 flex flex-wrap items-center gap-2">
-              <Button type="button" onClick={handleSaveUser} disabled={isSavingProfileImage} className="flex-1 font-black uppercase text-[10px] tracking-widest">
-                {selectedUser ? 'Guardar cambios' : 'Crear usuario'}
+              <Button type="button" onClick={handleSaveUser} disabled={isSavingProfileImage || isSavingUser} className="flex-1 font-black uppercase text-[10px] tracking-widest">
+                {isSavingUser ? 'Guardando...' : selectedUser ? 'Guardar cambios' : 'Crear usuario'}
               </Button>
               {selectedUser && (
                 <Button type="button" variant="destructive" onClick={handleDeleteUser} className="font-black uppercase text-[10px] tracking-widest">

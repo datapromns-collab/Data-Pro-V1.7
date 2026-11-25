@@ -158,6 +158,7 @@ export function useAuthStore() {
     avatarUrl?: string;
     originalId?: string;
   }, deletedUserId?: string) => {
+    let updatedUsers = users;
     if (upsert) {
       const response = await fetch('/api/auth/users', {
         method: 'POST',
@@ -174,6 +175,15 @@ export function useAuthStore() {
         }
         throw new Error(payload.error || `Users API error: ${response.status}`);
       }
+      const payload = await response.json();
+      const savedUser = payload?.user;
+      if (!savedUser || typeof savedUser.id !== 'string' || typeof savedUser.name !== 'string') {
+        throw new Error('La cuenta se guardó, pero el servidor no devolvió el perfil actualizado.');
+      }
+      updatedUsers = updatedUsers.filter((user) =>
+        user.id !== upsert.originalId && user.id !== savedUser.id
+      );
+      updatedUsers.push(savedUser);
     }
     if (deletedUserId) {
       const response = await fetch('/api/auth/users', {
@@ -191,17 +201,10 @@ export function useAuthStore() {
         }
         throw new Error(payload.error || `Users API error: ${response.status}`);
       }
+      updatedUsers = updatedUsers.filter((user) => user.id !== deletedUserId);
     }
-    const verificationResponse = await fetch('/api/auth/users', { cache: 'no-store' });
-    if (!verificationResponse.ok) {
-      if (verificationResponse.status === 401 || verificationResponse.status === 403) {
-        throw new Error('La cuenta se guardó, pero no se pudo actualizar la lista de usuarios. Verifica tu sesión de administrador.');
-      }
-      throw new Error(`Users verification API error: ${verificationResponse.status}`);
-    }
-    const verificationPayload = await verificationResponse.json();
-    return syncUsersList(verificationPayload.users);
-  }, [syncUsersList]);
+    return syncUsersList(updatedUsers);
+  }, [syncUsersList, users]);
 
   const upsertUser = useCallback(async (payload: {
     id: string;
