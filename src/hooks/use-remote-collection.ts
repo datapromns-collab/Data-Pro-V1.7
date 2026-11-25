@@ -129,7 +129,7 @@ function deepMergeValues<T>(target: T, source: any): T {
   return result as T;
 }
 
-export function useRemoteCollection<T = any>(namespace: string, initial: T, queryParams?: Record<string, string>) {
+export function useRemoteCollection<T = any>(namespace: string, initial: T, queryParams?: Record<string, string>, enabled = true) {
   const [data, setData] = useState<T>(initial);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -575,20 +575,25 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
   }, [namespace, cacheKey, deletedKey, applyDeleted, flushQueue, queryCacheKey, getQueryCache, setQueryCache]);
 
   useEffect(() => {
-    load();
-  }, [load]);
+    if (previousQueryParamsKeyRef.current !== queryParamsKey) {
+      previousQueryParamsKeyRef.current = queryParamsKey;
+      setIsLoaded(false);
+    }
+    if (enabled) void load();
+  }, [enabled, load, queryParamsKey]);
 
   useEffect(() => {
+    if (!enabled) return;
     const resumeQueueAfterLogin = () => {
       if (loadError) void load(true);
       if (queueRef.current.length > 0) void flushQueue();
     };
     window.addEventListener(AUTH_SESSION_READY_EVENT, resumeQueueAfterLogin);
     return () => window.removeEventListener(AUTH_SESSION_READY_EVENT, resumeQueueAfterLogin);
-  }, [flushQueue, load, loadError]);
+  }, [enabled, flushQueue, load, loadError]);
 
   useEffect(() => {
-    if (!isLoaded) return;
+    if (!enabled || !isLoaded) return;
     const interval = setInterval(() => {
       load(true);
     }, POLL_INTERVAL);
@@ -600,14 +605,7 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
       clearInterval(interval);
       document.removeEventListener('visibilitychange', onVisible);
     };
-  }, [isLoaded, load]);
-
-  useEffect(() => {
-    if (previousQueryParamsKeyRef.current === queryParamsKey) return;
-    previousQueryParamsKeyRef.current = queryParamsKey;
-    setIsLoaded(false);
-    load();
-  }, [queryParamsKey, load]);
+  }, [enabled, isLoaded, load]);
 
   return { data, setData: setDataSynced, setDataLocal, patchData, savePatch, removeItem, removeKey, isLoaded, isLoading, isSaving, hasPendingChanges, loadError, syncError };
 }

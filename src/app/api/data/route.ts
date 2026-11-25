@@ -92,7 +92,6 @@ function deepMergeWeeklyData(current: any, incoming: any): any {
 
 export async function GET(request: Request) {
   try {
-    const data = readDb();
     const section = new URL(request.url).searchParams.get('section');
     if (section !== 'users') {
       let denied: Response | null = null;
@@ -112,6 +111,7 @@ export async function GET(request: Request) {
       }
       if (denied) return denied;
     }
+    const data = readDb();
     if (section === 'planner') {
       const planner = data.planner ?? {};
       return new Response(JSON.stringify({

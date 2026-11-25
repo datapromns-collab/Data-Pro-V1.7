@@ -397,6 +397,11 @@ const mockOrdenesTrabajo: any[] = [
 ];
 
 export default function PlannerPage() {
+  const [activeModule, setActiveModule] = useState('planning');
+  const [activeTab, setActiveTab] = useState('gantt');
+  const [procesosSubTab, setProcesosSubTab] = useState('ptab');
+  const [ptabTab, setPtabTab] = useState<'agua' | 'insumos' | 'r-semanal' | 'r-mensual'>('agua');
+  const [salaJarabeSubTab, setSalaJarabeSubTab] = useState<'preparacion' | 'consumo-lineas' | 'consumo-litros' | 'consumo-ubb' | 'resumen'>('preparacion');
   const { 
     tasks, 
     weekStartDate, 
@@ -499,7 +504,12 @@ export default function PlannerPage() {
   } = usePermissionsStore();
 
   const { ordenes } = useOrdenesSap();
-  const mttoCo2Consumption = useRemoteCollection<Record<string, string>>('mtto-co2-consumption', {});
+  const mttoCo2Consumption = useRemoteCollection<Record<string, string>>(
+    'mtto-co2-consumption',
+    {},
+    undefined,
+    activeModule === 'mtto',
+  );
   const getMttoCo2ConsumptionForDate = (fechaStr: string): number =>
     Array.from({ length: 6 }, (_, index) => {
       const value = mttoCo2Consumption.data[`${fechaStr}-tank-${index + 1}`] || '';
@@ -568,9 +578,24 @@ export default function PlannerPage() {
     };
   }, [plantaWeekStartDate]);
 
-  const informesOperacionalesStore = useRemoteCollection<any[]>('planta-informes-operacionales', [], plantaWeekQuery);
-  const ordenesTrabajoStore = useRemoteCollection<any[]>('planta-ordenes-trabajo', [], plantaWeekQuery);
-  const ciclosDiasStore = useRemoteCollection<Record<string, boolean>>('planta-ciclos-dias', {});
+  const informesOperacionalesStore = useRemoteCollection<any[]>(
+    'planta-informes-operacionales',
+    [],
+    plantaWeekQuery,
+    activeModule === 'planta',
+  );
+  const ordenesTrabajoStore = useRemoteCollection<any[]>(
+    'planta-ordenes-trabajo',
+    [],
+    plantaWeekQuery,
+    activeModule === 'planta',
+  );
+  const ciclosDiasStore = useRemoteCollection<Record<string, boolean>>(
+    'planta-ciclos-dias',
+    {},
+    undefined,
+    activeModule === 'planta' && activeTab === 'ciclos',
+  );
   const informesOperacionales = informesOperacionalesStore.data;
   const setInformesOperacionales = informesOperacionalesStore.setData;
   const setInformesOperacionalesLocal = informesOperacionalesStore.setDataLocal;
@@ -836,12 +861,15 @@ export default function PlannerPage() {
       setErrorValidacion('No se pudo habilitar la edición por un error de conexión.');
     }
   };
-  const [activeModule, setActiveModule] = useState('planning');
-  const [activeTab, setActiveTab] = useState('gantt');
   const [planningDatePickerOpen, setPlanningDatePickerOpen] = useState(false);
   const [insumosSubTab, setInsumosSubTab] = useState('co2');
   const [insumosPeriodoSubTab, setInsumosPeriodoSubTab] = useState('diario');
-  const consumoLineasStore = useRemoteCollection<Record<number, ConsumoLineaRow[]>>('sala-jarabe-consumo-lineas', {});
+  const consumoLineasStore = useRemoteCollection<Record<number, ConsumoLineaRow[]>>(
+    'sala-jarabe-consumo-lineas',
+    {},
+    undefined,
+    activeModule === 'procesos' && procesosSubTab === 'sala-jarabe',
+  );
   const consumoLineasDataPorLinea = consumoLineasStore.data;
   const setConsumoLineasDataPorLinea = (updater: typeof consumoLineasDataPorLinea | ((prev: typeof consumoLineasDataPorLinea) => typeof consumoLineasDataPorLinea)) => {
     if (getProcesosLevel('sala-jarabe.consumo-lineas') !== 'write') return;
@@ -1093,8 +1121,18 @@ export default function PlannerPage() {
   const [salaJarabeNuevaTareaOpen, setSalaJarabeNuevaTareaOpen] = useState(false);
   const [preparacionTab, setPreparacionTab] = useState<'glup' | 'justy'>('glup');
   const [nuevaTarea, setNuevaTarea] = useState({ fecha: '', hora: '', numeroTanques: '', sala: '', sabor: '', litros: '', ubb: '', brix: '' });
-  const glupStore = useRemoteCollection<{ id: string; fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string; brix: string; estado: 'preparado' | 'enviado a linea' | 'retenido' | 'liberado'; enviarALinea: number | null; editando: boolean; editandoPor: string | null }[]>('sala-jarabe-glup', []);
-  const justyStore = useRemoteCollection<{ id: string; fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string; brix: string; estado: 'preparado' | 'enviado a linea' | 'retenido' | 'liberado'; enviarALinea: number | null; editando: boolean; editandoPor: string | null }[]>('sala-jarabe-justy', []);
+  const glupStore = useRemoteCollection<{ id: string; fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string; brix: string; estado: 'preparado' | 'enviado a linea' | 'retenido' | 'liberado'; enviarALinea: number | null; editando: boolean; editandoPor: string | null }[]>(
+    'sala-jarabe-glup',
+    [],
+    undefined,
+    activeModule === 'procesos' && procesosSubTab === 'sala-jarabe',
+  );
+  const justyStore = useRemoteCollection<{ id: string; fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string; brix: string; estado: 'preparado' | 'enviado a linea' | 'retenido' | 'liberado'; enviarALinea: number | null; editando: boolean; editandoPor: string | null }[]>(
+    'sala-jarabe-justy',
+    [],
+    undefined,
+    activeModule === 'procesos' && procesosSubTab === 'sala-jarabe',
+  );
   const glupRows = glupStore.data;
   const justyRows = justyStore.data;
   const setGlupRows = (updater: typeof glupRows | ((previous: typeof glupRows) => typeof glupRows)) => {
@@ -1218,7 +1256,6 @@ export default function PlannerPage() {
   const [lineaModalOpen, setLineaModalOpen] = useState(false);
   const [selectedLineaRow, setSelectedLineaRow] = useState<SelectedLineaRow | null>(null);
    const [selectedLinea, setSelectedLinea] = useState<number | null>(null);
-   const [salaJarabeSubTab, setSalaJarabeSubTab] = useState<'preparacion' | 'consumo-lineas' | 'consumo-litros' | 'consumo-ubb' | 'resumen'>('preparacion');
    const [selectedEstadoRow, setSelectedEstadoRow] = useState<{ id: string; type: 'glup' | 'justy' } | null>(null);
   const [estadoModalOpen, setEstadoModalOpen] = useState(false);
   const [revisionEditingRow, setRevisionEditingRow] = useState<{ id: string; type: 'glup' | 'justy'; scope: 'privileged' | 'public' } | null>(null);
@@ -1363,9 +1400,7 @@ export default function PlannerPage() {
     }
     return weeks;
   }, [salaJarabePrepWeekStart.getFullYear()]);
-  const [procesosSubTab, setProcesosSubTab] = useState('ptab');
   const [procesosInventarioView, setProcesosInventarioView] = useState<'diario' | 'semanal' | 'mensual'>('diario');
-  const [ptabTab, setPtabTab] = useState<'agua' | 'insumos' | 'r-semanal' | 'r-mensual'>('agua');
   const [ptabWeekStartDate, setPtabWeekStartDate] = useState(new Date());
   const [ptabInsumosFecha, setPtabInsumosFecha] = useState(new Date());
   const [rSemanalSubTab, setRSemanalSubTab] = useState<'s-agua' | 's-insumos'>('s-agua');
@@ -1399,8 +1434,18 @@ export default function PlannerPage() {
   const ptabAguaReadOnly = getProcesosLevel('ptab.agua') !== 'write';
   const ptabInsumosReadOnly = getProcesosLevel('ptab.insumos') !== 'write';
   const salaJarabeReadOnly = getProcesosLevel(`sala-jarabe.${salaJarabeSubTab}`) !== 'write';
-  const ptabAguaStore = useRemoteCollection<Record<string, string>>('ptab-agua', {});
-  const ptabInsumosStore = useRemoteCollection<Record<string, string>>('ptab-insumos', {});
+  const ptabAguaStore = useRemoteCollection<Record<string, string>>(
+    'ptab-agua',
+    {},
+    undefined,
+    activeModule === 'procesos' && procesosSubTab === 'ptab' && ptabTab !== 'insumos',
+  );
+  const ptabInsumosStore = useRemoteCollection<Record<string, string>>(
+    'ptab-insumos',
+    {},
+    undefined,
+    activeModule === 'procesos' && procesosSubTab === 'ptab' && ptabTab === 'insumos',
+  );
   const insumosQuimicos = [
     { codigo: 'INSU_0021', nombre: 'LP20' },
     { codigo: 'INSU_0010', nombre: 'Cloro' },
@@ -1446,8 +1491,18 @@ export default function PlannerPage() {
   }, [ptabInsumosFecha, user?.id, getPermissionLevel]);
   const [rSemanalWeekStartDate, setRSemanalWeekStartDate] = useState(new Date());
   const rSemanalWeeksContainerRef = useRef<HTMLDivElement>(null);
-  const rSemanalAguaStore = useRemoteCollection<Record<string, string>>('ptab-agua', {});
-  const insumosAguaTotalStore = useRemoteCollection<Record<string, string>>('insumos-agua', {});
+  const rSemanalAguaStore = useRemoteCollection<Record<string, string>>(
+    'ptab-agua',
+    {},
+    undefined,
+    activeModule === 'procesos' && procesosSubTab === 'ptab' && ptabTab === 'r-semanal',
+  );
+  const insumosAguaTotalStore = useRemoteCollection<Record<string, string>>(
+    'insumos-agua',
+    {},
+    undefined,
+    activeModule === 'insumos',
+  );
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -2198,7 +2253,12 @@ export default function PlannerPage() {
     return new Date();
   });
   const produccionFechaKey = produccionFecha ? format(produccionFecha, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd');
-  const producidasStore = useRemoteCollection<Record<string, { diurno: ProducidasTabla; nocturno: ProducidasTabla }>>('planta-produccion-producidas', {});
+  const producidasStore = useRemoteCollection<Record<string, { diurno: ProducidasTabla; nocturno: ProducidasTabla }>>(
+    'planta-produccion-producidas',
+    {},
+    undefined,
+    activeModule === 'planta' && activeTab === 'produccion',
+  );
   const producidasDia = producidasStore.data[produccionFechaKey] || { diurno: nuevaTabla(), nocturno: nuevaTabla() };
   const producidasDiurno = producidasDia.diurno;
   const producidasNocturno = producidasDia.nocturno;
@@ -2214,7 +2274,12 @@ export default function PlannerPage() {
       [produccionFechaKey]: { ...(prev[produccionFechaKey] || { diurno: nuevaTabla(), nocturno: nuevaTabla() }), nocturno: val }
     }));
   };
-  const velocidadesDtStore = useRemoteCollection<Record<string, { td: string[], tn: string[] }>>('planta-velocidades-bpm', {});
+  const velocidadesDtStore = useRemoteCollection<Record<string, { td: string[], tn: string[] }>>(
+    'planta-velocidades-bpm',
+    {},
+    undefined,
+    activeModule === 'planta' && activeTab === 'produccion',
+  );
   const velocidadesDtRaw = velocidadesDtStore.data[produccionFechaKey];
   const velocidadesDt = velocidadesDtRaw && typeof velocidadesDtRaw === 'object' && !Array.isArray(velocidadesDtRaw) && Array.isArray(velocidadesDtRaw.td) && velocidadesDtRaw.td.length >= 7
     ? velocidadesDtRaw
@@ -2222,12 +2287,22 @@ export default function PlannerPage() {
   const setVelocidadesDt = (turno: 'td' | 'tn', val: string[]) => {
     velocidadesDtStore.setData((prev) => ({ ...prev, [produccionFechaKey]: { ...(prev[produccionFechaKey] || { td: Array.from({ length: 7 }, () => ''), tn: Array.from({ length: 7 }, () => '') }), [turno]: val } }));
   };
-  const hrsPagadasStore = useRemoteCollection<Record<string, string[]>>('planta-hrs-pagadas', {});
+  const hrsPagadasStore = useRemoteCollection<Record<string, string[]>>(
+    'planta-hrs-pagadas',
+    {},
+    undefined,
+    activeModule === 'planta' && activeTab === 'produccion',
+  );
   const hrsPagadasDia = hrsPagadasStore.data[produccionFechaKey] || Array.from({ length: 7 }, () => '');
   const setHrsPagadasDia = (val: string[]) => {
     hrsPagadasStore.setData((prev) => ({ ...prev, [produccionFechaKey]: val }));
   };
-  const hrsPagadasDtStore = useRemoteCollection<Record<string, { td: string[], tn: string[] }>>('planta-hrs-pagadas-dt', {});
+  const hrsPagadasDtStore = useRemoteCollection<Record<string, { td: string[], tn: string[] }>>(
+    'planta-hrs-pagadas-dt',
+    {},
+    undefined,
+    activeModule === 'planta' && activeTab === 'produccion',
+  );
   const hrsPagadasDtRaw = hrsPagadasDtStore.data[produccionFechaKey];
   const hrsPagadasDt = hrsPagadasDtRaw && typeof hrsPagadasDtRaw === 'object' && !Array.isArray(hrsPagadasDtRaw) && Array.isArray(hrsPagadasDtRaw.td)
     ? hrsPagadasDtRaw
@@ -2235,12 +2310,47 @@ export default function PlannerPage() {
   const setHrsPagadasDt = (turno: 'td' | 'tn', val: string[]) => {
     hrsPagadasDtStore.setData((prev) => ({ ...prev, [produccionFechaKey]: { ...(prev[produccionFechaKey] || { td: Array.from({ length: 7 }, () => ''), tn: Array.from({ length: 7 }, () => '') }), [turno]: val } }));
   };
-  const hrsProgramadasStore = useRemoteCollection<Record<string, string[]>>('planta-hrs-programadas', {});
+  const hrsProgramadasStore = useRemoteCollection<Record<string, string[]>>(
+    'planta-hrs-programadas',
+    {},
+    undefined,
+    activeModule === 'planta' && activeTab === 'produccion',
+  );
   const hrsProgramadasDia = hrsProgramadasStore.data[produccionFechaKey] || Array.from({ length: 7 }, () => '');
   const setHrsProgramadasDia = (val: string[]) => {
     hrsProgramadasStore.setData((prev) => ({ ...prev, [produccionFechaKey]: val }));
   };
-  const hrsProgramadasDtStore = useRemoteCollection<Record<string, { td: string[], tn: string[] }>>('planta-hrs-programadas-dt', {});
+  const hrsProgramadasDtStore = useRemoteCollection<Record<string, { td: string[], tn: string[] }>>(
+    'planta-hrs-programadas-dt',
+    {},
+    undefined,
+    activeModule === 'planta' && activeTab === 'produccion',
+  );
+  const activeModuleCollectionsLoading =
+    (activeModule === 'mtto' && !mttoCo2Consumption.isLoaded) ||
+    (activeModule === 'planta' && (
+      activeTab === 'ciclos'
+        ? !ciclosDiasStore.isLoaded
+        : activeTab === 'produccion'
+          ? [
+            producidasStore,
+            velocidadesDtStore,
+            hrsPagadasStore,
+            hrsPagadasDtStore,
+            hrsProgramadasStore,
+            hrsProgramadasDtStore,
+          ].some((store) => !store.isLoaded)
+          : [informesOperacionalesStore, ordenesTrabajoStore].some((store) => !store.isLoaded)
+    )) ||
+    (activeModule === 'procesos' && (
+      procesosSubTab === 'sala-jarabe'
+        ? [consumoLineasStore, glupStore, justyStore].some((store) => !store.isLoaded)
+        : procesosSubTab === 'ptab' && (
+          (ptabTab !== 'insumos' && !ptabAguaStore.isLoaded) ||
+          (ptabTab === 'insumos' && !ptabInsumosStore.isLoaded) ||
+          (ptabTab === 'r-semanal' && !rSemanalAguaStore.isLoaded)
+        )
+    ));
   const hrsProgramadasDtRaw = hrsProgramadasDtStore.data[produccionFechaKey];
   const hrsProgramadasDt = hrsProgramadasDtRaw && typeof hrsProgramadasDtRaw === 'object' && !Array.isArray(hrsProgramadasDtRaw) && Array.isArray(hrsProgramadasDtRaw.td)
     ? hrsProgramadasDtRaw
@@ -4009,7 +4119,17 @@ export default function PlannerPage() {
     });
   };
 
-  if (!plannerLoaded || !authLoaded) return null;
+  if (!authLoaded) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-50">
+        <div className="flex flex-col items-center gap-4 rounded-2xl bg-white px-8 py-7 shadow-sm">
+          <Image src="/icox-v1.png" alt="Data Pro" width={48} height={48} className="h-12 w-12 object-contain" />
+          <div className="h-5 w-5 animate-spin rounded-full border-2 border-slate-200 border-t-blue-600" />
+          <p className="text-sm font-semibold text-slate-600">Preparando tu vista…</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!user) {
     return <LoginForm onLogin={login} />;
@@ -4501,7 +4621,7 @@ export default function PlannerPage() {
                 )}
              </div>
           </header>
-          <div className="flex-1 overflow-auto p-4 lg:p-8">
+          <div className="relative flex-1 overflow-auto p-4 lg:p-8">
             <div className="flex flex-col gap-4 lg:gap-6 h-full">
               {plannerSaveError && (
                 <div role="alert" className="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-800">
@@ -4513,6 +4633,17 @@ export default function PlannerPage() {
                   <button type="button" onClick={clearPlannerSaveError} aria-label="Cerrar aviso" className="rounded p-1 hover:bg-red-100">
                     <X className="h-4 w-4" />
                   </button>
+                </div>
+              )}
+              {(!plannerLoaded || activeModuleCollectionsLoading) && (
+                <div
+                  className="absolute inset-0 z-30 flex items-center justify-center bg-white/70 backdrop-blur-sm"
+                  role="status"
+                  aria-live="polite"
+                >
+                  <span className="rounded-xl bg-white px-4 py-3 text-sm font-bold text-slate-700 shadow-lg">
+                    {!plannerLoaded ? 'Cargando datos iniciales…' : 'Cargando datos del módulo…'}
+                  </span>
                 </div>
               )}
               

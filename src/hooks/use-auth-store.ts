@@ -140,7 +140,8 @@ export function useAuthStore() {
     };
     const refreshInterval = window.setInterval(refreshWhenVisible, 60_000);
     document.addEventListener('visibilitychange', refreshWhenVisible);
-    void Promise.all([refreshUsers(), refreshSession()]).finally(() => setIsLoaded(true));
+    void refreshUsers();
+    void refreshSession().finally(() => setIsLoaded(true));
 
     return () => {
       window.clearInterval(refreshInterval);

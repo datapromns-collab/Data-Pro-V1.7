@@ -757,11 +757,6 @@ function usePlannerStoreInner() {
   const saveToLocalStorageRef = useRef(saveToLocalStorage);
   saveToLocalStorageRef.current = saveToLocalStorage;
 
-  useEffect(() => {
-     if (!isLoaded) return;
-     refreshFromServer();
-   }, [isLoaded, refreshFromServer]);
-
    useEffect(() => {
      window.addEventListener(AUTH_SESSION_READY_EVENT, refreshFromServer);
      return () => window.removeEventListener(AUTH_SESSION_READY_EVENT, refreshFromServer);
