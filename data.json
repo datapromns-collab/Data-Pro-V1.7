@@ -35018,7 +35018,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-11-25T12:01:44.878Z"
+    "updatedAt": "2026-11-25T12:09:56.186Z"
   },
   "ordenesSap": [
     {
@@ -51238,7 +51238,7 @@
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 7
+          "cajas4": 7450
         }
       ]
     },
@@ -51264,12 +51264,12 @@
           "fechaInicio": "2026-11-24",
           "ticket1": "16856",
           "cajas1": 7360,
-          "ticket2": "",
+          "ticket2": "16857",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 8
         }
       ]
     },

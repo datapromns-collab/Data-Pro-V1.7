@@ -52,14 +52,10 @@ import {
   Upload
 } from 'lucide-react';
 import { getLineSpeedsForDate, PRODUCT_LIST, SHIFT_SPLIT_HOUR, SHIFT_SPLIT_MINUTE, PRODUCTION_START_HOUR, weekMonthKey } from '@/lib/planner-utils';
-import ProducidasTable, { ProducidasTabla, nuevaTabla, sumarTablas } from '@/components/planner/ProducidasTable';
-import { ProductionGantt } from '@/components/planner/ProductionGantt';
 import { useRemoteCollection } from '@/hooks/use-remote-collection';
-import OrdenesSapModule, { CorrelativoSelector } from '@/components/planner/OrdenesSapModule';
 import { useOrdenesSap } from '@/hooks/use-ordenes-sap';
-import PlantaReporteResumen from '@/components/planner/PlantaReporteResumen';
-import PlantaReporteTendencias from '@/components/planner/PlantaReporteTendencias';
 import type { PurchasingSummaryPrintData } from '@/components/planner/PurchasingModule';
+import { nuevaTabla, sumarTablas, type ProducidasTabla } from '@/lib/producidas-utils';
 import { usePlannerStore, getWeekKey } from '@/hooks/use-planner-store';
 import { getWeekDays } from '@/lib/planner-utils';
 import { useAuthStore } from '@/hooks/use-auth-store';
@@ -86,7 +82,6 @@ import { format, getISOWeek, getISOWeekYear, addDays, addMonths, subMonths, star
 import { es } from 'date-fns/locale';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
-import { Bar, CartesianGrid, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, BarChart, Legend, Line, ComposedChart } from 'recharts';
 
 const obtenerClaveSemanaISO = (fecha: Date) =>
   `${getISOWeekYear(fecha)}-W${String(getISOWeek(fecha)).padStart(2, '0')}`;
@@ -100,6 +95,13 @@ const lazyModule = <Props,>(loader: () => Promise<React.ComponentType<Props>>) =
   dynamic<Props>(() => loader().then((Component) => ({ default: Component })), {
     loading: () => <div className="p-6 text-center text-xs font-bold text-slate-500">Cargando módulo...</div>,
   });
+const ProducidasTable = lazyModule(() => import('@/components/planner/ProducidasTable').then((module) => module.default));
+const ProductionGantt = lazyModule(() => import('@/components/planner/ProductionGantt').then((module) => module.ProductionGantt));
+const OrdenesSapModule = lazyModule(() => import('@/components/planner/OrdenesSapModule').then((module) => module.default));
+const CorrelativoSelector = lazyModule(() => import('@/components/planner/OrdenesSapModule').then((module) => module.CorrelativoSelector));
+const PlantaReporteResumen = lazyModule(() => import('@/components/planner/PlantaReporteResumen').then((module) => module.default));
+const PlantaReporteTendencias = lazyModule(() => import('@/components/planner/PlantaReporteTendencias').then((module) => module.default));
+const ConsumoAguaChart = lazyModule(() => import('@/components/planner/ConsumoAguaChart').then((module) => module.ConsumoAguaChart));
 const LineSpeedsConfig = lazyModule(() => import('@/components/planner/LineSpeedsConfig').then((module) => module.LineSpeedsConfig));
 const TaskDialog = lazyModule(() => import('@/components/planner/TaskDialog').then((module) => module.TaskDialog));
 const Calculator = lazyModule(() => import('@/components/planner/Calculator').then((module) => module.Calculator));
@@ -7085,25 +7087,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                        </Button>
                                                      </div>
                                                         <div id="r-semanal-agua-chart" className="min-h-[420px] px-4 pb-4">
-                                                       {rSemanalChartData.length > 0 ? (
-                                                         <ResponsiveContainer width="100%" height={420}>
-                                                            <ComposedChart data={rSemanalChartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                                                              <CartesianGrid strokeDasharray="3 3" />
-                                                              <XAxis dataKey="dia" />
-                                                               <YAxis yAxisId="left" tickFormatter={(v) => (Math.abs(Number(v)) >= 1_000_000 ? `${(Number(v) / 1_000_000).toFixed(1)}M` : Math.abs(Number(v)) >= 1_000 ? `${(Number(v) / 1_000).toFixed(1)}K` : String(v))} width={50} />
-                                                               <YAxis yAxisId="right" orientation="right" />
-                                                              <RechartsTooltip />
-                                                              <Legend />
-                                                              <Bar yAxisId="left" dataKey="fisico" fill="#0ea5e9" name="Consumo Físico" />
-                                                              <Bar yAxisId="left" dataKey="teorico" fill="#10b981" name="Consumo Teórico" />
-                                                               <Line yAxisId="right" type="monotone" dataKey="rendimiento" stroke="#f59e0b" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} name="Rendimiento" />
-                                                            </ComposedChart>
-                                                         </ResponsiveContainer>
-                                                       ) : (
-                                                         <div className="h-[420px] rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-xs tracking-widest">
-                                                           Sin datos para graficar
-                                                         </div>
-                                                       )}
+                                                       <ConsumoAguaChart data={rSemanalChartData} xAxisDataKey="dia" height={420} />
                                                     </div>
                                                  </div>
                                               </div>
@@ -7232,25 +7216,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                <div className="mt-4 bg-white rounded-2xl border border-slate-100 p-4">
                                                  <div className="text-slate-700 font-black text-xs uppercase tracking-widest mb-2">Consumo de agua - Gráfico mensual</div>
                                                  <div className="min-h-[320px]">
-                                                   {rMensualChartData.length > 0 ? (
-                                                     <ResponsiveContainer width="100%" height={320}>
-                                                       <ComposedChart data={rMensualChartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                                                         <CartesianGrid strokeDasharray="3 3" />
-                                                         <XAxis dataKey="semana" />
-                                                         <YAxis yAxisId="left" tickFormatter={(v) => (Math.abs(Number(v)) >= 1_000_000 ? `${(Number(v) / 1_000_000).toFixed(1)}M` : Math.abs(Number(v)) >= 1_000 ? `${(Number(v) / 1_000).toFixed(1)}K` : String(v))} width={50} />
-                                                         <YAxis yAxisId="right" orientation="right" />
-                                                         <RechartsTooltip />
-                                                         <Legend />
-                                                         <Bar yAxisId="left" dataKey="fisico" fill="#0ea5e9" name="Consumo Físico" />
-                                                         <Bar yAxisId="left" dataKey="teorico" fill="#10b981" name="Consumo Teórico" />
-                                                         <Line yAxisId="right" type="monotone" dataKey="rendimiento" stroke="#f59e0b" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} name="Rendimiento" />
-                                                       </ComposedChart>
-                                                     </ResponsiveContainer>
-                                                   ) : (
-                                                     <div className="h-[320px] rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-xs tracking-widest">
-                                                       Sin datos para graficar
-                                                     </div>
-                                                   )}
+                                                   <ConsumoAguaChart data={rMensualChartData} xAxisDataKey="semana" height={320} />
                                                  </div>
                                                </div>
                                              </div>

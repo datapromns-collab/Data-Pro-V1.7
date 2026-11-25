@@ -2,34 +2,10 @@
 
 import { useState } from "react";
 import { PRODUCT_LIST } from "@/lib/planner-utils";
+import { LINEAS, nuevaTabla, type ProducidasTabla } from "@/lib/producidas-utils";
 
-const LINEAS = [1, 2, 3, 4, 5, 6, 7];
-
-export type Celda = number | "";
-export type Fila = Record<number, Celda>;
-export type ProducidasTabla = Record<string, Fila>;
-
-function nuevaTabla(): ProducidasTabla {
-  const tabla: ProducidasTabla = {};
-  PRODUCT_LIST.forEach((sabor) => {
-    tabla[sabor] = {};
-    LINEAS.forEach((l) => {
-      tabla[sabor][l] = "";
-    });
-  });
-  return tabla;
-}
-
-function sumarTablas(a: ProducidasTabla, b: ProducidasTabla): ProducidasTabla {
-  const resultado = nuevaTabla();
-  PRODUCT_LIST.forEach((sabor) => {
-    LINEAS.forEach((l) => {
-      resultado[sabor][l] =
-        (Number(a[sabor]?.[l]) || 0) + (Number(b[sabor]?.[l]) || 0);
-    });
-  });
-  return resultado;
-}
+export { LINEAS, nuevaTabla, sumarTablas } from "@/lib/producidas-utils";
+export type { Celda, Fila, ProducidasTabla } from "@/lib/producidas-utils";
 
 export default function ProducidasTable({
   titulo,
@@ -116,4 +92,3 @@ export default function ProducidasTable({
   );
 }
 
-export { nuevaTabla, sumarTablas, LINEAS };
