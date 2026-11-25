@@ -490,23 +490,25 @@ export function CalidadSeguimientoTanques({ canEdit = true }: { canEdit?: boolea
                               className="min-h-16 w-full min-w-0 resize-y rounded border border-slate-200 bg-white p-2 text-left text-[10px] text-slate-800 outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-200 disabled:opacity-60"
                             />
                           ) : (
-                            <input
-                              type={field.type === 'time' ? 'text' : field.type}
-                              inputMode={field.type === 'time' ? 'numeric' : undefined}
-                              value={getPreparationFieldValue(row, field.id)}
-                              aria-label={`${field.label}, fila ${rowIndex + 1}`}
-                              disabled={!canEdit || !trackingStore.isLoaded}
-                              placeholder={field.type === 'time' ? 'HH:MM' : undefined}
-                              maxLength={field.type === 'time' ? 5 : field.id === 'finishedTankRoom' ? 4 : undefined}
-                              pattern={field.type === 'time' ? '(?:[01][0-9]|2[0-3]):[0-5][0-9]' : field.id === 'finishedTankRoom' ? '[0-9]{2}-[0-9]' : undefined}
-                              onChange={(event) => {
-                                const value = event.target.value;
-                                if (field.id === 'finishedTankRoom' && !/^\d{0,2}(?:-\d?)?$/.test(value)) return;
-                                if (field.type === 'time' && !/^(?:(?:[01]\d?|2[0-3]?)(?::[0-5]?\d?)?)?$/.test(value)) return;
-                                updatePreparationRow(rowId, field.id, value);
-                              }}
-                              className="h-8 w-full min-w-0 rounded border border-slate-200 bg-white px-1 text-center text-[10px] text-slate-800 outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-200 disabled:opacity-60"
-                            />
+                            <div className="relative mx-auto h-36 w-full min-w-[2.5rem] max-w-16">
+                              <input
+                                type={field.type === 'time' ? 'text' : field.type}
+                                inputMode={field.type === 'time' ? 'numeric' : undefined}
+                                value={getPreparationFieldValue(row, field.id)}
+                                aria-label={`${field.label}, fila ${rowIndex + 1}`}
+                                disabled={!canEdit || !trackingStore.isLoaded}
+                                placeholder={field.type === 'time' ? 'HH:MM' : undefined}
+                                maxLength={field.type === 'time' ? 5 : field.id === 'finishedTankRoom' ? 4 : undefined}
+                                pattern={field.type === 'time' ? '(?:[01][0-9]|2[0-3]):[0-5][0-9]' : field.id === 'finishedTankRoom' ? '[0-9]{2}-[0-9]' : undefined}
+                                onChange={(event) => {
+                                  const value = event.target.value;
+                                  if (field.id === 'finishedTankRoom' && !/^\d{0,2}(?:-\d?)?$/.test(value)) return;
+                                  if (field.type === 'time' && !/^(?:(?:[01]\d?|2[0-3]?)(?::[0-5]?\d?)?)?$/.test(value)) return;
+                                  updatePreparationRow(rowId, field.id, value);
+                                }}
+                                className="absolute left-1/2 top-1/2 h-8 w-32 min-w-0 -translate-x-1/2 -translate-y-1/2 -rotate-90 rounded border border-slate-200 bg-white px-1 text-center text-[10px] text-slate-800 outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-200 disabled:opacity-60"
+                              />
+                            </div>
                           )}
                         </td>
                       ))}

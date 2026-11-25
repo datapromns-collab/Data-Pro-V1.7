@@ -1,17 +1,25 @@
 "use client";
 
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { ArrowLeftRight, Box, CalendarDays, CalendarIcon, CalendarRange, Droplets, FileDown, Package, Recycle, RotateCcw, Truck } from 'lucide-react';
 import { addDays, endOfWeek, format, getISOWeek, getISOWeekYear, setISOWeek, startOfISOWeek, startOfMonth, startOfWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
-import jsPDF from 'jspdf';
-import { Bar, CartesianGrid, ComposedChart, Legend, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { cn } from '@/lib/utils';
 import { loadProductionInventoryData, loadProductionInventoryPeriod, loadProductionNonConformingData, loadProductionReceptions, loadProductionWasteRows, savePlannerData, saveProductionNonConformingRows } from '@/lib/json-db';
 import { useAuthStore } from '@/hooks/use-auth-store';
 import { formatNonConformingPercent, normalizeNonConformingRows, parseNonConformingQuantity, summarizeNonConformingRows } from '@/lib/non-conforming-utils';
 import { parseCantidadCajas } from '@/lib/production-tracking-utils';
-import { getWasteRowsWithGeneratedCaps, MermasDesperdiciosReporte } from '@/components/planner/MermasDesperdiciosReporte';
+import { getWasteRowsWithGeneratedCaps } from '@/lib/waste-report-utils';
+
+const MermasDesperdiciosReporte = dynamic(() =>
+  import('@/components/planner/MermasDesperdiciosReporte').then((module) => module.MermasDesperdiciosReporte), {
+  loading: () => <div className="py-8 text-center text-sm text-slate-500">Cargando reporte...</div>,
+});
+const ProductionNonConformingChart = dynamic(() =>
+  import('@/components/planner/ProductionNonConformingChart').then((module) => module.ProductionNonConformingChart), {
+  loading: () => <div className="h-[28rem] rounded-2xl border border-slate-100 p-3" />,
+});
 
 type WasteSectionKey = 'mermas' | 'desperdicios' | 'rechazos' | 'devoluciones';
 type WasteDataGroup = 'mermasDesperdicios' | 'rechazosDevoluciones';
@@ -1521,6 +1529,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
     const rows = section === 'desperdicios' ? getWasteRowsWithGeneratedCapsForProduction(savedRows) : savedRows;
     setWastePdfStatus('generating');
     try {
+      const { default: jsPDF } = await import('jspdf');
       const logoResponse = await fetch('/Logo-MDS.png');
       if (!logoResponse.ok) throw new Error(`Unable to load MDS logo: HTTP ${logoResponse.status}`);
       const logoBlob = await logoResponse.blob();
@@ -4241,38 +4250,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                         </h4>
                                         {nonConformingSummaryRows.some((row) => row.quantity > 0) ? (
                                           <div className="h-[28rem] min-w-0 rounded-2xl border border-slate-100 p-3">
-                                            <ResponsiveContainer width="100%" height="100%">
-                                              <ComposedChart data={nonConformingSummaryRows} margin={{ top: 12, right: 12, left: 0, bottom: 54 }}>
-                                                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                                                <XAxis dataKey="label" interval={0} angle={-30} textAnchor="end" height={72} tick={{ fontSize: 10 }} />
-                                                <YAxis yAxisId="quantity" allowDecimals />
-                                                <YAxis yAxisId="percent" orientation="right" domain={[0, 100]} unit="%" />
-                                                <Tooltip
-                                                  content={({ active, payload, label }) => {
-                                                    if (!active || !payload?.length) return null;
-                                                    const data = payload[0].payload;
-
-                                                    return (
-                                                      <div className="rounded-lg border border-slate-200 bg-white px-3 py-2 shadow-lg">
-                                                        <p className="mb-1 font-semibold text-slate-900">{label}</p>
-                                                        <p className="text-indigo-600">
-                                                          Cantidad: {Number(data.quantity).toLocaleString('es-VE')}
-                                                        </p>
-                                                        <p className="text-slate-700">
-                                                          % que representa: {formatNonConformingPercent(Number(data.percentOfTotal))}
-                                                        </p>
-                                                        <p className="text-orange-600">
-                                                          % acumulado: {formatNonConformingPercent(Number(data.cumulativePercent))}
-                                                        </p>
-                                                      </div>
-                                                    );
-                                                  }}
-                                                />
-                                                <Legend />
-                                                <Bar yAxisId="quantity" dataKey="quantity" name="Cantidad" fill="#4f46e5" radius={[5, 5, 0, 0]} />
-                                                <Line yAxisId="percent" dataKey="cumulativePercent" name="% acumulado" stroke="#f97316" strokeWidth={2} dot={{ r: 3 }} />
-                                              </ComposedChart>
-                                            </ResponsiveContainer>
+                                            <ProductionNonConformingChart data={nonConformingSummaryRows} />
                                           </div>
                                         ) : nonConformingSummaryRows.length ? (
                                           <div className="flex h-64 items-center justify-center rounded-2xl border border-dashed border-amber-200 bg-amber-50 px-6 text-center text-sm text-amber-800">
