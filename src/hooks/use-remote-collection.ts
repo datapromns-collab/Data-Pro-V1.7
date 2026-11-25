@@ -129,6 +129,38 @@ function deepMergeValues<T>(target: T, source: any): T {
   return result as T;
 }
 
+export async function prefetchRemoteCollection(
+  namespace: string,
+  queryParams?: Record<string, string>,
+  signal?: AbortSignal,
+): Promise<void> {
+  const queryCacheKey = `rc_q_${namespace}_${JSON.stringify(queryParams || {})}`;
+  let url = `/api/collection/${encodeURIComponent(namespace)}`;
+  if (queryParams && Object.keys(queryParams).length > 0) {
+    url += `?${new URLSearchParams(queryParams).toString()}`;
+  }
+
+  try {
+    const response = await fetch(url, { cache: 'no-store', signal });
+    if (!response.ok) {
+      if (response.status !== 401 && response.status !== 403) {
+        console.warn(`[RC] Background preload failed for ${namespace} (HTTP ${response.status}).`);
+      }
+      return;
+    }
+
+    const data = await response.json();
+    try {
+      localStorage.setItem(queryCacheKey, JSON.stringify({ data, timestamp: Date.now() }));
+    } catch (error) {
+      console.warn(`[RC] Unable to cache background data for ${namespace}.`, error);
+    }
+  } catch (error) {
+    if (error instanceof Error && error.name === 'AbortError') return;
+    console.warn(`[RC] Background preload failed for ${namespace}.`, error);
+  }
+}
+
 export function useRemoteCollection<T = any>(namespace: string, initial: T, queryParams?: Record<string, string>, enabled = true) {
   const [data, setData] = useState<T>(initial);
   const [isLoaded, setIsLoaded] = useState(false);

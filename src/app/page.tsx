@@ -52,7 +52,7 @@ import {
   Upload
 } from 'lucide-react';
 import { getLineSpeedsForDate, PRODUCT_LIST, SHIFT_SPLIT_HOUR, SHIFT_SPLIT_MINUTE, PRODUCTION_START_HOUR, weekMonthKey } from '@/lib/planner-utils';
-import { useRemoteCollection } from '@/hooks/use-remote-collection';
+import { prefetchRemoteCollection, useRemoteCollection } from '@/hooks/use-remote-collection';
 import { useOrdenesSap } from '@/hooks/use-ordenes-sap';
 import type { PurchasingSummaryPrintData } from '@/components/planner/PurchasingModule';
 import { nuevaTabla, sumarTablas, type ProducidasTabla } from '@/lib/producidas-utils';
@@ -2329,6 +2329,7 @@ export default function PlannerPage() {
     activeModule === 'planta' && activeTab === 'produccion',
   );
   const activeModuleCollectionsLoading =
+    (activeModule === 'insumos' && !insumosAguaTotalStore.isLoaded) ||
     (activeModule === 'mtto' && !mttoCo2Consumption.isLoaded) ||
     (activeModule === 'planta' && (
       activeTab === 'ciclos'
@@ -2353,6 +2354,84 @@ export default function PlannerPage() {
           (ptabTab === 'r-semanal' && !rSemanalAguaStore.isLoaded)
         )
     ));
+  const backgroundCollectionGroups = useMemo(() => [
+    {
+      module: 'planta' as const,
+      requests: [
+        { namespace: 'planta-informes-operacionales', queryParams: plantaWeekQuery },
+        { namespace: 'planta-ordenes-trabajo', queryParams: plantaWeekQuery },
+        { namespace: 'planta-ciclos-dias' },
+        { namespace: 'planta-produccion-producidas' },
+        { namespace: 'planta-velocidades-bpm' },
+        { namespace: 'planta-hrs-pagadas' },
+        { namespace: 'planta-hrs-pagadas-dt' },
+        { namespace: 'planta-hrs-programadas' },
+        { namespace: 'planta-hrs-programadas-dt' },
+      ],
+    },
+    {
+      module: 'procesos' as const,
+      requests: [
+        { namespace: 'sala-jarabe-consumo-lineas' },
+        { namespace: 'sala-jarabe-glup' },
+        { namespace: 'sala-jarabe-justy' },
+        { namespace: 'ptab-agua' },
+        { namespace: 'ptab-insumos' },
+      ],
+    },
+    {
+      module: 'mtto' as const,
+      requests: [{ namespace: 'mtto-co2-consumption' }],
+    },
+    {
+      module: 'insumos' as const,
+      requests: [{ namespace: 'insumos-agua' }],
+    },
+  ], [plantaWeekQuery]);
+  const backgroundPrefetchedModulesRef = useRef(new Set<string>());
+
+  useEffect(() => {
+    if (!user || !authLoaded || !permissionsLoaded || !plannerLoaded || activeModuleCollectionsLoading) return;
+
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => {
+      void (async () => {
+        for (const group of backgroundCollectionGroups) {
+          if (
+            controller.signal.aborted ||
+            group.module === activeModule ||
+            backgroundPrefetchedModulesRef.current.has(group.module) ||
+            !hasAccess(user.id, group.module)
+          ) continue;
+
+          for (const request of group.requests) {
+            if (controller.signal.aborted) return;
+            await prefetchRemoteCollection(
+              request.namespace,
+              'queryParams' in request ? request.queryParams : undefined,
+              controller.signal,
+            );
+            await new Promise((resolve) => window.setTimeout(resolve, 150));
+          }
+          backgroundPrefetchedModulesRef.current.add(group.module);
+        }
+      })();
+    }, 1500);
+
+    return () => {
+      window.clearTimeout(timeout);
+      controller.abort();
+    };
+  }, [
+    activeModule,
+    activeModuleCollectionsLoading,
+    authLoaded,
+    backgroundCollectionGroups,
+    hasAccess,
+    permissionsLoaded,
+    plannerLoaded,
+    user,
+  ]);
   const hrsProgramadasDtRaw = hrsProgramadasDtStore.data[produccionFechaKey];
   const hrsProgramadasDt = hrsProgramadasDtRaw && typeof hrsProgramadasDtRaw === 'object' && !Array.isArray(hrsProgramadasDtRaw) && Array.isArray(hrsProgramadasDtRaw.td)
     ? hrsProgramadasDtRaw

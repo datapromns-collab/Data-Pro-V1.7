@@ -59,32 +59,49 @@ function writeFileAtomicallySync(target: string, contents: string): void {
   }
 }
 
-function writePayloadSync(payload: DbData): void {
-  const serialized = JSON.stringify(payload, null, 2);
-  writeFileAtomicallySync(DB_PATH, serialized);
+async function writeFileAtomically(target: string, contents: string): Promise<void> {
+  const tmpPath = `${target}.${process.pid}.${Date.now()}.${Math.random().toString(36).slice(2)}.tmp`;
+  try {
+    await fs.promises.writeFile(tmpPath, contents, { encoding: 'utf8', flag: 'wx' });
+    await fs.promises.rename(tmpPath, target);
+  } finally {
+    try {
+      await fs.promises.unlink(tmpPath);
+    } catch (error) {
+      const err = error as NodeJS.ErrnoException;
+      if (err.code !== 'ENOENT') {
+        console.warn('[DB][TEMP][CLEANUP][WARN]', error);
+      }
+    }
+  }
 }
 
-function createRotatingBackupSync(data: DbData): void {
-  const backupDir = getBackupDir();
-  try {
-    if (!fs.existsSync(backupDir)) {
-      fs.mkdirSync(backupDir, { recursive: true });
-    }
+let backupQueue: Promise<void> = Promise.resolve();
+
+function createRotatingBackup(serialized: string): void {
+  const nextBackup = backupQueue.then(async () => {
+    const backupDir = getBackupDir();
+    await fs.promises.mkdir(backupDir, { recursive: true });
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const backupPath = path.join(backupDir, `data-${timestamp}.json`);
-    writeFileAtomicallySync(backupPath, JSON.stringify(data, null, 2));
-    const files = fs.readdirSync(backupDir)
+    await writeFileAtomically(backupPath, serialized);
+    const files = (await fs.promises.readdir(backupDir))
       .filter((f) => f.startsWith('data-') && f.endsWith('.json'))
       .sort();
     while (files.length > MAX_BACKUPS) {
       const oldest = files.shift();
       if (oldest) {
-        try { fs.unlinkSync(path.join(backupDir, oldest)); } catch {}
+        try {
+          await fs.promises.unlink(path.join(backupDir, oldest));
+        } catch (error) {
+          if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
+        }
       }
     }
-  } catch (error) {
+  });
+  backupQueue = nextBackup.catch((error) => {
     console.warn('[DB][BACKUP][WARN] Unable to create rotating backup', error);
-  }
+  });
 }
 
 function sanitizeJson(raw: string): string | null {
@@ -174,12 +191,12 @@ export function readDb(): DbData {
 }
 
 export function writeDb(mutator: (current: DbData) => DbData): Promise<void> {
-  const nextWrite = writeQueue.then(() => {
+  const nextWrite = writeQueue.then(async () => {
     try {
       const current = structuredClone(readDb());
       const updated = mutator(current);
       assertPlantaCycleDates(current, updated);
-      retryWrite(updated, 6);
+      const serialized = await retryWrite(updated, 6);
       try {
         const signature = getDbSignature();
         cachedDb = signature ? { signature, data: updated } : null;
@@ -187,7 +204,7 @@ export function writeDb(mutator: (current: DbData) => DbData): Promise<void> {
         cachedDb = null;
         console.warn('[DB][CACHE][WARN] Unable to refresh database read cache', cacheError);
       }
-      createRotatingBackupSync(updated);
+      createRotatingBackup(serialized);
     } catch (error) {
       console.error('[DB][WRITE][ERROR]', error);
       throw error;
@@ -205,17 +222,19 @@ export function getDbPath(): string {
   return DB_PATH;
 }
 
-function retryWrite(updated: DbData, retries = 6): void {
+async function retryWrite(updated: DbData, retries = 6): Promise<string> {
+  const serialized = JSON.stringify(updated);
   let attempt = 0;
   while (true) {
     try {
-      writePayloadSync(updated);
-      return;
+      await writeFileAtomically(DB_PATH, serialized);
+      return serialized;
     } catch (error) {
       const err = error as NodeJS.ErrnoException;
       const isRetryable = err.code === 'EPERM' || err.code === 'EACCES' || err.code === 'EBUSY' || err.code === 'UNKNOWN';
       if (!isRetryable || attempt >= retries - 1) throw error;
       attempt++;
+      await new Promise((resolve) => setTimeout(resolve, 20 * attempt));
     }
   }
 }

@@ -607,30 +607,6 @@ function usePlannerStoreInner() {
     }
   }, [applyRemoteToState]);
 
-  const plannerDataChangedRef = useRef<(() => void) | null>(null);
-  const prevPlannerSnapshotRef = useRef<string>('');
-
-  const setPlannerDataChanged = useCallback((fn: (() => void) | null) => {
-    plannerDataChangedRef.current = fn;
-  }, []);
-
-  const computePlannerSnapshot = useCallback(() => JSON.stringify({
-    weeks: weeklyData,
-    config: { weekStartDate: toLocalISO(weekStartDate), lineSpeeds, lineSpeedHistory },
-    customRecipes,
-    customPackagingRecipes,
-  }), [weeklyData, weekStartDate, lineSpeeds, lineSpeedHistory, customRecipes, customPackagingRecipes]);
-
-  useEffect(() => {
-    if (!isLoaded) return;
-    const current = computePlannerSnapshot();
-    const prev = prevPlannerSnapshotRef.current;
-    if (prev && prev !== current) {
-      plannerDataChangedRef.current?.();
-    }
-    prevPlannerSnapshotRef.current = current;
-  }, [isLoaded, computePlannerSnapshot]);
-
   const loadFromLocalStorageRef = useRef(loadFromLocalStorage);
   loadFromLocalStorageRef.current = loadFromLocalStorage;
   const applyRemoteToStateRef = useRef(applyRemoteToState);
@@ -1222,7 +1198,6 @@ function usePlannerStoreInner() {
     updateProductionPlanAW,
     updateLogisticsInventoryAW,
     updatePlantInventoryAW,
-    setPlannerDataChanged,
     refreshFromServer,
     saveError,
     clearSaveError,
