@@ -401,6 +401,7 @@ const mockOrdenesTrabajo: any[] = [
 export default function PlannerPage() {
   const [activeModule, setActiveModule] = useState('planning');
   const [activeTab, setActiveTab] = useState('gantt');
+  const [insumosSubTab, setInsumosSubTab] = useState('co2');
   const [procesosSubTab, setProcesosSubTab] = useState('ptab');
   const [ptabTab, setPtabTab] = useState<'agua' | 'insumos' | 'r-semanal' | 'r-mensual'>('agua');
   const [salaJarabeSubTab, setSalaJarabeSubTab] = useState<'preparacion' | 'consumo-lineas' | 'consumo-litros' | 'consumo-ubb' | 'resumen'>('preparacion');
@@ -510,7 +511,7 @@ export default function PlannerPage() {
     'mtto-co2-consumption',
     {},
     undefined,
-    activeModule === 'mtto',
+    activeModule === 'mtto' || (activeModule === 'insumos' && insumosSubTab === 'co2'),
   );
   const getMttoCo2ConsumptionForDate = (fechaStr: string): number =>
     Array.from({ length: 6 }, (_, index) => {
@@ -864,7 +865,6 @@ export default function PlannerPage() {
     }
   };
   const [planningDatePickerOpen, setPlanningDatePickerOpen] = useState(false);
-  const [insumosSubTab, setInsumosSubTab] = useState('co2');
   const [insumosPeriodoSubTab, setInsumosPeriodoSubTab] = useState('diario');
   const consumoLineasStore = useRemoteCollection<Record<number, ConsumoLineaRow[]>>(
     'sala-jarabe-consumo-lineas',
@@ -1440,7 +1440,8 @@ export default function PlannerPage() {
     'ptab-agua',
     {},
     undefined,
-    activeModule === 'procesos' && procesosSubTab === 'ptab' && ptabTab !== 'insumos',
+    (activeModule === 'procesos' && procesosSubTab === 'ptab' && ptabTab !== 'insumos') ||
+      (activeModule === 'insumos' && insumosSubTab === 'agua'),
   );
   const ptabInsumosStore = useRemoteCollection<Record<string, string>>(
     'ptab-insumos',
@@ -1499,13 +1500,6 @@ export default function PlannerPage() {
     undefined,
     activeModule === 'procesos' && procesosSubTab === 'ptab' && ptabTab === 'r-semanal',
   );
-  const insumosAguaTotalStore = useRemoteCollection<Record<string, string>>(
-    'insumos-agua',
-    {},
-    undefined,
-    activeModule === 'insumos',
-  );
-
   useEffect(() => {
     if (typeof window === 'undefined') return;
     try {
@@ -2329,7 +2323,10 @@ export default function PlannerPage() {
     activeModule === 'planta' && activeTab === 'produccion',
   );
   const activeModuleCollectionsLoading =
-    (activeModule === 'insumos' && !insumosAguaTotalStore.isLoaded) ||
+    (activeModule === 'insumos' && (
+      (insumosSubTab === 'co2' && !mttoCo2Consumption.isLoaded) ||
+      (insumosSubTab === 'agua' && !ptabAguaStore.isLoaded)
+    )) ||
     (activeModule === 'mtto' && !mttoCo2Consumption.isLoaded) ||
     (activeModule === 'planta' && (
       activeTab === 'ciclos'

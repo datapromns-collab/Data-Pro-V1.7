@@ -153,6 +153,32 @@ export async function loadProductionWasteRows(
   }
 }
 
+export async function loadProductionWasteRowsRange(
+  section: 'mermas' | 'desperdicios' | 'rechazos' | 'devoluciones',
+  startDate: string,
+  endDate: string,
+): Promise<Record<string, unknown[]> | null> {
+  try {
+    const params = new URLSearchParams({ section: 'productionWaste', wasteSection: section, startDate, endDate });
+    const res = await fetchWithRetry(`${API_URL}?${params.toString()}`);
+    if (!res.ok) throw new Error('Production waste range API error');
+    const json = await res.json();
+    const rowsByDate = json.rowsByDate;
+    if (!rowsByDate || typeof rowsByDate !== 'object' || Array.isArray(rowsByDate)) {
+      throw new Error('Invalid production waste range response');
+    }
+    return Object.fromEntries(
+      Object.entries(rowsByDate).map(([date, rows]) => {
+        if (!Array.isArray(rows)) throw new Error(`Invalid production waste rows for ${date}`);
+        return [date, rows];
+      }),
+    );
+  } catch (error) {
+    console.warn('[JSON_DB] Unable to load production waste range', { section, startDate, endDate, error });
+    return null;
+  }
+}
+
 export async function loadProductionNonConformingData(): Promise<Record<string, unknown[]> | null> {
   try {
     const res = await fetchWithRetry('/api/production/non-conforming');

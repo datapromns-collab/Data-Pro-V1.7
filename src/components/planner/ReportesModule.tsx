@@ -18,7 +18,7 @@ import {
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-import { loadProductionInventoryPeriod, loadProductionReceptions, loadProductionWasteRows, type OrdenSap } from '@/lib/json-db';
+import { loadProductionInventoryPeriod, loadProductionReceptions, loadProductionWasteRowsRange, type OrdenSap } from '@/lib/json-db';
 import { parseCantidadCajas } from '@/lib/production-tracking-utils';
 import {
   ADHESIVE_FACTORS,
@@ -84,17 +84,18 @@ const loadWasteRowsForRange = async (
   period: WasteReportPeriod,
 ): Promise<Record<string, WasteReportRow[]>> => {
   const dates = getWasteDatesForRange(selectedWeek, monthDate, period);
-  const results = await Promise.all(dates.map(async (day) => {
+  const startDate = format(dates[0], 'yyyy-MM-dd');
+  const endDate = format(dates[dates.length - 1], 'yyyy-MM-dd');
+  const rowsByDate = await loadProductionWasteRowsRange(mode, startDate, endDate);
+  if (!rowsByDate) throw new Error('Unable to load production ' + mode + ' for ' + startDate + ' to ' + endDate);
+  return Object.fromEntries(dates.map((day) => {
     const dateKey = format(day, 'yyyy-MM-dd');
-    const response = await loadProductionWasteRows(mode, dateKey);
-    if (!response) throw new Error('Unable to load production ' + mode + ' for ' + dateKey);
-    const rows = Array.isArray(response.rows) ? response.rows : [];
+    const rows = rowsByDate[dateKey] ?? [];
     return [dateKey, rows
       .filter((row): row is Record<string, unknown> => !!row && typeof row === 'object' && !Array.isArray(row))
       .map((row, index) => normalizeWasteRow(row, dateKey, index))
-      .filter((row): row is WasteReportRow => Boolean(row))] as const;
+      .filter((row): row is WasteReportRow => Boolean(row))];
   }));
-  return Object.fromEntries(results);
 };
 
 function WasteSummaryReport({ mode, reportMonthDate, onMonthChange }: WasteSummaryReportProps) {

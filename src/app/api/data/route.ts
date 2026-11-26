@@ -229,10 +229,51 @@ export async function GET(request: Request) {
       const params = new URL(request.url).searchParams;
       const wasteSection = params.get('wasteSection');
       const date = params.get('date');
+      const startDate = params.get('startDate');
+      const endDate = params.get('endDate');
       const group = wasteSection === 'rechazos' || wasteSection === 'devoluciones'
         ? 'rechazosDevoluciones'
         : 'mermasDesperdicios';
-      if (!['mermas', 'desperdicios', 'rechazos', 'devoluciones'].includes(wasteSection || '') || !date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      if (!['mermas', 'desperdicios', 'rechazos', 'devoluciones'].includes(wasteSection || '')) {
+        return new Response(JSON.stringify({ error: 'Invalid production waste query' }), {
+          status: 400,
+          headers: { 'content-type': 'application/json' },
+        });
+      }
+
+      if (startDate !== null || endDate !== null) {
+        const startTime = startDate ? Date.parse(`${startDate}T00:00:00Z`) : NaN;
+        const endTime = endDate ? Date.parse(`${endDate}T00:00:00Z`) : NaN;
+        const isValidDate = (value: string | null, timestamp: number) =>
+          !!value && /^\d{4}-\d{2}-\d{2}$/.test(value) &&
+          !Number.isNaN(timestamp) && new Date(timestamp).toISOString().slice(0, 10) === value;
+        if (
+          date !== null ||
+          !isValidDate(startDate, startTime) ||
+          !isValidDate(endDate, endTime) ||
+          endTime < startTime ||
+          endTime - startTime > 30 * 24 * 60 * 60 * 1000
+        ) {
+          return new Response(JSON.stringify({ error: 'Invalid production waste date range' }), {
+            status: 400,
+            headers: { 'content-type': 'application/json' },
+          });
+        }
+
+        const rowsByDate: Record<string, unknown[]> = {};
+        const dailyRows = data.planner?.productionInventory?.[group]?.[wasteSection as 'mermas' | 'desperdicios' | 'rechazos' | 'devoluciones'];
+        for (let timestamp = startTime; timestamp <= endTime; timestamp += 24 * 60 * 60 * 1000) {
+          const dateKey = new Date(timestamp).toISOString().slice(0, 10);
+          const rows = dailyRows?.[dateKey];
+          rowsByDate[dateKey] = Array.isArray(rows) ? rows : [];
+        }
+        return new Response(JSON.stringify({ rowsByDate }), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        });
+      }
+
+      if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
         return new Response(JSON.stringify({ error: 'Invalid production waste query' }), {
           status: 400,
           headers: { 'content-type': 'application/json' },
