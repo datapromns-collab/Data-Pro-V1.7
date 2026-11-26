@@ -791,7 +791,7 @@ export function VentasModule({
   return (
     <div className="flex h-full flex-col gap-4">
       {!embeddedAnalysis && <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <div className="flex items-center gap-2 rounded-full bg-slate-100/70 p-1.5 shadow-inner ring-1 ring-slate-200/80 w-fit">
+        <div className="pointer-events-auto flex items-center gap-2 rounded-full bg-slate-100/70 p-1.5 shadow-inner ring-1 ring-slate-200/80 w-fit">
           <button
             type="button"
             onClick={() => setVista('pronostico')}

@@ -31,7 +31,7 @@ export default function SeguimientoPanel({ onVistaChange, readOnly = false, allo
   if (seccionesPermitidas.length === 0) return null;
 
   const botonClass = (activo: boolean) =>
-    `inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activo ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`;
+    `pointer-events-auto inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activo ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`;
 
   const mostrarEnfardadora = seccionesPermitidas.includes("enfardadora");
   const mostrarEtiquetadora = seccionesPermitidas.includes("etiquetadora");
@@ -39,7 +39,7 @@ export default function SeguimientoPanel({ onVistaChange, readOnly = false, allo
   return (
     <div className="space-y-4">
       {seccionesPermitidas.length > 1 && (
-        <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit">
+        <div className="pointer-events-auto flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit">
           {mostrarEnfardadora && (
             <button onClick={() => setVista("enfardadora")} className={botonClass(vista === "enfardadora")}>
               <Factory className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Enfardadora</span>

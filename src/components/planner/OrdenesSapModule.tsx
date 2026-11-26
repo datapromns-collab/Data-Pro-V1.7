@@ -381,7 +381,8 @@ export default function OrdenesSapModule({
   const [creadorSubsection, setCreadorSubsection] = useState<'fijas' | 'ordenes'>('fijas');
   // Estado independiente para la sección "Seguimiento de Órdenes" (no afecta a las demás secciones)
   const [seguimientoSubsection, setSeguimientoSubsection] = useState<number | 'resumen' | 'resumen-mensual'>(() => userId === 'jaime.r' ? 'resumen' : 1);
-  const [seguimientoResumenMensualSubsection, setSeguimientoResumenMensualSubsection] = useState<'resumen-por-sabor' | 'resumen-por-lineas' | 'rendimiento-azucar'>('resumen-por-sabor');
+  const [seguimientoResumenMensualSubsection, setSeguimientoResumenMensualSubsection] = useState<'resumen-por-sabor' | 'resumen-por-lineas' | 'sabor-por-linea' | 'rendimiento-azucar'>('resumen-por-sabor');
+  const [seguimientoResumenLinea, setSeguimientoResumenLinea] = useState(1);
   const [jarabeRealPorSabor, setJarabeRealPorSabor] = useState<Record<string, number>>({});
 
   useEffect(() => {
@@ -1146,6 +1147,56 @@ export default function OrdenesSapModule({
     });
   }, [resumenMensualSeguimientoPorLineas.items]);
 
+  const resumenMensualSeguimientoPorSaborLinea = useMemo(() => {
+    const mes = seguimientoResumenMes;
+    const anio = seguimientoResumenAnio;
+    if (!mes || !anio) return { items: [], total: { sabor: `TOTAL L${seguimientoResumenLinea}`, requerido: 0, real: 0, diff: 0, pct: 0 } };
+
+    const filas = combinarFilasResumenMensual(mes, anio, ordenes, autoOverridesFlat, dataManual || [])
+      .filter((fila) => fila.linea === seguimientoResumenLinea);
+    const requerido: Record<string, number> = {};
+    const real: Record<string, number> = {};
+    filas.forEach((fila) => {
+      if (fila.jarabeReal > 0) {
+        requerido[fila.sabor] = (requerido[fila.sabor] || 0) + fila.jarabeRequerido;
+      }
+      real[fila.sabor] = (real[fila.sabor] || 0) + fila.jarabeReal;
+    });
+
+    const items = PRODUCT_LIST.map((sabor) => {
+      const req = requerido[sabor] || 0;
+      const realVal = real[sabor] || 0;
+      const diff = realVal - req;
+      const pct = req > 0 ? (diff / req) * 100 : 0;
+      return { sabor, requerido: req, real: realVal, diff, pct };
+    }).filter((item) => item.requerido > 0 || item.real > 0);
+
+    const total = items.reduce((acc, item) => {
+      acc.requerido += item.requerido;
+      acc.real += item.real;
+      acc.diff += item.diff;
+      return acc;
+    }, { sabor: `TOTAL L${seguimientoResumenLinea}`, requerido: 0, real: 0, diff: 0, pct: 0 });
+    total.pct = total.requerido > 0 ? (total.diff / total.requerido) * 100 : 0;
+    return { items, total };
+  }, [seguimientoResumenMes, seguimientoResumenAnio, seguimientoResumenLinea, ordenes, autoOverridesFlat, dataManual]);
+
+  const pctParetoDataPorLinea = useMemo(() => {
+    const sorted = resumenMensualSeguimientoPorSaborLinea.items
+      .slice()
+      .sort((a, b) => Math.abs(b.pct) - Math.abs(a.pct));
+    const totalAbs = sorted.reduce((sum, item) => sum + Math.abs(item.pct), 0);
+    let cumulative = 0;
+    return sorted.map((item) => {
+      cumulative += Math.abs(item.pct);
+      return {
+        sabor: item.sabor,
+        pct: item.pct,
+        cumPct: totalAbs > 0 ? (cumulative / totalAbs) * 100 : 0,
+      };
+    });
+  }, [resumenMensualSeguimientoPorSaborLinea.items]);
+
   const rendimientoAzucar = useMemo(() => {
     const mes = seguimientoResumenMes;
     const anio = seguimientoResumenAnio;
@@ -1847,11 +1898,14 @@ const exportarPDFdia = async () => {
      pdf.save(pdfNombre);
    };
 
-    const exportarPDFResumenSeguimientoSabor = async () => {
+    const exportarPDFResumenSeguimientoSabor = async (
+      resumen = resumenMensualSeguimiento,
+      linea?: number
+    ) => {
      const mes = seguimientoResumenMes;
      const anio = seguimientoResumenAnio;
      const fechaLabel = mes && anio ? `${format(new Date(anio, mes - 1, 1), 'MMMM', { locale: es }).toUpperCase()} ${anio}` : 'SIN MES';
-     const items = resumenMensualSeguimiento.items.slice();
+     const items = resumen.items.slice();
      if (!items.length) return;
 
      const headers = ['SABOR', 'JARABE REQUERIDO', 'JARABE REAL', 'DIFERENCIA', 'PORCENTAJE'];
@@ -1870,7 +1924,12 @@ const exportarPDFdia = async () => {
      pdf.setFont('helvetica', 'bold');
      pdf.setFontSize(11);
      pdf.setTextColor(15, 23, 42);
-     pdf.text('Resumen Seguimiento Mensual por Sabor', pageWidth / 2, marginY - 6, { align: 'center' });
+     pdf.text(
+       linea ? `Resumen Seguimiento Mensual por Sabor - Línea ${linea}` : 'Resumen Seguimiento Mensual por Sabor',
+       pageWidth / 2,
+       marginY - 6,
+       { align: 'center' }
+     );
 
      let y = marginY;
      pdf.setDrawColor(0, 0, 0);
@@ -1943,15 +2002,15 @@ const exportarPDFdia = async () => {
      pdf.setFontSize(8);
      pdf.setTextColor(255, 255, 255);
      let x = startX;
-     pdf.text(String(resumenMensualSeguimiento.total.sabor), x + colWidths[0] / 2, y + 4, { align: 'center' });
+     pdf.text(String(resumen.total.sabor), x + colWidths[0] / 2, y + 4, { align: 'center' });
      x += colWidths[0];
-     pdf.text(resumenMensualSeguimiento.total.requerido.toFixed(2).replace('.', ','), x + colWidths[1] / 2, y + 4, { align: 'center' });
+     pdf.text(resumen.total.requerido.toFixed(2).replace('.', ','), x + colWidths[1] / 2, y + 4, { align: 'center' });
      x += colWidths[1];
-     pdf.text(resumenMensualSeguimiento.total.real.toFixed(2).replace('.', ','), x + colWidths[2] / 2, y + 4, { align: 'center' });
+     pdf.text(resumen.total.real.toFixed(2).replace('.', ','), x + colWidths[2] / 2, y + 4, { align: 'center' });
      x += colWidths[2];
-     pdf.text(resumenMensualSeguimiento.total.diff.toFixed(2).replace('.', ','), x + colWidths[3] / 2, y + 4, { align: 'center' });
+     pdf.text(resumen.total.diff.toFixed(2).replace('.', ','), x + colWidths[3] / 2, y + 4, { align: 'center' });
      x += colWidths[3];
-     pdf.text(resumenMensualSeguimiento.total.pct.toFixed(2).replace('.', ',') + '%', x + colWidths[4] / 2, y + 4, { align: 'center' });
+     pdf.text(resumen.total.pct.toFixed(2).replace('.', ',') + '%', x + colWidths[4] / 2, y + 4, { align: 'center' });
      drawRowBorders(y, headerHeight);
 
      y += headerHeight + 3;
@@ -1986,7 +2045,9 @@ const exportarPDFdia = async () => {
        }
      }
 
-     const pdfNombre = `Resumen Seguimiento por Sabor ${fechaLabel}.pdf`;
+     const pdfNombre = linea
+       ? `Resumen Seguimiento por Sabor Linea ${linea} ${fechaLabel}.pdf`
+       : `Resumen Seguimiento por Sabor ${fechaLabel}.pdf`;
      pdf.save(pdfNombre);
    };
 
@@ -2266,7 +2327,7 @@ const exportarPDFdia = async () => {
       )}
       <div className="space-y-3 mb-6 no-print">
         <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full border border-slate-200 w-full sm:w-auto">
+            <div className="pointer-events-auto flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full border border-slate-200 w-full sm:w-auto">
               {isSectionAllowed('carga-prod') && (
                 <button
                   onClick={() => setActiveSection('carga-prod')}
@@ -2321,7 +2382,7 @@ const exportarPDFdia = async () => {
                <PopoverTrigger asChild>
                  <Button
                    variant="outline"
-                   className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[11px] whitespace-nowrap border-0 bg-white text-slate-700 shadow-sm cursor-pointer"
+                   className="pointer-events-auto inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[11px] whitespace-nowrap border-0 bg-white text-slate-700 shadow-sm cursor-pointer"
                  >
                    <CalendarIcon className="h-3.5 w-3.5 text-primary" />
                    {selectedFecha ? format(selectedFecha, "dd 'de' MMM, yyyy", { locale: es }) : "Seleccionar fecha"}
@@ -2376,7 +2437,7 @@ const exportarPDFdia = async () => {
                <PopoverTrigger asChild>
                  <Button
                    variant="outline"
-                   className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[11px] whitespace-nowrap border-0 bg-white text-slate-700 shadow-sm cursor-pointer"
+                   className="pointer-events-auto inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[11px] whitespace-nowrap border-0 bg-white text-slate-700 shadow-sm cursor-pointer"
                  >
                    <CalendarIcon className="h-3.5 w-3.5 text-primary" />
                    {selectedFechaProdtSemanal ? format(selectedFechaProdtSemanal, "dd 'de' MMM, yyyy", { locale: es }) : "Seleccionar fecha"}
@@ -2432,7 +2493,7 @@ const exportarPDFdia = async () => {
         <div className="flex flex-wrap items-center justify-between gap-3">
           {activeSection === 'carga-prod' ? (
             <>
-              <div className="flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full border border-slate-200">
+              <div className="pointer-events-auto flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full border border-slate-200">
                 {lineas.map((linea) => {
                   const isActive = activeLinea === linea;
                   return (
@@ -2450,7 +2511,7 @@ const exportarPDFdia = async () => {
                 <Button
                   size="sm"
                   onClick={() => openNuevaOrden(activeLinea ?? 1)}
-                  className="h-9 pl-4 pr-5 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+                  className="pointer-events-auto h-9 pl-4 pr-5 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
                 >
                   <Plus className="h-3.5 w-3.5" />
                   Nueva Orden
@@ -2467,7 +2528,7 @@ const exportarPDFdia = async () => {
             </>
             ) : isSectionAllowed('dia-a-dia') && activeSection === 'dia-a-dia' ? (
             <div className="flex flex-wrap items-center justify-between gap-3 w-full">
-              <div className="flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full border border-slate-200">
+              <div className="pointer-events-auto flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full border border-slate-200">
                 <button
                   onClick={() => setActiveSubsection('dia')}
                   className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSubsection === 'dia' || activeSubsection === null ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
@@ -2485,7 +2546,7 @@ const exportarPDFdia = async () => {
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
-                    className="h-9 w-[240px] justify-start rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                    className="pointer-events-auto h-9 w-[240px] justify-start rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
                   >
                     <CalendarIcon className="h-3.5 w-3.5 mr-2" />
                      {fechaDiaADia ? format(fechaDiaADia, "d 'de' MMM, yyyy", { locale: es }) : "Seleccionar día"}
@@ -2508,7 +2569,7 @@ const exportarPDFdia = async () => {
                    <PopoverTrigger asChild>
                      <Button
                        variant="outline"
-                       className="h-9 w-[240px] justify-start rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                       className="pointer-events-auto h-9 w-[240px] justify-start rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
                      >
                        <CalendarIcon className="h-3.5 w-3.5 mr-2" />
                        {selectedFecha ? format(selectedFecha, 'MMMM yyyy', { locale: es }).toUpperCase() : 'SELECCIONE MES'}
@@ -2570,7 +2631,7 @@ const exportarPDFdia = async () => {
         )}
 
         {isSectionAllowed('dia-a-dia') && activeSection === 'dia-a-dia' && (activeSubsection === 'diurno' || activeSubsection === 'nocturno') && (
-          <div className="flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full border border-slate-200 w-fit">
+          <div className="pointer-events-auto flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full border border-slate-200 w-fit">
             <button
               onClick={() => setActiveSubsection('diurno')}
               className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSubsection === 'diurno' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
@@ -2807,7 +2868,7 @@ const exportarPDFdia = async () => {
             <div className="bg-white rounded-[2.5rem] border border-slate-200 p-4">
                <div className="flex flex-col gap-3 mb-4">
                  <div className="flex items-center justify-between gap-3 flex-wrap">
-                    <div className="flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit flex-wrap gap-1 overflow-x-auto">
+                    <div className="pointer-events-auto flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit flex-wrap gap-1 overflow-x-auto">
                       {userId !== 'jaime.r' && [1, 2, 3, 4, 5, 6, 7].map((n) => (
                         <button
                           key={n}
@@ -2875,7 +2936,7 @@ const exportarPDFdia = async () => {
                        <PopoverTrigger asChild>
                          <Button
                            variant="outline"
-                           className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[11px] whitespace-nowrap border-0 bg-white text-slate-700 shadow-sm cursor-pointer"
+                           className="pointer-events-auto inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[11px] whitespace-nowrap border-0 bg-white text-slate-700 shadow-sm cursor-pointer"
                          >
                            <CalendarIcon className="h-3.5 w-3.5 text-primary" />
                            {selectedFechaSeguimiento ? format(selectedFechaSeguimiento, "dd 'de' MMM, yyyy", { locale: es }) : "Seleccionar fecha"}
@@ -2928,7 +2989,7 @@ const exportarPDFdia = async () => {
                  </div>
 
                  {seguimientoSubsection === 'resumen-mensual' && (
-                    <div className="flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full border border-slate-200 w-fit">
+                    <div className="pointer-events-auto flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full border border-slate-200 w-fit">
                       <button
                         onClick={() => setSeguimientoResumenMensualSubsection('resumen-por-sabor')}
                         className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoResumenMensualSubsection === 'resumen-por-sabor' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
@@ -2940,6 +3001,12 @@ const exportarPDFdia = async () => {
                         className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoResumenMensualSubsection === 'resumen-por-lineas' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
                       >
                         resumen por lineas
+                      </button>
+                      <button
+                        onClick={() => setSeguimientoResumenMensualSubsection('sabor-por-linea')}
+                        className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoResumenMensualSubsection === 'sabor-por-linea' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                      >
+                        sabor por línea
                       </button>
                       <button
                         onClick={() => setSeguimientoResumenMensualSubsection('rendimiento-azucar')}
@@ -2962,7 +3029,9 @@ const exportarPDFdia = async () => {
                         </span>
                         <Button
                           size="sm"
-                          onClick={exportarPDFResumenSeguimientoSabor}
+                          onClick={() => seguimientoResumenMensualSubsection === 'sabor-por-linea'
+                            ? exportarPDFResumenSeguimientoSabor(resumenMensualSeguimientoPorSaborLinea, seguimientoResumenLinea)
+                            : exportarPDFResumenSeguimientoSabor()}
                           className="pointer-events-auto h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
                         >
                           <FileDown className="h-3 w-3" />
@@ -3065,6 +3134,86 @@ const exportarPDFdia = async () => {
                                       <BarChart data={pctParetoDataLineas} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                                         <CartesianGrid strokeDasharray="3 3" />
                                         <XAxis dataKey="linea" tick={{ fontSize: 10 }} interval={0} angle={-35} textAnchor="end" height={80} />
+                                        <YAxis tick={{ fontSize: 10 }} />
+                                        <Tooltip formatter={(value: number) => value.toFixed(2).replace('.', ',') + '%'} labelStyle={{ fontSize: 10 }} />
+                                        <Legend />
+                                        <Bar dataKey="pct" name="Porcentaje" fill="#0ea5e9" />
+                                        <Line type="monotone" dataKey="cumPct" name="Acumulado %" stroke="#ef4444" />
+                                      </BarChart>
+                                    </ResponsiveContainer>
+                                  </div>
+                                ) : (
+                                  <p className="text-[10px] text-slate-500 text-center py-8">No hay datos suficientes para mostrar la gráfica</p>
+                                )}
+                              </div>
+                            </>
+                           ) : seguimientoResumenMensualSubsection === 'sabor-por-linea' ? (
+                            <>
+                              <div className="mb-4 flex flex-wrap items-center gap-2">
+                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Filtrar por línea:</span>
+                                <div className="inline-flex flex-wrap items-center gap-1 rounded-full border border-slate-200 bg-slate-100/50 p-1">
+                                  {lineas.map((linea) => (
+                                    <button
+                                      key={linea}
+                                      type="button"
+                                      aria-pressed={seguimientoResumenLinea === linea}
+                                      onClick={() => setSeguimientoResumenLinea(linea)}
+                                      className={`rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-widest transition-none ${seguimientoResumenLinea === linea ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                                    >
+                                      Línea {linea}
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+                              <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                <table className="w-full border-collapse text-center">
+                                  <thead>
+                                    <tr className="bg-slate-100">
+                                      <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Sabor</th>
+                                      <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Jarabe requerido de cajas completadas</th>
+                                      <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Jarabe Real</th>
+                                      <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Diferencia</th>
+                                      <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200">Porcentaje</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {resumenMensualSeguimientoPorSaborLinea.items.length === 0 ? (
+                                      <tr>
+                                        <td colSpan={5} className="px-3 py-10 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                                          Sin registros para la línea {seguimientoResumenLinea} en este mes
+                                        </td>
+                                      </tr>
+                                    ) : (
+                                      <>
+                                        {resumenMensualSeguimientoPorSaborLinea.items.map((item) => (
+                                          <tr key={item.sabor} className="even:bg-slate-50/60">
+                                            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">{item.sabor}</td>
+                                            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100">{item.requerido.toFixed(2).replace('.', ',')}</td>
+                                            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100">{item.real.toFixed(2).replace('.', ',')}</td>
+                                            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100">{item.diff.toFixed(2).replace('.', ',')}</td>
+                                            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-b border-slate-100">{item.pct.toFixed(2).replace('.', ',')}%</td>
+                                          </tr>
+                                        ))}
+                                        <tr className="bg-slate-100 font-bold">
+                                          <td className="px-2 py-1 text-[10px] font-black text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">{resumenMensualSeguimientoPorSaborLinea.total.sabor}</td>
+                                          <td className="px-2 py-1 text-[10px] font-black text-slate-700 border-r border-b border-slate-100">{resumenMensualSeguimientoPorSaborLinea.total.requerido.toFixed(2).replace('.', ',')}</td>
+                                          <td className="px-2 py-1 text-[10px] font-black text-slate-700 border-r border-b border-slate-100">{resumenMensualSeguimientoPorSaborLinea.total.real.toFixed(2).replace('.', ',')}</td>
+                                          <td className="px-2 py-1 text-[10px] font-black text-slate-700 border-r border-b border-slate-100">{resumenMensualSeguimientoPorSaborLinea.total.diff.toFixed(2).replace('.', ',')}</td>
+                                          <td className="px-2 py-1 text-[10px] font-black text-slate-700 border-b border-slate-100">{resumenMensualSeguimientoPorSaborLinea.total.pct.toFixed(2).replace('.', ',')}%</td>
+                                        </tr>
+                                      </>
+                                    )}
+                                  </tbody>
+                                </table>
+                              </div>
+                              <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4">
+                                <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Tendencia de pérdida por sabor - Línea {seguimientoResumenLinea}</h3>
+                                {pctParetoDataPorLinea.length > 0 ? (
+                                  <div style={{ height: 320 }}>
+                                    <ResponsiveContainer width="100%" height="100%">
+                                      <BarChart data={pctParetoDataPorLinea} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis dataKey="sabor" tick={{ fontSize: 10 }} interval={0} angle={-35} textAnchor="end" height={80} />
                                         <YAxis tick={{ fontSize: 10 }} />
                                         <Tooltip formatter={(value: number) => value.toFixed(2).replace('.', ',') + '%'} labelStyle={{ fontSize: 10 }} />
                                         <Legend />

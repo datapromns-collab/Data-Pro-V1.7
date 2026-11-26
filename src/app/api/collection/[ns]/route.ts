@@ -277,6 +277,60 @@ export async function GET(request: Request) {
     });
   }
   const cleaned = cleanExisting(ns, raw ?? {});
+  const reportMonth = url.searchParams.get('reportMonth');
+  const reportWeekStart = url.searchParams.get('weekStart');
+  if (ns === 'jarabes' && (reportMonth !== null || reportWeekStart !== null)) {
+    const monthMatch = /^(\d{4})-(\d{2})$/.exec(reportMonth || '');
+    const weekStartTime = reportWeekStart ? Date.parse(`${reportWeekStart}T00:00:00Z`) : NaN;
+    const validWeekStart = !!reportWeekStart &&
+      /^\d{4}-\d{2}-\d{2}$/.test(reportWeekStart) &&
+      !Number.isNaN(weekStartTime) &&
+      new Date(weekStartTime).toISOString().slice(0, 10) === reportWeekStart;
+    if (
+      !monthMatch ||
+      Number(monthMatch[2]) < 1 ||
+      Number(monthMatch[2]) > 12 ||
+      !validWeekStart
+    ) {
+      return Response.json({ error: 'Invalid Jarabes report range' }, { status: 400 });
+    }
+
+    const monthStart = `${reportMonth}-01`;
+    const monthEnd = new Date(Date.UTC(Number(monthMatch[1]), Number(monthMatch[2]), 0))
+      .toISOString()
+      .slice(0, 10);
+    const weekStart = reportWeekStart;
+    const weekEnd = new Date(weekStartTime + 6 * 24 * 60 * 60 * 1000)
+      .toISOString()
+      .slice(0, 10);
+    const includesReportDate = (date: string) =>
+      /^\d{4}-\d{2}-\d{2}$/.test(date) &&
+      ((date >= monthStart && date <= monthEnd) || (date >= weekStart && date <= weekEnd));
+    const filterByDate = (value: any) => Object.fromEntries(
+      Object.entries(value && typeof value === 'object' && !Array.isArray(value) ? value : {})
+        .filter(([date]) => includesReportDate(date)),
+    );
+    const hasRemoteData = ['ubb', 'sugar', 'tanques', 'realKgPerSack', 'costoAzucar', 'weeklyFisico']
+      .some((key) => {
+        const value = cleaned?.[key];
+        return value && typeof value === 'object' && Object.keys(value).length > 0;
+      });
+
+    return Response.json({
+      ubb: filterByDate(cleaned?.ubb),
+      sugar: filterByDate(cleaned?.sugar),
+      tanques: filterByDate(cleaned?.tanques),
+      realKgPerSack: filterByDate(cleaned?.realKgPerSack),
+      costoAzucar: filterByDate(cleaned?.costoAzucar),
+      weeklyFisico: Object.fromEntries(
+        Object.entries(cleaned?.weeklyFisico ?? {})
+          .filter(([key]) => key.endsWith(`|${reportMonth}`)),
+      ),
+      _reportHasRemoteData: hasRemoteData,
+    }, {
+      headers: { 'content-type': 'application/json; charset=utf-8' },
+    });
+  }
   return new Response(JSON.stringify(cleaned ?? {}), {
     status: 200,
     headers: { 'content-type': 'application/json; charset=utf-8' },

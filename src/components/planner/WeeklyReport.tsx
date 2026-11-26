@@ -37,7 +37,7 @@ export const WeeklyReport: React.FC<WeeklyReportProps> = ({ data }) => {
           type="date"
           value={selectedDate}
           onChange={(e) => setSelectedDate(e.target.value)}
-          className="border rounded px-2 py-1"
+          className="pointer-events-auto border rounded px-2 py-1"
         />
         <button
           onClick={handleExportPDF}

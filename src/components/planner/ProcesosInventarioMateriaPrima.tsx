@@ -281,8 +281,8 @@ export function ProcesosInventarioMateriaPrima({
 
   return (
     <>
-    <div className="flex items-center gap-2 no-print mb-2">
-      <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+    <div className="pointer-events-auto flex items-center gap-2 no-print mb-2">
+      <div className="pointer-events-auto flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
         {view === 'diario' && visibleShifts.map((turn) => (
           <button
             key={turn}
@@ -316,7 +316,7 @@ export function ProcesosInventarioMateriaPrima({
             value={date}
             onChange={(event) => event.target.value && setDate(event.target.value)}
             aria-label="Fecha del inventario"
-            className="h-8 rounded-full border border-slate-200 bg-white px-3 text-left text-[10px] font-bold uppercase tracking-widest shadow-sm"
+            className="pointer-events-auto h-8 rounded-full border border-slate-200 bg-white px-3 text-left text-[10px] font-bold uppercase tracking-widest shadow-sm"
           />
         )}
         {view === 'semanal' && (
@@ -331,7 +331,7 @@ export function ProcesosInventarioMateriaPrima({
                   const [year, month, day] = event.target.value.split('-').map(Number);
                   setWeeklyDate(new Date(year, month - 1, day));
                 }}
-                className="h-8 rounded-full border border-slate-200 bg-white px-3 text-left text-[10px] font-bold shadow-sm"
+                className="pointer-events-auto h-8 rounded-full border border-slate-200 bg-white px-3 text-left text-[10px] font-bold shadow-sm"
               />
             </label>
             <label className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-slate-500">
@@ -340,7 +340,7 @@ export function ProcesosInventarioMateriaPrima({
                 type="month"
                 value={weeklyMonth}
                 onChange={(event) => event.target.value && setWeeklyMonth(event.target.value)}
-                className="h-8 rounded-full border border-slate-200 bg-white px-3 text-left text-[10px] font-bold shadow-sm"
+                className="pointer-events-auto h-8 rounded-full border border-slate-200 bg-white px-3 text-left text-[10px] font-bold shadow-sm"
               />
             </label>
           </div>
@@ -352,7 +352,7 @@ export function ProcesosInventarioMateriaPrima({
               type="month"
               value={monthlyMonth}
               onChange={(event) => event.target.value && setMonthlyMonth(event.target.value)}
-              className="h-8 rounded-full border border-slate-200 bg-white px-3 text-left text-[10px] font-bold shadow-sm"
+              className="pointer-events-auto h-8 rounded-full border border-slate-200 bg-white px-3 text-left text-[10px] font-bold shadow-sm"
             />
           </label>
         )}

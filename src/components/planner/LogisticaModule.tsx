@@ -521,13 +521,13 @@ export function LogisticaModule() {
   return (
     <div className="flex flex-col h-full">
       <div className="flex flex-col gap-2 mb-2 no-print">
-        <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit">
+        <div className="pointer-events-auto flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit">
           {logisticaTabs.map(({ id, label, icon: Icon }) => (
             <button
               key={id}
               onClick={() => setLogisticaSubTab(id)}
               className={cn(
-                'inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none',
+                'pointer-events-auto inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none',
                 logisticaSubTab === id ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
               )}
             >
@@ -646,7 +646,7 @@ export function LogisticaModule() {
             </select>
           </div>
 
-          <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit">
+          <div className="pointer-events-auto flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit">
             {[
               { id: 'prodt', label: 'Prodt' },
               { id: 'matp', label: 'Matp' },

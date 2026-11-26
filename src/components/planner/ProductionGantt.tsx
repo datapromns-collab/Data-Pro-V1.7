@@ -211,7 +211,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
   }, []);
 
   return (
-    <div className="w-full bg-white print:p-0 print:m-0">
+    <div className="production-gantt w-full bg-white print:p-0 print:m-0">
       <div className="flex flex-col gap-1 min-w-[850px] print:min-w-0">
         <div className="flex border-b border-slate-300 pb-1 mb-2">
           <div className="w-20 shrink-0 flex flex-col justify-end">
@@ -259,7 +259,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                   return (
                     <div
                       key={`auto-${iIdx}`}
-                      className="absolute inset-y-1 rounded border shadow-[0_1px_2px_rgba(0,0,0,0.05)] z-[5] overflow-hidden"
+                      className="production-gantt-bar absolute inset-y-1 rounded border shadow-[0_1px_2px_rgba(0,0,0,0.05)] z-[5] overflow-hidden"
                       style={style}
                     >
                       <div className="flex flex-col justify-center h-full px-2">
@@ -289,7 +289,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                       key={task.id}
                       onClick={() => onTaskClick?.(task)}
                       className={cn(
-                        "absolute inset-y-1 rounded border shadow-[0_1px_2px_rgba(0,0,0,0.05)] z-[10] cursor-pointer group/task overflow-hidden",
+                        "production-gantt-bar absolute inset-y-1 rounded border shadow-[0_1px_2px_rgba(0,0,0,0.05)] z-[10] cursor-pointer group/task overflow-hidden",
                         (isSpecial || isMaterialTest || isOther) ? "z-[11]" : ""
                       )}
                       style={style}

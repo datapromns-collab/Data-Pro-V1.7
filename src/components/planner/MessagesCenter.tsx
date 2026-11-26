@@ -59,8 +59,28 @@ interface MessagesCenterProps {
   canSendMessages: boolean;
 }
 
+interface MessageRecipientGroup {
+  id: string;
+  name: string;
+  recipients: string[];
+  createdBy: string;
+  createdAt: string;
+}
+
+function isMessageRecipientGroup(value: unknown): value is MessageRecipientGroup {
+  if (!value || typeof value !== "object") return false;
+  const group = value as Record<string, unknown>;
+  return typeof group.id === "string"
+    && typeof group.name === "string"
+    && Array.isArray(group.recipients)
+    && group.recipients.every((recipient) => typeof recipient === "string")
+    && typeof group.createdBy === "string"
+    && typeof group.createdAt === "string";
+}
+
 export function MessagesCenter({ user, canSendMessages }: MessagesCenterProps) {
   const userId = user?.id;
+  const canManageGroups = userId === "demon";
   const { messages, unreadCount, markAsRead, markAllAsRead, reload } = useMessagesStore(userId);
   const { toast } = useToast();
 
@@ -69,21 +89,86 @@ export function MessagesCenter({ user, canSendMessages }: MessagesCenterProps) {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [type, setType] = useState<Message["type"]>("info");
-  const [recipientMode, setRecipientMode] = useState<"all" | "selected">("all");
+  const [recipientMode, setRecipientMode] = useState<"all" | "selected" | "group">("all");
   const [selected, setSelected] = useState<string[]>([]);
+  const [recipientGroups, setRecipientGroups] = useState<MessageRecipientGroup[]>([]);
+  const [selectedGroupId, setSelectedGroupId] = useState("");
+  const [managingGroups, setManagingGroups] = useState(false);
+  const [groupName, setGroupName] = useState("");
+  const [groupMembers, setGroupMembers] = useState<string[]>([]);
+  const [savingGroup, setSavingGroup] = useState(false);
   const [sending, setSending] = useState(false);
   const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
   const messageInputRef = useRef<HTMLTextAreaElement>(null);
+
+  const loadRecipientGroups = async () => {
+    try {
+      const response = await fetch("/api/messages?resource=groups", { cache: "no-store" });
+      if (!response.ok) throw new Error(`Groups API error: ${response.status}`);
+      const groups: unknown = await response.json();
+      if (!Array.isArray(groups)) throw new Error("Invalid recipient groups response");
+      const validGroups = groups.filter(isMessageRecipientGroup);
+      if (validGroups.length !== groups.length) throw new Error("Invalid recipient groups response");
+      setRecipientGroups(validGroups);
+    } catch (error) {
+      console.error("[MessagesCenter] Unable to load recipient groups", error);
+      toast({ title: "No se pudieron cargar los grupos de notificaciones" });
+    }
+  };
+
+  const createRecipientGroup = async () => {
+    const name = groupName.trim();
+    if (!name || groupMembers.length === 0) {
+      toast({ title: "Escribe un nombre y selecciona al menos un usuario" });
+      return;
+    }
+
+    setSavingGroup(true);
+    try {
+      const response = await fetch("/api/messages", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          action: "create-recipient-group",
+          name,
+          recipients: groupMembers,
+        }),
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(typeof result?.error === "string" ? result.error : "No se pudo crear el grupo");
+      }
+
+      if (!isMessageRecipientGroup(result?.group)) throw new Error("Respuesta inválida al crear el grupo");
+      setRecipientGroups((previous) => [result.group, ...previous]);
+      setGroupName("");
+      setGroupMembers([]);
+      toast({ title: "Grupo de notificaciones creado" });
+    } catch (error) {
+      console.error("[MessagesCenter] Unable to create recipient group", error);
+      toast({ title: error instanceof Error ? error.message : "No se pudo crear el grupo" });
+    } finally {
+      setSavingGroup(false);
+    }
+  };
 
   const recipients = useMemo(() => {
     if (recipientMode === "all") {
       return USERS_LIST.map((u) => u.id).filter((id) => id !== userId);
     }
+    if (recipientMode === "group") {
+      return (recipientGroups.find((group) => group.id === selectedGroupId)?.recipients ?? [])
+        .filter((id) => id !== userId);
+    }
     return selected.filter((id) => id !== userId);
-  }, [recipientMode, selected, userId]);
+  }, [recipientGroups, recipientMode, selected, selectedGroupId, userId]);
 
   const recipientsLabel = useMemo(() => {
     if (recipientMode === "all") return "Todos los usuarios";
+    if (recipientMode === "group") {
+      const group = recipientGroups.find((item) => item.id === selectedGroupId);
+      return group ? `${group.name} (${recipients.length})` : "Selecciona un grupo";
+    }
     if (recipients.length === 0) return "Ningún destinatario";
     if (recipients.length <= 2) {
       return recipients
@@ -91,7 +176,7 @@ export function MessagesCenter({ user, canSendMessages }: MessagesCenterProps) {
         .join(", ");
     }
     return `${recipients.length} destinatarios`;
-  }, [recipientMode, recipients]);
+  }, [recipientGroups, recipientMode, recipients, selectedGroupId]);
 
   const handleSend = async () => {
     if (!user) return;
@@ -120,6 +205,7 @@ export function MessagesCenter({ user, canSendMessages }: MessagesCenterProps) {
       setType("info");
       setRecipientMode("all");
       setSelected([]);
+      setSelectedGroupId("");
       setReplyingTo(null);
       setComposing(false);
       reload();
@@ -139,6 +225,8 @@ export function MessagesCenter({ user, canSendMessages }: MessagesCenterProps) {
     setType("info");
     setRecipientMode("all");
     setSelected([]);
+    setSelectedGroupId("");
+    setManagingGroups(false);
     setComposing(true);
   };
 
@@ -171,7 +259,12 @@ export function MessagesCenter({ user, canSendMessages }: MessagesCenterProps) {
   const others = USERS_LIST.filter((u) => u.id !== userId);
 
   return (
-    <Popover onOpenChange={(open) => { if (open) reload(); }}>
+    <Popover onOpenChange={(open) => {
+      if (open) {
+        reload();
+        if (canSendMessages || canManageGroups) void loadRecipientGroups();
+      }
+    }}>
       <PopoverTrigger asChild>
         <button
           type="button"
@@ -202,6 +295,74 @@ export function MessagesCenter({ user, canSendMessages }: MessagesCenterProps) {
             </button>
           )}
         </div>
+
+        {canManageGroups && (
+          <button
+            type="button"
+            onClick={() => {
+              setManagingGroups((open) => !open);
+              setComposing(false);
+              setReplyingTo(null);
+            }}
+            className="w-full flex items-center justify-center gap-2 h-10 text-[11px] font-black uppercase tracking-widest text-primary border-b border-slate-100 hover:bg-primary/5 transition-none"
+          >
+            <Users className="h-4 w-4" /> {managingGroups ? "Cerrar grupos" : "Crear grupo de usuarios"}
+          </button>
+        )}
+
+        {canManageGroups && managingGroups && (
+          <div className="p-3 space-y-2 border-b border-slate-100">
+            <p className="text-[11px] font-black uppercase tracking-wide text-slate-700">
+              Grupo para notificaciones
+            </p>
+            <Input
+              value={groupName}
+              onChange={(event) => setGroupName(event.target.value)}
+              placeholder="Nombre del grupo"
+              maxLength={60}
+              className="h-9 text-[12px] font-bold"
+            />
+            <div className="max-h-[140px] overflow-y-auto border border-slate-200 rounded-lg p-1.5 space-y-0.5">
+              {USERS_LIST.map((member) => (
+                <button
+                  key={member.id}
+                  type="button"
+                  aria-pressed={groupMembers.includes(member.id)}
+                  onClick={() => setGroupMembers((previous) => (
+                    previous.includes(member.id)
+                      ? previous.filter((id) => id !== member.id)
+                      : [...previous, member.id]
+                  ))}
+                  className={cn(
+                    "w-full flex items-center justify-between px-2 py-1.5 rounded-md text-left text-[11px] font-bold transition-none",
+                    groupMembers.includes(member.id)
+                      ? "bg-primary/10 text-primary"
+                      : "hover:bg-slate-100 text-slate-700"
+                  )}
+                >
+                  <span className="truncate">{member.name}</span>
+                  <span className="text-[9px] text-slate-400 uppercase">{member.id}</span>
+                </button>
+              ))}
+            </div>
+            <p className="text-[10px] font-bold text-slate-400">
+              {groupMembers.length} usuarios seleccionados
+            </p>
+            {recipientGroups.length > 0 && (
+              <p className="text-[10px] text-slate-500">
+                Grupos existentes: {recipientGroups.map((group) => group.name).join(", ")}
+              </p>
+            )}
+            <Button
+              size="sm"
+              onClick={() => void createRecipientGroup()}
+              disabled={savingGroup}
+              className="w-full h-9 text-[11px] font-black"
+            >
+              {savingGroup ? "Guardando..." : "Guardar grupo"}
+            </Button>
+          </div>
+        )}
 
         {canSendMessages && !composing && (
           <button
@@ -280,7 +441,7 @@ export function MessagesCenter({ user, canSendMessages }: MessagesCenterProps) {
               {!replyingTo && (
                 <Select
                   value={recipientMode}
-                  onValueChange={(v) => setRecipientMode(v as "all" | "selected")}
+                  onValueChange={(v) => setRecipientMode(v as "all" | "selected" | "group")}
                 >
                   <SelectTrigger className="h-9 flex-1 text-[11px] font-bold">
                     <SelectValue placeholder="Destinatarios" />
@@ -288,10 +449,27 @@ export function MessagesCenter({ user, canSendMessages }: MessagesCenterProps) {
                   <SelectContent>
                     <SelectItem value="all" className="text-[11px]">Todos</SelectItem>
                     <SelectItem value="selected" className="text-[11px]">Seleccionar...</SelectItem>
+                    {recipientGroups.length > 0 && (
+                      <SelectItem value="group" className="text-[11px]">Grupo guardado</SelectItem>
+                    )}
                   </SelectContent>
                 </Select>
               )}
             </div>
+            {!replyingTo && recipientMode === "group" && (
+              <Select value={selectedGroupId} onValueChange={setSelectedGroupId}>
+                <SelectTrigger className="h-9 w-full text-[11px] font-bold">
+                  <SelectValue placeholder="Selecciona un grupo" />
+                </SelectTrigger>
+                <SelectContent>
+                  {recipientGroups.map((group) => (
+                    <SelectItem key={group.id} value={group.id} className="text-[11px]">
+                      {group.name} ({group.recipients.length})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
             {!replyingTo && recipientMode === "selected" && (
               <div className="max-h-[140px] overflow-y-auto border border-slate-200 rounded-lg p-1.5 space-y-0.5">
                 {others.map((u) => (

@@ -645,4 +645,54 @@
   html.dark .planta-cumplimiento-cell {
     color: #000 !important;
   }
+
+  html.dark button[class~="bg-white"][class~="text-slate-900"][class~="shadow-sm"] {
+    background-color: #fff !important;
+    color: #0f172a !important;
+  }
+
+  html.dark .dark-order-followup-table [class~="text-emerald-600"],
+  html.dark .dark-order-followup-table [class~="text-emerald-700"] {
+    color: #6ee7b7 !important;
+  }
+
+  html.dark .dark-order-followup-table [class~="text-sky-700"] {
+    color: #7dd3fc !important;
+  }
+
+  html.dark .production-mermas-table [aria-label="Línea"],
+  html.dark .production-mermas-table [aria-label="Cantidad"] {
+    color: #fff !important;
+  }
+
+  html.dark .production-gantt [class~="text-slate-900"],
+  html.dark .production-gantt [class~="text-slate-800"],
+  html.dark .production-gantt [class~="text-slate-700"],
+  html.dark .production-gantt [class~="text-slate-600"],
+  html.dark .production-gantt [class~="text-slate-500"],
+  html.dark .production-gantt [class~="text-slate-400"],
+  html.dark .production-gantt [class~="text-slate-300"] {
+    color: #fff !important;
+  }
+
+  html.dark .production-gantt .production-gantt-bar [class~="text-slate-900"],
+  html.dark .production-gantt .production-gantt-bar [class~="text-slate-800"],
+  html.dark .production-gantt .production-gantt-bar [class~="text-slate-700"],
+  html.dark .production-gantt .production-gantt-bar [class~="text-slate-600"],
+  html.dark .production-gantt .production-gantt-bar [class~="text-slate-500"],
+  html.dark .production-gantt .production-gantt-bar [class~="text-slate-400"],
+  html.dark .production-gantt .production-gantt-bar [class~="text-slate-300"] {
+    color: #000 !important;
+  }
+}
+
+@media screen {
+  html.dark .weekly-plan-section .weekly-plan-product-card [class~="text-slate-800"],
+  html.dark .weekly-plan-section .weekly-plan-product-card [class~="text-slate-500"] {
+    color: #0f172a !important;
+  }
+
+  html.dark .weekly-plan-section .weekly-plan-outside-accent {
+    color: #6ee7b7 !important;
+  }
 }

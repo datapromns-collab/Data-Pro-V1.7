@@ -320,7 +320,7 @@ export function TaskDialog({
               <DialogTitle className="font-headline text-2xl text-slate-900">
                 {initialTask ? 'Editar Tarea' : 'Nueva Tarea'}
               </DialogTitle>
-              {readOnly && <Badge variant="secondary" className="bg-amber-50 text-amber-600 border-amber-100 uppercase text-[8px] font-black tracking-widest mt-1">Solo Lectura</Badge>}
+              {readOnly && <Badge variant="secondary" className="bg-amber-50 text-amber-600 border-amber-100 dark:bg-amber-950 dark:text-amber-200 dark:border-amber-800 uppercase text-[8px] font-black tracking-widest mt-1">Solo Lectura</Badge>}
             </div>
           </div>
           <DialogDescription className="text-slate-500">
@@ -329,9 +329,9 @@ export function TaskDialog({
         </DialogHeader>
 
         {readOnly && (
-           <div className="mx-1 p-3 bg-amber-50/50 rounded-2xl border border-amber-100 flex items-center gap-3 mb-2">
-            <ShieldAlert className="h-4 w-4 text-amber-500" />
-            <span className="text-[10px] font-bold text-amber-700 uppercase tracking-widest leading-none">Modo de consulta: Edición deshabilitada</span>
+           <div className="mx-1 p-3 bg-amber-50/50 dark:bg-amber-950/60 rounded-2xl border border-amber-100 dark:border-amber-800 flex items-center gap-3 mb-2">
+            <ShieldAlert className="h-4 w-4 text-amber-500 dark:text-amber-300" />
+            <span className="text-[10px] font-bold text-amber-700 dark:text-amber-200 uppercase tracking-widest leading-none">Modo de consulta: Edición deshabilitada</span>
           </div>
         )}
 
@@ -465,13 +465,13 @@ export function TaskDialog({
                 />
               </div>
               <div className="grid gap-2">
-                <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 text-emerald-600">CANTIDAD (CAJAS)</Label>
+                <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 text-emerald-600 dark:text-emerald-300">CANTIDAD (CAJAS)</Label>
                 <Input 
                   type="number" 
                   value={quantity === 0 ? '' : quantity} 
                   onChange={(e) => { setQuantity(parseInt(e.target.value) || 0); setLastEdited('quantity'); }}
                   disabled={readOnly}
-                  className="h-12 rounded-2xl border-emerald-100 bg-emerald-50/50 disabled:opacity-80 font-black text-lg text-emerald-700" 
+                  className="h-12 rounded-2xl border-emerald-100 bg-emerald-50/50 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-200 disabled:opacity-80 font-black text-lg text-emerald-700"
                   placeholder="0"
                 />
               </div>
@@ -514,7 +514,9 @@ export function TaskDialog({
                   </div>
                   <span className={cn(
                     "font-black px-2 py-0.5 rounded-lg",
-                    availableGap.hours < duration ? "bg-destructive/10 text-destructive" : "bg-emerald-50 text-emerald-600"
+                    availableGap.hours < duration
+                      ? "bg-destructive/10 text-destructive"
+                      : "bg-emerald-50 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-300"
                   )}>
                     {availableGap.hours.toFixed(2)} hrs
                   </span>
@@ -549,7 +551,7 @@ export function TaskDialog({
               <Button 
                 variant="outline" 
                 onClick={() => handleSave(true)} 
-                className="rounded-xl h-12 font-bold px-4 border-emerald-200 text-emerald-600 hover:bg-emerald-50 hover:border-emerald-300 transition-all flex items-center justify-center gap-2 flex-1 sm:flex-none"
+                className="rounded-xl h-12 font-bold px-4 border-emerald-200 text-emerald-600 hover:bg-emerald-50 hover:border-emerald-300 dark:border-emerald-700 dark:text-emerald-300 dark:hover:bg-emerald-950 dark:hover:border-emerald-600 transition-all flex items-center justify-center gap-2 flex-1 sm:flex-none"
                 title="Copia esta tarea a otra línea o día"
               >
                 <Copy className="h-4 w-4" /> 

@@ -185,10 +185,10 @@ export function WeeklyPlanSection({ tasks, weekStartDate, weeklyData }: WeeklyPl
   };
 
   return (
-    <div className="space-y-4 pb-8">
+    <div className="weekly-plan-section space-y-4 pb-8">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center gap-2" role="tablist" aria-label="Tipo de plan semanal">
+          <div className="pointer-events-auto flex items-center gap-2" role="tablist" aria-label="Tipo de plan semanal">
             {([
               { id: 'cajas', label: 'Plan Cajas' },
               { id: 'tanques', label: 'Plan Tanques' },
@@ -214,7 +214,7 @@ export function WeeklyPlanSection({ tasks, weekStartDate, weeklyData }: WeeklyPl
               type="button"
               aria-label="Semana anterior"
               onClick={() => setSelectedWeekStart((current) => addDays(current, -7))}
-              className="rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50"
+              className="pointer-events-auto rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50"
             >
               ‹
             </button>
@@ -230,14 +230,14 @@ export function WeeklyPlanSection({ tasks, weekStartDate, weeklyData }: WeeklyPl
                   const date = setISOWeek(new Date(Number(match[1]), 0, 4), Number(match[2]));
                   setSelectedWeekStart(startOfWeek(date, { weekStartsOn: 1 }));
                 }}
-                className="h-9 rounded-full border border-slate-200 bg-white px-3 text-[11px] font-bold normal-case tracking-normal text-slate-700"
+                className="pointer-events-auto h-9 rounded-full border border-slate-200 bg-white px-3 text-[11px] font-bold normal-case tracking-normal text-slate-700"
               />
             </label>
             <button
               type="button"
               aria-label="Semana siguiente"
               onClick={() => setSelectedWeekStart((current) => addDays(current, 7))}
-              className="rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50"
+              className="pointer-events-auto rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50"
             >
               ›
             </button>
@@ -288,7 +288,7 @@ export function WeeklyPlanSection({ tasks, weekStartDate, weeklyData }: WeeklyPl
           <tbody>
             {LINES.map((lineId) => (
               <tr key={lineId} className="even:bg-slate-50/60">
-                <th className="sticky left-0 z-10 border-b border-r border-slate-200 bg-white px-4 py-3 text-center text-sm font-black text-emerald-800 even:bg-slate-50">
+                <th className="weekly-plan-outside-accent sticky left-0 z-10 border-b border-r border-slate-200 bg-white px-4 py-3 text-center text-sm font-black text-emerald-800 even:bg-slate-50">
                   Línea {lineId}
                 </th>
                 {weekDays.map((day) => {
@@ -305,7 +305,7 @@ export function WeeklyPlanSection({ tasks, weekStartDate, weeklyData }: WeeklyPl
                           {dayPlan.products.map((product, index) => (
                             <div
                               key={`${product.name}-${product.presentation ?? ''}-${index}`}
-                              className="flex items-start justify-between gap-2 rounded-lg border border-sky-200 bg-sky-50 px-2.5 py-2"
+                              className="weekly-plan-product-card flex items-start justify-between gap-2 rounded-lg border border-sky-200 bg-sky-50 px-2.5 py-2"
                             >
                               <div className="min-w-0">
                                 <p className="break-words text-[10px] font-bold leading-tight text-slate-800">
@@ -326,7 +326,7 @@ export function WeeklyPlanSection({ tasks, weekStartDate, weeklyData }: WeeklyPl
                           ))}
                           {total > 0 && (
                             <div className="border-t border-slate-200 pt-1.5 text-right text-[9px] font-black uppercase text-slate-500">
-                              Total: <span className="tabular-nums text-emerald-700">{formatPlanValue(total)} {planUnit}</span>
+                              Total:                               <span className="weekly-plan-outside-accent tabular-nums text-emerald-700">{formatPlanValue(total)} {planUnit}</span>
                             </div>
                           )}
                         </div>

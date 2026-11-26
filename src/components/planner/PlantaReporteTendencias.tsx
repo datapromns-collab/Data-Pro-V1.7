@@ -479,7 +479,7 @@ export default function PlantaReporteTendencias({
             {LINEAS.map((linea) => (
               <label
                 key={linea}
-                className={`inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold ${
+                className={`pointer-events-auto inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold ${
                   lineaSeleccionada === linea
                     ? "border-blue-200 bg-blue-50 text-blue-800"
                     : "border-slate-200 bg-white text-slate-500"
@@ -490,7 +490,7 @@ export default function PlantaReporteTendencias({
                   name="planta-tendencias-linea"
                   checked={lineaSeleccionada === linea}
                   onChange={() => setLineaSeleccionada(linea)}
-                  className="sr-only"
+                  className="pointer-events-auto sr-only"
                   aria-label={`Seleccionar Línea ${linea}`}
                 />
                 Línea {linea}
@@ -508,7 +508,7 @@ export default function PlantaReporteTendencias({
                 value={fechaInicio}
                 max={fechaFin}
                 onChange={(event) => setFechaInicioManual(event.target.value)}
-                className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-xs font-bold normal-case tracking-normal text-slate-800"
+                className="pointer-events-auto h-10 rounded-xl border border-slate-200 bg-white px-3 text-xs font-bold normal-case tracking-normal text-slate-800"
               />
             </label>
 
@@ -519,7 +519,7 @@ export default function PlantaReporteTendencias({
                 value={fechaFin}
                 min={fechaInicio}
                 onChange={(event) => setFechaFinManual(event.target.value)}
-                className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-xs font-bold normal-case tracking-normal text-slate-800"
+                className="pointer-events-auto h-10 rounded-xl border border-slate-200 bg-white px-3 text-xs font-bold normal-case tracking-normal text-slate-800"
               />
             </label>
           </>
@@ -540,7 +540,7 @@ export default function PlantaReporteTendencias({
                   onClick={() => setParadasSeleccionadas((actuales) => (
                     seleccionada ? actuales.filter((item) => item !== key) : [...actuales, key]
                   ))}
-                  className={`rounded-full border px-3 py-1.5 text-xs font-bold transition-colors ${
+                  className={`pointer-events-auto rounded-full border px-3 py-1.5 text-xs font-bold transition-colors ${
                     seleccionada ? "text-white" : "border-slate-200 bg-white text-slate-600"
                   }`}
                   style={seleccionada ? { backgroundColor: color, borderColor: color } : undefined}

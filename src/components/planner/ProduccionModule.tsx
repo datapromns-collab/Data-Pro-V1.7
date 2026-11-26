@@ -2731,7 +2731,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                 }
               }}
               className={cn(
-                'inline-flex min-w-0 min-h-9 items-center justify-center gap-1.5 rounded-full border-0 px-2 py-1 text-center text-[9px] font-bold uppercase leading-tight tracking-wide outline-none transition-none active:scale-95 transform-none focus:ring-0 sm:px-3 sm:text-[10px] sm:tracking-widest',
+                'pointer-events-auto inline-flex min-w-0 min-h-9 items-center justify-center gap-1.5 rounded-full border-0 px-2 py-1 text-center text-[9px] font-bold uppercase leading-tight tracking-wide outline-none transition-none active:scale-95 transform-none focus:ring-0 sm:px-3 sm:text-[10px] sm:tracking-widest',
                 activeProduccionSection === id ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
               )}
             >
@@ -2790,7 +2790,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
               const [year, month, day] = raw.split('-').map(Number);
               setInventariosDiariosFecha(new Date(year, month - 1, day));
             }}
-            className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+            className="pointer-events-auto h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
           />
         </div>
       )}
@@ -2809,7 +2809,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
               const date = startOfISOWeek(setISOWeek(new Date(yearNum, 0, 4), weekNum));
               setInventariosSemanalFecha(date);
             }}
-            className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+            className="pointer-events-auto h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
           />
           <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest">
             Semana {getISOWeek(inventariosSemanalFecha)}
@@ -2826,7 +2826,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                 const month = Number(e.target.value);
                 setInventariosMensualMes(new Date(inventariosMensualMes.getFullYear(), month, 1));
               }}
-              className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+              className="pointer-events-auto h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
             >
               <option value="0">Enero</option>
               <option value="1">Febrero</option>
@@ -2847,7 +2847,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                 const year = Number(e.target.value);
                 setInventariosMensualMes(new Date(year, inventariosMensualMes.getMonth(), 1));
               }}
-              className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+              className="pointer-events-auto h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
             >
               {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - 5 + i).map((year) => (
                 <option key={year} value={year.toString()}>{year}</option>
@@ -3251,7 +3251,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                     const [year, month, day] = raw.split('-').map(Number);
                     setRecepcionesDiariasFecha(new Date(year, month - 1, day));
                   }}
-                  className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                  className="pointer-events-auto h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
                 />
                 <span className={cn(
                   'text-[10px] font-bold uppercase tracking-widest',
@@ -3284,7 +3284,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                     const date = startOfISOWeek(setISOWeek(new Date(yearNum, 0, 4), weekNum));
                     setRecepcionesSemanalFecha(date);
                   }}
-                  className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                  className="pointer-events-auto h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
                 />
                 <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest">
                   Semana {getISOWeek(recepcionesSemanalFecha)}
@@ -3368,7 +3368,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                     const [year, month, day] = raw.split('-').map(Number);
                     setMermasFecha(new Date(year, month - 1, day));
                   }}
-                  className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                  className="pointer-events-auto h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
                 />
               </div>
             )}
@@ -3380,7 +3380,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                     const month = Number(e.target.value);
                     setMermasMensualMes(new Date(mermasMensualMes.getFullYear(), month, 1));
                   }}
-                  className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                  className="pointer-events-auto h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
                 >
                   <option value="0">Enero</option>
                   <option value="1">Febrero</option>
@@ -3401,7 +3401,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                     const year = Number(e.target.value);
                     setMermasMensualMes(new Date(year, mermasMensualMes.getMonth(), 1));
                   }}
-                  className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                  className="pointer-events-auto h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
                 >
                   {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - 5 + i).map((year) => (
                     <option key={year} value={year.toString()}>{year}</option>
@@ -3526,7 +3526,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                           No se pudo copiar la columna. Verifica los permisos del navegador e inténtalo de nuevo.
                         </div>
                       )}
-                      <table className="w-full border-collapse text-left text-xs">
+                      <table className={cn('w-full border-collapse text-left text-xs', isMermas && 'production-mermas-table')}>
                         <thead>
                           <tr className={headerColor}>
                             <th className="w-12 px-3 py-3 text-center font-black uppercase tracking-widest">N°</th>
@@ -3920,7 +3920,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                         const [year, month, day] = event.target.value.split('-').map(Number);
                                         setNonConformingDailyDate(new Date(year, month - 1, day));
                                       }}
-                                      className="h-9 rounded-full border-slate-200 bg-white px-3 text-left text-[10px] font-bold uppercase tracking-widest"
+                                      className="pointer-events-auto h-9 rounded-full border-slate-200 bg-white px-3 text-left text-[10px] font-bold uppercase tracking-widest"
                                       aria-label="Fecha de productos no conformes"
                                     />
                                     {nonConformingSaveStatus !== 'idle' && (
@@ -3940,7 +3940,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                             <h3 className="text-xs font-black uppercase tracking-widest text-slate-700">
                                               Productos No Conformes - {format(nonConformingDailyDate, 'dd/MM/yyyy')}
                                             </h3>
-                                            <div className="flex flex-wrap items-center gap-2">
+                                            <div className="pointer-events-auto flex flex-wrap items-center gap-2">
                                               {canEnable && (
                                                 <button
                                                   type="button"
@@ -4125,7 +4125,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                 </>
                               ) : (
                                 <>
-                                  <div className="mb-2 flex flex-wrap items-center gap-2 no-print">
+                                  <div className="pointer-events-auto mb-2 flex flex-wrap items-center gap-2 no-print">
                                     {activeNonConformingPeriod === 'semanal' ? (
                                       <>
                                         <input
@@ -4136,7 +4136,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                             const [year, month] = event.target.value.split('-').map(Number);
                                             setNonConformingWeeklyMonthDate(new Date(year, month - 1, 1));
                                           }}
-                                          className="h-9 rounded-full border-slate-200 bg-white px-3 text-[10px] font-bold uppercase tracking-widest"
+                                          className="pointer-events-auto h-9 rounded-full border-slate-200 bg-white px-3 text-[10px] font-bold uppercase tracking-widest"
                                           aria-label="Filtrar resumen semanal por mes"
                                         />
                                         <input
@@ -4147,7 +4147,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                             const [year, week] = event.target.value.split('-W').map(Number);
                                             setNonConformingWeeklyDate(startOfISOWeek(setISOWeek(new Date(year, 0, 4), week)));
                                           }}
-                                          className="h-9 rounded-full border-slate-200 bg-white px-3 text-[10px] font-bold uppercase tracking-widest"
+                                          className="pointer-events-auto h-9 rounded-full border-slate-200 bg-white px-3 text-[10px] font-bold uppercase tracking-widest"
                                           aria-label="Semana del resumen"
                                         />
                                         <span className="text-[10px] font-black uppercase tracking-widest text-slate-600">
@@ -4163,7 +4163,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                           const [year, month] = event.target.value.split('-').map(Number);
                                           setNonConformingMonthlyDate(new Date(year, month - 1, 1));
                                         }}
-                                        className="h-9 rounded-full border-slate-200 bg-white px-3 text-[10px] font-bold uppercase tracking-widest"
+                                        className="pointer-events-auto h-9 rounded-full border-slate-200 bg-white px-3 text-[10px] font-bold uppercase tracking-widest"
                                         aria-label="Mes del resumen"
                                       />
                                     )}
@@ -4309,7 +4309,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                           setConsumoMaterialesWeekDate(startOfWeek(selectedMonth, { weekStartsOn: 1 }));
                                         }
                                       }}
-                                      className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800"
+                                      className="pointer-events-auto rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800"
                                     />
                                   </label>
                                   {consumoMaterialesPeriod === 'semanal' && (
@@ -4321,7 +4321,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                           const [year, month, day] = event.target.value.split('-').map(Number);
                                           setConsumoMaterialesWeekDate(new Date(year, month - 1, day));
                                         }}
-                                        className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800"
+                                        className="pointer-events-auto rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800"
                                       >
                                         {consumoMaterialesWeekOptions.map((weekStart) => (
                                           <option key={format(weekStart, 'yyyy-MM-dd')} value={format(weekStart, 'yyyy-MM-dd')}>

@@ -144,13 +144,13 @@ function EtiquetadoraInner({ readOnly = false }: { readOnly?: boolean }) {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <div className="flex items-center gap-2 bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit">
+      <div className="pointer-events-auto flex items-center gap-2 bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={cn(
-              "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95",
+              "pointer-events-auto inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95",
               activeTab === tab.id
                 ? "bg-white text-slate-900 shadow-sm"
                 : "bg-transparent text-slate-500 hover:text-slate-700"
@@ -311,7 +311,7 @@ function ParadasControl({ readOnly = false }: { readOnly?: boolean }) {
               <Button
                 variant={"outline"}
                 className={cn(
-                  "w-[240px] justify-start text-left font-bold border-slate-200 bg-white h-11 shadow-sm rounded-xl",
+                  "pointer-events-auto w-[240px] justify-start text-left font-bold border-slate-200 bg-white h-11 shadow-sm rounded-xl",
                   !date && "text-muted-foreground"
                 )}
               >

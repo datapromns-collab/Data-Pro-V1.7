@@ -351,13 +351,13 @@ export default function EficienciaPanel({ data, setData, patchData, storageKey, 
 
         <div className="flex items-center gap-2">
           <div className="flex items-center bg-white border border-slate-200 rounded-xl shadow-sm h-11 px-2">
-            <Button variant="ghost" size="icon" onClick={handlePrevWeek} className="h-8 w-8 text-primary">
+            <Button variant="ghost" size="icon" onClick={handlePrevWeek} className="pointer-events-auto h-8 w-8 text-primary">
               <ChevronLeft className="h-4 w-4" />
             </Button>
 
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="ghost" className="min-w-[200px] justify-center text-center font-bold text-xs uppercase h-8">
+                <Button variant="ghost" className="pointer-events-auto min-w-[200px] justify-center text-center font-bold text-xs uppercase h-8">
                   <CalendarIcon className="mr-2 h-4 w-4 text-primary" />
                   {weekRange}
                 </Button>
@@ -367,7 +367,7 @@ export default function EficienciaPanel({ data, setData, patchData, storageKey, 
               </PopoverContent>
             </Popover>
 
-            <Button variant="ghost" size="icon" onClick={handleNextWeek} className="h-8 w-8 text-primary">
+            <Button variant="ghost" size="icon" onClick={handleNextWeek} className="pointer-events-auto h-8 w-8 text-primary">
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>

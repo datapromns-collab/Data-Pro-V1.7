@@ -464,7 +464,7 @@ export default memo(function OrdenesSapDailyPlan({ orders, onDailyProductionChan
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <div className="flex items-center justify-between gap-3 w-full">
-        <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+        <div className="pointer-events-auto flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
           <button
             onClick={() => setActiveSubsection('dia')}
             className={cn(
@@ -488,7 +488,7 @@ export default memo(function OrdenesSapDailyPlan({ orders, onDailyProductionChan
           <PopoverTrigger asChild>
             <Button
               variant="outline"
-              className="h-9 w-[240px] justify-start rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+              className="pointer-events-auto h-9 w-[240px] justify-start rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
             >
               <CalendarIcon className="h-3.5 w-3.5 mr-2" />
               {fechaDiaADia ? format(fechaDiaADia, "d 'de' MMM, yyyy", { locale: es }) : "Seleccionar día"}
@@ -501,7 +501,7 @@ export default memo(function OrdenesSapDailyPlan({ orders, onDailyProductionChan
       </div>
 
       {activeSubsection === 'diurno' || activeSubsection === 'nocturno' ? (
-        <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit">
+        <div className="pointer-events-auto flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit">
           <button
             onClick={() => setActiveSubsection('diurno')}
             className={cn(

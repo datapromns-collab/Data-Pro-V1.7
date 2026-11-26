@@ -4136,7 +4136,7 @@ export default function PlannerPage() {
   }
 
   const navTabClass = (isActive: boolean) => cn(
-    "inline-flex items-center justify-center gap-2 h-9 px-3 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95",
+    "pointer-events-auto inline-flex items-center justify-center gap-2 h-9 px-3 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95",
     isActive ? "bg-white text-slate-900 shadow-sm" : "bg-slate-200/50 text-slate-500 hover:bg-slate-200 hover:text-slate-700"
   );
 
@@ -4502,7 +4502,7 @@ export default function PlannerPage() {
                         <PopoverTrigger asChild>
                           <button
                             type="button"
-                            className="inline-flex h-9 shrink-0 items-center gap-2 rounded-full border-0 bg-white pl-3 pr-4 text-[11px] font-bold text-slate-700 shadow-sm"
+                            className="pointer-events-auto inline-flex h-9 shrink-0 items-center gap-2 rounded-full border-0 bg-white pl-3 pr-4 text-[11px] font-bold text-slate-700 shadow-sm"
                             aria-label="Abrir selector de fecha de planificación"
                           >
                             <CalendarIcon className="h-3.5 w-3.5 text-primary" />
@@ -4933,7 +4933,7 @@ export default function PlannerPage() {
                                key={tab}
                                onClick={() => { setActiveTab(tab); if (tab === 'paradas-lineas') setParadasSubTab('informes-operacionales'); if (tab === 'produccion') setProduccionSubTab('planificadas'); if (tab === 'reporte') setReporteSubTab('diario'); if (tab === 'resumen-semanal') { setResumenSemanalSubTab('resumen'); setPtSubTab('TDiurno'); setResumenSemanalWeekStartDate(new Date()); } if (tab === 'resumen-mensual') { setResumenMensualSubTab('mes'); setResumenMensualPtSubTab('TDiurno'); } }}
                                className={cn(
-                                 "inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                 "pointer-events-auto inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
                                  activeTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                )}
                              >
@@ -4957,7 +4957,7 @@ export default function PlannerPage() {
                                    key={subTab}
                                    onClick={() => setParadasSubTab(subTab)}
                                    className={cn(
-                                     "inline-flex items-center justify-center gap-1.5 h-8 px-2 sm:px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                     "pointer-events-auto inline-flex items-center justify-center gap-1.5 h-8 px-2 sm:px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
                                      paradasSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                    )}
                                  >
@@ -4970,7 +4970,7 @@ export default function PlannerPage() {
                              <div className="flex items-center gap-2 pointer-events-auto">
                                 <Popover>
                                   <PopoverTrigger asChild>
-                                    <button className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
+                                    <button className="pointer-events-auto inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
                                       <CalendarIcon className="h-3.5 w-3.5 text-primary" />
                                       Semana {getISOWeek(plantaWeekStartDate)}
                                     </button>
@@ -5047,7 +5047,7 @@ export default function PlannerPage() {
                                      type="date" 
                                      value={paradaFiltroFecha} 
                                      onChange={(e) => setParadaFiltroFecha(e.target.value)}
-                                     className="h-9 text-[11px] w-44 bg-white"
+                                     className="pointer-events-auto h-9 text-[11px] w-44 bg-white"
                                      placeholder="Filtrar fecha"
                                    />
                                     {paradaFiltroFecha && (
@@ -5507,7 +5507,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                              key={subTab}
                                              onClick={() => setProduccionSubTab(subTab)}
                                              className={cn(
-                                               "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                               "pointer-events-auto inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
                                                produccionSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                              )}
                                            >
@@ -5541,7 +5541,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                         key={subTab}
                                         onClick={() => setPlanificadasSubTab(subTab)}
                                         className={cn(
-                                          "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                          "pointer-events-auto inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
                                           planificadasSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                         )}
                                       >
@@ -5561,7 +5561,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                        key={subTab}
                                        onClick={() => setProducidasSubTab(subTab)}
                                        className={cn(
-                                         "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                         "pointer-events-auto inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
                                          producidasSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                        )}
                                      >
@@ -5594,7 +5594,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                              key={subTab}
                                              onClick={() => setPlanificadasTurnoSubTab(subTab)}
                                              className={cn(
-                                               "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                               "pointer-events-auto inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
                                                planificadasTurnoSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                              )}
                                            >
@@ -5613,7 +5613,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                </h4>
                                              </div>
                                               <div className="p-4">
-                                                <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                                <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto pointer-events-auto">
                                                   <PlanificadasPorDiaTable datosPorDia={planificadasPorDia} fecha={produccionFecha || new Date()} turno="diurno" />
                                                 </div>
                                               </div>
@@ -5628,7 +5628,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                 </h4>
                                               </div>
                                               <div className="p-4">
-                                                <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                                <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto pointer-events-auto">
                                                   <PlanificadasPorDiaTable datosPorDia={planificadasPorDia} fecha={produccionFecha || new Date()} turno="nocturno" />
                                                 </div>
                                               </div>
@@ -5644,7 +5644,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                              </h4>
                                            </div>
                                             <div className="p-4">
-                                              <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                              <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto pointer-events-auto">
                                                 <PlanificadasPorDiaTable datosPorDia={planificadasPorDia} fecha={produccionFecha || new Date()} turno="diario" />
                                               </div>
                                             </div>
@@ -5660,7 +5660,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                 key={subTab}
                                                 onClick={() => setProducidasTurnoSubTab(subTab)}
                                                 className={cn(
-                                                  "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                                  "pointer-events-auto inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
                                                   producidasTurnoSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                                 )}
                                               >
@@ -5695,13 +5695,13 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                           <>
                              <div className="flex items-center justify-between gap-2 mb-4 no-print">
                                <div className="flex items-center gap-3">
-                                  <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
+                                  <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 pointer-events-auto">
                                        {['diario', 'por-turno', 'resumen', 'tendencias'].map((subTab) => (
                                       <button
                                         key={subTab}
                                         onClick={() => setReporteSubTab(subTab)}
                                         className={cn(
-                                          "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                          "pointer-events-auto inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
                                           reporteSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                         )}
                                       >
@@ -5737,7 +5737,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                    aria-selected={reporteTendenciasSubTab === 'alcance'}
                                    onClick={() => setReporteTendenciasSubTab('alcance')}
                                    className={cn(
-                                     "inline-flex h-8 items-center justify-center rounded-full px-5 text-[10px] font-bold uppercase tracking-widest",
+                                     "pointer-events-auto inline-flex h-8 items-center justify-center rounded-full px-5 text-[10px] font-bold uppercase tracking-widest",
                                      reporteTendenciasSubTab === 'alcance' ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                    )}
                                  >
@@ -5749,7 +5749,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                    aria-selected={reporteTendenciasSubTab === 'paradas'}
                                    onClick={() => setReporteTendenciasSubTab('paradas')}
                                    className={cn(
-                                     "inline-flex h-8 items-center justify-center rounded-full px-5 text-[10px] font-bold uppercase tracking-widest",
+                                     "pointer-events-auto inline-flex h-8 items-center justify-center rounded-full px-5 text-[10px] font-bold uppercase tracking-widest",
                                      reporteTendenciasSubTab === 'paradas' ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                    )}
                                  >
@@ -5864,7 +5864,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                              key={subTab}
                                              onClick={() => setTurnoSubTab(subTab)}
                                             className={cn(
-                                              "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                              "pointer-events-auto inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
                                               turnoSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                             )}
                                           >
@@ -6030,7 +6030,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                      key={subTab}
                                      onClick={() => setResumenSemanalSubTab(subTab)}
                                      className={cn(
-                                       "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                       "pointer-events-auto inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
                                        resumenSemanalSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                      )}
                                    >
@@ -6041,7 +6041,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                {resumenSemanalSubTab !== 'tendencias' && <div className="ml-auto pointer-events-auto">
                                  <Popover>
                                    <PopoverTrigger asChild>
-                                     <button className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
+                                     <button className="pointer-events-auto inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
                                        <CalendarIcon className="h-3.5 w-3.5 text-primary" />
                                        Semana {getISOWeek(resumenSemanalWeekStartDate)}
                                      </button>
@@ -6095,7 +6095,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                        setResumenSemanalTendenciasInicio(semana);
                                        if (semana > resumenSemanalTendenciasFin) setResumenSemanalTendenciasFin(semana);
                                      }}
-                                     className="h-9 rounded-full border border-slate-200 bg-white px-3 text-xs font-bold normal-case tracking-normal text-slate-700"
+                                     className="pointer-events-auto h-9 rounded-full border border-slate-200 bg-white px-3 text-xs font-bold normal-case tracking-normal text-slate-700"
                                    />
                                  </label>
                                  <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
@@ -6110,7 +6110,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                        setResumenSemanalTendenciasFin(semana);
                                        if (semana < resumenSemanalTendenciasInicio) setResumenSemanalTendenciasInicio(semana);
                                      }}
-                                     className="h-9 rounded-full border border-slate-200 bg-white px-3 text-xs font-bold normal-case tracking-normal text-slate-700"
+                                     className="pointer-events-auto h-9 rounded-full border border-slate-200 bg-white px-3 text-xs font-bold normal-case tracking-normal text-slate-700"
                                    />
                                  </label>
                                </div>
@@ -6125,7 +6125,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                       aria-selected={resumenSemanalTendenciasSubTab === subTab}
                                       onClick={() => setResumenSemanalTendenciasSubTab(subTab)}
                                       className={cn(
-                                        "inline-flex h-8 items-center justify-center rounded-full px-5 text-[10px] font-bold uppercase tracking-widest",
+                                        "pointer-events-auto inline-flex h-8 items-center justify-center rounded-full px-5 text-[10px] font-bold uppercase tracking-widest",
                                         resumenSemanalTendenciasSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                       )}
                                     >
@@ -6225,7 +6225,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                            key={subTab}
                                            onClick={() => setPtSubTab(subTab)}
                                            className={cn(
-                                             "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                             "pointer-events-auto inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
                                              ptSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                            )}
                                          >
@@ -6319,14 +6319,14 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                          )}
                        {activeTab === 'resumen-mensual' && (
                          <div className="flex-1 flex flex-col gap-3">
-                           <div className="flex flex-wrap items-center gap-3 no-print">
+                           <div className="flex flex-wrap items-center gap-3 no-print pointer-events-auto">
                              <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 pointer-events-auto">
                                {(['mes', 'pt', 'tendencias'] as const).map((subTab) => (
                                  <button
                                    key={subTab}
                                    onClick={() => setResumenMensualSubTab(subTab)}
                                    className={cn(
-                                     "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                     "pointer-events-auto inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
                                      resumenMensualSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                    )}
                                  >
@@ -6362,7 +6362,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                      setResumenMensualTendenciasInicio(mes);
                                      if (mes > resumenMensualTendenciasFin) setResumenMensualTendenciasFin(mes);
                                    }}
-                                   className="h-9 rounded-full border border-slate-200 bg-white px-3 text-xs font-bold normal-case tracking-normal text-slate-700"
+                                   className="pointer-events-auto h-9 rounded-full border border-slate-200 bg-white px-3 text-xs font-bold normal-case tracking-normal text-slate-700"
                                  />
                                </label>
                                <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
@@ -6377,7 +6377,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                      setResumenMensualTendenciasFin(mes);
                                      if (mes < resumenMensualTendenciasInicio) setResumenMensualTendenciasInicio(mes);
                                    }}
-                                   className="h-9 rounded-full border border-slate-200 bg-white px-3 text-xs font-bold normal-case tracking-normal text-slate-700"
+                                   className="pointer-events-auto h-9 rounded-full border border-slate-200 bg-white px-3 text-xs font-bold normal-case tracking-normal text-slate-700"
                                  />
                                </label>
                              </div>
@@ -6392,7 +6392,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                    aria-selected={resumenMensualTendenciasSubTab === subTab}
                                    onClick={() => setResumenMensualTendenciasSubTab(subTab)}
                                    className={cn(
-                                     "inline-flex h-8 items-center justify-center rounded-full px-5 text-[10px] font-bold uppercase tracking-widest",
+                                     "pointer-events-auto inline-flex h-8 items-center justify-center rounded-full px-5 text-[10px] font-bold uppercase tracking-widest",
                                      resumenMensualTendenciasSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                    )}
                                  >
@@ -6485,14 +6485,14 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                              )}
                              {resumenMensualSubTab === 'pt' && (
                                <div className="flex flex-col gap-3">
-                                 <div className="flex items-center gap-3 no-print">
+                                 <div className="flex items-center gap-3 no-print pointer-events-auto">
                                    <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 pointer-events-auto">
                                      {(['TDiurno', 'TNocturno'] as const).map((subTab) => (
                                        <button
                                          key={subTab}
                                          onClick={() => setResumenMensualPtSubTab(subTab)}
                                          className={cn(
-                                           "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                           "pointer-events-auto inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
                                            resumenMensualPtSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                          )}
                                        >
@@ -6559,7 +6559,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                   type="month"
                                   value={ciclosMes}
                                   onChange={(event) => setCiclosMes(event.target.value)}
-                                  className="w-full sm:w-48"
+                                  className="pointer-events-auto w-full sm:w-48"
                                   aria-label="Mes y año de Ciclos"
                                 />
                               </div>
@@ -6640,13 +6640,13 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                        {activeModule === 'procesos' && hasAccess(user.id, 'procesos') && (
                         <div className="flex flex-col h-full">
                           <div className="flex items-center gap-2 mb-2 no-print">
-                            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 pointer-events-auto">
                                  {procesosTabs.map(({ id: tab }) => (
                                <button
                                  key={tab}
                                  onClick={() => setProcesosSubTab(tab)}
                                  className={cn(
-                                   "inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                   "pointer-events-auto inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
                                    procesosSubTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                  )}
                                >
@@ -6667,13 +6667,13 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                           )}
                           {procesosSubTab === 'ptab' && getProcesosLevel('ptab') !== 'none' && (
                             <div className="flex items-center gap-2 no-print mb-2">
-                              <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                              <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 pointer-events-auto">
                                    {ptabTabs.map((tab) => (
                                    <button
                                      key={tab}
                                      onClick={() => setPtabTab(tab as 'agua' | 'insumos' | 'r-semanal' | 'r-mensual')}
                                      className={cn(
-                                       "inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                       "pointer-events-auto inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
                                        ptabTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                      )}
                                    >
@@ -6697,7 +6697,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                           type="button"
                                           onClick={() => setPtabWeekStartDate((current) => addDays(current, -7))}
                                           aria-label="Semana anterior"
-                                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+                                          className="pointer-events-auto inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
                                         >
                                           <ChevronLeft className="h-4 w-4" />
                                         </button>
@@ -6708,7 +6708,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                           type="button"
                                           onClick={() => setPtabWeekStartDate((current) => addDays(current, 7))}
                                           aria-label="Semana siguiente"
-                                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+                                          className="pointer-events-auto inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
                                         >
                                           <ChevronRight className="h-4 w-4" />
                                         </button>
@@ -6793,7 +6793,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                   <div className="flex items-center justify-end no-print gap-2">
                                     <Popover>
                                       <PopoverTrigger asChild>
-                                        <button className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
+                                        <button className="pointer-events-auto inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
                                           <CalendarIcon className="h-3.5 w-3.5 text-primary" />
                                           {format(ptabInsumosFecha || new Date(), 'd/M/yyyy')}
                                         </button>
@@ -6914,13 +6914,13 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                 {procesosSubTab === 'ptab' && ptabTab === 'r-semanal' && getProcesosLevel('ptab.r-semanal') !== 'none' && (
                               <div className="flex flex-col h-full">
                                 <div className="flex items-center gap-2 mb-2 no-print">
-                                  <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                                  <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 pointer-events-auto">
                                     {rSemanalTabs.map((tab) => (
                                       <button
                                         key={tab}
                                         onClick={() => setRSemanalSubTab(tab as 's-agua' | 's-insumos')}
                                         className={cn(
-                                          "inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                          "pointer-events-auto inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
                                           rSemanalSubTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                         )}
                                       >
@@ -6941,7 +6941,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                 <div className="flex items-center justify-end no-print gap-2">
                                                   <Popover>
                                                     <PopoverTrigger asChild>
-                                                      <button className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
+                                                      <button className="pointer-events-auto inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
                                                         <CalendarIcon className="h-3.5 w-3.5 text-primary" />
                                                         {rSemanalMonthOptions.find(m => m.value === String(rSemanalSelectedMonth))?.label} {rSemanalSelectedYear}
                                                       </button>
@@ -6979,7 +6979,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                   </Popover>
                                                   <Popover>
                                                     <PopoverTrigger asChild>
-                                                      <button className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
+                                                      <button className="pointer-events-auto inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
                                                         <CalendarIcon className="h-3.5 w-3.5 text-primary" />
                                                         Semana {getISOWeek(rSemanalWeekStartDate)}
                                                       </button>
@@ -7105,13 +7105,13 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                 {procesosSubTab === 'ptab' && ptabTab === 'r-mensual' && getProcesosLevel('ptab.r-mensual') !== 'none' && (
                              <div className="flex flex-col h-full">
                                <div className="flex items-center gap-2 mb-2 no-print">
-                                 <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                                 <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 pointer-events-auto">
                                    {rMensualTabs.map((tab) => (
                                      <button
                                        key={tab}
                                        onClick={() => setRMensualSubTab(tab as 'm-agua' | 'm-insumos')}
                                        className={cn(
-                                         "inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                         "pointer-events-auto inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
                                          rMensualSubTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                        )}
                                      >
@@ -7132,7 +7132,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                               <div className="flex items-center justify-end no-print gap-2">
                                                 <Popover>
                                                   <PopoverTrigger asChild>
-                                                    <button className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
+                                                    <button className="pointer-events-auto inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
                                                       <CalendarIcon className="h-3.5 w-3.5 text-primary" />
                                                       {rMensualMonthOptions.find(m => m.value === String(rMensualSelectedMonth))?.label} {rMensualSelectedYear}
                                                     </button>
@@ -7253,7 +7253,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                               {procesosSubTab === 'inv-materia-prima' && getProcesosLevel('inv-materia-prima') !== 'none' && (
                                 <div className="flex flex-col flex-1 min-h-0">
                                   <div className="flex items-center gap-2 no-print mb-2">
-                                    <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                                    <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 pointer-events-auto">
                                       {([
                                         { key: 'diario', label: 'Diario', Icon: CalendarRange },
                                         { key: 'semanal', label: 'Semanal', Icon: TrendingUp },
@@ -7265,7 +7265,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                           onClick={() => setProcesosInventarioView(key)}
                                           aria-pressed={procesosInventarioView === key}
                                           className={cn(
-                                            "inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                            "pointer-events-auto inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
                                             procesosInventarioView === key ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700",
                                           )}
                                         >
@@ -7289,8 +7289,8 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                               {procesosSubTab === 'sala-jarabe' && getProcesosLevel('sala-jarabe') !== 'none' && (
                              <div className="flex flex-col h-full gap-3">
                                <div className="flex flex-col gap-2 no-print">
-                                 <div className="flex items-center gap-2">
-                                   <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                                 <div className="flex items-center gap-2 pointer-events-auto">
+                                   <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 pointer-events-auto">
                                       {([
                                         { key: 'preparacion', label: 'Preparacion', icon: FlaskConical },
                                         { key: 'consumo-lineas', label: 'Consumo en Lineas', icon: Activity },
@@ -7302,7 +7302,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                          key={tab.key}
                                          onClick={() => setSalaJarabeSubTab(tab.key)}
                                          className={cn(
-                                           "inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                           "pointer-events-auto inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
                                            salaJarabeSubTab === tab.key ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                          )}
                                        >
@@ -7339,7 +7339,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                      <p key={`${index}-${error}`} role="alert" className="text-[10px] font-bold text-red-600">{error}</p>
                                    ))}
                                   {salaJarabeSubTab === 'preparacion' && (
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex items-center gap-2 pointer-events-auto">
                                       <button
                                         onClick={() => setSalaJarabeNuevaTareaOpen(true)}
                                         disabled={salaJarabeReadOnly}
@@ -7349,7 +7349,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                       </button>
                                       <Popover>
                                         <PopoverTrigger asChild>
-                                          <button className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
+                                          <button className="pointer-events-auto inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
                                             <CalendarIcon className="h-3.5 w-3.5 text-primary" />
                                             Semana {salaJarabePrepWeekNumber}
                                           </button>
@@ -7383,8 +7383,8 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                   )}
                                    {salaJarabeSubTab === 'consumo-lineas' && (
                                      <div className="flex flex-col gap-3 h-full">
-                                       <div className="flex items-center gap-2">
-                                         <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                                       <div className="flex items-center gap-2 pointer-events-auto">
+                                         <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 pointer-events-auto">
                                            {Array.from({ length: 7 }).map((_, idx) => {
                                              const n = idx + 1;
                                              return (
@@ -7415,7 +7415,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                    aria-label="Filtrar consumo por mes"
                                                    value={format(consumoLineasMonth, 'yyyy-MM')}
                                                    onChange={(event) => handleConsumoLineasMonthChange(event.target.value)}
-                                                   className="h-8 rounded-full border border-slate-200 bg-white px-3 text-[11px] font-bold normal-case tracking-normal text-slate-700"
+                                                   className="pointer-events-auto h-8 rounded-full border border-slate-200 bg-white px-3 text-[11px] font-bold normal-case tracking-normal text-slate-700"
                                                  />
                                                </label>
                                                <div className="flex min-w-0 flex-1 items-center justify-between gap-2">
@@ -7424,7 +7424,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                    onClick={() => setConsumoLineasWeekStart((current) => addDays(current, -7))}
                                                    aria-label="Semana anterior"
                                                    disabled={consumoLineasWeekStart <= firstConsumoWeekOfMonth}
-                                                   className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                                                   className="pointer-events-auto inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
                                                  >
                                                    <ChevronLeft className="h-4 w-4" />
                                                  </button>
@@ -7436,7 +7436,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                    onClick={() => setConsumoLineasWeekStart((current) => addDays(current, 7))}
                                                    aria-label="Semana siguiente"
                                                    disabled={consumoLineasWeekStart >= lastConsumoWeekOfMonth}
-                                                   className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                                                   className="pointer-events-auto inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
                                                  >
                                                    <ChevronRight className="h-4 w-4" />
                                                  </button>
@@ -7563,7 +7563,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                       {salaJarabeSubTab === 'preparacion' && (
                                         <div className="flex flex-col h-full gap-3">
                                           <div className="flex items-center gap-2 no-print">
-                                            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                                            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 pointer-events-auto">
                                               {[
                                                 { key: 'glup', label: 'Glup' },
                                                 { key: 'justy', label: 'Justy' },
@@ -7572,7 +7572,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                   key={tab.key}
                                                   onClick={() => setPreparacionTab(tab.key as any)}
                                                   className={cn(
-                                                    "inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                                    "pointer-events-auto inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
                                                     preparacionTab === tab.key ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                                   )}
                                                 >
@@ -7919,7 +7919,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                     const date = parseFecha(event.target.value);
                                                     if (date) setConsumoLitrosDailyDate(date);
                                                   }}
-                                                  className="h-8 rounded-full border border-slate-200 bg-white px-3 text-[11px] font-bold normal-case tracking-normal text-slate-700"
+                                                  className="pointer-events-auto h-8 rounded-full border border-slate-200 bg-white px-3 text-[11px] font-bold normal-case tracking-normal text-slate-700"
                                                 />
                                               </label>
                                             )}
@@ -7932,7 +7932,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                     aria-label="Mes del resumen semanal de consumo de litros"
                                                     value={format(consumoLitrosWeeklyMonth, 'yyyy-MM')}
                                                     onChange={(event) => handleConsumoLitrosWeeklyMonthChange(event.target.value)}
-                                                    className="h-8 rounded-full border border-slate-200 bg-white px-3 text-[11px] font-bold normal-case tracking-normal text-slate-700"
+                                                    className="pointer-events-auto h-8 rounded-full border border-slate-200 bg-white px-3 text-[11px] font-bold normal-case tracking-normal text-slate-700"
                                                   />
                                                 </label>
                                                 <div className="flex min-w-[280px] items-center justify-between gap-2">
@@ -7941,7 +7941,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                     onClick={() => setConsumoLitrosWeeklyDate((current) => addDays(current, -7))}
                                                     aria-label="Semana anterior"
                                                     disabled={consumoLitrosSelectedWeekStart <= consumoLitrosFirstWeekOfMonth}
-                                                    className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                                                    className="pointer-events-auto inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
                                                   >
                                                     <ChevronLeft className="h-4 w-4" />
                                                   </button>
@@ -7953,7 +7953,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                     onClick={() => setConsumoLitrosWeeklyDate((current) => addDays(current, 7))}
                                                     aria-label="Semana siguiente"
                                                     disabled={consumoLitrosSelectedWeekStart >= consumoLitrosLastWeekOfMonth}
-                                                    className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                                                    className="pointer-events-auto inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
                                                   >
                                                     <ChevronRight className="h-4 w-4" />
                                                   </button>
@@ -7973,7 +7973,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                       setConsumoLitrosMonthlyDate(new Date(year, month - 1, 1));
                                                     }
                                                   }}
-                                                  className="h-8 rounded-full border border-slate-200 bg-white px-3 text-[11px] font-bold normal-case tracking-normal text-slate-700"
+                                                  className="pointer-events-auto h-8 rounded-full border border-slate-200 bg-white px-3 text-[11px] font-bold normal-case tracking-normal text-slate-700"
                                                 />
                                               </label>
                                             )}
@@ -8026,7 +8026,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                     const date = parseFecha(event.target.value);
                                                     if (date) setConsumoUbbDailyDate(date);
                                                   }}
-                                                  className="h-8 rounded-full border border-slate-200 bg-white px-3 text-[11px] font-bold normal-case tracking-normal text-slate-700"
+                                                  className="pointer-events-auto h-8 rounded-full border border-slate-200 bg-white px-3 text-[11px] font-bold normal-case tracking-normal text-slate-700"
                                                 />
                                               </label>
                                             )}
@@ -8039,7 +8039,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                     aria-label="Mes del resumen semanal de consumo UBB"
                                                     value={format(consumoUbbWeeklyMonth, 'yyyy-MM')}
                                                     onChange={(event) => handleConsumoUbbWeeklyMonthChange(event.target.value)}
-                                                    className="h-8 rounded-full border border-slate-200 bg-white px-3 text-[11px] font-bold normal-case tracking-normal text-slate-700"
+                                                    className="pointer-events-auto h-8 rounded-full border border-slate-200 bg-white px-3 text-[11px] font-bold normal-case tracking-normal text-slate-700"
                                                   />
                                                 </label>
                                                 <div className="flex min-w-[280px] items-center justify-between gap-2">
@@ -8048,7 +8048,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                     onClick={() => setConsumoUbbWeeklyDate((current) => addDays(current, -7))}
                                                     aria-label="Semana anterior"
                                                     disabled={consumoUbbSelectedWeekStart <= consumoUbbFirstWeekOfMonth}
-                                                    className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                                                    className="pointer-events-auto inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
                                                   >
                                                     <ChevronLeft className="h-4 w-4" />
                                                   </button>
@@ -8060,7 +8060,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                     onClick={() => setConsumoUbbWeeklyDate((current) => addDays(current, 7))}
                                                     aria-label="Semana siguiente"
                                                     disabled={consumoUbbSelectedWeekStart >= consumoUbbLastWeekOfMonth}
-                                                    className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                                                    className="pointer-events-auto inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
                                                   >
                                                     <ChevronRight className="h-4 w-4" />
                                                   </button>
@@ -8080,7 +8080,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                       setConsumoUbbMonthlyDate(new Date(year, month - 1, 1));
                                                     }
                                                   }}
-                                                  className="h-8 rounded-full border border-slate-200 bg-white px-3 text-[11px] font-bold normal-case tracking-normal text-slate-700"
+                                                  className="pointer-events-auto h-8 rounded-full border border-slate-200 bg-white px-3 text-[11px] font-bold normal-case tracking-normal text-slate-700"
                                                 />
                                               </label>
                                             )}
@@ -9152,7 +9152,7 @@ function TablaResumenReporteDiario({ informesOperacionales, tasks, realProductio
   return (
     <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
       <div className="p-4">
-        <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+        <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto pointer-events-auto">
           <table className="w-full border-collapse text-center" style={{ minWidth: 1400 }}>
             <thead>
               <tr className="bg-slate-100">
@@ -9889,7 +9889,7 @@ function PlanificadasPorDiaTable({ datosPorDia, fecha, turno }: { datosPorDia: a
   return (
     <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
       <div className="p-4">
-        <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+        <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto pointer-events-auto">
           <table className="w-full border-collapse text-center" style={{ minWidth: esDiario ? 1400 : 1200 }}>
             <thead>
               <tr className="bg-slate-100">
@@ -10185,7 +10185,7 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
         {(turno === 'DIURNO' || turno === 'NOCTURNO') && (
          <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible mt-3">
            <div className="p-4">
-             <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+             <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto pointer-events-auto">
                <table className="w-full border-collapse text-center" style={{ minWidth: 700 }}>
                  <thead>
                    <tr className="bg-slate-100">

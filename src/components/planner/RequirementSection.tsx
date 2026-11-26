@@ -381,7 +381,7 @@ export function RequirementSection({ onPrint, onPrintCalculation, tasks, weekSta
                   type="date"
                   value={format(calcStartDate, 'yyyy-MM-dd')}
                   onChange={(e) => setCalcStartDate(new Date(e.target.value + 'T00:00:00'))}
-                  className="text-xs font-bold text-slate-700 border-0 bg-transparent focus:ring-0 p-0 w-[130px]"
+                  className="pointer-events-auto text-xs font-bold text-slate-700 border-0 bg-transparent focus:ring-0 p-0 w-[130px]"
                 />
               </div>
               <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg px-3 py-2 shadow-sm">
@@ -391,7 +391,7 @@ export function RequirementSection({ onPrint, onPrintCalculation, tasks, weekSta
                   type="date"
                   value={format(calcEndDate, 'yyyy-MM-dd')}
                   onChange={(e) => setCalcEndDate(new Date(e.target.value + 'T00:00:00'))}
-                  className="text-xs font-bold text-slate-700 border-0 bg-transparent focus:ring-0 p-0 w-[130px]"
+                  className="pointer-events-auto text-xs font-bold text-slate-700 border-0 bg-transparent focus:ring-0 p-0 w-[130px]"
                 />
               </div>
             </div>

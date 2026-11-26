@@ -435,7 +435,7 @@ export function RawMaterialModule({
                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Día de Trabajo:</span>
                 <Popover>
                   <PopoverTrigger asChild>
-                    <Button variant="outline" className="h-10 justify-start text-left font-bold bg-slate-50 border-slate-100 shadow-none hover:bg-slate-100 transition-none rounded-xl px-4 active:scale-95">
+                    <Button variant="outline" className="pointer-events-auto h-10 justify-start text-left font-bold bg-slate-50 border-slate-100 shadow-none hover:bg-slate-100 transition-none rounded-xl px-4 active:scale-95">
                       <CalendarIcon className="mr-2 h-4 w-4 text-primary" />
                       {format(workingDate, "EEEE dd 'de' MMMM", { locale: es })}
                     </Button>

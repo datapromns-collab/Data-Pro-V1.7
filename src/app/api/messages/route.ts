@@ -23,13 +23,27 @@ interface Message {
   createdAt: string;
 }
 
+interface MessageRecipientGroup {
+  id: string;
+  name: string;
+  recipients: string[];
+  createdBy: string;
+  createdAt: string;
+}
+
+interface MessagesDatabase {
+  messages: Message[];
+  recipientGroups?: MessageRecipientGroup[];
+  [key: string]: unknown;
+}
+
 function ensureDb() {
   if (!fs.existsSync(DB_PATH)) {
     fs.writeFileSync(DB_PATH, JSON.stringify({ messages: [] }, null, 2), 'utf8');
   }
 }
 
-function readDb(): { messages: Message[] } {
+function readDb(): MessagesDatabase {
   ensureDb();
   try {
     const data = JSON.parse(fs.readFileSync(DB_PATH, 'utf8'));
@@ -40,7 +54,7 @@ function readDb(): { messages: Message[] } {
   }
 }
 
-function writeDb(data: { messages: Message[] }) {
+function writeDb(data: MessagesDatabase) {
   fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2), 'utf8');
 }
 
@@ -52,7 +66,19 @@ export async function GET(request: Request) {
   try {
     const auth = await requireAuthenticated(request);
     if (auth.response) return auth.response;
-    let list = readDb().messages;
+    const db = readDb();
+    if (new URL(request.url).searchParams.get('resource') === 'groups') {
+      if (auth.user.id !== 'demon') {
+        const senderAuth = await requireMessageSender(request);
+        if (senderAuth.response) return senderAuth.response;
+      }
+      return new Response(JSON.stringify(db.recipientGroups ?? []), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      });
+    }
+
+    let list = db.messages;
     list = list.filter((m) => m.recipient === auth.user.id || m.recipient === 'all');
     list = [...list].sort(
       (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -70,17 +96,65 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const auth = await requireMessageSender(request);
+  const auth = await requireAuthenticated(request);
   if (auth.response) return auth.response;
   try {
     const body = await request.json();
+    if (body.action === 'create-recipient-group') {
+      if (auth.user.id !== 'demon') {
+        return new Response(JSON.stringify({ error: 'Only demon can create recipient groups' }), {
+          status: 403,
+          headers: { 'content-type': 'application/json' },
+        });
+      }
+
+      const name = typeof body.name === 'string' ? body.name.trim() : '';
+      const recipients: string[] = [];
+      if (Array.isArray(body.recipients)) {
+        for (const id of body.recipients) {
+          if (isValidId(id) && !recipients.includes(id)) recipients.push(id);
+        }
+      }
+      if (!name || name.length > 60 || recipients.length === 0) {
+        return new Response(JSON.stringify({ error: 'Escribe un nombre y selecciona al menos un usuario' }), {
+          status: 400,
+          headers: { 'content-type': 'application/json' },
+        });
+      }
+
+      const db = readDb();
+      db.recipientGroups = db.recipientGroups ?? [];
+      if (db.recipientGroups.some((group) => group.name.toLocaleLowerCase() === name.toLocaleLowerCase())) {
+        return new Response(JSON.stringify({ error: 'Ya existe un grupo con ese nombre' }), {
+          status: 409,
+          headers: { 'content-type': 'application/json' },
+        });
+      }
+
+      const group: MessageRecipientGroup = {
+        id: `group-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`,
+        name,
+        recipients,
+        createdBy: auth.user.id,
+        createdAt: new Date().toISOString(),
+      };
+      db.recipientGroups.push(group);
+      writeDb(db);
+      return new Response(JSON.stringify({ ok: true, group }), {
+        status: 201,
+        headers: { 'content-type': 'application/json' },
+      });
+    }
+
+    const senderAuth = await requireMessageSender(request);
+    if (senderAuth.response) return senderAuth.response;
     const title = typeof body.title === 'string' ? body.title.trim() : '';
     const message = typeof body.message === 'string' ? body.message.trim() : '';
     const type: MessageType = ['info', 'warning', 'success', 'error'].includes(body.type)
       ? body.type
       : 'info';
-    const senderId = auth.user.id;
-    const senderName = auth.user.name;
+    const senderId = senderAuth.user.id;
+    const senderName = senderAuth.user.name;
     const recipients = Array.isArray(body.recipients)
       ? body.recipients.filter(isValidId)
       : [];

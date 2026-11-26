@@ -93,6 +93,8 @@ export const EMPTY_JARABES_DATA: JarabesData = {
   weeklyFisico: {},
 };
 
+type JarabesCollectionData = JarabesData & { _reportHasRemoteData?: boolean };
+
 interface JarabesContextValue {
   data: JarabesData;
   isLoaded: boolean;
@@ -128,8 +130,14 @@ function normalizeJarabesData(raw: any): JarabesData {
   };
 }
 
-function JarabesProvider({ children }: { children: React.ReactNode }) {
-  const store = useRemoteCollection<JarabesData>('jarabes', EMPTY_JARABES_DATA);
+function JarabesProvider({
+  children,
+  reportQueryParams,
+}: {
+  children: React.ReactNode;
+  reportQueryParams?: Record<string, string>;
+}) {
+  const store = useRemoteCollection<JarabesCollectionData>('jarabes', EMPTY_JARABES_DATA, reportQueryParams);
   const migratedRef = useRef(false);
 
   const data = useMemo(() => normalizeJarabesData(store.data), [store.data]);
@@ -138,7 +146,7 @@ function JarabesProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (migratedRef.current) return;
     if (!store.isLoaded || typeof window === 'undefined') return;
-    const hasRemote =
+    const hasRemote = store.data._reportHasRemoteData === true ||
       Object.keys(data.ubb).length > 0 ||
       Object.keys(data.sugar).length > 0 ||
       Object.keys(data.tanques).length > 0 ||
@@ -1659,6 +1667,11 @@ interface JarabesResumenReporteProps {
   onPrintMonthlyPromedio?: (html: string, filename?: string) => void;
 }
 
+interface JarabesResumenReporteInnerProps extends JarabesResumenReporteProps {
+  selectedWeekDate: Date;
+  onWeekChange: (value: string) => void;
+}
+
 export function JarabesResumenReporte({
   reportMonthDate,
   onPrintWeeklyStandard,
@@ -1666,10 +1679,39 @@ export function JarabesResumenReporte({
   onPrintMonthlyStandard,
   onPrintMonthlyPromedio,
 }: JarabesResumenReporteProps) {
+  const reportMonth = format(reportMonthDate, 'yyyy-MM');
+  const [weekSelection, setWeekSelection] = useState({ month: reportMonth, date: reportMonthDate });
+  const selectedWeekDate = weekSelection.month === reportMonth ? weekSelection.date : reportMonthDate;
+
+  useEffect(() => {
+    if (weekSelection.month !== reportMonth) {
+      setWeekSelection({ month: reportMonth, date: reportMonthDate });
+    }
+  }, [reportMonth, reportMonthDate, weekSelection.month]);
+
+  const reportQueryParams = useMemo(() => ({
+    reportMonth,
+    weekStart: format(startOfISOWeek(selectedWeekDate), 'yyyy-MM-dd'),
+  }), [reportMonth, selectedWeekDate]);
+
+  const handleWeekChange = useCallback((value: string) => {
+    const match = /^(\d{4})-W(\d{2})$/.exec(value);
+    if (!match) return;
+    const year = Number(match[1]);
+    const week = Number(match[2]);
+    if (week < 1 || week > 53) return;
+    const weekStart = startOfISOWeek(setISOWeek(new Date(year, 0, 4), week));
+    const dateInReportMonth = Array.from({ length: 7 }, (_, index) => addDays(weekStart, index))
+      .find((day) => isSameMonth(day, reportMonthDate));
+    setWeekSelection({ month: reportMonth, date: dateInReportMonth ?? weekStart });
+  }, [reportMonth, reportMonthDate]);
+
   return (
-    <JarabesProvider>
+    <JarabesProvider reportQueryParams={reportQueryParams}>
       <JarabesResumenReporteInner
         reportMonthDate={reportMonthDate}
+        selectedWeekDate={selectedWeekDate}
+        onWeekChange={handleWeekChange}
         onPrintWeeklyStandard={onPrintWeeklyStandard}
         onPrintWeeklyPromedio={onPrintWeeklyPromedio}
         onPrintMonthlyStandard={onPrintMonthlyStandard}
@@ -1681,36 +1723,21 @@ export function JarabesResumenReporte({
 
 function JarabesResumenReporteInner({
   reportMonthDate,
+  selectedWeekDate,
+  onWeekChange,
   onPrintWeeklyStandard,
   onPrintWeeklyPromedio,
   onPrintMonthlyStandard,
   onPrintMonthlyPromedio,
-}: JarabesResumenReporteProps) {
+}: JarabesResumenReporteInnerProps) {
   const { data, getWeeklyFisico, isLoaded } = useJarabes();
   const selectedFecha = useMemo(() => startOfMonth(reportMonthDate), [reportMonthDate]);
-  const [selectedWeekDate, setSelectedWeekDate] = useState(reportMonthDate);
   const [activeResumenTab, setActiveResumenTab] = useState('semanal');
   const [activeResumenSemanalTab, setActiveResumenSemanalTab] = useState('r-estandar-sem');
   const [activeResumenMensualTab, setActiveResumenMensualTab] = useState('r-estandar-mes');
   const [updateCounter, setUpdateCounter] = useState(0);
   const [realKgPerSack, setRealKgPerSack] = useState<number>();
   const [costoAzucar, setCostoAzucar] = useState<number>();
-
-  useEffect(() => {
-    setSelectedWeekDate(reportMonthDate);
-  }, [reportMonthDate]);
-
-  const handleWeekChange = (value: string) => {
-    const match = /^(\d{4})-W(\d{2})$/.exec(value);
-    if (!match) return;
-    const year = Number(match[1]);
-    const week = Number(match[2]);
-    if (week < 1 || week > 53) return;
-    const weekStart = startOfISOWeek(setISOWeek(new Date(year, 0, 4), week));
-    const dateInReportMonth = Array.from({ length: 7 }, (_, index) => addDays(weekStart, index))
-      .find((day) => isSameMonth(day, reportMonthDate));
-    setSelectedWeekDate(dateInReportMonth ?? weekStart);
-  };
 
   useEffect(() => {
     const key = dk(selectedFecha);
@@ -1767,7 +1794,7 @@ function JarabesResumenReporteInner({
                   type="week"
                   aria-label="Seleccionar semana de rendimiento de azúcar"
                   value={`${getISOWeekYear(selectedWeekDate)}-W${String(getISOWeek(selectedWeekDate)).padStart(2, '0')}`}
-                  onChange={(event) => handleWeekChange(event.target.value)}
+                  onChange={(event) => onWeekChange(event.target.value)}
                   className="pointer-events-auto h-9 rounded-full border-0 bg-white px-3 text-[10px] font-bold text-slate-700 shadow-sm outline-none"
                 />
               </label>
@@ -2052,7 +2079,7 @@ function JarabesModuleInner({ onPrintStandard, onPrintPromedio, onPrintWeeklySta
                       type="month"
                       value={mensualMes}
                       onChange={(e) => handleMensualMesChange(e.target.value)}
-                      className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                      className="pointer-events-auto h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
                     />
                     <input
                       type="date"
@@ -2064,7 +2091,7 @@ function JarabesModuleInner({ onPrintStandard, onPrintPromedio, onPrintWeeklySta
                         const date = new Date(year, month - 1, day);
                         setSelectedFecha(date);
                       }}
-                      className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                      className="pointer-events-auto h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
                     />
                   </div>
                 </div>

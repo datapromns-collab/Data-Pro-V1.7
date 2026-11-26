@@ -21,7 +21,7 @@ import { useSeguimientoResumenOptimizado, type LineaKey } from '@/hooks/use-segu
 import { PRODUCT_LIST } from '@/lib/planner-utils';
 import { combinarFilasResumenMensual, FACTORES_RENDIMIENTO_AZUCAR } from '@/lib/seguimiento-utils';
 
-type ResumenMensualSubsection = 'resumen-por-sabor' | 'resumen-por-lineas' | 'rendimiento-azucar';
+type ResumenMensualSubsection = 'resumen-por-sabor' | 'resumen-por-lineas' | 'sabor-por-linea' | 'rendimiento-azucar';
 
 const formatNumber = (value: number) => value.toFixed(2).replace('.', ',');
 
@@ -33,6 +33,7 @@ export function OrdenesReporteResumenMensual({ reportMonthDate }: OrdenesReporte
   const { ordenes, loadError } = useOrdenesSap();
   const seguimiento = useSeguimientoResumenOptimizado();
   const [subsection, setSubsection] = useState<ResumenMensualSubsection>('resumen-por-sabor');
+  const [selectedLine, setSelectedLine] = useState(1);
   const month = reportMonthDate.getMonth() + 1;
   const year = reportMonthDate.getFullYear();
 
@@ -195,6 +196,55 @@ export function OrdenesReporteResumenMensual({ reportMonthDate }: OrdenesReporte
     });
   }, [byLine.items]);
 
+  const byFlavorLine = useMemo(() => {
+    const rows = monthlyRows.filter((row) => row.linea === selectedLine);
+    const required: Record<string, number> = {};
+    const real: Record<string, number> = {};
+    rows.forEach((row) => {
+      if (row.jarabeReal > 0) {
+        required[row.sabor] = (required[row.sabor] || 0) + row.jarabeRequerido;
+      }
+      real[row.sabor] = (real[row.sabor] || 0) + row.jarabeReal;
+    });
+
+    const items = PRODUCT_LIST.map((sabor) => {
+      const requerido = required[sabor] || 0;
+      const realVal = real[sabor] || 0;
+      const diff = realVal - requerido;
+      return {
+        sabor,
+        requerido,
+        real: realVal,
+        diff,
+        pct: requerido > 0 ? (diff / requerido) * 100 : 0,
+      };
+    }).filter((item) => item.requerido > 0 || item.real > 0);
+    const total = items.reduce((sum, item) => ({
+      requerido: sum.requerido + item.requerido,
+      real: sum.real + item.real,
+      diff: sum.diff + item.diff,
+    }), { requerido: 0, real: 0, diff: 0 });
+
+    return {
+      items,
+      total: {
+        sabor: `TOTAL L${selectedLine}`,
+        ...total,
+        pct: total.requerido > 0 ? (total.diff / total.requerido) * 100 : 0,
+      },
+    };
+  }, [monthlyRows, selectedLine]);
+
+  const flavorLinePareto = useMemo(() => {
+    const sorted = byFlavorLine.items.slice().sort((a, b) => Math.abs(b.pct) - Math.abs(a.pct));
+    const totalAbs = sorted.reduce((sum, item) => sum + Math.abs(item.pct), 0);
+    let cumulative = 0;
+    return sorted.map((item) => {
+      cumulative += Math.abs(item.pct);
+      return { sabor: item.sabor, pct: item.pct, cumPct: totalAbs > 0 ? (cumulative / totalAbs) * 100 : 0 };
+    });
+  }, [byFlavorLine.items]);
+
   const sugarPareto = useMemo(() => {
     let accumulated = 0;
     return sugarPerformance.items
@@ -258,6 +308,26 @@ export function OrdenesReporteResumenMensual({ reportMonthDate }: OrdenesReporte
           `${formatNumber(byLine.total.pct)}%`,
         ],
       ];
+    } else if (subsection === 'sabor-por-linea') {
+      title = `Resumen mensual por sabor - Línea ${selectedLine}`;
+      filename = `Resumen Seguimiento por Sabor Linea ${selectedLine} ${period}.pdf`;
+      head = [['SABOR', 'JARABE REQUERIDO', 'JARABE REAL', 'DIFERENCIA', 'PORCENTAJE']];
+      body = [
+        ...byFlavorLine.items.map((item) => [
+          item.sabor,
+          formatNumber(item.requerido),
+          formatNumber(item.real),
+          formatNumber(item.diff),
+          `${formatNumber(item.pct)}%`,
+        ]),
+        [
+          byFlavorLine.total.sabor,
+          formatNumber(byFlavorLine.total.requerido),
+          formatNumber(byFlavorLine.total.real),
+          formatNumber(byFlavorLine.total.diff),
+          `${formatNumber(byFlavorLine.total.pct)}%`,
+        ],
+      ];
     } else {
       title = 'Rendimiento de azúcar por sabor';
       filename = `Rendimiento de Azucar por Sabor ${period}.pdf`;
@@ -307,6 +377,7 @@ export function OrdenesReporteResumenMensual({ reportMonthDate }: OrdenesReporte
   const subsections: { id: ResumenMensualSubsection; label: string }[] = [
     { id: 'resumen-por-sabor', label: 'RESUMEN POR SABOR' },
     { id: 'resumen-por-lineas', label: 'RESUMEN POR LÍNEAS' },
+    { id: 'sabor-por-linea', label: 'SABOR POR LÍNEA' },
     { id: 'rendimiento-azucar', label: 'PÉRDIDA DE AZÚCAR POR JARABE EN LÍNEA' },
   ];
 
@@ -439,6 +510,84 @@ export function OrdenesReporteResumenMensual({ reportMonthDate }: OrdenesReporte
                     <BarChart data={linePareto} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="linea" tick={{ fontSize: 10 }} interval={0} angle={-35} textAnchor="end" height={80} />
+                      <YAxis tick={{ fontSize: 10 }} />
+                      <Tooltip formatter={(value: number) => `${formatNumber(value)}%`} labelStyle={{ fontSize: 10 }} />
+                      <Legend />
+                      <Bar dataKey="pct" name="Porcentaje" fill="#0ea5e9" />
+                      <Line type="monotone" dataKey="cumPct" name="Acumulado %" stroke="#ef4444" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              ) : <p className="py-8 text-center text-[10px] text-slate-500">No hay datos suficientes para mostrar la gráfica</p>}
+            </div>
+          </>
+        )}
+
+        {subsection === 'sabor-por-linea' && (
+          <>
+            <div className="mb-4 flex flex-wrap items-center gap-2">
+              <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Filtrar por línea:</span>
+              <div className="inline-flex flex-wrap items-center gap-1 rounded-full border border-slate-200 bg-slate-100/50 p-1">
+                {[1, 2, 3, 4, 5, 6, 7].map((line) => (
+                  <button
+                    key={line}
+                    type="button"
+                    aria-pressed={selectedLine === line}
+                    onClick={() => setSelectedLine(line)}
+                    className={`rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-widest transition-none ${selectedLine === line ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                  >
+                    Línea {line}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
+              <table className="w-full border-collapse text-center">
+                <thead>
+                  <tr className="bg-slate-100">
+                    {['Sabor', 'Jarabe requerido de cajas completadas', 'Jarabe Real', 'Diferencia', 'Porcentaje'].map((heading, index) => (
+                      <th key={heading} className={`px-2 py-1.5 text-[9px] font-black uppercase tracking-widest text-slate-500 ${index < 4 ? 'border-r' : ''} border-b border-slate-200`}>{heading}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {byFlavorLine.items.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="px-3 py-10 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                        Sin registros para la línea {selectedLine} en este mes
+                      </td>
+                    </tr>
+                  ) : (
+                    <>
+                      {byFlavorLine.items.map((item) => (
+                        <tr key={item.sabor} className="even:bg-slate-50/60">
+                          <td className="whitespace-nowrap border-b border-r border-slate-100 px-2 py-1 text-[10px] font-bold text-slate-700">{item.sabor}</td>
+                          <td className="border-b border-r border-slate-100 px-2 py-1 text-[10px] font-bold text-slate-700">{formatNumber(item.requerido)}</td>
+                          <td className="border-b border-r border-slate-100 px-2 py-1 text-[10px] font-bold text-slate-700">{formatNumber(item.real)}</td>
+                          <td className="border-b border-r border-slate-100 px-2 py-1 text-[10px] font-bold text-slate-700">{formatNumber(item.diff)}</td>
+                          <td className="border-b border-slate-100 px-2 py-1 text-[10px] font-bold text-slate-700">{formatNumber(item.pct)}%</td>
+                        </tr>
+                      ))}
+                      <tr className="bg-slate-100 font-bold">
+                        <td className="whitespace-nowrap border-b border-r border-slate-100 px-2 py-1 text-[10px] font-black text-slate-700">{byFlavorLine.total.sabor}</td>
+                        <td className="border-b border-r border-slate-100 px-2 py-1 text-[10px] font-black text-slate-700">{formatNumber(byFlavorLine.total.requerido)}</td>
+                        <td className="border-b border-r border-slate-100 px-2 py-1 text-[10px] font-black text-slate-700">{formatNumber(byFlavorLine.total.real)}</td>
+                        <td className="border-b border-r border-slate-100 px-2 py-1 text-[10px] font-black text-slate-700">{formatNumber(byFlavorLine.total.diff)}</td>
+                        <td className="border-b border-slate-100 px-2 py-1 text-[10px] font-black text-slate-700">{formatNumber(byFlavorLine.total.pct)}%</td>
+                      </tr>
+                    </>
+                  )}
+                </tbody>
+              </table>
+            </div>
+            <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4">
+              <h3 className="mb-2 text-[10px] font-black uppercase tracking-widest text-slate-500">Tendencia de pérdida por sabor - Línea {selectedLine}</h3>
+              {flavorLinePareto.length > 0 ? (
+                <div style={{ height: 320 }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={flavorLinePareto} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="sabor" tick={{ fontSize: 10 }} interval={0} angle={-35} textAnchor="end" height={80} />
                       <YAxis tick={{ fontSize: 10 }} />
                       <Tooltip formatter={(value: number) => `${formatNumber(value)}%`} labelStyle={{ fontSize: 10 }} />
                       <Legend />

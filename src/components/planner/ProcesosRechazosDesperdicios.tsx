@@ -374,11 +374,11 @@ export function ProcesosRechazosDesperdicios({
           }}
           disabled={editing}
           aria-label="Fecha de registro"
-          className="h-9 rounded-full border border-slate-200 bg-white px-3 text-left text-[10px] font-bold uppercase tracking-widest disabled:opacity-60"
+          className="pointer-events-auto h-9 rounded-full border border-slate-200 bg-white px-3 text-left text-[10px] font-bold uppercase tracking-widest disabled:opacity-60"
         />
       </div>
 
-      <div className="mb-4 flex flex-wrap gap-2">
+      <div className="pointer-events-auto mb-4 flex flex-wrap gap-2">
         {visibleSections.map(([key, label]) => (
           <button
             key={key}
@@ -390,7 +390,7 @@ export function ProcesosRechazosDesperdicios({
               setSaveStatus('idle');
               setSaveError('');
             }}
-            className={`rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-widest disabled:opacity-50 ${
+            className={`pointer-events-auto rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-widest disabled:opacity-50 ${
               section === key
                 ? key === 'rechazos'
                   ? 'bg-yellow-400 text-slate-900'
