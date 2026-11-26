@@ -1988,7 +1988,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "finan.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-25T15:22:40.562Z"
     },
     {
@@ -1999,7 +1999,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "finan.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
@@ -2010,7 +2010,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "finan.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-24T13:33:51.205Z"
     },
     {
@@ -2021,7 +2021,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "finan.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-23T20:35:12.174Z"
     },
     {
@@ -2032,7 +2032,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "finan.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-14T15:35:25.107Z"
     },
     {
@@ -2043,7 +2043,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "finan.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-14T15:03:53.664Z"
     },
     {
@@ -2054,7 +2054,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "finan.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-14T14:09:41.196Z"
     },
     {
@@ -2065,7 +2065,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "finan.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-14T13:48:44.118Z"
     },
     {
@@ -2076,7 +2076,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "finan.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-14T13:46:47.735Z"
     },
     {
@@ -2087,7 +2087,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "finan.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-14T12:19:40.786Z"
     },
     {
@@ -2098,7 +2098,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "g.tec.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-25T15:22:40.562Z"
     },
     {
@@ -2109,7 +2109,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "g.tec.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-24T18:38:29.016Z"
     },
     {
@@ -2120,7 +2120,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "g.tec.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-24T13:33:51.205Z"
     },
     {
@@ -3088,7 +3088,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "prodt4.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-25T15:22:40.562Z"
     },
     {
