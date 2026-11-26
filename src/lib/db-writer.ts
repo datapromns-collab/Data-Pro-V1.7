@@ -253,6 +253,16 @@ function assertPlantaCycleDates(current: DbData, updated: DbData): void {
     const identityKeys = namespace === 'planta-informes-operacionales'
       ? ['fecha', 'linea', 'equipo', 'inicioParada', 'finParada', 'turno', 'tipoParada']
       : ['orden', 'fechaOrden'];
+    const previousById = new Map<string, any>();
+    const previousByIdentity = new Map<string, any>();
+    previousItems.forEach((item: any) => {
+      if (item?.id != null) {
+        const id = String(item.id);
+        if (!previousById.has(id)) previousById.set(id, item);
+      }
+      const identity = JSON.stringify(identityKeys.map((key) => String(item?.[key] ?? '')));
+      if (!previousByIdentity.has(identity)) previousByIdentity.set(identity, item);
+    });
 
     const getDates = (item: any): string[] => namespace === 'planta-informes-operacionales'
       ? [item?.fecha].filter((date): date is string => typeof date === 'string')
@@ -260,11 +270,10 @@ function assertPlantaCycleDates(current: DbData, updated: DbData): void {
         .filter((date): date is string => typeof date === 'string');
 
     for (const item of updatedItems) {
+      const identity = JSON.stringify(identityKeys.map((key) => String(item?.[key] ?? '')));
       const previousItem = item?.id != null
-        ? previousItems.find((candidate: any) => String(candidate?.id) === String(item.id))
-        : previousItems.find((candidate: any) =>
-          identityKeys.every((key) => String(candidate?.[key] ?? '') === String(item?.[key] ?? '')),
-        );
+        ? previousById.get(String(item.id))
+        : previousByIdentity.get(identity);
       const previousDates = previousItem ? getDates(previousItem) : [];
       const blockedDate = getDates(item).find((date) =>
         /^\d{4}-\d{2}-\d{2}$/.test(date) &&

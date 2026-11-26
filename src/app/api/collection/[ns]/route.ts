@@ -320,6 +320,17 @@ export async function POST(request: Request) {
         const currentArr = Array.isArray(current) ? current : [];
         if (ns === 'planta-informes-operacionales' || ns === 'planta-ordenes-trabajo') {
           const inactiveDays = db.collections['planta-ciclos-dias'] || {};
+          const identityKeys = DEDUP_KEYS[ns];
+          const currentById = new Map<string, any>();
+          const currentByIdentity = new Map<string, any>();
+          currentArr.forEach((item: any) => {
+            if (item?.id != null) {
+              const id = String(item.id);
+              if (!currentById.has(id)) currentById.set(id, item);
+            }
+            const identity = JSON.stringify(identityKeys.map((key) => String(item?.[key] ?? '')));
+            if (!currentByIdentity.has(identity)) currentByIdentity.set(identity, item);
+          });
           const getRecordDates = (item: any): string[] => ns === 'planta-informes-operacionales'
             ? [item?.fecha].filter((date): date is string => typeof date === 'string')
             : [item?.fechaOrden, item?.fechaEmision, item?.fechaParada, item?.otFechaParada, item?.fecha]
@@ -327,10 +338,8 @@ export async function POST(request: Request) {
 
           for (const item of incomingData) {
             const existingItem = item?.id != null
-              ? currentArr.find((candidate: any) => String(candidate?.id) === String(item.id))
-              : currentArr.find((candidate: any) =>
-                DEDUP_KEYS[ns].every((key) => String(candidate?.[key] ?? '') === String(item?.[key] ?? '')),
-              );
+              ? currentById.get(String(item.id))
+              : currentByIdentity.get(JSON.stringify(identityKeys.map((key) => String(item?.[key] ?? ''))));
             const existingDates = existingItem ? getRecordDates(existingItem) : [];
             const newInactiveDate = getRecordDates(item).find((date) =>
               /^\d{4}-\d{2}-\d{2}$/.test(date) &&
