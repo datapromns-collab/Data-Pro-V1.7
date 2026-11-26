@@ -1,5 +1,6 @@
 import { readDb, writeDb } from '@/lib/db-writer';
 import { authorizeCollectionRead, authorizeCollectionWrite } from '@/lib/server-auth';
+import { PRODUCTION_WASTE_CODES } from '@/lib/production-waste-catalog';
 
 const RETRYABLE_CODES = new Set(['EPERM', 'EACCES', 'EBUSY', 'UNKNOWN']);
 
@@ -345,6 +346,45 @@ export async function POST(request: Request) {
   try {
     const incoming = await request.json();
     const incomingItems = incoming && Array.isArray(incoming.items) ? incoming.items : incoming;
+    if (ns === 'sap-mermas-por-crear') {
+      if (!incomingItems || typeof incomingItems !== 'object' || Array.isArray(incomingItems)) {
+        return Response.json({ error: 'Los datos de Mermas por crear deben ser un objeto.' }, { status: 400 });
+      }
+      const allowedKeys = new Set(['stockByCode', 'inactiveDates']);
+      for (const key of Object.keys(incomingItems)) {
+        if (!allowedKeys.has(key)) {
+          return Response.json({ error: `Campo no permitido en Mermas por crear: ${key}.` }, { status: 400 });
+        }
+      }
+      const stockByCode = (incomingItems as Record<string, unknown>).stockByCode;
+      if (stockByCode !== undefined) {
+        if (!stockByCode || typeof stockByCode !== 'object' || Array.isArray(stockByCode)) {
+          return Response.json({ error: 'El Stock debe ser un mapa de códigos y cantidades.' }, { status: 400 });
+        }
+        for (const [code, stock] of Object.entries(stockByCode)) {
+          if (!PRODUCTION_WASTE_CODES.has(code) || typeof stock !== 'number' || !Number.isFinite(stock) || stock < 0) {
+            return Response.json({ error: `Código o Stock inválido: ${code}.` }, { status: 400 });
+          }
+        }
+      }
+      const inactiveDates = (incomingItems as Record<string, unknown>).inactiveDates;
+      if (inactiveDates !== undefined) {
+        if (!inactiveDates || typeof inactiveDates !== 'object' || Array.isArray(inactiveDates)) {
+          return Response.json({ error: 'Las fechas inactivas deben ser un mapa de fechas.' }, { status: 400 });
+        }
+        for (const [date, inactive] of Object.entries(inactiveDates)) {
+          const timestamp = Date.parse(`${date}T00:00:00Z`);
+          if (
+            !/^\d{4}-\d{2}-\d{2}$/.test(date) ||
+            Number.isNaN(timestamp) ||
+            new Date(timestamp).toISOString().slice(0, 10) !== date ||
+            typeof inactive !== 'boolean'
+          ) {
+            return Response.json({ error: `Fecha o estado inválido: ${date}.` }, { status: 400 });
+          }
+        }
+      }
+    }
     if (ns === 'planta-ciclos-dias') {
       if (!incomingItems || typeof incomingItems !== 'object' || Array.isArray(incomingItems)) {
         return Response.json({ error: 'El calendario de Ciclos debe ser un objeto de fechas.' }, { status: 400 });

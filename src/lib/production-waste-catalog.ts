@@ -1,0 +1,87 @@
+export type WasteProduct = { code: string; material: string };
+
+export const WASTE_PRODUCTS_BY_LINE: Record<string, Record<string, WasteProduct>> = {
+  'Linea 1': {
+    'GLUP COLA': { code: 'ENV-00001', material: 'BOTELLA ENVASADA GLUP COLA NEGRA 2.LTS' },
+    'GLUP UVA': { code: 'ENV-00005', material: 'BOTELLA ENVASADA GLUP UVA  2.0.LTS' },
+    'GLUP PIÑA': { code: 'ENV-00009', material: 'BOTELLA ENVASADA GLUP PIÑA 2.0.LTS' },
+    'GLUP FRESH': { code: 'ENV-00013', material: 'BOTELLA ENVASADA GLUP FRESH 2.0.LTS' },
+    'GLUP KOLITA': { code: 'ENV-00017', material: 'BOTELLA ENVASADA GLUP KOLITA 2.0.LTS' },
+    'GLUP NARANJA': { code: 'ENV-00021', material: 'BOTELLA ENVASADA GLUP NARANJA 2.0 LTS' },
+    'GLUP MANZANA': { code: 'ENV-00053', material: 'BOTELLA ENVASADA GLUP MANZANA VERDE  2.0.LTS' },
+    'GLUP MANZANA ROJA': { code: 'ENV-00085', material: 'BOTELLA ENVASADA MANZANA ROJA 2.0 L (LINEA 1)' },
+    'GLUP PIÑA PARCHITA': { code: 'ENV-00089', material: 'BOTELLA ENVASADA PIÑA PARCHITA 2.0 L (LINEA 1)' },
+  },
+  'Linea 2': {
+    'GLUP COLA': { code: 'ENV-00038', material: 'BOTELLA ENVASADA GLUP COLA NEGRA 2.LTS (EN LINEA 2)' },
+    'GLUP UVA': { code: 'ENV-00039', material: 'BOTELLA ENVASADA GLUP UVA  2.0.LTS  (EN LINEA 2)' },
+    'GLUP KOLITA': { code: 'ENV-00040', material: 'BOTELLA ENVASADA GLUP KOLITA 2.0.LTS  (EN LINEA 2)' },
+    'GLUP NARANJA': { code: 'ENV-00041', material: 'BOTELLA ENVASADA GLUP NARANJA 2.0 LTS  (EN LINEA 2)' },
+    'GLUP PIÑA': { code: 'ENV-00042', material: 'BOTELLA ENVASADA GLUP PIÑA 2.0.LTS  (EN LINEA 2)' },
+    'GLUP FRESH': { code: 'ENV-00043', material: 'BOTELLA ENVASADA GLUP FRESH 2.0.LTS  (EN LINEA 2)' },
+    'GLUP MANZANA': { code: 'ENV-00046', material: 'BOTELLA ENVASADA GLUP MANZANA VERDE  2.0.LTS  (LINEA 2)' },
+    'GLUP MANZANA ROJA': { code: 'ENV-00086', material: 'BOTELLA ENVASADA MANZANA ROJA 2.0 L (LINEA 2)' },
+    'GLUP PIÑA PARCHITA': { code: 'ENV-00090', material: 'BOTELLA ENVASADA PIÑA PARCHITA 2.0 L (LINEA 2)' },
+  },
+  'Linea 3': {
+    'GLUP COLA': { code: 'ENV-00063', material: 'BOTELLA ENVASADA GLUP COLA NEGRA 2L (LINEA 3)' },
+    'GLUP UVA': { code: 'ENV-00064', material: 'BOTELLA ENVASADA GLUP UVA 2L (LINEA 3)' },
+    'GLUP KOLITA': { code: 'ENV-00065', material: 'BOTELLA ENVASADA GLUP KOLITA 2L (LINEA 3)' },
+    'GLUP FRESH': { code: 'ENV-00066', material: 'BOTELLA ENVASADA GLUP FRESH 2L (LINEA 3)' },
+    'GLUP MANZANA': { code: 'ENV-00067', material: 'BOTELLA ENVASADA GLUP MANZANA VERDE 2L (LINEA 3)' },
+    'GLUP PIÑA': { code: 'ENV-00083', material: 'BOTELLA ENVASADA PIÑA 2.0 L (LINEA 3)' },
+    'GLUP MANZANA ROJA': { code: 'ENV-00087', material: 'BOTELLA ENVASADA MANZANA ROJA 2.0 L (LINEA 3)' },
+    'GLUP PIÑA PARCHITA': { code: 'ENV-00091', material: 'BOTELLA ENVASADA PIÑA PARCHITA 2.0 L (LINEA 3)' },
+    'GLUP NARANJA': { code: 'ENV-00093', material: 'BOTELLA ENVASADA GLUP NARANJA 2.0 LTS  (EN LINEA 3)' },
+  },
+  'Linea 4': {
+    'GLUP COLA': { code: 'ENV-00054', material: 'BOTELLA ENVASADA GLUP COLA NEGRA 2.LTS (LINEA 4)' },
+    'GLUP UVA': { code: 'ENV-00055', material: 'BOTELLA ENVASADA GLUP UVA  2.0.LTS(LINEA 4)' },
+    'GLUP KOLITA': { code: 'ENV-00056', material: 'BOTELLA ENVASADA GLUP KOLITA 2.0.LTS (LINEA 4)' },
+    'GLUP FRESH': { code: 'ENV-00057', material: 'BOTELLA ENVASADA GLUP FRESH 2.0.LTS(LINEA 4)' },
+    'GLUP MANZANA': { code: 'ENV-00058', material: 'BOTELLA ENVASADA GLUP MANZANA VERDE  2.0.LTS  (LINEA 4)' },
+    'GLUP PIÑA': { code: 'ENV-00084', material: 'BOTELLA ENVASADA PIÑA 2.0 L (LINEA 4)' },
+    'GLUP MANZANA ROJA': { code: 'ENV-00088', material: 'BOTELLA ENVASADA MANZANA ROJA 2.0 L (LINEA 4)' },
+    'GLUP PIÑA PARCHITA': { code: 'ENV-00092', material: 'BOTELLA ENVASADA PIÑA PARCHITA 2.0 L (LINEA 4)' },
+    'GLUP NARANJA': { code: 'ENV-00094', material: 'BOTELLA ENVASADA GLUP NARANJA 2.0 LTS  (EN LINEA 4)' },
+  },
+  'Linea 5': {
+    'JUSTY NARANJA': { code: 'ENV-00027', material: 'BOTELLA ENVASADA JUSTY NARANJA  1.5 LTS' },
+    'JUSTY DURAZNO': { code: 'ENV-00095', material: 'BOTELLA ENVASADA JUSTY DURAZNO 1.5 LTS' },
+    'JUSTY PERA': { code: 'ENV-00108', material: 'BOTELLA ENVASADA JUSTY PERA 1.5 LTS' },
+    'JUSTY MANZANA': { code: 'ENV-00107', material: 'BOTELLA ENVASADA JUSTY MANZANA 1.5 LTS' },
+    'JUSTY MANDARINA': { code: 'ENV-00105', material: 'BOTELLA ENVASADA JUSTY MANDARINA 1.5 LTS' },
+    'JUSTY SANDIA': { code: 'ENV-00104', material: 'BOTELLA ENVASADA JUSTY SANDIA 1.5 LTS' },
+    'JUSTY TAMARINDO': { code: 'ENV-00106', material: 'BOTELLA ENVASADA JUSTY TAMARINDO 1.5 LTS' },
+    'VITA TEA DURAZNO': { code: 'ENV-00033', material: 'BOTELLA ENVASADA  VITA TEA  (DURAZNO)  1.5 LTS' },
+    'VITA TEA LIMON': { code: 'ENV-00034', material: 'BOTELLA ENVASADA  VITA TEA  (LIMON)  1.5 LTS' },
+  },
+  'Linea 6': {
+    'GLUP COLA': { code: 'ENV-00048', material: 'BOTELLA ENVASADA GLUP COLA NEGRA 400 ML (LINEA 6)' },
+    'GLUP UVA': { code: 'ENV-00059', material: 'BOTELLA ENVASADA GLUP UVA 400 ML (LINEA 6)' },
+    'GLUP FRESH': { code: 'ENV-00060', material: 'BOTELLA ENVASADA GLUP FRESH 400 ML (LINEA 6)' },
+    'GLUP KOLITA': { code: 'ENV-00061', material: 'BOTELLA ENVASADA GLUP KOLITA 400 ML (LINEA 6)' },
+    'GLUP MANZANA': { code: 'ENV-00062', material: 'BOTELLA ENVASADA GLUP MANZANA VERDE 400 ML (LINEA 6)' },
+    'GLUP PIÑA': { code: 'ENV-00096', material: 'BOTELLA ENVASADA GLUP PIÑA 400 ML (LINEA 6)' },
+    'GLUP NARANJA': { code: 'ENV-00097', material: 'BOTELLA ENVASADA GLUP NARANJA 400 ML (LINEA 6)' },
+    'GLUP PIÑA PARCHITA': { code: 'ENV-00098', material: 'BOTELLA ENVASADA GLUP PIÑA PARCHITA 400 ML (LINEA 6)' },
+    'GLUP MANZANA ROJA': { code: 'ENV-00099', material: 'BOTELLA ENVASADA GLUP MANZANA ROJA 400 ML (LINEA 6)' },
+  },
+  'Linea 7': {
+    'GLUP COLA': { code: 'ENV-00078', material: 'BOTELLA ENVASADA GLUP COLA NEGRA 1.0 L (LINEA 7)' },
+    'GLUP UVA': { code: 'ENV-00079', material: 'BOTELLA ENVASADA GLUP UVA 1.0 L (LINEA 7)' },
+    'GLUP KOLITA': { code: 'ENV-00080', material: 'BOTELLA ENVASADA GLUP KOLITA 1.0 L (LINEA 7)' },
+    'GLUP FRESH': { code: 'ENV-00081', material: 'BOTELLA ENVASADA GLUP FRESH 1.0 L (LINEA 7)' },
+    'GLUP MANZANA': { code: 'ENV-00082', material: 'BOTELLA ENVASADA GLUP MANZANA VERDE 1.0 L (LINEA 7)' },
+    'GLUP PIÑA': { code: 'ENV-00100', material: 'BOTELLA ENVASADA GLUP PIÑA 1.0 L (LINEA 7)' },
+    'GLUP NARANJA': { code: 'ENV-00101', material: 'BOTELLA ENVASADA GLUP NARANJA 1.0 L (LINEA 7)' },
+    'GLUP PIÑA PARCHITA': { code: 'ENV-00102', material: 'BOTELLA ENVASADA GLUP PIÑA PARCHITA 1.0 L (LINEA 7)' },
+    'GLUP MANZANA ROJA': { code: 'ENV-00103', material: 'BOTELLA ENVASADA GLUP MANZANA ROJA 1.0 L (LINEA 7)' },
+  },
+};
+
+export const PRODUCTION_WASTE_CODES = new Set(
+  Object.values(WASTE_PRODUCTS_BY_LINE).flatMap((products) =>
+    Object.values(products).map((product) => product.code)
+  ),
+);

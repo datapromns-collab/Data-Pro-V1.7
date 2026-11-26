@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { Factory, Plus, CalendarIcon, FileDown, FileSpreadsheet, Image } from 'lucide-react';
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import {
   Bar,
   BarChart,
@@ -28,6 +28,10 @@ import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import * as XLSX from 'xlsx';
 import { useOrdenesSap } from '@/hooks/use-ordenes-sap';
+import { useRemoteCollection } from '@/hooks/use-remote-collection';
+import { loadProductionWasteRowsRange } from '@/lib/json-db';
+import { parseCantidadCajas } from '@/lib/production-tracking-utils';
+import { PRODUCTION_WASTE_CODES, WASTE_PRODUCTS_BY_LINE } from '@/lib/production-waste-catalog';
 import { useSeguimientoResumenOptimizado, type SeguimientoOrdenLineaConLinea } from '@/hooks/use-seguimiento-ordenes';
 import { combinarFilasResumenMensual, FACTORES_RENDIMIENTO_AZUCAR } from '@/lib/seguimiento-utils';
 import {
@@ -70,6 +74,16 @@ const SABOR_COLORS: Record<string, string> = {
 };
 
 const FALLBACK_COLOR = "bg-gray-200 text-gray-900";
+type MermasPorCrearData = {
+  stockByCode: Record<string, number>;
+  inactiveDates: Record<string, boolean>;
+};
+const EMPTY_MERMAS_POR_CREAR_DATA: MermasPorCrearData = { stockByCode: {}, inactiveDates: {} };
+const WASTE_CATALOG_ROWS = Object.entries(WASTE_PRODUCTS_BY_LINE).flatMap(([line, products]) =>
+  Object.entries(products).map(([flavor, product]) => ({ line, flavor, ...product }))
+);
+const formatMermasPorCrearQuantity = (value: number) =>
+  value.toLocaleString('es-ES', { maximumFractionDigits: 6 });
 
 const SABOR_ALIAS: Record<string, string> = {
   'GLUP MANZANA VERDE': 'GLUP MANZANA',
@@ -373,12 +387,87 @@ export default function OrdenesSapModule({
     document.body.removeChild(textarea);
   };
   const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
-  const allowedSections = userId === 'jaime.r' ? ['seguimiento-ordenes'] as const : userId === 'maria.mds' ? ['carga-prod', 'creador-ordenes', 'seguimiento-ordenes'] as const : ['carga-prod', 'creador-ordenes', 'seguimiento-ordenes', 'dia-a-dia', 'prodt-semanal', 'resumen-mensual'] as const;
+  const allowedSections = userId === 'jaime.r' ? ['seguimiento-ordenes'] as const : userId === 'maria.mds' ? ['carga-prod', 'creador-ordenes', 'mermas-por-crear', 'seguimiento-ordenes'] as const : ['carga-prod', 'creador-ordenes', 'mermas-por-crear', 'seguimiento-ordenes', 'dia-a-dia', 'prodt-semanal', 'resumen-mensual'] as const;
   const isSectionAllowed = (section: string) => allowedSections.includes(section as any);
-  const [activeSection, setActiveSection] = useState<'carga-prod' | 'creador-ordenes' | 'seguimiento-ordenes' | 'dia-a-dia' | 'prodt-semanal' | 'resumen-mensual'>(() => userId === 'jaime.r' ? 'seguimiento-ordenes' : 'carga-prod');
+  const [activeSection, setActiveSection] = useState<'carga-prod' | 'creador-ordenes' | 'mermas-por-crear' | 'seguimiento-ordenes' | 'dia-a-dia' | 'prodt-semanal' | 'resumen-mensual'>(() => userId === 'jaime.r' ? 'seguimiento-ordenes' : 'carga-prod');
   const [activeSubsection, setActiveSubsection] = useState<'dia' | 'diurno' | 'nocturno' | null>(null);
   // Estado independiente para la sección "Creador de Órdenes" (no afecta a las demás secciones)
   const [creadorSubsection, setCreadorSubsection] = useState<'fijas' | 'ordenes'>('fijas');
+  const [mermasPorCrearSubsection, setMermasPorCrearSubsection] = useState<'por-crear' | 'fechas'>('por-crear');
+  const [mermasPorCrearMonth, setMermasPorCrearMonth] = useState(() => format(new Date(), 'yyyy-MM'));
+  const [productionMermasRowsByDate, setProductionMermasRowsByDate] = useState<Record<string, unknown[]>>({});
+  const [productionMermasLoading, setProductionMermasLoading] = useState(false);
+  const [productionMermasError, setProductionMermasError] = useState<string | null>(null);
+  const [mermasRefreshKey, setMermasRefreshKey] = useState(0);
+  const [stockImporting, setStockImporting] = useState(false);
+  const [stockImportMessage, setStockImportMessage] = useState<string | null>(null);
+  const [stockImportError, setStockImportError] = useState<string | null>(null);
+  const stockFileInputRef = useRef<HTMLInputElement>(null);
+  const canEditMermasPorCrearStock = ['maria.mds', 'alex.mds', 'demon', 'demon2'].includes(userId ?? '');
+  const canEditMermasPorCrearDates = canEditMermasPorCrearStock;
+  const mermasPorCrearStore = useRemoteCollection<MermasPorCrearData>(
+    'sap-mermas-por-crear',
+    EMPTY_MERMAS_POR_CREAR_DATA,
+    undefined,
+    isSectionAllowed('mermas-por-crear'),
+  );
+  const mermasPorCrearData = mermasPorCrearStore.data;
+  const mermasPorCrearMonthKey = mermasPorCrearMonth;
+  const mermasPorCrearCalendar = useMemo(() => {
+    const [year, month] = mermasPorCrearMonthKey.split('-').map(Number);
+    if (!year || !month) return { days: [] as string[], leadingDays: 0 };
+    const firstDay = new Date(year, month - 1, 1);
+    const daysInMonth = new Date(year, month, 0).getDate();
+    return {
+      days: Array.from({ length: daysInMonth }, (_, index) =>
+        format(new Date(year, month - 1, index + 1), 'yyyy-MM-dd'),
+      ),
+      leadingDays: (firstDay.getDay() + 6) % 7,
+    };
+  }, [mermasPorCrearMonthKey]);
+
+  useEffect(() => {
+    if (activeSection !== 'mermas-por-crear') return;
+    let cancelled = false;
+    const [year, month] = mermasPorCrearMonthKey.split('-').map(Number);
+    if (!year || !month) return;
+    const startDate = `${mermasPorCrearMonthKey}-01`;
+    const endDate = format(new Date(year, month, 0), 'yyyy-MM-dd');
+    setProductionMermasLoading(true);
+    setProductionMermasError(null);
+    setProductionMermasRowsByDate({});
+    void loadProductionWasteRowsRange('mermas', startDate, endDate)
+      .then((rowsByDate) => {
+        if (cancelled) return;
+        if (!rowsByDate) throw new Error('No se pudieron cargar las mermas del período.');
+        setProductionMermasRowsByDate(rowsByDate);
+      })
+      .catch((error: unknown) => {
+        if (cancelled) return;
+        setProductionMermasError(error instanceof Error ? error.message : 'Error cargando las mermas.');
+      })
+      .finally(() => {
+        if (!cancelled) setProductionMermasLoading(false);
+      });
+    return () => { cancelled = true; };
+  }, [activeSection, mermasPorCrearMonthKey, mermasRefreshKey]);
+
+  const mermaTotalsByCode = useMemo(() => {
+    const totals: Record<string, number> = {};
+    for (const [date, rows] of Object.entries(productionMermasRowsByDate)) {
+      if (mermasPorCrearData.inactiveDates?.[date] === true) continue;
+      for (const row of rows) {
+        if (!row || typeof row !== 'object') continue;
+        const record = row as Record<string, unknown>;
+        const code = typeof record.code === 'string' ? record.code.trim().toUpperCase() : '';
+        if (!PRODUCTION_WASTE_CODES.has(code)) continue;
+        const quantity = parseCantidadCajas(record.quantity);
+        if (quantity === null) continue;
+        totals[code] = (totals[code] ?? 0) + quantity;
+      }
+    }
+    return totals;
+  }, [productionMermasRowsByDate, mermasPorCrearData.inactiveDates]);
   // Estado independiente para la sección "Seguimiento de Órdenes" (no afecta a las demás secciones)
   const [seguimientoSubsection, setSeguimientoSubsection] = useState<number | 'resumen' | 'resumen-mensual'>(() => userId === 'jaime.r' ? 'resumen' : 1);
   const [seguimientoResumenMensualSubsection, setSeguimientoResumenMensualSubsection] = useState<'resumen-por-sabor' | 'resumen-por-lineas' | 'sabor-por-linea' | 'rendimiento-azucar'>('resumen-por-sabor');
@@ -2315,6 +2404,84 @@ const exportarPDFdia = async () => {
     return mapa;
   }, [ordenes, selectedFechaSeguimiento]);
 
+  const handleStockExcelImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+
+    setStockImportError(null);
+    setStockImportMessage(null);
+    setStockImporting(true);
+    try {
+      const workbook = XLSX.read(await file.arrayBuffer(), { type: 'array' });
+      const firstSheetName = workbook.SheetNames[0];
+      if (!firstSheetName) throw new Error('El archivo no contiene hojas de cálculo.');
+
+      const worksheet = workbook.Sheets[firstSheetName];
+      const rows = XLSX.utils.sheet_to_json<Record<string, unknown>>(worksheet, { defval: '' });
+      if (rows.length === 0) throw new Error('La primera hoja está vacía o no contiene encabezados.');
+
+      const normalizeHeader = (value: string) => value
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, '');
+      const headers = Object.keys(rows[0]);
+      const codeHeader = headers.find((header) => normalizeHeader(header) === 'codigo');
+      const stockHeader = headers.find((header) => normalizeHeader(header) === 'stock');
+      if (!codeHeader || !stockHeader) {
+        throw new Error('La primera hoja debe tener encabezados “Código” y “Stock”.');
+      }
+
+      const stockByCode: Record<string, number> = Object.fromEntries(
+        WASTE_CATALOG_ROWS.map(({ code }) => [code, 0]),
+      );
+      const rowErrors: string[] = [];
+      let importedRows = 0;
+      rows.forEach((row, index) => {
+        const code = String(row[codeHeader] ?? '').trim().toUpperCase();
+        const rawStock = row[stockHeader];
+        if (!code && (rawStock === '' || rawStock === null || rawStock === undefined)) return;
+        if (!code) {
+          rowErrors.push(`fila ${index + 2}: falta el código`);
+          return;
+        }
+        if (!PRODUCTION_WASTE_CODES.has(code)) {
+          rowErrors.push(`fila ${index + 2}: código ${code} no pertenece al catálogo de Mermas`);
+          return;
+        }
+        const stock = rawStock === '' || rawStock === null || rawStock === undefined
+          ? 0
+          : parseCantidadCajas(rawStock);
+        if (stock === null || stock < 0) {
+          rowErrors.push(`fila ${index + 2}: Stock debe ser un número igual o mayor que cero`);
+          return;
+        }
+        stockByCode[code] += stock;
+        importedRows += 1;
+      });
+
+      if (rowErrors.length > 0) {
+        const extraErrors = rowErrors.length > 5 ? ` y ${rowErrors.length - 5} más` : '';
+        throw new Error(`${rowErrors.slice(0, 5).join('; ')}${extraErrors}. No se importó el archivo.`);
+      }
+      if (importedRows === 0) throw new Error('No se encontraron filas de Stock para importar.');
+
+      await mermasPorCrearStore.savePatch({ stockByCode });
+      setStockImportMessage(`Stock actualizado desde ${file.name} (${importedRows} filas).`);
+    } catch (error) {
+      setStockImportError(error instanceof Error ? error.message : 'No se pudo importar el archivo de Stock.');
+    } finally {
+      setStockImporting(false);
+    }
+  };
+
+  const toggleMermasPorCrearDate = (date: string, inactive: boolean) => {
+    mermasPorCrearStore.patchData({
+      inactiveDates: { [date]: !inactive },
+    });
+  };
+
   return (
     <div className="pb-10">
       {ordenesSaveError && (
@@ -2343,6 +2510,14 @@ const exportarPDFdia = async () => {
                 >
                    <Factory className="h-3.5 w-3.5" /> CREADOR DE ORDENES
                  </button>
+              )}
+              {isSectionAllowed('mermas-por-crear') && (
+                <button
+                  onClick={() => setActiveSection('mermas-por-crear')}
+                  className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSection === 'mermas-por-crear' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                >
+                  <Factory className="h-3.5 w-3.5" /> MERMAS POR CREAR
+                </button>
               )}
                {isSectionAllowed('seguimiento-ordenes') && (
                  <button
@@ -2489,7 +2664,7 @@ const exportarPDFdia = async () => {
            )}
          </div>
 
-        {isSectionAllowed('carga-prod') && activeSection !== 'creador-ordenes' && (
+        {isSectionAllowed('carga-prod') && activeSection !== 'creador-ordenes' && activeSection !== 'mermas-por-crear' && (
         <div className="flex flex-wrap items-center justify-between gap-3">
           {activeSection === 'carga-prod' ? (
             <>
@@ -2859,6 +3034,202 @@ const exportarPDFdia = async () => {
                 </div>
               )}
            </div>
+          )}
+
+          {isSectionAllowed('mermas-por-crear') && activeSection === 'mermas-por-crear' && (
+            <div className="rounded-[2.5rem] border border-slate-200 bg-white p-4">
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                <h3 className="font-black text-sm uppercase tracking-widest text-slate-800">Mermas por crear</h3>
+                <Input
+                  type="month"
+                  value={mermasPorCrearMonth}
+                  onChange={(event) => {
+                    if (/^\d{4}-(0[1-9]|1[0-2])$/.test(event.target.value)) {
+                      setMermasPorCrearMonth(event.target.value);
+                    }
+                  }}
+                  className="pointer-events-auto w-full sm:w-48"
+                  aria-label="Mes y año de Mermas por crear"
+                />
+              </div>
+
+              <div className="mb-4 flex w-fit flex-wrap items-center gap-1 rounded-full border border-slate-200 bg-slate-100/50 p-1">
+                <button
+                  type="button"
+                  onClick={() => setMermasPorCrearSubsection('por-crear')}
+                  className={`h-9 rounded-full px-6 text-[10px] font-bold uppercase tracking-widest ${mermasPorCrearSubsection === 'por-crear' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                >
+                  Por crear
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMermasPorCrearSubsection('fechas')}
+                  className={`h-9 rounded-full px-6 text-[10px] font-bold uppercase tracking-widest ${mermasPorCrearSubsection === 'fechas' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                >
+                  Fechas
+                </button>
+              </div>
+
+              {mermasPorCrearStore.loadError && (
+                <p role="alert" className="mb-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-xs font-medium text-red-700">
+                  {mermasPorCrearStore.loadError}
+                </p>
+              )}
+              {mermasPorCrearStore.syncError && (
+                <p role="alert" className="mb-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-xs font-medium text-red-700">
+                  {mermasPorCrearStore.syncError}
+                </p>
+              )}
+              {!mermasPorCrearStore.isLoaded && (
+                <p role="status" className="mb-3 text-xs text-slate-500">Cargando Stock y fechas guardadas...</p>
+              )}
+
+              {mermasPorCrearSubsection === 'por-crear' ? (
+                <div className="space-y-3">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <p className="text-xs text-slate-500">Para crear = mermas del mes menos Stock. Las fechas inactivas no se suman.</p>
+                    <div className="flex items-center gap-2">
+                      <input
+                        ref={stockFileInputRef}
+                        type="file"
+                        accept=".xlsx,.xls"
+                        onChange={handleStockExcelImport}
+                        className="hidden"
+                        aria-label="Archivo Excel de Stock"
+                      />
+                      {canEditMermasPorCrearStock && (
+                        <Button
+                          type="button"
+                          size="sm"
+                          onClick={() => stockFileInputRef.current?.click()}
+                          disabled={!mermasPorCrearStore.isLoaded || Boolean(mermasPorCrearStore.loadError) || stockImporting}
+                          className="h-9 rounded-full bg-blue-600 px-4 text-[10px] font-black uppercase tracking-widest text-white hover:bg-blue-700"
+                        >
+                          <FileSpreadsheet className="mr-2 h-3.5 w-3.5" />
+                          {stockImporting ? 'Importando...' : 'Cargar Stock Excel'}
+                        </Button>
+                      )}
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setMermasRefreshKey((key) => key + 1)}
+                        disabled={productionMermasLoading}
+                        className="h-9 rounded-full px-4 text-[10px] font-bold uppercase tracking-widest"
+                      >
+                        {productionMermasLoading ? 'Actualizando...' : 'Actualizar mermas'}
+                      </Button>
+                    </div>
+                  </div>
+                  {stockImportError && <p role="alert" className="text-xs font-medium text-red-700">{stockImportError}</p>}
+                  {stockImportMessage && <p role="status" className="text-xs font-medium text-emerald-700">{stockImportMessage}</p>}
+                  {productionMermasError && <p role="alert" className="text-xs font-medium text-red-700">{productionMermasError}</p>}
+                  {productionMermasLoading && <p role="status" className="text-xs text-slate-500">Cargando mermas del mes...</p>}
+
+                  {mermasPorCrearStore.isLoaded && !mermasPorCrearStore.loadError && !productionMermasLoading && !productionMermasError && (
+                    <div className="overflow-x-auto rounded-2xl border border-slate-200">
+                      <table className="w-full border-collapse text-center">
+                        <thead>
+                          <tr className="bg-slate-100">
+                            {['Códigos', 'Stock', 'Mermas', 'Para crear'].map((heading) => (
+                              <th key={heading} className="border-b border-r border-slate-200 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-slate-600 last:border-r-0">
+                                {heading}
+                              </th>
+                            ))}
+                          </tr>
+                        </thead>
+                        {Object.entries(WASTE_PRODUCTS_BY_LINE).map(([line, products]) => (
+                          <tbody key={line}>
+                            <tr className="bg-slate-50">
+                              <th colSpan={4} className="border-b border-slate-200 px-3 py-2 text-left text-[10px] font-black uppercase tracking-widest text-slate-700">
+                                {line.replace('Linea', 'Línea')}
+                              </th>
+                            </tr>
+                            {Object.entries(products).map(([flavor, product]) => {
+                              const stock = mermasPorCrearData.stockByCode?.[product.code] ?? 0;
+                              const merma = mermaTotalsByCode[product.code] ?? 0;
+                              return (
+                                <tr key={`${line}-${product.code}`} className="even:bg-slate-50/60">
+                                  <td className="border-b border-r border-slate-100 px-3 py-2 text-xs font-bold text-slate-700">
+                                    <span>{product.code}</span>
+                                    <span className="ml-2 text-[10px] font-normal text-slate-500">{flavor}</span>
+                                  </td>
+                                  <td className="border-b border-r border-slate-100 px-3 py-2 text-xs text-slate-700">{formatMermasPorCrearQuantity(stock)}</td>
+                                  <td className="border-b border-r border-slate-100 px-3 py-2 text-xs text-slate-700">{formatMermasPorCrearQuantity(merma)}</td>
+                                  <td className="border-b border-slate-100 px-3 py-2 text-xs font-black text-slate-900">{formatMermasPorCrearQuantity(merma - stock)}</td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        ))}
+                      </table>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                    <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3">
+                      <div className="text-[10px] font-black uppercase tracking-widest text-emerald-700">Días activos</div>
+                      <div className="mt-1 text-2xl font-black text-emerald-800">
+                        {mermasPorCrearCalendar.days.filter((day) => mermasPorCrearData.inactiveDates?.[day] !== true).length}
+                      </div>
+                    </div>
+                    <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3">
+                      <div className="text-[10px] font-black uppercase tracking-widest text-red-700">Días desactivados</div>
+                      <div className="mt-1 text-2xl font-black text-red-800">
+                        {mermasPorCrearCalendar.days.filter((day) => mermasPorCrearData.inactiveDates?.[day] === true).length}
+                      </div>
+                    </div>
+                    <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs font-medium leading-5 text-slate-600">
+                      Los registros de Producción se conservan. Desactivar un día lo excluye de la suma mensual de mermas.
+                    </div>
+                  </div>
+                  <div className="rounded-2xl border border-slate-200 bg-white p-3 sm:p-5">
+                    <div className="grid grid-cols-7 gap-2">
+                      {['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'].map((weekday) => (
+                        <div key={weekday} className="py-2 text-center text-[10px] font-black uppercase tracking-wider text-slate-400">{weekday}</div>
+                      ))}
+                      {Array.from({ length: mermasPorCrearCalendar.leadingDays }, (_, index) => (
+                        <div key={`empty-${index}`} aria-hidden="true" />
+                      ))}
+                      {mermasPorCrearCalendar.days.map((day) => {
+                        const inactive = mermasPorCrearData.inactiveDates?.[day] === true;
+                        const canToggleDate = canEditMermasPorCrearDates &&
+                          mermasPorCrearStore.isLoaded &&
+                          !mermasPorCrearStore.loadError;
+                        return (
+                          <button
+                            key={day}
+                            type="button"
+                            disabled={!canToggleDate}
+                            onClick={() => toggleMermasPorCrearDate(day, inactive)}
+                            aria-pressed={!inactive}
+                            aria-label={`${format(new Date(`${day}T00:00:00`), 'd MMMM yyyy', { locale: es })}: ${inactive ? 'desactivado' : 'activo'}`}
+                            className={`min-h-16 rounded-xl border p-2 text-left transition-colors disabled:cursor-not-allowed disabled:opacity-60 sm:min-h-20 ${
+                              inactive
+                                ? 'border-red-200 bg-red-50 text-red-800 hover:bg-red-100'
+                                : 'border-emerald-200 bg-emerald-50 text-emerald-800 hover:bg-emerald-100'
+                            }`}
+                          >
+                            <span className="block text-lg font-black">{Number(day.slice(-2))}</span>
+                            <span className="mt-1 block text-[9px] font-black uppercase tracking-widest">
+                              {inactive ? 'Inactivo' : 'Activo'}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                  {!canEditMermasPorCrearDates && (
+                    <p className="text-sm font-semibold text-amber-700">Solo Maria, Alex, Demon y Demon2 pueden modificar las fechas.</p>
+                  )}
+                  {mermasPorCrearStore.hasPendingChanges && !mermasPorCrearStore.syncError && (
+                    <p role="status" className="text-xs font-semibold text-amber-700">Guardando cambios de fechas...</p>
+                  )}
+                </div>
+              )}
+            </div>
           )}
 
           {/* Filas automáticas del Seguimiento de Órdenes derivadas de "Carga Prodt" */}
@@ -3312,7 +3683,7 @@ const exportarPDFdia = async () => {
             </div>
           )}
 
-          {activeSection !== 'creador-ordenes' && activeSection !== 'seguimiento-ordenes' && activeLinea === null && (
+          {activeSection !== 'creador-ordenes' && activeSection !== 'mermas-por-crear' && activeSection !== 'seguimiento-ordenes' && activeLinea === null && (
            <div className="bg-white rounded-[2.5rem] border border-slate-200 p-8">
              <div className="h-48 flex items-center justify-center text-slate-400">
                 <p className="text-[10px] font-bold uppercase tracking-widest">Seleccione una línea para ver los datos</p>
@@ -3320,7 +3691,7 @@ const exportarPDFdia = async () => {
            </div>
          )}
 
-           {activeSection !== 'creador-ordenes' && activeSection !== 'seguimiento-ordenes' && activeLinea && (
+           {activeSection !== 'creador-ordenes' && activeSection !== 'mermas-por-crear' && activeSection !== 'seguimiento-ordenes' && activeLinea && (
               <div className="bg-white rounded-[2.5rem] border border-slate-200 p-4">
                 {activeSection === 'carga-prod' ? (
                   <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">

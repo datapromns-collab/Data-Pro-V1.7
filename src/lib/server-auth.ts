@@ -527,6 +527,7 @@ const COLLECTION_PERMISSION_MAP: Record<string, [string, string?]> = {
     'seguimiento-etiquetadora': ['seguimiento', 'etiquetadora'],
     'seguimiento-ordenes': ['ordenes-sap', 'seguimiento-ordenes'],
     'seguimiento-ordenes-auto': ['ordenes-sap', 'seguimiento-ordenes'],
+    'sap-mermas-por-crear': ['ordenes-sap', 'mermas-por-crear'],
     'planning-production-forecast': ['planning', 'seguimiento-prodt'],
     'ventas-pronostico-mensual': ['ventas', 'forecast'],
     'ventas-inventario-diario': ['ventas', 'analysis'],
@@ -647,6 +648,7 @@ const DATA_READ_FALLBACKS: Record<string, [string, string?][]> = {
   ],
   productionWaste: [
     ['insumos', 'mermas-botella-envasada'], ['insumos', 'mermas-materiales-lineas'],
+    ['ordenes-sap', 'mermas-por-crear'],
     ['management', 'production'], ['management', 'weekly-summary'], ['management', 'monthly-summary'],
   ],
   productionNonConforming: [
@@ -694,9 +696,21 @@ export async function authorizeCollectionRead(request: Request, namespace: strin
   return denied;
 }
 
-export async function authorizeCollectionWrite(request: Request, namespace: string): Promise<Response | null> {
+export async function authorizeCollectionWrite(
+  request: Request,
+  namespace: string,
+): Promise<Response | null> {
   const permission = COLLECTION_PERMISSION_MAP[namespace];
   if (!permission) return Response.json({ error: 'Write permission denied for collection' }, { status: 403 });
+  if (namespace === 'sap-mermas-por-crear') {
+    const auth = await requireAuthenticated(request);
+    if (auth.response) return auth.response;
+    const canEditStock = ['maria.mds', 'alex.mds', 'demon', 'demon2'].includes(auth.user.id);
+    if (!canEditStock) {
+      return Response.json({ error: 'No tienes permiso para modificar Stock o fechas.' }, { status: 403 });
+    }
+    return null;
+  }
   if (namespace === 'planta-ordenes-trabajo') {
     return authorizeModuleWrite(request, 'planta', 'line-stops.work-orders.edit-pending');
   }
