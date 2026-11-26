@@ -1108,7 +1108,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "g.tec.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-26T19:00:26.311Z"
     },
     {
@@ -1119,7 +1119,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "g.tec.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-11-26T18:39:04.627Z"
     },
     {
