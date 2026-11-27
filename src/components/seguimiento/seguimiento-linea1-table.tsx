@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -27,6 +27,7 @@ export function SeguimientoLineaTable({
   filasAuto?: SeguimientoOrdenFuente[];
 }) {
   const { data, updateRow, deleteRow, autoOverrides, updateAutoOverride, syncError } = useSeguimientoOrdenes(linea);
+  const [saborFilter, setSaborFilter] = useState<string>('all');
 
   const handleUpdate = (id: string, updates: Partial<SeguimientoOrdenLinea>) => {
     updateRow(id, updates);
@@ -86,9 +87,27 @@ export function SeguimientoLineaTable({
     return rm ? bebidaTerminada / rm : bebidaTerminada;
   };
 
+  const saboresDisponibles = useMemo(
+    () => ['all', ...Array.from(new Set([
+      ...data.map((row) => row.sabor),
+      ...filasAuto.map((row) => row.sabor),
+    ].filter((sabor): sabor is string => Boolean(sabor?.trim())))).sort()],
+    [data, filasAuto]
+  );
+
+  const filteredData = useMemo(
+    () => data.filter((row) => saborFilter === 'all' || row.sabor === saborFilter),
+    [data, saborFilter]
+  );
+
+  const filteredFilasAuto = useMemo(
+    () => filasAuto.filter((row) => saborFilter === 'all' || row.sabor === saborFilter),
+    [filasAuto, saborFilter]
+  );
+
   const totales = useMemo(() => {
     // Solo se suman las filas manuales (las automáticas ya traen sus propios totales en cajasCompletadas)
-    const manuales = data.reduce(
+    const manuales = filteredData.reduce(
       (acc, row) => {
         acc.cajasPlanificadas += Number(row.cajasPlanificadas) || 0;
         acc.cajasCompletadas += Number(row.cajasCompletadas) || 0;
@@ -104,23 +123,23 @@ export function SeguimientoLineaTable({
       { cajasPlanificadas: 0, cajasCompletadas: 0, diferencia: 0, jarabeRequerido: 0, jarabeReal: 0, diferencia2: 0, botellasT: 0, ubb: 0, pnc: 0 }
     );
 
-    const autoCajasCompletadas = filasAuto.reduce((sum, f) => sum + (Number(f.cajasCompletadas) || 0), 0);
-    const autoCajasPlanificadas = filasAuto.reduce((sum, f) => sum + (Number(autoOverrides[f.id]?.cajasPlanificadas) || 0), 0);
-    const autoJarabeReal = filasAuto.reduce((sum, f) => sum + (Number(autoOverrides[f.id]?.jarabeReal) || 0), 0);
-    const autoUbb = filasAuto.reduce((sum, f) => sum + (Number(autoOverrides[f.id]?.ubb) || 0), 0);
-    const autoPnc = filasAuto.reduce((sum, f) => sum + (Number(autoOverrides[f.id]?.pnc) || 0), 0);
+    const autoCajasCompletadas = filteredFilasAuto.reduce((sum, f) => sum + (Number(f.cajasCompletadas) || 0), 0);
+    const autoCajasPlanificadas = filteredFilasAuto.reduce((sum, f) => sum + (Number(autoOverrides[f.id]?.cajasPlanificadas) || 0), 0);
+    const autoJarabeReal = filteredFilasAuto.reduce((sum, f) => sum + (Number(autoOverrides[f.id]?.jarabeReal) || 0), 0);
+    const autoUbb = filteredFilasAuto.reduce((sum, f) => sum + (Number(autoOverrides[f.id]?.ubb) || 0), 0);
+    const autoPnc = filteredFilasAuto.reduce((sum, f) => sum + (Number(autoOverrides[f.id]?.pnc) || 0), 0);
     // Diferencia = Cajas completadas - Cajas Planificadas | Diferencia2 = Jarabe Real - Jarabe requerido
-    const autoDiferencia = filasAuto.reduce((sum, f) => sum + ((Number(f.cajasCompletadas) || 0) - (Number(autoOverrides[f.id]?.cajasPlanificadas) || 0)), 0);
-    const autoBotellasT = filasAuto.reduce((sum, f) => {
+    const autoDiferencia = filteredFilasAuto.reduce((sum, f) => sum + ((Number(f.cajasCompletadas) || 0) - (Number(autoOverrides[f.id]?.cajasPlanificadas) || 0)), 0);
+    const autoBotellasT = filteredFilasAuto.reduce((sum, f) => {
       const overrideProducto = Number(autoOverrides[f.id]?.producto) || 0;
       return sum + ((Number(f.cajasCompletadas) || 0) * getLineMultiplier(linea) + overrideProducto);
     }, 0);
-    const autoJarabeRequerido = filasAuto.reduce((sum, f) => {
+    const autoJarabeRequerido = filteredFilasAuto.reduce((sum, f) => {
       const overrideProducto = Number(autoOverrides[f.id]?.producto) || 0;
       const overridePnc = Number(autoOverrides[f.id]?.pnc) || 0;
       return sum + calcularJarabeRequerido({ ...f, producto: overrideProducto, pnc: overridePnc }, linea);
     }, 0);
-    const autoDiferencia2 = filasAuto.reduce((sum, f) => {
+    const autoDiferencia2 = filteredFilasAuto.reduce((sum, f) => {
       const overrideProducto = Number(autoOverrides[f.id]?.producto) || 0;
       const overridePnc = Number(autoOverrides[f.id]?.pnc) || 0;
       const req = calcularJarabeRequerido({ ...f, producto: overrideProducto, pnc: overridePnc }, linea);
@@ -140,7 +159,7 @@ export function SeguimientoLineaTable({
       pnc: manuales.pnc + autoPnc,
       botellasT: manuales.botellasT + autoBotellasT,
     };
-  }, [data, filasAuto, autoOverrides]);
+  }, [filteredData, filteredFilasAuto, autoOverrides, linea]);
 
   const headers = [
     'Sabor',
@@ -168,11 +187,27 @@ export function SeguimientoLineaTable({
           <div className="w-2 h-2 rounded-full bg-sky-500" />
           <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">{label}</h4>
         </div>
-        {filasAuto.length > 0 && (
-          <span className="text-[9px] font-black uppercase tracking-widest text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-full px-3 py-1">
-            Auto · Carga Prodt
-          </span>
-        )}
+        <div className="flex items-center gap-2">
+          {filasAuto.length > 0 && (
+            <span className="text-[9px] font-black uppercase tracking-widest text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-full px-3 py-1">
+              Auto · Carga Prodt
+            </span>
+          )}
+          <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-2 py-1.5">
+            <label className="text-[9px] font-black uppercase tracking-widest text-slate-500">Sabor</label>
+            <select
+              value={saborFilter}
+              onChange={(e) => setSaborFilter(e.target.value)}
+              className="h-8 min-w-[160px] rounded-md border border-slate-200 bg-white px-2 text-[10px] font-bold text-slate-700 outline-none"
+            >
+              {saboresDisponibles.map((sabor) => (
+                <option key={sabor} value={sabor}>
+                  {sabor === 'all' ? 'Todos' : sabor}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
       </div>
       {syncError && (
         <p role="alert" className="mx-4 mt-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs font-medium text-red-700">
@@ -196,20 +231,22 @@ export function SeguimientoLineaTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.length === 0 && filasAuto.length === 0 ? (
+            {filteredData.length === 0 && filteredFilasAuto.length === 0 ? (
               <TableRow className="hover:bg-transparent">
                 <TableCell colSpan={16} className="text-center py-16">
                   <div className="flex flex-col items-center gap-2 text-slate-400">
                     <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center">
                       <Trash2 className="h-4 w-4" />
                     </div>
-                    <p className="text-[10px] font-bold uppercase tracking-widest">Sin registros</p>
+                    <p className="text-[10px] font-bold uppercase tracking-widest">
+                      {saborFilter === 'all' ? 'Sin registros' : 'Sin registros para este sabor'}
+                    </p>
                   </div>
                 </TableCell>
               </TableRow>
             ) : (
               <>
-                {filasAuto.map((row) => {
+                {filteredFilasAuto.map((row) => {
                   const ov = autoOverrides[row.id] ?? {};
                   const planificadas = Number(ov.cajasPlanificadas) || 0;
                   const jarabeReal = Number(ov.jarabeReal) || 0;
@@ -272,7 +309,7 @@ export function SeguimientoLineaTable({
                   </TableRow>
                   );
                 })}
-                {data.map((row) => (
+                {filteredData.map((row) => (
                   <TableRow key={row.id} className="group hover:bg-sky-50/60 transition-colors">
                     <TableCell className="text-[11px] font-semibold text-slate-800 py-2.5 pl-5 border-b border-slate-100">{row.sabor}</TableCell>
                     <TableCell className="text-[11px] font-medium text-slate-600 py-2.5 border-b border-slate-100">{row.codigoProducto}</TableCell>
@@ -351,7 +388,7 @@ export function SeguimientoLineaTable({
               </>
             )}
           </TableBody>
-          {(data.length > 0 || filasAuto.length > 0) && (
+          {(filteredData.length > 0 || filteredFilasAuto.length > 0) && (
             <TableFooter>
               <TableRow className="hover:bg-transparent bg-transparent">
                 <TableCell colSpan={5} className="text-right font-black text-[10px] uppercase tracking-widest text-slate-700 py-4 pl-5 border-t-2 border-slate-200">TOTALES</TableCell>
